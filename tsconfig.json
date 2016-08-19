@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "outDir": "./target",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true, "diagnostics": true
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "fmk-dosis-til-tekst-ts",
+  "author": "Trifork",
+  "version": "1.0.0",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
+    "webpack": "^1.13.2"
+  }
+}
