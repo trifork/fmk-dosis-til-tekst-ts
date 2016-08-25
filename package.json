@@ -3,10 +3,30 @@
   "author": "Trifork",
   "version": "1.0.0",
   "devDependencies": {
-  },
-  "dependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "0.8.0",
+    "grunt-npm": "0.0.2",
+    "grunt-ts": "^5.4.0",
+    "grunt-tslint": "^3.0.3",
+    "grunt-webpack": "^1.0.14",
+    "load-grunt-tasks": "^3.5.0",
     "ts-loader": "^0.8.2",
+    "tslint": "^3.15.1",
     "typescript": "^1.8.10",
-    "webpack": "^1.13.2"
-  }
+    "typings": "^0.8.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.0"
+  },
+  "dependencies": {},
+  "main": "target/lib/index.js",
+  "typings": "target/lib/index.d.ts",
+  "files": [
+    "target/lib"
+  ],
+  "publishConfig": {
+    "registry": "http://nexus.dkfmkci01.trifork.com/content/repositories/npm-fmk-internal/"
+  },
+  "registry": "http://nexus.dkfmkci01.trifork.com/content/groups/npm-fmk-all/"
 }

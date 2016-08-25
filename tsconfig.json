@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
         "target": "es5",
+        "sourceMap": true,
         "outDir": "./target",
         "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true, "diagnostics": true
-    }
+         "diagnostics": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

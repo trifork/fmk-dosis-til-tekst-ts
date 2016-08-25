@@ -1,35 +1,35 @@
-import { DoseWrapper } from './DoseWrapper';
+import { DoseWrapper } from "./DoseWrapper";
 
 export class NoonDoseWrapper extends DoseWrapper {
-	
-	constructor(
-			doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number, 
-			doseQuantitystring: string , minimalDoseQuantitystring: string , maximalDoseQuantitystring: string , 
-			isAccordingToNeed: boolean) {
-		super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
-	}
 
-	public static makeDose(quantity: number, isAccordingToNeed = false): NoonDoseWrapper {
-		if(NoonDoseWrapper.isZero(quantity))
-			return null;
-		return new NoonDoseWrapper(quantity, null, null, null, null, null, false);
-	}
+    constructor(
+        doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number,
+        doseQuantitystring: string, minimalDoseQuantitystring: string, maximalDoseQuantitystring: string,
+        isAccordingToNeed: boolean) {
+        super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
+    }
 
-	public static makeDoseWithText(quantity: number, supplText: string, isAccordingToNeed = false): NoonDoseWrapper  {
-		if(NoonDoseWrapper.isZero(quantity))
-			return null;
-		return new NoonDoseWrapper(quantity, null, null, supplText, null, null, isAccordingToNeed);
-	}
+    public static makeDose(quantity: number, isAccordingToNeed = false): NoonDoseWrapper {
+        if (NoonDoseWrapper.isZero(quantity))
+            return null;
+        return new NoonDoseWrapper(quantity, null, null, null, null, null, false);
+    }
 
-	public static  makeDoseWithMinMax(minimalQuantity: number, maximalQuantity: number, isAccordingToNeed = false): NoonDoseWrapper {
-		if(NoonDoseWrapper.isMinAndMaxZero(minimalQuantity, maximalQuantity))
-			return null;
-		return new NoonDoseWrapper(null, minimalQuantity, maximalQuantity, null, null, null, isAccordingToNeed);
-	}	
-	
-	static LABEL = "middag";  
+    public static makeDoseWithText(quantity: number, supplText: string, isAccordingToNeed = false): NoonDoseWrapper {
+        if (NoonDoseWrapper.isZero(quantity))
+            return null;
+        return new NoonDoseWrapper(quantity, null, null, supplText, null, null, isAccordingToNeed);
+    }
 
-	public getLabel() {
-		return NoonDoseWrapper.LABEL;
-	}
+    public static makeDoseWithMinMax(minimalQuantity: number, maximalQuantity: number, isAccordingToNeed = false): NoonDoseWrapper {
+        if (NoonDoseWrapper.isMinAndMaxZero(minimalQuantity, maximalQuantity))
+            return null;
+        return new NoonDoseWrapper(null, minimalQuantity, maximalQuantity, null, null, null, isAccordingToNeed);
+    }
+
+    static LABEL = "middag";
+
+    public getLabel() {
+        return NoonDoseWrapper.LABEL;
+    }
 }

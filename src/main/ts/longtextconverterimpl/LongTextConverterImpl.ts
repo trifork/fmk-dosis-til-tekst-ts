@@ -1,23 +1,23 @@
-import { DosageWrapper } from '../vowrapper/DosageWrapper';
-import { DoseWrapper } from '../vowrapper/DoseWrapper';
-import { DayWrapper } from '../vowrapper/DayWrapper';
-import { DateOrDateTimeWrapper } from '../vowrapper/DateOrDateTimeWrapper';
-import { DosisTilTekstException  } from '../DosisTilTekstException';
-import { TextHelper } from '../TextHelper';
-import { UnitOrUnitsWrapper } from '../vowrapper/UnitOrUnitsWrapper';
-import { StructureWrapper } from '../vowrapper/StructureWrapper';
+import { DosageWrapper } from "../vowrapper/DosageWrapper";
+import { DoseWrapper } from "../vowrapper/DoseWrapper";
+import { DayWrapper } from "../vowrapper/DayWrapper";
+import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
+import { DosisTilTekstException  } from "../DosisTilTekstException";
+import { TextHelper } from "../TextHelper";
+import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
+import { StructureWrapper } from "../vowrapper/StructureWrapper";
 
 export abstract class LongTextConverterImpl {
 
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
     public abstract doConvert(dosageStructure: DosageWrapper): string;
 
-    protected appendDosageStart(s: string, startDateOrDateTime: DateOrDateTimeWrapper) {
-        s += "Doseringsforløbet starter " + this.datesToLongText(startDateOrDateTime);
+    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper) {
+        return "Doseringsforløbet starter " + this.datesToLongText(startDateOrDateTime);
     }
 
-    protected appendDosageEnd(s: string, endDateOrDateTime: DateOrDateTimeWrapper) {
-        s += ", og ophører " + this.datesToLongText(endDateOrDateTime);
+    protected getDosageEndText(endDateOrDateTime: DateOrDateTimeWrapper) {
+        return ", og ophører " + this.datesToLongText(endDateOrDateTime);
     }
 
     protected datesToLongText(startDateOrDateTime: DateOrDateTimeWrapper): string {
@@ -41,7 +41,7 @@ export abstract class LongTextConverterImpl {
 
     private haveSeconds(dateTime: Date): boolean {
         let secs = dateTime.getTime() / 1000;
-        return (secs % 60 != 0);
+        return (secs % 60 !== 0);
     }
 
     protected appendDays(s: string, unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): number {
@@ -55,9 +55,9 @@ export abstract class LongTextConverterImpl {
             let daysLabel = this.makeDaysLabel(structure, day);
 
             // We cannot have a day without label if there are other days (or "any day")
-            if (structure.days.length > 1 && daysLabel.length == 0 && structure.iterationInterval == 1)
+            if (structure.days.length > 1 && daysLabel.length === 0 && structure.iterationInterval === 1)
                 daysLabel = "Daglig: ";
-            else if (structure.days.length > 1 && daysLabel.length == 0 && structure.iterationInterval > 1)
+            else if (structure.days.length > 1 && daysLabel.length === 0 && structure.iterationInterval > 1)
                 daysLabel = "Dosering: "; // We probably never get here
 
             s += daysLabel;
@@ -67,17 +67,17 @@ export abstract class LongTextConverterImpl {
     }
 
     protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper): string {
-        if (day.dayNumber == 0) {
+        if (day.dayNumber === 0) {
             if (day.containsAccordingToNeedDosesOnly())
                 return "Efter behov: ";
             else
                 return "Dag ikke angivet: ";
         }
-        else if (structure.iterationInterval == 1) {
+        else if (structure.iterationInterval === 1) {
             return "";
         }
         else {
-            return TextHelper.makeDayString(structure.startDateOrDateTime, day.dayNumber) + ": ";
+            return TextHelper.makeDayString(structure.getStartDateOrDateTime(), day.dayNumber) + ": ";
         }
     }
 
@@ -93,7 +93,7 @@ export abstract class LongTextConverterImpl {
         if (!hasDaysLabel)
             daglig = " daglig";
 
-        if (day.getNumberOfDoses() == 1) {
+        if (day.getNumberOfDoses() === 1) {
             // The cast to CharSequence is needed to circumvent a gwt bug:
             s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.supplText);
             if (day.containsAccordingToNeedDosesOnly() && day.dayNumber > 0)

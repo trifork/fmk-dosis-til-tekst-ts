@@ -1,10 +1,19 @@
-import { UnitOrUnitsWrapper } from './UnitOrUnitsWrapper';
-import { StructureWrapper } from './StructureWrapper';
-import { DateOrDateTimeWrapper } from './DateOrDateTimeWrapper';
+import { UnitOrUnitsWrapper } from "./UnitOrUnitsWrapper";
+import { StructureWrapper } from "./StructureWrapper";
+import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 
 export class StructuresWrapper {
     private _unitOrUnits: UnitOrUnitsWrapper;
     private _structures: StructureWrapper[];
+
+    public static fromJsonObject(parsedObject: any): StructuresWrapper {
+        if (parsedObject) {
+            throw "StructuresWrapper.fromJsonObject not implemented";
+        }
+        else {
+            return undefined;
+        }
+    }
 
     public static makeStructures(unitOrUnits: UnitOrUnitsWrapper, ...structures: StructureWrapper[]): StructuresWrapper {
         return new StructuresWrapper(unitOrUnits, structures);
@@ -17,8 +26,8 @@ export class StructuresWrapper {
     constructor(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]) {
         this._unitOrUnits = unitOrUnits;
         structures.sort((s1, s2) => {
-            let i = s1.startDateOrDateTime.getDateOrDateTime().getMilliseconds() - s2.startDateOrDateTime.getDateOrDateTime().getMilliseconds();
-            if (i != 0)
+            let i = s1.getStartDateOrDateTime().getDateOrDateTime().getMilliseconds() - s2.getStartDateOrDateTime().getDateOrDateTime().getMilliseconds();
+            if (i !== 0)
                 return i;
             if (s1.containsAccordingToNeedDosesOnly())
                 return 1;
@@ -40,9 +49,9 @@ export class StructuresWrapper {
     public hasOverlappingPeriodes(): boolean {
         for (let i = 0; i < this.structures.length; i++) {
             for (let j = i + 1; j < this.structures.length; j++) {
-                let dis = this.structures[i].startDateOrDateTime;
+                let dis = this.structures[i].getStartDateOrDateTime();
                 let die = this.structures[i].endDateOrDateTime;
-                let djs = this.structures[j].startDateOrDateTime;
+                let djs = this.structures[j].getStartDateOrDateTime();
                 let dje = this.structures[j].endDateOrDateTime;
                 if (this.overlaps(dis, die, djs, dje))
                     return true;
@@ -54,7 +63,7 @@ export class StructuresWrapper {
     private overlaps(dis: DateOrDateTimeWrapper, die: DateOrDateTimeWrapper, djs: DateOrDateTimeWrapper, dje: DateOrDateTimeWrapper): boolean {
         let cis = this.makeStart(dis);
         let cjs = this.makeStart(djs);
-        if (cis.getTime() == cjs.getTime()) {
+        if (cis.getTime() === cjs.getTime()) {
             return true;
         }
         let cie = this.makeEnd(die);
@@ -68,7 +77,7 @@ export class StructuresWrapper {
     }
 
     private makeStart(ds: DateOrDateTimeWrapper): Date {
-        var d: Date;
+        let d: Date;
         if (ds && ds.dateTime) {
             d = new Date(ds.dateTime.getTime());
             d.setMilliseconds(0);
@@ -87,7 +96,7 @@ export class StructuresWrapper {
     }
 
     private makeEnd(de: DateOrDateTimeWrapper): Date {
-        var d: Date;
+        let d: Date;
 
         if (de && de.dateTime) {
             d = new Date(de.dateTime.getTime());

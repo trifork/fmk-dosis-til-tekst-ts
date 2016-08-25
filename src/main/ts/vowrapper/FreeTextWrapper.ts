@@ -1,31 +1,36 @@
-import { DateOrDateTimeWrapper } from './DateOrDateTimeWrapper';
+import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 
 export class FreeTextWrapper {
-	
-	private startDateOrDateTime: DateOrDateTimeWrapper;
-	private endDateOrDateTime: DateOrDateTimeWrapper;
-	private text: string;
-	
-	public static  makeFreeText(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper , text: string ): FreeTextWrapper {
-		return new FreeTextWrapper(startDateOrDateTime, endDateOrDateTime, text);
-	}
-	
-	constructor(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, text: string) {
-		this.startDateOrDateTime = startDateOrDateTime;
-		this.endDateOrDateTime = endDateOrDateTime;
-		this.text = text;
-	}
-	
-	public getStartDateOrDateTime(): DateOrDateTimeWrapper {
-		return this.startDateOrDateTime;
-	}
 
-	public  getEndDateOrDateTime(): DateOrDateTimeWrapper {
-		return this.endDateOrDateTime;
-	}
+    private _startDateOrDateTime: DateOrDateTimeWrapper;
+    private _endDateOrDateTime: DateOrDateTimeWrapper;
+    private _text: string;
 
-	public getText(): string {
-		return this.text;
-	}
-	
+    public static fromJsonObject(parsedObject: any): FreeTextWrapper {
+        return parsedObject ? new FreeTextWrapper(DateOrDateTimeWrapper.fromJsonObject(parsedObject.startDateOrDateTime),
+            DateOrDateTimeWrapper.fromJsonObject(parsedObject.endDateOrDateTime),
+            parsedObject.text) : undefined;
+    }
+
+    public static makeFreeText(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, text: string): FreeTextWrapper {
+        return new FreeTextWrapper(startDateOrDateTime, endDateOrDateTime, text);
+    }
+
+    constructor(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, text: string) {
+        this._startDateOrDateTime = startDateOrDateTime;
+        this._endDateOrDateTime = endDateOrDateTime;
+        this._text = text;
+    }
+
+    get startDateOrDateTime(): DateOrDateTimeWrapper {
+        return this._startDateOrDateTime;
+    }
+
+    public get endDateOrDateTime(): DateOrDateTimeWrapper {
+        return this._endDateOrDateTime;
+    }
+
+    public get text(): string {
+        return this._text;
+    }
 }
