@@ -21,7 +21,6 @@
   },
   "dependencies": {},
   "main": "target/dosistiltekst.js",
-  // "typings": "target/lib/index.d.ts",
   "files": [
     "target"
   ],
