@@ -20,10 +20,10 @@
     "webpack-dev-server": "^1.15.0"
   },
   "dependencies": {},
-  "main": "target/lib/index.js",
-  "typings": "target/lib/index.d.ts",
+  "main": "target/dosistiltekst.js",
+  // "typings": "target/lib/index.d.ts",
   "files": [
-    "target/lib"
+    "target"
   ],
   "publishConfig": {
     "registry": "http://nexus.dkfmkci01.trifork.com/content/repositories/npm-fmk-internal/"
