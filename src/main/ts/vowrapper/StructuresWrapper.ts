@@ -6,27 +6,16 @@ export class StructuresWrapper {
     private _unitOrUnits: UnitOrUnitsWrapper;
     private _structures: StructureWrapper[];
 
-    public static fromJsonObject(parsedObject: any): StructuresWrapper {
-        if (parsedObject) {
-            throw "StructuresWrapper.fromJsonObject not implemented";
-        }
-        else {
-            return undefined;
-        }
-    }
-
-    public static makeStructures(unitOrUnits: UnitOrUnitsWrapper, ...structures: StructureWrapper[]): StructuresWrapper {
-        return new StructuresWrapper(unitOrUnits, structures);
-    }
-
-    public static makeStructuresWithArray(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]): StructuresWrapper {
-        return new StructuresWrapper(unitOrUnits, structures);
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new StructuresWrapper(UnitOrUnitsWrapper.fromJsonObject(jsonObject.unitOrUnits), jsonObject.structures.map(s => StructureWrapper.fromJsonObject(s)))
+            : undefined;
     }
 
     constructor(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]) {
         this._unitOrUnits = unitOrUnits;
         structures.sort((s1, s2) => {
-            let i = s1.getStartDateOrDateTime().getDateOrDateTime().getMilliseconds() - s2.getStartDateOrDateTime().getDateOrDateTime().getMilliseconds();
+            let i = s1.startDateOrDateTime.getDateOrDateTime().getMilliseconds() - s2.startDateOrDateTime.getDateOrDateTime().getMilliseconds();
             if (i !== 0)
                 return i;
             if (s1.containsAccordingToNeedDosesOnly())
@@ -49,9 +38,9 @@ export class StructuresWrapper {
     public hasOverlappingPeriodes(): boolean {
         for (let i = 0; i < this.structures.length; i++) {
             for (let j = i + 1; j < this.structures.length; j++) {
-                let dis = this.structures[i].getStartDateOrDateTime();
+                let dis = this.structures[i].startDateOrDateTime;
                 let die = this.structures[i].endDateOrDateTime;
-                let djs = this.structures[j].getStartDateOrDateTime();
+                let djs = this.structures[j].startDateOrDateTime;
                 let dje = this.structures[j].endDateOrDateTime;
                 if (this.overlaps(dis, die, djs, dje))
                     return true;

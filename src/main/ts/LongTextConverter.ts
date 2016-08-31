@@ -2,6 +2,10 @@ import { LongTextConverterImpl } from "./longtextconverterimpl/LongTextConverter
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
 import { DailyRepeatedConverterImpl } from "./longtextconverterimpl/DailyRepeatedConverterImpl";
 import { FreeTextConverterImpl } from "./longtextconverterimpl/FreeTextConverterImpl";
+import { AdministrationAccordingToSchemaConverterImpl } from "./longtextconverterimpl/AdministrationAccordingToSchemaConverterImpl";
+import { DefaultLongTextConverterImpl } from "./longtextconverterimpl/DefaultLongTextConverterImpl";
+import { EmptyStructureConverterImpl } from "./longtextconverterimpl/EmptyStructureConverterImpl";
+import { TwoDaysRepeatedConverterImpl } from "./longtextconverterimpl/TwoDaysRepeatedConverterImpl";
 
 export class LongTextConverter {
 
@@ -10,19 +14,16 @@ export class LongTextConverter {
     private static get converters() {
         if (!LongTextConverter._converters) {
             LongTextConverter._converters = new Array<LongTextConverterImpl>();
+            LongTextConverter._converters.push(new AdministrationAccordingToSchemaConverterImpl());
+            LongTextConverter._converters.push(new FreeTextConverterImpl());
+            LongTextConverter._converters.push(new EmptyStructureConverterImpl());
+            LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
+            LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
+            // converters.add(new WeeklyRepeatedConverterImpl());		
+            LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
+            // converters.add(new DefaultMultiPeriodeLongTextConverterImpl());
         }
 
-
-        // converters.add(new AdministrationAccordingToSchemaConverterImpl());
-        LongTextConverter._converters.push(new FreeTextConverterImpl());
-        // converters.add(new EmptyStructureConverterImpl());*/
-        LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
-        /*	
-        converters.add(new TwoDaysRepeatedConverterImpl());		
-        converters.add(new WeeklyRepeatedConverterImpl());		
-        converters.add(new DefaultLongTextConverterImpl());
-        converters.add(new DefaultMultiPeriodeLongTextConverterImpl());
-        */
         return LongTextConverter._converters;
     }
     public convert(dosageJson: any): string {

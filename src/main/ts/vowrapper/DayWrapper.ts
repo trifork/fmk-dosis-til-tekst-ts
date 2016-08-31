@@ -30,30 +30,34 @@ export class DayWrapper {
     private _areAllDosesHaveTheSameQuantity: boolean;
     private _accordingToNeedDoses: Array<DoseWrapper>;
 
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new DayWrapper(jsonObject.dayNumber, jsonObject.plainDoses.map(d => PlainDoseWrapper.fromJsonObject(d)), jsonObject.timedDoses.map(d => TimedDoseWrapper.fromJsonObject(d)))
+            : undefined;
+    }
 
-    public static makeDay(dayNumber: number, ...doses: DoseWrapper[]): DayWrapper {
-        let day = new DayWrapper();
-        day._dayNumber = dayNumber;
-        for (let dose of doses) {
-            if (dose != null) {
-                if (dose instanceof PlainDoseWrapper)
-                    day._plainDoses.push(dose);
-                else if (dose instanceof TimedDoseWrapper)
-                    day._timedDoses.push(dose);
-                else if (dose instanceof MorningDoseWrapper)
-                    day._morningDose = dose;
-                else if (dose instanceof NoonDoseWrapper)
-                    day._noonDose = dose;
-                else if (dose instanceof EveningDoseWrapper)
-                    day._eveningDose = dose;
-                else if (dose instanceof NightDoseWrapper)
-                    day._nightDose = dose;
-                else
-                    throw new DosisTilTekstException("Unknown dose type");
-                day._allDoses.push(dose);
+    public constructor(dayNumber: number, plainDoses: PlainDoseWrapper[], timedDoses: TimedDoseWrapper[], ...doses: DoseWrapper[]) {
+
+        this._dayNumber = dayNumber;
+        this._plainDoses = plainDoses;
+        this._timedDoses = timedDoses;
+
+        this._allDoses = new Array<DoseWrapper>();
+
+        plainDoses.forEach(d => this._allDoses.push(d));
+        timedDoses.forEach(d => this._allDoses.push(d));
+
+        this._areAllDosesTheSame = true;
+        let compareDose: DoseWrapper;
+        for (let dose of this.allDoses) {
+            if (!compareDose) {
+                compareDose = dose;
+            }
+            else if (!compareDose.theSameAs(dose)) {
+                this._areAllDosesTheSame = false;
+                break;
             }
         }
-        return day;
     }
 
     get dayNumber() {
@@ -121,21 +125,7 @@ export class DayWrapper {
      * @return true if all dosages are of the same type and has the same quantity
      */
     public allDosesAreTheSame(): boolean {
-        if (this._areAllDosesTheSame) {
-            return this._areAllDosesTheSame;
-        }
-
-        this._areAllDosesTheSame = true;
-        let dose0: DoseWrapper = null;
-        for (let dose of this.allDoses) {
-            if (dose0 == null) {
-                dose0 = dose;
-            }
-            else if (!dose0.theSameAs(dose)) {
-                this._areAllDosesTheSame = false;
-                break;
-            }
-        }
+        return this._areAllDosesTheSame;
     }
 
     /**
@@ -211,10 +201,11 @@ export class DayWrapper {
     }
 
     private static addDosage(bd: number, d: number): number {
-        if (d == null) {
-            throw new DosisTilTekstException("addDosage: d skal være sat");
+        if (d) {
+            return bd + d;
         }
-        return bd + d;
+
+        throw new DosisTilTekstException("addDosage: d skal være sat");
     }
 
 }

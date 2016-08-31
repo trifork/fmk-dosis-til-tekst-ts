@@ -14,7 +14,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         let structure: StructureWrapper = dosage.structures.structures[0];
         if (structure.iterationInterval !== 1)
             return false;
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.endDateOrDateTime))
+        if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime))
             return false;
         if (structure.days.length !== 1)
             return false;
@@ -30,7 +30,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
-        s += this.getDosageStartText(structure.getStartDateOrDateTime());
+        s += this.getDosageStartText(structure.startDateOrDateTime);
 
         if (structure.endDateOrDateTime) {
             s += ", gentages hver dag";
@@ -42,7 +42,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         }
 
         s += TextHelper.INDENT + "Doseringsforløb:\n";
-        this.appendDays(s, unitOrUnits, structure);
+        s += this.getDaysText(unitOrUnits, structure);
         return s.toString();
     }
 

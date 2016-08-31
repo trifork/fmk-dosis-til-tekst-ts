@@ -5,9 +5,9 @@ export class DateOrDateTimeWrapper {
     private _date: Date;
     private _dateTime: Date;
 
-    public static fromJsonObject(parsedObject: any) {
-        if (parsedObject) {
-            return new DateOrDateTimeWrapper(parsedObject.date ? new Date(parsedObject.date) : undefined, parsedObject.dateTime ? new Date(parsedObject.dateTime) : undefined);
+    public static fromJsonObject(jsonObject: any) {
+        if (jsonObject) {
+            return new DateOrDateTimeWrapper(jsonObject.date ? new Date(jsonObject.date) : undefined, jsonObject.dateTime ? new Date(jsonObject.dateTime) : undefined);
         }
 
         return undefined;
@@ -61,12 +61,14 @@ export class DateOrDateTimeWrapper {
     }
 
     public isEqualTo(dt: DateOrDateTimeWrapper): boolean {
-        if (!dt) return false;
-        if (this.date)
-            return this.date === dt.date;
-        else if (this.dateTime)
-            return this.dateTime === dt.dateTime;
-        else
-            return !dt.date && !dt.dateTime;
+        if (dt) {
+            if (this.date)
+                return this.date.getTime() === dt.date.getTime();
+            else if (this.dateTime)
+                return this.dateTime.getTime() === dt.dateTime.getTime();
+            else
+                return !dt.date && !dt.dateTime;
+        }
+        return false;
     }
 }

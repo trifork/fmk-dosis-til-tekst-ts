@@ -29,6 +29,6 @@ export class Factory {
     */
     public static getLongTextConverter() { return new LongTextConverter(); }
     public static getDateOrDateTimeWrapper() { return new DateOrDateTimeWrapper(null, null); }
-    public static getStructureWrapper() { return new StructureWrapper(null, null, null, null, null, null); }
+    public static getStructureWrapper() { return new StructureWrapper(null, null, null, null, null); }
     public static getDosageWrapper() { return new DosageWrapper(null, new FreeTextWrapper(new DateOrDateTimeWrapper(new Date(), null), null, "dims"), null); }
 }

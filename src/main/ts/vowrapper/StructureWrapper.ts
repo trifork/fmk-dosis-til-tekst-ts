@@ -31,33 +31,23 @@ export class StructureWrapper {
     static dayComparator(day1: DayWrapper, day2: DayWrapper): number {
         return day1.dayNumber - day2.dayNumber;
     };
-    /**
-     * Factory metod to create structured dosages
-     */
-    public static makeStructure(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, ...days: DayWrapper[]): StructureWrapper {
-        return StructureWrapper.makeStructure(iterationInterval, supplText, startDateOrDateTime, endDateOrDateTime, null, ...days);
-    }
 
-    /**
-     * Factory metod to create structured dosages
-     */
-    public static makeStructureWithSourceRef(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, refToSource: Object, ...days: DayWrapper[]): StructureWrapper {
-
-        let sortedList = days.sort(StructureWrapper.dayComparator);
-        return new StructureWrapper(iterationInterval, supplText, startDateOrDateTime, endDateOrDateTime, null, sortedList);
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new StructureWrapper(jsonObject.iterationInterval, jsonObject.supplText, DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime), jsonObject.days.map(d => DayWrapper.fromJsonObject(d)).sort(StructureWrapper.dayComparator))
+            : undefined;
     }
 
 
 
-    constructor(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, refToSource: Object, days: Array<DayWrapper>) {
+    constructor(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, days: Array<DayWrapper>) {
         this._iterationInterval = iterationInterval;
         this._supplText = supplText;
         this._startDateOrDateTime = startDateOrDateTime;
         this._endDateOrDateTime = endDateOrDateTime;
 
         if (days) {
-            this.days = days;
-            this.refToSource = refToSource;
+            this._days = days;
         }
         else {
             throw new DosisTilTekstException("StructureWrapper: days must be set in StructureWrapper");
@@ -73,7 +63,7 @@ export class StructureWrapper {
         return this._supplText;
     }
 
-    public getStartDateOrDateTime(): DateOrDateTimeWrapper {
+    get startDateOrDateTime(): DateOrDateTimeWrapper {
         return this._startDateOrDateTime;
     }
 
@@ -94,8 +84,8 @@ export class StructureWrapper {
     }
 
     public startsAndEndsSameDay(): boolean {
-        if (this.getStartDateOrDateTime() && this.endDateOrDateTime) {
-            let startDate = this.getStartDateOrDateTime().getDateOrDateTime();
+        if (this._startDateOrDateTime && this.endDateOrDateTime) {
+            let startDate = this._startDateOrDateTime.getDateOrDateTime();
             let endDate = this.endDateOrDateTime.getDateOrDateTime();
 
             return startDate.getFullYear() === endDate.getFullYear()
@@ -136,12 +126,9 @@ export class StructureWrapper {
     public allDaysAreTheSame(): boolean {
         if (this._areAllDaysTheSame === undefined) {
             this._areAllDaysTheSame = true;
-            let day0: DayWrapper = null;
+            let day0: DayWrapper;
             for (let day of this.days) {
-                if (day0 == null) {
-                    day0 = day;
-                }
-                else {
+                if (day0) {
                     if (day0.getNumberOfDoses() !== day.getNumberOfDoses()) {
                         this._areAllDaysTheSame = false;
                         break;
@@ -154,6 +141,9 @@ export class StructureWrapper {
                             }
                         }
                     }
+                }
+                else {
+                    day0 = day;
                 }
             }
         }

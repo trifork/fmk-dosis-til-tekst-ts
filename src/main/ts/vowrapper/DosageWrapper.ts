@@ -11,10 +11,10 @@ export class DosageWrapper {
     public freeText: FreeTextWrapper;
     public structures: StructuresWrapper;
 
-    public static fromJsonObject(parsedObject: any): DosageWrapper {
-        return new DosageWrapper(AdministrationAccordingToSchemaWrapper.fromJsonObject(parsedObject.administrationAccordingToSchema),
-            FreeTextWrapper.fromJsonObject(parsedObject.freeText),
-            StructuresWrapper.fromJsonObject(parsedObject.structures));
+    public static fromJsonObject(jsonObject: any): DosageWrapper {
+        return new DosageWrapper(AdministrationAccordingToSchemaWrapper.fromJsonObject(jsonObject.administrationAccordingToSchema),
+            FreeTextWrapper.fromJsonObject(jsonObject.freeText),
+            StructuresWrapper.fromJsonObject(jsonObject.structures));
     }
 
     public static makeStructuredDosage(structures: StructuresWrapper): DosageWrapper {
@@ -40,21 +40,21 @@ export class DosageWrapper {
      * @return Returns true if the dosage is "according to schema..." 
      */
     public isAdministrationAccordingToSchema(): boolean {
-        return this.administrationAccordingToSchema != null;
+        return this.administrationAccordingToSchema !== null && this.administrationAccordingToSchema !== undefined;
     }
 
     /**
      * @return Returns true if the dosage is a free text dosage
      */
     public isFreeText(): boolean {
-        return this.freeText != null;
+        return this.freeText !== undefined && this.freeText !== null;
     }
 
     /**
      * @return Returns true if the dosage is structured
      */
     public isStructured(): boolean {
-        return this.structures != null;
+        return this.structures !== undefined && this.structures !== null;
     }
 
     /**

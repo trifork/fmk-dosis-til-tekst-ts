@@ -44,7 +44,8 @@ export abstract class LongTextConverterImpl {
         return (secs % 60 !== 0);
     }
 
-    protected appendDays(s: string, unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): number {
+    protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+        let s = "";
         let appendedLines = 0;
         for (let day of structure.days) {
             appendedLines++;
@@ -63,7 +64,7 @@ export abstract class LongTextConverterImpl {
             s += daysLabel;
             s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
         }
-        return appendedLines;
+        return s;
     }
 
     protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper): string {
@@ -77,7 +78,7 @@ export abstract class LongTextConverterImpl {
             return "";
         }
         else {
-            return TextHelper.makeDayString(structure.getStartDateOrDateTime(), day.dayNumber) + ": ";
+            return TextHelper.makeDayString(structure.startDateOrDateTime, day.dayNumber) + ": ";
         }
     }
 
@@ -94,7 +95,6 @@ export abstract class LongTextConverterImpl {
             daglig = " daglig";
 
         if (day.getNumberOfDoses() === 1) {
-            // The cast to CharSequence is needed to circumvent a gwt bug:
             s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.supplText);
             if (day.containsAccordingToNeedDosesOnly() && day.dayNumber > 0)
                 s += " højst 1 gang" + daglig + supplText;
@@ -102,7 +102,6 @@ export abstract class LongTextConverterImpl {
                 s += supplText;
         }
         else if (day.getNumberOfDoses() > 1 && day.allDosesAreTheSame()) {
-            // The cast to CharSequence is needed to circumvent a gwt bug:
             s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.supplText);
             if (day.containsAccordingToNeedDosesOnly() && day.dayNumber > 0)
                 s += " højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
@@ -111,7 +110,6 @@ export abstract class LongTextConverterImpl {
         }
         else {
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                // The cast to CharSequence is needed to circumvent a gwt bug:
                 s += this.makeOneDose(day.getDose(d), unitOrUnits, structure.supplText) + supplText;
                 if (d < day.getNumberOfDoses() - 1)
                     s += " + ";
@@ -122,7 +120,7 @@ export abstract class LongTextConverterImpl {
             s += " " + dosagePeriodPostfix;
         }
 
-        return s.toString();
+        return s;
     }
 
     private makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, supplText: string): string {
@@ -136,6 +134,27 @@ export abstract class LongTextConverterImpl {
             s += " efter behov";
         }
         return s;
+    }
+
+    protected getNoteText(structure: StructureWrapper): string {
+        if (this.isVarying(structure) && this.isComplex(structure))
+            return ".\nBemærk at doseringen varierer og har et komplekst forløb:\n";
+        else if (this.isVarying(structure))
+            return ".\nBemærk at doseringen varierer:\n";
+        else if (this.isComplex(structure))
+            return ".\nBemærk at doseringen har et komplekst forløb:\n";
+        else
+            return ":\n";
+    }
+
+    private isComplex(structure: StructureWrapper): boolean {
+        if (structure.days.length === 1)
+            return false;
+        return !structure.daysAreInUninteruptedSequenceFromOne();
+    }
+
+    private isVarying(structure: StructureWrapper): boolean {
+        return !structure.allDaysAreTheSame();
     }
 
 }

@@ -245,13 +245,13 @@ export class TextHelper {
     }
 
     private static weekdays: string[] = [
+        "søndag",
         "mandag",
         "tirsdag",
         "onsdag",
         "torsdag",
         "fredag",
-        "lørdag",
-        "søndag"
+        "lørdag"
     ];
 
     private static months: string[] = [

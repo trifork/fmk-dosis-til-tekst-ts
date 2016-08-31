@@ -5,9 +5,9 @@ export class AdministrationAccordingToSchemaWrapper {
     private startDateOrDateTime: DateOrDateTimeWrapper;
     private endDateOrDateTime: DateOrDateTimeWrapper;
 
-    public static fromJsonObject(parsedObject: any) {
-        return parsedObject ?
-            new AdministrationAccordingToSchemaWrapper(DateOrDateTimeWrapper.fromJsonObject(parsedObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(parsedObject.endDateOrDateTime))
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new AdministrationAccordingToSchemaWrapper(DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime))
             : undefined;
     }
 

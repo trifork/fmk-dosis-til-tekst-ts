@@ -4,12 +4,10 @@ export class UnitOrUnitsWrapper {
     private _unitSingular: string;
     private _unitPlural: string;
 
-    public static makeUnit(unit: string): UnitOrUnitsWrapper {
-        return new UnitOrUnitsWrapper(unit, null, null);
-    }
-
-    public static makeUnits(unitSingular: string, unitPlural: string): UnitOrUnitsWrapper {
-        return new UnitOrUnitsWrapper(null, unitSingular, unitPlural);
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new UnitOrUnitsWrapper(jsonObject.unit, jsonObject.unitSingular, jsonObject.unitPlural)
+            : undefined;
     }
 
     constructor(unit: string, unitSingular: string, unitPlural: string) {

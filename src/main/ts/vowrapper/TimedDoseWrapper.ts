@@ -1,40 +1,27 @@
-import { DoseWrapper } from "./DoseWrapper";
+import {LocalTime} from "../LocalTime";
+import {DoseWrapper} from "./DoseWrapper";
 
 export class TimedDoseWrapper extends DoseWrapper {
 
-    private _time: Date;
+    private _time: LocalTime;
+
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new TimedDoseWrapper(LocalTime.fromJsonObject(jsonObject.time), jsonObject.doseQuantity, jsonObject.minimalDoseQuantity, jsonObject.maximalDoseQuantity, jsonObject.doseQuantityString, jsonObject.minimalDoseQuantityString, jsonObject.maximalDoseQuantityString, jsonObject.isAccordingToNeed)
+            : undefined;
+    }
+
+    static fromJsonObjectTime(jsonObject: any): Date {
+        return new Date();
+    }
 
     constructor(
-        time: Date,
+        time: LocalTime,
         doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number,
         doseQuantitystring: string, minimalDoseQuantitystring: string, maximalDoseQuantitystring: string,
         isAccordingToNeed: boolean) {
         super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
         this._time = time;
-    }
-
-    public static makeDose(time: Date, quantity: number, isAccordingToNeed: boolean): TimedDoseWrapper {
-        if (TimedDoseWrapper.isZero(quantity))
-            return null;
-        return new TimedDoseWrapper(time, quantity, null, null, null, null, null, isAccordingToNeed);
-    }
-
-    public static makeDoseWithText(time: Date, quantity: number, supplText: string, isAccordingToNeed: boolean): TimedDoseWrapper {
-        if (TimedDoseWrapper.isZero(quantity))
-            return null;
-        return new TimedDoseWrapper(time, quantity, null, null, supplText, null, null, isAccordingToNeed);
-    }
-
-    public static makeDoseWithMinMax(time: Date, minimalQuantity: number, maximalQuantity: number, isAccordingToNeed: boolean): TimedDoseWrapper {
-        if (TimedDoseWrapper.isMinAndMaxZero(minimalQuantity, maximalQuantity))
-            return null;
-        return new TimedDoseWrapper(time, null, minimalQuantity, maximalQuantity, null, null, null, isAccordingToNeed);
-    }
-
-    public static makeDoseWithMinMaxAndText(time: Date, minimalQuantity: number, maximalQuantity: number, minimalSupplText: string, maximalSupplText: string, isAccordingToNeed: boolean): TimedDoseWrapper {
-        if (TimedDoseWrapper.isMinAndMaxZero(minimalQuantity, maximalQuantity))
-            return null;
-        return new TimedDoseWrapper(time, null, minimalQuantity, maximalQuantity, null, minimalSupplText, maximalSupplText, isAccordingToNeed);
     }
 
     static LABEL = "kl.";
