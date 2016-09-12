@@ -3,6 +3,7 @@ import { DateOrDateTimeWrapper } from "./vowrapper/DateOrDateTimeWrapper";
 import { DayWrapper } from "./vowrapper/DayWrapper";
 import { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
 import { DayOfWeek } from "./vowrapper/DayOfWeek";
+import { LoggerService } from "./LoggerService";
 
 export class TextHelper {
 
@@ -14,10 +15,8 @@ export class TextHelper {
     //    private static final FastDateFormat longDateFormatter = FastDateFormat.getInstance(LONG_DATE_FORMAT, new Locale("da", "DK"));
 
     private static _decimalsToFractions: { [key: string]: string; } = { "0,5": "1/2", "0,25": "1/4", "0,75": "3/4", "1,5": "1 1/2" };
-    private static _singularToPlural: { [key: string]: string; };
-    private static _pluralToSingular: { [key: string]: string; };
 
-    private static UNITS: string[][] = [
+    private static _unit: string[][] = [
         ["ampul", "ampuller"],
         ["applikatordosis", "applikatordoser"],
         ["beholder", "beholdere"],
@@ -88,13 +87,14 @@ export class TextHelper {
     ];
 
     public static formatQuantity(quantity: number): string {
+        LoggerService.debug("formatQuantity: " + quantity + " trimmed: " + TextHelper.trim(quantity.toString().replace(".", ",")));
         // We replace . with , below using string replace as we want to make
         // sure we always use , no matter what the locale settings are
         return TextHelper.trim(quantity.toString().replace(".", ","));
     }
 
     public static gange(num: number): String {
-        if (!num || Math.floor(num) > 1)
+        if (num === undefined || Math.floor(num) > 1)
             return "gange";
         else
             return "gang";
@@ -133,48 +133,25 @@ export class TextHelper {
         }
     }
 
-    static initSingularPlural() {
-        for (let u of TextHelper.UNITS) {
-            TextHelper._singularToPlural = {};
-            TextHelper._singularToPlural[u[0]] = u[1];
-            TextHelper._pluralToSingular = {};
-            TextHelper._pluralToSingular[u[1]] = u[0];
+    public static unitToSingular(plural: string): string {
+        let singular = TextHelper._unit.filter(u => u[1] === plural).map(u => u[0]);
+        if (singular && singular.length > 0) {
+            LoggerService.debug("singular: " + singular.toString());
+            return singular[0];
         }
+
+        return plural;
     }
 
-    static get singularToPlural() {
-        if (!TextHelper._singularToPlural) {
-            TextHelper.initSingularPlural();
+    public static unitToPlural(singular: string): string {
+        LoggerService.debug("unit to plural called with: " + singular.toString());
+        let plural = TextHelper._unit.filter(u => u[0] === singular);
+        if (plural && plural.length > 0) {
+            LoggerService.debug("plural: " + plural.toString() + " plural[0]: " + plural[0] + " plural[0][1]: " + plural[0][1]);
+            return plural[0][1];
         }
 
-        return TextHelper._singularToPlural;
-    }
-
-    static get pluralToSingular() {
-        if (!TextHelper._pluralToSingular) {
-            TextHelper.initSingularPlural();
-        }
-
-        return TextHelper._pluralToSingular;
-    }
-
-
-    public static unitToSingular(s: string): string {
-
-        let singular = TextHelper.pluralToSingular[s];
-        if (s in TextHelper.pluralToSingular) {
-            return TextHelper.pluralToSingular[s];
-        }
-        else {
-            return s;
-        }
-    }
-
-    public static unitToPlural(s: string): string {
-        if (s in TextHelper.singularToPlural)
-            return TextHelper.singularToPlural[s];
-        else
-            return s;
+        return singular;
     }
 
     public static getUnit(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
@@ -224,10 +201,10 @@ export class TextHelper {
     }
 
     private static hasPluralUnit(dose: DoseWrapper): boolean {
-        if (dose.doseQuantity) {
+        if (dose.doseQuantity !== undefined) {
             return dose.doseQuantity > 1.0 || dose.doseQuantity < 0.000000001;
         }
-        else if (dose.maximalDoseQuantity) {
+        else if (dose.maximalDoseQuantity !== undefined) {
             return dose.maximalDoseQuantity > 1.0 || dose.maximalDoseQuantity < 0.000000001;
         }
         else {
@@ -236,7 +213,7 @@ export class TextHelper {
     }
 
     private static hasPluralUnitForNumber(dose: number): boolean {
-        if (dose) {
+        if (dose !== undefined) {
             return dose > 1.0 || dose < 0.000000001;
         }
         else {
@@ -286,12 +263,12 @@ export class TextHelper {
 
     public static formatLongDateTime(dateTime: Date): string {
         // "EEEEEEE "den" d"." MMMMMMM yyyy "kl." HH:mm:ss";
-        return TextHelper.formatLongDate(dateTime) + "kl." + dateTime.toLocaleTimeString().replace(".", ":");
+        return TextHelper.formatLongDate(dateTime) + " kl. " + dateTime.toLocaleTimeString(undefined, { hour12: false }).replace(".", ":");
     }
 
     public static formatLongDateNoSecs(dateTime: Date): string {
         let dateTimeString = TextHelper.formatLongDateTime(dateTime);
-        return dateTimeString.substr(0, dateTimeString.length - 2);
+        return dateTimeString.substr(0, dateTimeString.length - 3);
     }
 
     public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTimeWrapper, day: DayWrapper, initialUpperCase: boolean): DayOfWeek {

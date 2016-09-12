@@ -1,4 +1,5 @@
 import { TextHelper } from "../TextHelper";
+import { LoggerService } from "../LoggerService";
 
 export abstract class DoseWrapper {
 
@@ -19,13 +20,18 @@ export abstract class DoseWrapper {
         this._minimalDoseQuantity = minimalDoseQuantity;
         this._maximalDoseQuantity = maximalDoseQuantity;
         this._isAccordingToNeed = isAccordingToNeed;
-        if (minimalDoseQuantity)
+        if (minimalDoseQuantity !== undefined)
             this._minimalDoseQuantityString = TextHelper.formatQuantity(minimalDoseQuantity);
-        if (maximalDoseQuantity)
+        if (maximalDoseQuantity !== undefined)
             this._maximalDoseQuantityString = TextHelper.formatQuantity(maximalDoseQuantity);
-        if (doseQuantity)
+        if (doseQuantity !== undefined)
             this._doseQuantityString = TextHelper.formatQuantity(doseQuantity).replace(".", ",");
+
+        LoggerService.debug("DoseWrapper minimalDoseQuantity " + minimalDoseQuantity);
+        LoggerService.debug("DoseWrapper maximalDoseQuantity " + maximalDoseQuantity);
     }
+
+
 
     public abstract getLabel(): string;
     /*
@@ -39,73 +45,73 @@ export abstract class DoseWrapper {
       */
 
     protected static isZero(quantity: number): boolean {
-        if (quantity) {
-            return quantity < 0.000000001;
-        }
-        else {
-            return true;
-        }
+    if (quantity) {
+        return quantity < 0.000000001;
     }
-
-    protected static isMinAndMaxZero(minimalQuantity, maximalQuantity): boolean {
-        return !minimalQuantity && !maximalQuantity;
-    }
-
-    public get minimalDoseQuantity() {
-        return this._minimalDoseQuantity;
-    }
-
-    public get maximalDoseQuantity() {
-        return this._maximalDoseQuantity;
-    }
-
-    public get doseQuantity() {
-        return this._doseQuantity;
-    }
-
-    public get minimalDoseQuantityString() {
-        return this._minimalDoseQuantityString;
-    }
-
-    public get maximalDoseQuantityString() {
-        return this._maximalDoseQuantityString;
-    }
-
-    public get doseQuantityString() {
-        return this._doseQuantityString;
-    }
-
-    public get isAccordingToNeed() {
-        return this._isAccordingToNeed;
-    }
-
-    public get anyDoseQuantityString() {
-        if (this.doseQuantityString)
-            return this.doseQuantityString;
-        else
-            return this.minimalDoseQuantityString + "-" + this.maximalDoseQuantityString;
-    }
-
-    public theSameAs(other: DoseWrapper): boolean {
-        if (this.getLabel() !== other.getLabel())
-            return false;
-        if (this.isAccordingToNeed !== other.isAccordingToNeed)
-            return false;
-        if (!this.equalsWhereNullsAreTrue(this.minimalDoseQuantityString, other.minimalDoseQuantityString))
-            return false;
-        if (!this.equalsWhereNullsAreTrue(this.maximalDoseQuantityString, other.maximalDoseQuantityString))
-            return false;
-        if (!this.equalsWhereNullsAreTrue(this.doseQuantityString, other.doseQuantityString))
-            return false;
+    else {
         return true;
     }
+}
+
+    protected static isMinAndMaxZero(minimalQuantity, maximalQuantity): boolean {
+    return !minimalQuantity && !maximalQuantity;
+}
+
+    public get minimalDoseQuantity() {
+    return this._minimalDoseQuantity;
+}
+
+    public get maximalDoseQuantity() {
+    return this._maximalDoseQuantity;
+}
+
+    public get doseQuantity() {
+    return this._doseQuantity;
+}
+
+    public get minimalDoseQuantityString() {
+    return this._minimalDoseQuantityString;
+}
+
+    public get maximalDoseQuantityString() {
+    return this._maximalDoseQuantityString;
+}
+
+    public get doseQuantityString() {
+    return this._doseQuantityString;
+}
+
+    public get isAccordingToNeed() {
+    return this._isAccordingToNeed;
+}
+
+    public get anyDoseQuantityString() {
+    if (this.doseQuantityString)
+        return this.doseQuantityString;
+    else
+        return this.minimalDoseQuantityString + "-" + this.maximalDoseQuantityString;
+}
+
+    public theSameAs(other: DoseWrapper): boolean {
+    if (this.getLabel() !== other.getLabel())
+        return false;
+    if (this.isAccordingToNeed !== other.isAccordingToNeed)
+        return false;
+    if (!this.equalsWhereNullsAreTrue(this.minimalDoseQuantityString, other.minimalDoseQuantityString))
+        return false;
+    if (!this.equalsWhereNullsAreTrue(this.maximalDoseQuantityString, other.maximalDoseQuantityString))
+        return false;
+    if (!this.equalsWhereNullsAreTrue(this.doseQuantityString, other.doseQuantityString))
+        return false;
+    return true;
+}
 
     private equalsWhereNullsAreTrue(a, b): boolean {
-        if (!a && !b)
-            return true;
-        else if ((!a && b) || (a && !b))
-            return false;
-        else
-            return a.toString().equals(b.toString());
-    }
+    if (!a && !b)
+        return true;
+    else if ((!a && b) || (a && !b))
+        return false;
+    else
+        return a.toString().equals(b.toString());
+}
 }

@@ -1,4 +1,5 @@
 import { DoseWrapper } from "./DoseWrapper";
+import { LoggerService } from "../LoggerService";
 
 export class MorningDoseWrapper extends DoseWrapper {
 
@@ -9,22 +10,15 @@ export class MorningDoseWrapper extends DoseWrapper {
         super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
     }
 
-    public static makeDose(quantity: number, isAccordingToNeed = false): MorningDoseWrapper {
-        if (MorningDoseWrapper.isZero(quantity))
-            return null;
-        return new MorningDoseWrapper(quantity, null, null, null, null, null, false);
-    }
+    public static fromJsonObject(jsonObject: any) {
+        if (jsonObject) {
+            LoggerService.debug("MorningDoseWrapper minimalDoseQuantity " + jsonObject.minimalDoseQuantity);
+            LoggerService.debug("MorningDoseWrapper maximalDoseQuantity " + jsonObject.maximalDoseQuantity);
+        }
 
-    public static makeDoseWithText(quantity: number, supplText: string, isAccordingToNeed = false): MorningDoseWrapper {
-        if (MorningDoseWrapper.isZero(quantity))
-            return null;
-        return new MorningDoseWrapper(quantity, null, null, supplText, null, null, isAccordingToNeed);
-    }
-
-    public static makeDoseWithMinMax(minimalQuantity: number, maximalQuantity: number, isAccordingToNeed = false): MorningDoseWrapper {
-        if (MorningDoseWrapper.isMinAndMaxZero(minimalQuantity, maximalQuantity))
-            return null;
-        return new MorningDoseWrapper(null, minimalQuantity, maximalQuantity, null, null, null, isAccordingToNeed);
+        return jsonObject ?
+            new MorningDoseWrapper(jsonObject.doseQuantity, jsonObject.minimalDoseQuantity, jsonObject.maximalDoseQuantity, jsonObject.doseQuantityString, jsonObject.minimalDoseQuantityString, jsonObject.maximalDoseQuantityString, jsonObject.isAccordingToNeed)
+            : undefined;
     }
 
     static LABEL = "morgen";

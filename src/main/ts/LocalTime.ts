@@ -27,6 +27,7 @@ export class LocalTime {
     }
 
     public toString(): string {
+
         let hourString = this._hour.toString();
         if (hourString.length === 1) {
             hourString = "0" + hourString;
@@ -38,7 +39,7 @@ export class LocalTime {
 
         let secondString: string;
 
-        if (this._second) {
+        if (this._second !== undefined) {
             secondString = this._second.toString();
             if (secondString.length === 1) {
                 secondString = "0" + secondString;

@@ -9,22 +9,10 @@ export class NightDoseWrapper extends DoseWrapper {
         super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
     }
 
-    public static makeDose(quantity: number, isAccordingToNeed = false): NightDoseWrapper {
-        if (NightDoseWrapper.isZero(quantity))
-            return null;
-        return new NightDoseWrapper(quantity, null, null, null, null, null, false);
-    }
-
-    public static makeDoseWithText(quantity: number, supplText: string, isAccordingToNeed = false): NightDoseWrapper {
-        if (NightDoseWrapper.isZero(quantity))
-            return null;
-        return new NightDoseWrapper(quantity, null, null, supplText, null, null, isAccordingToNeed);
-    }
-
-    public static makeDoseWithMinMax(minimalQuantity: number, maximalQuantity: number, isAccordingToNeed = false): NightDoseWrapper {
-        if (NightDoseWrapper.isMinAndMaxZero(minimalQuantity, maximalQuantity))
-            return null;
-        return new NightDoseWrapper(null, minimalQuantity, maximalQuantity, null, null, null, isAccordingToNeed);
+    public static fromJsonObject(jsonObject: any) {
+        return jsonObject ?
+            new NightDoseWrapper(jsonObject.doseQuantity, jsonObject.minimalDoseQuantity, jsonObject.maximalDoseQuantity, jsonObject.doseQuantityString, jsonObject.minimalDoseQuantityString, jsonObject.maximalDoseQuantityString, jsonObject.isAccordingToNeed)
+            : undefined;
     }
 
     static LABEL = "før sengetid";

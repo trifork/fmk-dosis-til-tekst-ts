@@ -6,6 +6,9 @@ import { AdministrationAccordingToSchemaConverterImpl } from "./longtextconverte
 import { DefaultLongTextConverterImpl } from "./longtextconverterimpl/DefaultLongTextConverterImpl";
 import { EmptyStructureConverterImpl } from "./longtextconverterimpl/EmptyStructureConverterImpl";
 import { TwoDaysRepeatedConverterImpl } from "./longtextconverterimpl/TwoDaysRepeatedConverterImpl";
+import { WeeklyRepeatedConverterImpl } from "./longtextconverterimpl/WeeklyRepeatedConverterImpl";
+import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
+import { LoggerService } from "./LoggerService";
 
 export class LongTextConverter {
 
@@ -19,19 +22,26 @@ export class LongTextConverter {
             LongTextConverter._converters.push(new EmptyStructureConverterImpl());
             LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
             LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
-            // converters.add(new WeeklyRepeatedConverterImpl());		
+            LongTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
             LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
-            // converters.add(new DefaultMultiPeriodeLongTextConverterImpl());
+            LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl());
         }
 
         return LongTextConverter._converters;
     }
+
     public convert(dosageJson: any): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
+        return LongTextConverter.convertWrapper(dosage);
+    }
 
+    public static convertWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter.converters) {
-            if (converter.canConvert(dosage))
+            if (converter.canConvert(dosage)) {
+                LoggerService.info(converter.constructor["name"]);
+
                 return converter.doConvert(dosage);
+            }
         }
         return null;
     }

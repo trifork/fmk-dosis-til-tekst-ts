@@ -7,6 +7,7 @@ import { MorningDoseWrapper } from "./MorningDoseWrapper";
 import { NoonDoseWrapper } from "./NoonDoseWrapper";
 import { EveningDoseWrapper } from "./EveningDoseWrapper";
 import { NightDoseWrapper } from "./NightDoseWrapper";
+import { LoggerService } from "../LoggerService";
 
 export class DayWrapper {
 
@@ -31,21 +32,65 @@ export class DayWrapper {
     private _accordingToNeedDoses: Array<DoseWrapper>;
 
     public static fromJsonObject(jsonObject: any) {
+
+        if (jsonObject) {
+            for (let key in jsonObject) {
+                if (jsonObject.hasOwnProperty(key)) {
+                    let element = jsonObject[key];
+                    LoggerService.debug(key + ": " + element);
+
+                }
+            }
+
+        }
+
+        LoggerService.debug("DayWrapper.fromJsonObject");
+        for (let key in jsonObject) {
+            if (jsonObject.hasOwnProperty(key)) {
+                let element = jsonObject[key];
+                LoggerService.debug(key + ": " + element);
+            }
+        }
+        LoggerService.debug("DayWrapper.fromJsonObject END");
+
         return jsonObject ?
-            new DayWrapper(jsonObject.dayNumber, jsonObject.plainDoses.map(d => PlainDoseWrapper.fromJsonObject(d)), jsonObject.timedDoses.map(d => TimedDoseWrapper.fromJsonObject(d)))
+            new DayWrapper(jsonObject.dayNumber,
+                jsonObject.plainDoses.map(d => PlainDoseWrapper.fromJsonObject(d)),
+                jsonObject.timedDoses.map(d => TimedDoseWrapper.fromJsonObject(d)),
+                MorningDoseWrapper.fromJsonObject(jsonObject.morningDose),
+                NoonDoseWrapper.fromJsonObject(jsonObject.noonDose),
+                EveningDoseWrapper.fromJsonObject(jsonObject.eveningDose),
+                NightDoseWrapper.fromJsonObject(jsonObject.nightDose)
+            )
             : undefined;
     }
 
-    public constructor(dayNumber: number, plainDoses: PlainDoseWrapper[], timedDoses: TimedDoseWrapper[], ...doses: DoseWrapper[]) {
+    public constructor(dayNumber: number, plainDoses: PlainDoseWrapper[], timedDoses: TimedDoseWrapper[], morningDose: MorningDoseWrapper, noonDose: NoonDoseWrapper, eveningDose: EveningDoseWrapper, nightDose: NightDoseWrapper) {
 
         this._dayNumber = dayNumber;
         this._plainDoses = plainDoses;
         this._timedDoses = timedDoses;
+        this._morningDose = morningDose;
+        this._noonDose = noonDose;
+        this._eveningDose = eveningDose;
+        this._nightDose = nightDose;
 
         this._allDoses = new Array<DoseWrapper>();
 
         plainDoses.forEach(d => this._allDoses.push(d));
         timedDoses.forEach(d => this._allDoses.push(d));
+        if (morningDose) {
+            this._allDoses.push(morningDose);
+        }
+        if (noonDose) {
+            this._allDoses.push(noonDose);
+        }
+        if (eveningDose) {
+            this._allDoses.push(eveningDose);
+        }
+        if (nightDose) {
+            this._allDoses.push(nightDose);
+        }
 
         this._areAllDosesTheSame = true;
         let compareDose: DoseWrapper;

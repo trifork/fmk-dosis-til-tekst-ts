@@ -19,26 +19,15 @@ export class StructureWrapper {
     private _areAllDaysTheSame: boolean;
     private _areAllDosesTheSame: boolean;
 
-    /*
-    private static final Comparator<DayWrapper> DAY_COMPARATOR = new Comparator<DayWrapper>() {
-        @Override
-        public int compare(DayWrapper o1, DayWrapper o2) {
-            return o1.dayNumber - o2.dayNumber;
-        }
-    };
-    */
-
-    static dayComparator(day1: DayWrapper, day2: DayWrapper): number {
-        return day1.dayNumber - day2.dayNumber;
-    };
-
     public static fromJsonObject(jsonObject: any) {
         return jsonObject ?
-            new StructureWrapper(jsonObject.iterationInterval, jsonObject.supplText, DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime), jsonObject.days.map(d => DayWrapper.fromJsonObject(d)).sort(StructureWrapper.dayComparator))
+            new StructureWrapper(jsonObject.iterationInterval,
+                jsonObject.supplText,
+                DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime),
+                DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime),
+                jsonObject.days.map(d => DayWrapper.fromJsonObject(d)).sort((d1, d2) => d1.dayNumber - d2.dayNumber))
             : undefined;
     }
-
-
 
     constructor(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, days: Array<DayWrapper>) {
         this._iterationInterval = iterationInterval;

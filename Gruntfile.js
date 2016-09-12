@@ -14,7 +14,9 @@ module.exports = function (grunt) {
         configuration: "tslint.json"
       },
       files: [
-        "src/main/ts/**/*.ts",
+        "src/main/ts/*.ts",
+        "src/main/ts/longtextconverterimpl/*.ts",
+        "src/main/ts/vowrapper/*.ts",
         "src/main/ts/**/*.tsx"
       ]
     },

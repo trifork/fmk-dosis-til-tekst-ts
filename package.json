@@ -19,7 +19,9 @@
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "winston": "^2.2.0"
+  },
   "main": "target/dosistiltekst.js",
   "files": [
     "target"

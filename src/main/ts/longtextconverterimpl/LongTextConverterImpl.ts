@@ -7,6 +7,8 @@ import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 
+import { LoggerService  } from "../LoggerService";
+
 export abstract class LongTextConverterImpl {
 
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
@@ -21,6 +23,9 @@ export abstract class LongTextConverterImpl {
     }
 
     protected datesToLongText(startDateOrDateTime: DateOrDateTimeWrapper): string {
+
+        LoggerService.debug("startDateOrDateTime.date: " + startDateOrDateTime.date + " startDateOrDateTime.dateTime: " + startDateOrDateTime.dateTime);
+
         if (!startDateOrDateTime)
             throw new DosisTilTekstException("startDateOrDateTime must be set");
 
@@ -40,8 +45,7 @@ export abstract class LongTextConverterImpl {
     }
 
     private haveSeconds(dateTime: Date): boolean {
-        let secs = dateTime.getTime() / 1000;
-        return (secs % 60 !== 0);
+        return dateTime.getSeconds() !== 0;
     }
 
     protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
@@ -109,6 +113,7 @@ export abstract class LongTextConverterImpl {
                 s += " " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
         }
         else {
+
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
                 s += this.makeOneDose(day.getDose(d), unitOrUnits, structure.supplText) + supplText;
                 if (d < day.getNumberOfDoses() - 1)

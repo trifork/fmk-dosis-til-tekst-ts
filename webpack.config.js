@@ -1,22 +1,24 @@
-var path = require("path");
+var path = require('path');
 
 module.exports = {
 
-    // entry: "./src/main/ts/test.ts",
     entry: "./src/main/ts/Factory.ts",
 
-    // needs population
     output: {
-        // filename: "target/test_webpack.js", // needs population,
-                filename: "target/dosistiltekst.js", // needs population,
 
-         // export itself to a global var
+        filename: "target/dosistiltekst.js", 
+
+        // export itself to a global var
         libraryTarget: "var",
-        // name of the global var: "Foo"
+        // name of the global var
         library: "dosistiltekst"
     },
+    // FOR THE SERVER VERSION, USE externals: [ list of node modules ]
+    // externals: [ 'fs'],
+        
     resolve: {
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+        modulesDirectories: [ "node_modules" ]
     },
     bail: true,
     debug: true,
@@ -26,5 +28,7 @@ module.exports = {
             // Load typescript source-files
             { test: /\.ts?$/, loader: "ts-loader", exclude: /\.d\.ts$/ },
         ]
-    }
+    },
+    
+
 };

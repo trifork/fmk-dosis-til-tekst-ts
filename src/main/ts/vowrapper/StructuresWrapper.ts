@@ -1,6 +1,7 @@
 import { UnitOrUnitsWrapper } from "./UnitOrUnitsWrapper";
 import { StructureWrapper } from "./StructureWrapper";
 import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
+import { LoggerService } from "../LoggerService";
 
 export class StructuresWrapper {
     private _unitOrUnits: UnitOrUnitsWrapper;
@@ -14,8 +15,12 @@ export class StructuresWrapper {
 
     constructor(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]) {
         this._unitOrUnits = unitOrUnits;
+        LoggerService.debug("[0]: " + structures[0].startDateOrDateTime.getDateOrDateTime().toString());
+        if (structures[1] && structures[1].startDateOrDateTime) LoggerService.debug(" [1]: " + structures[1].startDateOrDateTime.getDateOrDateTime().toString());
         structures.sort((s1, s2) => {
-            let i = s1.startDateOrDateTime.getDateOrDateTime().getMilliseconds() - s2.startDateOrDateTime.getDateOrDateTime().getMilliseconds();
+            let i = s1.startDateOrDateTime.getDateOrDateTime().getTime() - s2.startDateOrDateTime.getDateOrDateTime().getTime();
+            LoggerService.debug("s1: " + s1.startDateOrDateTime.getDateOrDateTime().getTime());
+            LoggerService.debug("s2: " + s2.startDateOrDateTime.getDateOrDateTime().getTime());
             if (i !== 0)
                 return i;
             if (s1.containsAccordingToNeedDosesOnly())
@@ -23,6 +28,8 @@ export class StructuresWrapper {
             else
                 return -1;
         });
+         LoggerService.debug("Efter sortering: [0]: " + structures[0].startDateOrDateTime.getDateOrDateTime().toString());
+        if (structures[1] && structures[1].startDateOrDateTime) LoggerService.debug("Efter sortering: [1]: " + structures[1].startDateOrDateTime.getDateOrDateTime().toString());
 
         this._structures = structures;
     }
@@ -31,7 +38,7 @@ export class StructuresWrapper {
         return this._unitOrUnits;
     }
 
-    public get structures() {
+    public get structures(): StructureWrapper[] {
         return this._structures;
     }
 
