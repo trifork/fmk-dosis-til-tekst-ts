@@ -7,7 +7,6 @@ import { MorningDoseWrapper } from "./MorningDoseWrapper";
 import { NoonDoseWrapper } from "./NoonDoseWrapper";
 import { EveningDoseWrapper } from "./EveningDoseWrapper";
 import { NightDoseWrapper } from "./NightDoseWrapper";
-import { LoggerService } from "../LoggerService";
 
 export class DayWrapper {
 
@@ -19,8 +18,8 @@ export class DayWrapper {
     // compatibility in the dosis-to-text conversion
     // AccordingToNeed is merged into each type since 2012-06-01 schemas 
     // private List<AccordingToNeedDoseWrapper> accordingToNeedDoses = new ArrayList<AccordingToNeedDoseWrapper>();
-    private _plainDoses: Array<PlainDoseWrapper>;
-    private _timedDoses: Array<TimedDoseWrapper>;
+    private _plainDoses: Array<PlainDoseWrapper> = [];
+    private _timedDoses: Array<TimedDoseWrapper> = [];
     private _morningDose: MorningDoseWrapper;
     private _noonDose: NoonDoseWrapper;
     private _eveningDose: EveningDoseWrapper;
@@ -34,73 +33,67 @@ export class DayWrapper {
     public static fromJsonObject(jsonObject: any) {
 
         if (jsonObject) {
-            for (let key in jsonObject) {
-                if (jsonObject.hasOwnProperty(key)) {
-                    let element = jsonObject[key];
-                    LoggerService.debug(key + ": " + element);
-
+            let allDoses: DoseWrapper[] = [];
+            jsonObject.allDoses.forEach(d => {
+                switch (d.type) {
+                    case "MorningDoseWrapper":
+                        allDoses.push(MorningDoseWrapper.fromJsonObject(d));
+                        break;
+                    case "NoonDoseWrapper":
+                        allDoses.push(NoonDoseWrapper.fromJsonObject(d));
+                        break;
+                    case "EveningDoseWrapper":
+                        allDoses.push(EveningDoseWrapper.fromJsonObject(d));
+                        break;
+                    case "NightDoseWrapper":
+                        allDoses.push(NightDoseWrapper.fromJsonObject(d));
+                        break;
+                    case "PlainDoseWrapper":
+                        allDoses.push(PlainDoseWrapper.fromJsonObject(d));
+                        break;
+                    case "TimedDoseWrapper":
+                        allDoses.push(TimedDoseWrapper.fromJsonObject(d));
+                        break;
                 }
-            }
-
+            });
+            return new DayWrapper(jsonObject.dayNumber, allDoses);
         }
-
-        LoggerService.debug("DayWrapper.fromJsonObject");
-        for (let key in jsonObject) {
-            if (jsonObject.hasOwnProperty(key)) {
-                let element = jsonObject[key];
-                LoggerService.debug(key + ": " + element);
-            }
-        }
-        LoggerService.debug("DayWrapper.fromJsonObject END");
-
-        return jsonObject ?
-            new DayWrapper(jsonObject.dayNumber,
-                jsonObject.plainDoses.map(d => PlainDoseWrapper.fromJsonObject(d)),
-                jsonObject.timedDoses.map(d => TimedDoseWrapper.fromJsonObject(d)),
-                MorningDoseWrapper.fromJsonObject(jsonObject.morningDose),
-                NoonDoseWrapper.fromJsonObject(jsonObject.noonDose),
-                EveningDoseWrapper.fromJsonObject(jsonObject.eveningDose),
-                NightDoseWrapper.fromJsonObject(jsonObject.nightDose)
-            )
-            : undefined;
+        return undefined;
     }
 
-    public constructor(dayNumber: number, plainDoses: PlainDoseWrapper[], timedDoses: TimedDoseWrapper[], morningDose: MorningDoseWrapper, noonDose: NoonDoseWrapper, eveningDose: EveningDoseWrapper, nightDose: NightDoseWrapper) {
 
-        this._dayNumber = dayNumber;
-        this._plainDoses = plainDoses;
-        this._timedDoses = timedDoses;
-        this._morningDose = morningDose;
-        this._noonDose = noonDose;
-        this._eveningDose = eveningDose;
-        this._nightDose = nightDose;
+    public constructor(dayNumber: number, doses: DoseWrapper[]) {
 
-        this._allDoses = new Array<DoseWrapper>();
+        this._allDoses = doses;
 
-        plainDoses.forEach(d => this._allDoses.push(d));
-        timedDoses.forEach(d => this._allDoses.push(d));
-        if (morningDose) {
-            this._allDoses.push(morningDose);
-        }
-        if (noonDose) {
-            this._allDoses.push(noonDose);
-        }
-        if (eveningDose) {
-            this._allDoses.push(eveningDose);
-        }
-        if (nightDose) {
-            this._allDoses.push(nightDose);
-        }
+        for (let dose of doses) {
 
-        this._areAllDosesTheSame = true;
-        let compareDose: DoseWrapper;
-        for (let dose of this.allDoses) {
-            if (!compareDose) {
-                compareDose = dose;
+            this._dayNumber = dayNumber;
+            if (dose) {
+                if (dose instanceof PlainDoseWrapper)
+                    this._plainDoses.push(<PlainDoseWrapper>dose);
+                else if (dose instanceof TimedDoseWrapper)
+                    this._timedDoses.push(<TimedDoseWrapper>dose);
+                else if (dose instanceof MorningDoseWrapper)
+                    this._morningDose = <MorningDoseWrapper>dose;
+                else if (dose instanceof NoonDoseWrapper)
+                    this._noonDose = <NoonDoseWrapper>dose;
+                else if (dose instanceof EveningDoseWrapper)
+                    this._eveningDose = <EveningDoseWrapper>dose;
+                else if (dose instanceof NightDoseWrapper)
+                    this._nightDose = <NightDoseWrapper>dose;
             }
-            else if (!compareDose.theSameAs(dose)) {
-                this._areAllDosesTheSame = false;
-                break;
+
+            this._areAllDosesTheSame = true;
+            let compareDose: DoseWrapper;
+            for (let dose of this.allDoses) {
+                if (!compareDose) {
+                    compareDose = dose;
+                }
+                else if (!compareDose.theSameAs(dose)) {
+                    this._areAllDosesTheSame = false;
+                    break;
+                }
             }
         }
     }

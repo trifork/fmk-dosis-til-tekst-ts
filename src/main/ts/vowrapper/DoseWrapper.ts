@@ -1,5 +1,4 @@
 import { TextHelper } from "../TextHelper";
-import { LoggerService } from "../LoggerService";
 
 export abstract class DoseWrapper {
 
@@ -26,12 +25,7 @@ export abstract class DoseWrapper {
             this._maximalDoseQuantityString = TextHelper.formatQuantity(maximalDoseQuantity);
         if (doseQuantity !== undefined)
             this._doseQuantityString = TextHelper.formatQuantity(doseQuantity).replace(".", ",");
-
-        LoggerService.debug("DoseWrapper minimalDoseQuantity " + minimalDoseQuantity);
-        LoggerService.debug("DoseWrapper maximalDoseQuantity " + maximalDoseQuantity);
     }
-
-
 
     public abstract getLabel(): string;
     /*

@@ -7,8 +7,6 @@ import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 
-import { LoggerService  } from "../LoggerService";
-
 export abstract class LongTextConverterImpl {
 
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
@@ -23,8 +21,6 @@ export abstract class LongTextConverterImpl {
     }
 
     protected datesToLongText(startDateOrDateTime: DateOrDateTimeWrapper): string {
-
-        LoggerService.debug("startDateOrDateTime.date: " + startDateOrDateTime.date + " startDateOrDateTime.dateTime: " + startDateOrDateTime.dateTime);
 
         if (!startDateOrDateTime)
             throw new DosisTilTekstException("startDateOrDateTime must be set");
@@ -52,7 +48,7 @@ export abstract class LongTextConverterImpl {
         let s = "";
         let appendedLines = 0;
         for (let day of structure.days) {
-            appendedLines++;
+              appendedLines++;
             if (appendedLines > 1) {
                 s += "\n";
             }
@@ -121,7 +117,7 @@ export abstract class LongTextConverterImpl {
             }
         }
         let dosagePeriodPostfix = structure.dosagePeriodPostfix;
-        if (dosagePeriodPostfix != null && dosagePeriodPostfix.length > 0) {
+        if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
         }
 

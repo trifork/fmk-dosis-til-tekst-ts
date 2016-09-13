@@ -25,24 +25,25 @@ export class StructureWrapper {
                 jsonObject.supplText,
                 DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime),
                 DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime),
-                jsonObject.days.map(d => DayWrapper.fromJsonObject(d)).sort((d1, d2) => d1.dayNumber - d2.dayNumber))
+                jsonObject.days.map(d => DayWrapper.fromJsonObject(d)),
+                jsonObject.dosagePeriodPostfix)
             : undefined;
     }
 
-    constructor(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, days: Array<DayWrapper>) {
+    constructor(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, days: Array<DayWrapper>, dosagePeriodPostfix: string) {
         this._iterationInterval = iterationInterval;
         this._supplText = supplText;
         this._startDateOrDateTime = startDateOrDateTime;
         this._endDateOrDateTime = endDateOrDateTime;
+        this._dosagePeriodPostfix = dosagePeriodPostfix;
 
         if (days) {
-            this._days = days;
+            this._days = days.sort((d1, d2) => d1.dayNumber - d2.dayNumber);
         }
         else {
             throw new DosisTilTekstException("StructureWrapper: days must be set in StructureWrapper");
         }
     }
-
 
     get iterationInterval(): number {
         return this._iterationInterval;

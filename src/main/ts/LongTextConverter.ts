@@ -8,7 +8,6 @@ import { EmptyStructureConverterImpl } from "./longtextconverterimpl/EmptyStruct
 import { TwoDaysRepeatedConverterImpl } from "./longtextconverterimpl/TwoDaysRepeatedConverterImpl";
 import { WeeklyRepeatedConverterImpl } from "./longtextconverterimpl/WeeklyRepeatedConverterImpl";
 import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
-import { LoggerService } from "./LoggerService";
 
 export class LongTextConverter {
 
@@ -38,7 +37,6 @@ export class LongTextConverter {
     public static convertWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter.converters) {
             if (converter.canConvert(dosage)) {
-                LoggerService.info(converter.constructor["name"]);
 
                 return converter.doConvert(dosage);
             }

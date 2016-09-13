@@ -3,7 +3,6 @@ import {LongTextConverterImpl} from "./LongTextConverterImpl";
 import {UnitOrUnitsWrapper} from "../vowrapper/UnitOrUnitsWrapper";
 import {StructureWrapper} from "../vowrapper/StructureWrapper";
 import {TextHelper} from "../TextHelper";
-import { LoggerService} from "../LoggerService";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -21,17 +20,11 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
     private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
 
-        LoggerService.debug("structure.startDateOrDateTime: " + structure.startDateOrDateTime + " structure.endDateOrDateTime: " + structure.endDateOrDateTime);
-
         if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime)) {
             // Same day dosage
-            LoggerService.debug("IsEqual true");
             s += "Doseringen foretages kun " + this.datesToLongText(structure.startDateOrDateTime) + ":\n";
         }
         else if (structure.iterationInterval === 0) {
-
-            LoggerService.debug("IsEqual false");
-
             // Not repeated dosage
             s += this.getDosageStartText(structure.startDateOrDateTime);
             // If there is just one day with according to need dosages we don't want say when to stop

@@ -3,7 +3,6 @@ import { DateOrDateTimeWrapper } from "./vowrapper/DateOrDateTimeWrapper";
 import { DayWrapper } from "./vowrapper/DayWrapper";
 import { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
 import { DayOfWeek } from "./vowrapper/DayOfWeek";
-import { LoggerService } from "./LoggerService";
 
 export class TextHelper {
 
@@ -87,7 +86,6 @@ export class TextHelper {
     ];
 
     public static formatQuantity(quantity: number): string {
-        LoggerService.debug("formatQuantity: " + quantity + " trimmed: " + TextHelper.trim(quantity.toString().replace(".", ",")));
         // We replace . with , below using string replace as we want to make
         // sure we always use , no matter what the locale settings are
         return TextHelper.trim(quantity.toString().replace(".", ","));
@@ -136,7 +134,6 @@ export class TextHelper {
     public static unitToSingular(plural: string): string {
         let singular = TextHelper._unit.filter(u => u[1] === plural).map(u => u[0]);
         if (singular && singular.length > 0) {
-            LoggerService.debug("singular: " + singular.toString());
             return singular[0];
         }
 
@@ -144,10 +141,8 @@ export class TextHelper {
     }
 
     public static unitToPlural(singular: string): string {
-        LoggerService.debug("unit to plural called with: " + singular.toString());
         let plural = TextHelper._unit.filter(u => u[0] === singular);
         if (plural && plural.length > 0) {
-            LoggerService.debug("plural: " + plural.toString() + " plural[0]: " + plural[0] + " plural[0][1]: " + plural[0][1]);
             return plural[0][1];
         }
 
