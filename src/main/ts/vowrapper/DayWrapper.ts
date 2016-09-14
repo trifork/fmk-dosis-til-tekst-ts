@@ -7,6 +7,7 @@ import { MorningDoseWrapper } from "./MorningDoseWrapper";
 import { NoonDoseWrapper } from "./NoonDoseWrapper";
 import { EveningDoseWrapper } from "./EveningDoseWrapper";
 import { NightDoseWrapper } from "./NightDoseWrapper";
+import { LoggerService } from "../LoggerService";
 
 export class DayWrapper {
 
@@ -177,13 +178,16 @@ export class DayWrapper {
         this._areAllDosesHaveTheSameQuantity = true;
         if (this.allDoses.length > 1) {
             let dose0 = this.allDoses[0];
+            LoggerService.debug("Day#1: " + dose0.anyDoseQuantityString);
             for (let i = 1; i < this.allDoses.length; i++) {
+                LoggerService.debug("Day#2: " + this.allDoses[i].anyDoseQuantityString);
                 if (dose0.anyDoseQuantityString !== this.allDoses[i].anyDoseQuantityString) {
                     this._areAllDosesHaveTheSameQuantity = false;
                     break;
                 }
             }
         }
+        return this._areAllDosesHaveTheSameQuantity;
     }
 
     public containsAccordingToNeedDose(): boolean {

@@ -37,7 +37,6 @@ export class LongTextConverter {
     public static convertWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter.converters) {
             if (converter.canConvert(dosage)) {
-
                 return converter.doConvert(dosage);
             }
         }

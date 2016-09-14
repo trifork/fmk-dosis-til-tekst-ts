@@ -279,4 +279,13 @@ export class TextHelper {
         return new DayOfWeek(dateOnly.getDay(), name, day);
 
     }
+
+
+    public static strStartsWith(str: string, prefix: string): boolean {
+        return str.indexOf(prefix) === 0;
+    }
+
+    public static strEndsWith(str: string, suffix: string): boolean {
+        return str.lastIndexOf(suffix) === str.length - suffix.length;
+    }
 }
