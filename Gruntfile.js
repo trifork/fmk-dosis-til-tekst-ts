@@ -6,10 +6,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 
-		clean: {
-			pre: ['target'],
-			post: ['target/lib/*.ts']
-		},
+		clean: ['target'],
 
 		ts: {
 			default: {
@@ -38,7 +35,7 @@ module.exports = function (grunt) {
 
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
-	grunt.registerTask('default', ['clean:pre', 'tslint', 'ts', 'webpack', 'clean:post']);
+	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack']);
 	grunt.registerTask('publish', ['default', 'npm-publish']);
 
 };
