@@ -3,8 +3,7 @@
   "author": "Trifork",
   "version": "1.0.0",
   "scripts": {
-    "build.for.unittests": "./node_modules/.bin/grunt unittest-build",
-    "grunt.prod": "./node_modules/.bin/grunt",
+    "grunt.prod": "./node_modules/.bin/grunt publish",
     "grunt.dev": "./node_modules/.bin/grunt --watch",
     "build.prod": "npm i && npm run grunt.prod",
     "build.dev": "npm run grunt.dev",
@@ -26,9 +25,6 @@
     "typings": "^0.8.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
-  },
-  "dependencies": {
-    "winston": "^2.2.0"
   },
   "main": "target/lib/index.js",
   "typings": "target/lib/index.d.ts",
