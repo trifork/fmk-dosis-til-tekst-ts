@@ -32,7 +32,7 @@ export abstract class ShortTextConverterImpl {
     }
 
     protected static hasIntegerValue(n: number): boolean {
-        return n % 1 == 0;
+        return n % 1 === 0;
     }
 
     protected static toDoseAndUnitValue(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {

@@ -6,7 +6,7 @@ module.exports = {
 
     output: {
 
-        filename: "target/dosistiltekst.js", 
+        filename: "target/dosistiltekst.js",
 
         // export itself to a global var
         libraryTarget: "var",
@@ -15,7 +15,7 @@ module.exports = {
     },
     // FOR THE SERVER VERSION, USE externals: [ list of node modules ]
     // externals: [ 'fs'],
-        
+
     resolve: {
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
         modulesDirectories: [ "node_modules" ]
@@ -25,10 +25,11 @@ module.exports = {
     devtool: "source-map",
     module: {
         loaders: [
-            // Load typescript source-files
-            { test: /\.ts?$/, loader: "ts-loader", exclude: /\.d\.ts$/ },
-        ]
+			{
+				test: /\.ts$/,
+				exclude: /\.d\.ts$/,
+				loader: 'awesome-typescript-loader?tsconfig=tsconfig.unittest.json'
+			}
+		]
     },
-    
-
 };

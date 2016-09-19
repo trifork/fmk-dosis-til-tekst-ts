@@ -2,7 +2,16 @@
   "name": "fmk-dosis-til-tekst-ts",
   "author": "Trifork",
   "version": "1.0.0",
+  "scripts": {
+    "build.for.unittests": "./node_modules/.bin/grunt unittest-build",
+    "grunt.prod": "./node_modules/.bin/grunt",
+    "grunt.dev": "./node_modules/.bin/grunt --watch",
+    "build.prod": "npm i && npm run grunt.prod",
+    "build.dev": "npm run grunt.dev",
+    "build": "npm run build.dev"
+  },
   "devDependencies": {
+    "awesome-typescript-loader": "~1.1.1",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
@@ -12,7 +21,6 @@
     "grunt-tslint": "^3.0.3",
     "grunt-webpack": "^1.0.14",
     "load-grunt-tasks": "^3.5.0",
-    "ts-loader": "^0.8.2",
     "tslint": "^3.15.1",
     "typescript": "^1.8.10",
     "typings": "^0.8.1",
@@ -22,7 +30,8 @@
   "dependencies": {
     "winston": "^2.2.0"
   },
-  "main": "target/dosistiltekst.js",
+  "main": "target/lib/index.js",
+  "typings": "target/lib/index.d.ts",
   "files": [
     "target"
   ],

@@ -1,12 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "sourceMap": true,
-        "outDir": "./target",
-        "moduleResolution": "node",
-         "diagnostics": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+	"version": "1.8.9",
+	"compileOnSave": false,
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"target": "es6",
+		"module": "es2015",
+		"declaration": true,
+		"sourceMap": true,
+		"moduleResolution": "node",
+		"rootDir": "./src/main/ts",
+		"noLib": false,
+		"outDir": "target/lib"
+	},
+	"exclude": [
+		"node_modules",
+		"target"
+	]
 }

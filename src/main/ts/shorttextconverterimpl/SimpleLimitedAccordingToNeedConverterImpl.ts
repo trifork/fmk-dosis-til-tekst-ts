@@ -21,7 +21,7 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         let structure: StructureWrapper = dosage.structures.structures[0];
         if (structure.iterationInterval !== 1)
             return false;
-        if (structure.days.length != 1)
+        if (structure.days.length !== 1)
             return false;
         let day: DayWrapper = structure.days[0];
         if (day.dayNumber !== 1)
@@ -40,7 +40,7 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         text += SimpleLimitedAccordingToNeedConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.unitOrUnits);
         text += " efter behov";
 
-        if (day.getNumberOfAccordingToNeedDoses() == 1)
+        if (day.getNumberOfAccordingToNeedDoses() === 1)
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gang daglig";
         else
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";

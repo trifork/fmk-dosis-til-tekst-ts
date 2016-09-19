@@ -20,7 +20,7 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
             return false;
         if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime))
             return false;
-        if (structure.days.length > 7 || structure.days.length == 0)
+        if (structure.days.length > 7 || structure.days.length === 0)
             return false;
         if (structure.days[0].dayNumber === 0)
             return false;

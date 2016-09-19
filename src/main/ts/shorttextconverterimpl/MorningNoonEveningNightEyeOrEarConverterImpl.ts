@@ -8,8 +8,6 @@ import { TextHelper } from "../TextHelper";
 export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConverterImpl {
 
     public canConvert(dosage: DosageWrapper): boolean {
-
-          
         if (dosage.structures === undefined)
             return false;
         if (dosage.structures.structures.length !== 1)
@@ -19,7 +17,7 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
             return false;
         if (structure.days.length !== 1)
             return false;
-             
+
         let day: DayWrapper = structure.days[0];
         if (day.dayNumber !== 1)
             return false;
@@ -33,9 +31,9 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
             return false;
         if (!ShortTextConverterImpl.hasIntegerValue(day.allDoses[0].doseQuantity))
             return false;
-            
+
         let quantity: number = day.allDoses[0].doseQuantity;
-        if (!(quantity % 2 == 0))
+        if (!(quantity % 2 === 0))
             return false;
         if (structure.supplText === undefined)
             return false;
@@ -119,7 +117,7 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         return text;
     }
 
-    public static getNoonText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper) : string{
+    public static getNoonText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
         if (day.noonDose) {
             if (day.morningDose && (day.eveningDose || day.nightDose))
