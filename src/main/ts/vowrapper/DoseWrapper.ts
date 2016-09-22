@@ -34,7 +34,7 @@ export abstract class DoseWrapper {
             return null;
          v = new (value);
         v = v.setScale(9, .ROUND_HALF_UP);
-        return v;		
+        return v;
     }
       */
 
@@ -106,6 +106,6 @@ export abstract class DoseWrapper {
     else if ((!a && b) || (a && !b))
         return false;
     else
-        return a.toString().equals(b.toString());
+        return a.toString() === b.toString();
 }
 }
