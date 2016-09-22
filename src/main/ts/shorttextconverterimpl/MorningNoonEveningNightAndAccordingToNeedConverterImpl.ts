@@ -10,7 +10,7 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
 
 
     public canConvert(dosage: DosageWrapper): boolean {
-        if (dosage.structures == null)
+        if (dosage.structures === undefined)
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;

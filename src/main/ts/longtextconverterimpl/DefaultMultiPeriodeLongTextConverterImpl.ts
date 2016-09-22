@@ -24,7 +24,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         dosage.structures.structures.forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
                 new StructuresWrapper(dosage.structures.unitOrUnits, [structure]));
-            s += (LongTextConverter.convertWrapper(w) + "\n\n");
+            s += (new LongTextConverter().convertWrapper(w) + "\n\n");
         });
 
         return s.trim();

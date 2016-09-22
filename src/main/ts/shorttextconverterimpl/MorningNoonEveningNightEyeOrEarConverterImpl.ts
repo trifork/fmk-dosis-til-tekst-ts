@@ -142,7 +142,7 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
                 text += ", ";
             else if (day.morningDose || day.noonDose)
                 text += " og ";
-            if (day.morningDose != null || day.noonDose != null)
+            if (day.morningDose || day.noonDose )
                 text += day.eveningDose.getLabel();
             else
                 text += this.toDoseLabelUnitValue(day.eveningDose.doseQuantity / 2, day.eveningDose.getLabel(), unitOrUnits);
@@ -155,10 +155,10 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
 
     public static getNightText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
-        if (day.nightDose != null) {
-            if (day.morningDose != null || day.noonDose != null || day.eveningDose != null)
+        if (day.nightDose) {
+            if (day.morningDose || day.noonDose || day.eveningDose )
                 text += " og ";
-            if (day.morningDose != null || day.noonDose != null || day.eveningDose != null)
+            if (day.morningDose || day.noonDose || day.eveningDose)
                 text += day.nightDose.getLabel();
             else
                 text += this.toDoseLabelUnitValue(day.nightDose.doseQuantity / 2, day.nightDose.getLabel(), unitOrUnits);

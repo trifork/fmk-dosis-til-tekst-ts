@@ -2,33 +2,35 @@ import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
+import { DoseWrapper } from "../vowrapper/DoseWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 
 /**
- * Conversion of simple but limited "according to need" dosage, with or without suppl. dosage free text
+ * Conversion of: Simple non repeated dosage (like "according to need") with suppl. 
+ * dosage free text. All dosages the same.
  * <p>
- * Example:<br>
- * 283: 1 pust ved anfald højst 3 gange daglig
+ * Example:<br> 
+ * 204: 1 plaster 5 timer før virkning ønskes, 
  */
-export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverterImpl {
+export class SimpleNonRepeatedConverterImpl extends ShortTextConverterImpl {
 
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.structures.length != 1)
             return false;
         let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 1)
+        if (structure.iterationInterval !== 0)
             return false;
         if (structure.days.length !== 1)
             return false;
         let day: DayWrapper = structure.days[0];
-        if (day.dayNumber !== 1)
+        if (day.dayNumber !== 0 && (!(structure.startsAndEndsSameDay() && day.dayNumber === 1)))
             return false;
-        if (!day.containsAccordingToNeedDosesOnly())
+        if (day.containsAccordingToNeedDose() || day.containsMorningNoonEveningNightDoses())
             return false;
-        if (!day.allDosesAreTheSame())
+        if (day.getNumberOfDoses() !== 1)
             return false;
         return true;
     }
@@ -37,17 +39,10 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         let structure: StructureWrapper = dosage.structures.structures[0];
         let text = "";
         let day: DayWrapper = structure.days[0];
-        text += SimpleLimitedAccordingToNeedConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.unitOrUnits);
-        text += " efter behov";
-
-        if (day.getNumberOfAccordingToNeedDoses() === 1)
-            text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gang daglig";
-        else
-            text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";
-
+        let dose: DoseWrapper = day.allDoses[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(dose, dosage.structures.unitOrUnits);
         if (structure.supplText)
-            text += TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
-
-        return text.toString();
+            text += " " + structure.supplText;
+        return text;
     }
 }

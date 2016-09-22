@@ -8,8 +8,6 @@ import { DayOfWeek } from "../vowrapper/DayOfWeek";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 
-import { LoggerService } from "../LoggerService";
-
 export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConverterImpl {
 
     public canConvert(dosage: DosageWrapper): boolean {
@@ -45,13 +43,9 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
 
         let firstDay: DayOfWeek = daysOfWeek[0];
         text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay.day, dosage.structures.unitOrUnits);
-        LoggerService.debug("after morning: " + text);
         text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay.day, dosage.structures.unitOrUnits);
-        LoggerService.debug("after noon: " + text);
         text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay.day, dosage.structures.unitOrUnits);
-        LoggerService.debug("after evening: " + text);
         text += MorningNoonEveningNightConverterImpl.getNightText(firstDay.day, dosage.structures.unitOrUnits);
-        LoggerService.debug("after night: " + text);
         let i = 0;
         for (let d of daysOfWeek) {
             if (i === daysOfWeek.length - 1 && daysOfWeek.length > 1)
@@ -63,10 +57,7 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
             i++;
         }
         text += " hver uge";
-
         text += MorningNoonEveningNightConverterImpl.getSupplText(structure.supplText);
-
-        LoggerService.debug("returning: " + text);
 
         return text;
     }

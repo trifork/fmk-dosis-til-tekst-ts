@@ -53,4 +53,17 @@ export abstract class ShortTextConverterImpl {
             return s + " " + u + " " + label;
     }
 
+    protected calculateNumberOfWholeWeeks(iterationInterval: number): number {
+        let numberOfWholeWeeks = iterationInterval / 7;
+        if (numberOfWholeWeeks.toFixed() !== numberOfWholeWeeks.toString())
+            numberOfWholeWeeks = -1;
+        return numberOfWholeWeeks;
+    }
+
+    protected calculateNumberOfWholeMonths(iterationInterval: number): number {
+        let numberOfWholeMonths = iterationInterval / 30;
+        if (numberOfWholeMonths.toFixed() !== numberOfWholeMonths.toString())
+            numberOfWholeMonths = -1;
+        return numberOfWholeMonths;
+    }
 }

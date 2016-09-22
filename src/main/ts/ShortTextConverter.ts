@@ -6,8 +6,19 @@ import { MorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/M
 import { SimpleLimitedAccordingToNeedConverterImpl } from "./shorttextconverterimpl/SimpleLimitedAccordingToNeedConverterImpl";
 import { MorningNoonEveningNightAndAccordingToNeedConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightAndAccordingToNeedConverterImpl";
 import { WeeklyMorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/WeeklyMorningNoonEveningNightConverterImpl";
+import { RepeatedEyeOrEarConverterImpl } from "./shorttextconverterimpl/RepeatedEyeOrEarConverterImpl";
+import { RepeatedConverterImpl } from "./shorttextconverterimpl/RepeatedConverterImpl";
+import { SimpleNonRepeatedConverterImpl } from "./shorttextconverterimpl/SimpleNonRepeatedConverterImpl";
+import { MorningNoonEveningNightInNDaysConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightInNDaysConverterImpl";
+import { SimpleAccordingToNeedConverterImpl } from "./shorttextconverterimpl/SimpleAccordingToNeedConverterImpl";
+import { LimitedNumberOfDaysConverterImpl } from "./shorttextconverterimpl/LimitedNumberOfDaysConverterImpl";
+import { WeeklyRepeatedConverterImpl } from "./shorttextconverterimpl/WeeklyRepeatedConverterImpl";
+import { ParacetamolConverterImpl } from "./shorttextconverterimpl/ParacetamolConverterImpl";
+import { MultipleDaysNonRepeatedConverterImpl } from "./shorttextconverterimpl/MultipleDaysNonRepeatedConverterImpl";
+import { NumberOfWholeWeeksConverterImpl } from "./shorttextconverterimpl/NumberOfWholeWeeksConverterImpl";
+import { DayInWeekConverterImpl } from "./shorttextconverterimpl/DayInWeekConverterImpl";
+import { CombinedTwoPeriodesConverterImpl } from "./shorttextconverterimpl/CombinedTwoPeriodesConverterImpl";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
-import { LoggerService } from "./LoggerService";
 
 export class ShortTextConverter {
 
@@ -23,46 +34,44 @@ export class ShortTextConverter {
 
     private static get converters() {
         if (!ShortTextConverter._converters) {
-            ShortTextConverter._converters = new Array<ShortTextConverterImpl>();
+            ShortTextConverter._converters = [
+                new AdministrationAccordingToSchemaConverterImpl(),
+                new FreeTextConverterImpl(),
+                new MorningNoonEveningNightEyeOrEarConverterImpl(),
+                new MorningNoonEveningNightConverterImpl(),
+                new WeeklyMorningNoonEveningNightConverterImpl(),
+                new RepeatedEyeOrEarConverterImpl(),
+                new RepeatedConverterImpl(),
+                new SimpleNonRepeatedConverterImpl(),
+                new MorningNoonEveningNightInNDaysConverterImpl(),
+                new SimpleAccordingToNeedConverterImpl(),
+                new LimitedNumberOfDaysConverterImpl(),
 
-            ShortTextConverter._converters.push(new AdministrationAccordingToSchemaConverterImpl());
-            ShortTextConverter._converters.push(new FreeTextConverterImpl());
-            ShortTextConverter._converters.push(new MorningNoonEveningNightEyeOrEarConverterImpl());
-            ShortTextConverter._converters.push(new MorningNoonEveningNightConverterImpl());
-
-
-            ShortTextConverter._converters.push(new WeeklyMorningNoonEveningNightConverterImpl());
-            /*
-            ShortTextConverter._converters.push(new RepeatedEyeOrEarConverterImpl());
-            ShortTextConverter._converters.push(new RepeatedConverterImpl());
-            ShortTextConverter._converters.push(new SimpleNonRepeatedConverterImpl());
-            ShortTextConverter._converters.push(new MorningNoonEveningNightInNDaysConverterImp());
-            ShortTextConverter._converters.push(new SimpleAccordingToNeedConverterImpl());
-            ShortTextConverter._converters.push(new LimitedNumberOfDaysConverterImpl()); */
-            ShortTextConverter._converters.push(new SimpleLimitedAccordingToNeedConverterImpl());
-            /*
-            ShortTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
-            ShortTextConverter._converters.push(new ParacetamolConverterImpl());*/
-            ShortTextConverter._converters.push(new MorningNoonEveningNightAndAccordingToNeedConverterImpl());
-            /*ShortTextConverter._converters.push(new MultipleDaysNonRepeatedConverterImpl());
-            ShortTextConverter._converters.push(new NumberOfWholeWeeksConverterImpl());
-            ShortTextConverter._converters.push(new DayInWeekConverterImpl());
-            // Converters for more than one periode:
-            ShortTextConverter._converters.push(new CombinedTwoPeriodesConverterImpl());
-            */
+                new SimpleLimitedAccordingToNeedConverterImpl(),
+                new WeeklyRepeatedConverterImpl(),
+                new ParacetamolConverterImpl(),
+                new MorningNoonEveningNightAndAccordingToNeedConverterImpl(),
+                new MultipleDaysNonRepeatedConverterImpl(),
+                new NumberOfWholeWeeksConverterImpl(),
+                new DayInWeekConverterImpl(),
+                new CombinedTwoPeriodesConverterImpl()
+            ];
         }
 
         return ShortTextConverter._converters;
     }
 
     public getConverterClassName(dosageJson: any): string {
-        let dosage = DosageWrapper.fromJsonObject(dosageJson);
+        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
+    }
+
+    public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of ShortTextConverter.converters) {
-            if (converter.canConvert(dosage)) {
+            if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= ShortTextConverter.MAX_LENGTH) {
                 return converter.constructor["name"];
             }
         }
-        return "Ikke fundet";
+        return null;
     }
 
 	/**
@@ -70,7 +79,7 @@ export class ShortTextConverter {
 	 * @param dosage
 	 * @return A short text string describing the dosage 
 	 */
-    public static convert(dosage: DosageWrapper): string {
+    public convertWrapper(dosage: DosageWrapper): string {
         return ShortTextConverter.doConvert(dosage, ShortTextConverter.MAX_LENGTH);
     }
 
@@ -89,7 +98,6 @@ export class ShortTextConverter {
     public static doConvert(dosage: DosageWrapper, maxLength: number): string {
         for (let converter of ShortTextConverter.converters) {
             if (converter.canConvert(dosage)) {
-                LoggerService.info(converter.constructor["name"]);
                 let s = converter.doConvert(dosage);
                 if (s.length <= maxLength)
                     return s;

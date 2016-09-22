@@ -31,10 +31,10 @@ export class LongTextConverter {
 
     public convert(dosageJson: any): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
-        return LongTextConverter.convertWrapper(dosage);
+        return this.convertWrapper(dosage);
     }
 
-    public static convertWrapper(dosage: DosageWrapper): string {
+    public convertWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter.converters) {
             if (converter.canConvert(dosage)) {
                 return converter.doConvert(dosage);
@@ -47,6 +47,19 @@ export class LongTextConverter {
         for (let converter of this.converters) {
             if (converter.canConvert(dosage))
                 return converter;
+        }
+        return null;
+    }
+
+     public getConverterClassName(dosageJson: any): string {
+        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
+    }
+
+    public getConverterClassNameWrapper(dosage: DosageWrapper): string {
+        for (let converter of LongTextConverter.converters) {
+            if (converter.canConvert(dosage)) {
+                return converter.constructor["name"];
+            }
         }
         return null;
     }

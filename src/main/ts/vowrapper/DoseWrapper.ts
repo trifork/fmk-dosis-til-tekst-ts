@@ -39,73 +39,75 @@ export abstract class DoseWrapper {
       */
 
     protected static isZero(quantity: number): boolean {
-    if (quantity) {
-        return quantity < 0.000000001;
+        if (quantity) {
+            return quantity < 0.000000001;
+        }
+        else {
+            return true;
+        }
     }
-    else {
-        return true;
-    }
-}
 
     protected static isMinAndMaxZero(minimalQuantity, maximalQuantity): boolean {
-    return !minimalQuantity && !maximalQuantity;
-}
+        return !minimalQuantity && !maximalQuantity;
+    }
 
     public get minimalDoseQuantity() {
-    return this._minimalDoseQuantity;
-}
+        return this._minimalDoseQuantity;
+    }
 
     public get maximalDoseQuantity() {
-    return this._maximalDoseQuantity;
-}
+        return this._maximalDoseQuantity;
+    }
 
     public get doseQuantity() {
-    return this._doseQuantity;
-}
+        return this._doseQuantity;
+    }
 
     public get minimalDoseQuantityString() {
-    return this._minimalDoseQuantityString;
-}
+        return this._minimalDoseQuantityString;
+    }
 
     public get maximalDoseQuantityString() {
-    return this._maximalDoseQuantityString;
-}
+        return this._maximalDoseQuantityString;
+    }
 
     public get doseQuantityString() {
-    return this._doseQuantityString;
-}
+        return this._doseQuantityString;
+    }
 
     public get isAccordingToNeed() {
-    return this._isAccordingToNeed;
-}
+        return this._isAccordingToNeed;
+    }
 
     public get anyDoseQuantityString() {
-    if (this.doseQuantityString)
-        return this.doseQuantityString;
-    else
-        return this.minimalDoseQuantityString + "-" + this.maximalDoseQuantityString;
-}
+        if (this.doseQuantityString)
+            return this.doseQuantityString;
+        else
+            return this.minimalDoseQuantityString + "-" + this.maximalDoseQuantityString;
+    }
 
     public theSameAs(other: DoseWrapper): boolean {
-    if (this.getLabel() !== other.getLabel())
-        return false;
-    if (this.isAccordingToNeed !== other.isAccordingToNeed)
-        return false;
-    if (!this.equalsWhereNullsAreTrue(this.minimalDoseQuantityString, other.minimalDoseQuantityString))
-        return false;
-    if (!this.equalsWhereNullsAreTrue(this.maximalDoseQuantityString, other.maximalDoseQuantityString))
-        return false;
-    if (!this.equalsWhereNullsAreTrue(this.doseQuantityString, other.doseQuantityString))
-        return false;
-    return true;
-}
-
-    private equalsWhereNullsAreTrue(a, b): boolean {
-    if (!a && !b)
+        if (this.getLabel() !== other.getLabel())
+            return false;
+        if (this.isAccordingToNeed !== other.isAccordingToNeed)
+            return false;
+        if (!this.equalsWhereNullsAreTrue(this.minimalDoseQuantityString, other.minimalDoseQuantityString))
+            return false;
+        if (!this.equalsWhereNullsAreTrue(this.maximalDoseQuantityString, other.maximalDoseQuantityString))
+            return false;
+        if (!this.equalsWhereNullsAreTrue(this.doseQuantityString, other.doseQuantityString))
+            return false;
         return true;
-    else if ((!a && b) || (a && !b))
-        return false;
-    else
-        return a.toString() === b.toString();
-}
+    }
+
+    private equalsWhereNullsAreTrue(a: string, b: string): boolean {
+        if (a === undefined && b === undefined)
+            return true;
+        else if ((a === undefined && b) || (a && b === undefined)) {
+            return false;
+        }
+        else {
+            return a === b;
+        }
+    }
 }

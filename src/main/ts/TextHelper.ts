@@ -99,7 +99,7 @@ export class TextHelper {
     }
 
     public static maybeAddSpace(supplText: string): string {
-        if (supplText && supplText.substr(0, 1) === "," || supplText.substr(0, 1) === ".")
+        if (supplText && (supplText.substr(0, 1) === "," || supplText.substr(0, 1) === "."))
             return "";
         else
             return " ";
@@ -155,7 +155,7 @@ export class TextHelper {
         else if (unitOrUnits.unitSingular && unitOrUnits.unitPlural)
             return TextHelper.chooseUnit(dose, unitOrUnits.unitSingular, unitOrUnits.unitPlural);
         else
-            return null;
+            return "";
     }
 
     public static getUnitFromDoseNumber(dose: number, unitOrUnits: UnitOrUnitsWrapper): string {
@@ -164,7 +164,7 @@ export class TextHelper {
         else if (unitOrUnits.unitSingular && unitOrUnits.unitPlural)
             return TextHelper.chooseUnitForDoseNumber(dose, unitOrUnits.unitSingular, unitOrUnits.unitPlural);
         else
-            return null;
+            return "";
     }
 
     private static correctUnit(dose: DoseWrapper, unit: string): string {

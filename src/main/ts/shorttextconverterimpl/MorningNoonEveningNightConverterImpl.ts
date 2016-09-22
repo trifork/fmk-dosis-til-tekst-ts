@@ -53,11 +53,11 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
         if (day.noonDose) {
             if (day.morningDose && (day.eveningDose || day.nightDose))
                 text += ", ";
-            else if (day.morningDose != null)
+            else if (day.morningDose)
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
                 text += this.toDoseAndUnitValue(day.noonDose, unitOrUnits);
-            else if (day.morningDose != null)
+            else if (day.morningDose)
                 text += day.noonDose.getLabel();
             else
                 text += this.toDoseAndUnitValue(day.noonDose, unitOrUnits);
@@ -72,7 +72,7 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
 
         let text = "";
 
-        if (day.eveningDose != null) {
+        if (day.eveningDose) {
             if ((day.morningDose || day.noonDose) && day.nightDose)
                 text += ", ";
             else if (day.morningDose || day.noonDose)
@@ -94,12 +94,12 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
 
         let text = "";
 
-        if (day.nightDose != null) {
-            if (day.morningDose != null || day.noonDose != null || day.eveningDose != null)
+        if (day.nightDose) {
+            if (day.morningDose || day.noonDose  || day.eveningDose )
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
                 text += this.toDoseAndUnitValue(day.nightDose, unitOrUnits);
-            else if (day.morningDose != null || day.noonDose != null || day.eveningDose != null)
+            else if (day.morningDose || day.noonDose || day.eveningDose )
                 text += day.nightDose.getLabel();
             else
                 text += this.toDoseAndUnitValue(day.nightDose, unitOrUnits);

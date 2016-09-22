@@ -91,13 +91,6 @@ export class StructureWrapper {
         return this._days;
     }
 
-    public getDay(dayNumber: number): DayWrapper {
-        for (let day of this.days)
-            if (day.dayNumber === dayNumber)
-                return day;
-        return null;
-    }
-
     public sameDayOfWeek(): boolean {
         if (this.days.length === 1) {
             return false;
@@ -155,23 +148,23 @@ export class StructureWrapper {
      * @return true if all dosages are of the same type and has the same quantity
      */
     public allDosesAreTheSame(): boolean {
-        if (this._areAllDosesTheSame) {
-            return this._areAllDosesTheSame;
-        }
-
-        this._areAllDosesTheSame = true;
-        let dose0: DoseWrapper = null;
-        for (let day of this.days) {
-            for (let dose of day.allDoses) {
-                if (dose0 === null) {
-                    dose0 = dose;
-                }
-                else if (!dose0.theSameAs(dose)) {
-                    this._areAllDosesTheSame = false;
-                    break;
+        if (this._areAllDosesTheSame === undefined) {
+            this._areAllDosesTheSame = true;
+            let dose0: DoseWrapper;
+            for (let day of this.days) {
+                for (let dose of day.allDoses) {
+                    if (dose0 === undefined) {
+                        dose0 = dose;
+                    }
+                    else if (!dose0.theSameAs(dose)) {
+                        this._areAllDosesTheSame = false;
+                        break;
+                    }
                 }
             }
         }
+
+        return this._areAllDosesTheSame;
     }
 
     public containsMorningNoonEveningNightDoses(): boolean {
