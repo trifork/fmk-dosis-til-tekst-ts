@@ -20,9 +20,6 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
         let day: DayWrapper = structure.days[0];
         if (day.containsAccordingToNeedDose())
             return false;
-        //		if(day.getMorningDose()!=null || day.getNoonDose()!=null
-        //				|| day.getEveningDose()!=null || day.getNightDose()!=null)
-        //			return false;
         if (!day.allDosesAreTheSame())
             return false;
         return true;
@@ -67,7 +64,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
             return " 1 gang om måneden";
         if (numberOfWholeMonths === 1 && numberOfDoses >= 1)
             return " " + numberOfDoses + " " + "gange samme dag 1 gang om måneden";
-        if (numberOfWholeMonths > 1 && numberOfDoses == 1)
+        if (numberOfWholeMonths > 1 && numberOfDoses === 1)
             return " hver " + numberOfWholeMonths + ". måned";
 
         // Repeated weekly
@@ -77,7 +74,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
             return " " + name + " hver uge";
         else if (numberOfWholeWeeks === 1 && numberOfDoses > 1)
             return " " + numberOfDoses + " " + "gange " + name + " hver uge";
-        if (numberOfWholeWeeks > 1 && numberOfDoses == 1)
+        if (numberOfWholeWeeks > 1 && numberOfDoses === 1)
             return " " + name + " hver " + numberOfWholeWeeks + ". uge";
 
         // Every Nth day

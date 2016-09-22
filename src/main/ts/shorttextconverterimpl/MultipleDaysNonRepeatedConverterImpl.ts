@@ -53,7 +53,7 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
             let day: DayWrapper = structure.days[i];
             if (i === 0)
                 text += " dag " + day.dayNumber;
-            else if (i == structure.days.length - 1)
+            else if (i === structure.days.length - 1)
                 text += " og " + day.dayNumber;
             else text += ", " + day.dayNumber;
         }

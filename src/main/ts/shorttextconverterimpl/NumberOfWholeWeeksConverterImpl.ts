@@ -56,7 +56,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
             // Add how many weeks/days
             if (days === 7) {
                 text += " i en uge";
-            } else if (days % 7 == 0) {
+            } else if (days % 7 === 0) {
                 let weeks = days / 7;
                 text += " i " + weeks + " uger";
             } else {

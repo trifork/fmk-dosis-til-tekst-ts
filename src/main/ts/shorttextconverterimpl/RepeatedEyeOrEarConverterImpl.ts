@@ -120,7 +120,7 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
             return " 1 gang om måneden";
         if (numberOfWholeMonths === 1 && numberOfDoses >= 1)
             return " " + numberOfDoses + " " + "gange samme dag 1 gang om måneden";
-        if (numberOfWholeMonths > 1 && numberOfDoses == 1)
+        if (numberOfWholeMonths > 1 && numberOfDoses === 1)
             return " hver " + numberOfWholeMonths + ". måned";
 
         // Repeated weekly
