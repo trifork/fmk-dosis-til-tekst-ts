@@ -16,7 +16,7 @@ export class DayWrapper {
 
     // Doses were separate types before 2012-06-01. We keep them for now to maintain
     // compatibility in the dosis-to-text conversion
-    // AccordingToNeed is merged into each type since 2012-06-01 schemas 
+    // AccordingToNeed is merged into each type since 2012-06-01 schemas
     // private List<AccordingToNeedDoseWrapper> accordingToNeedDoses = new ArrayList<AccordingToNeedDoseWrapper>();
     private _plainDoses: Array<PlainDoseWrapper> = [];
     private _timedDoses: Array<TimedDoseWrapper> = [];
@@ -86,7 +86,7 @@ export class DayWrapper {
 
             this._areAllDosesTheSame = true;
             let compareDose: DoseWrapper;
-            for (let dose of this.allDoses) {
+            for (let dose of this.getAllDoses()) {
                 if (!compareDose) {
                     compareDose = dose;
                 }
@@ -98,7 +98,7 @@ export class DayWrapper {
         }
     }
 
-    get dayNumber() {
+    getDayNumber() {
         return this._dayNumber;
     }
 
@@ -123,14 +123,14 @@ export class DayWrapper {
         else {
             this._accordingToNeedDoses = new Array<DoseWrapper>();
             for (let d of this._allDoses) {
-                if (d.isAccordingToNeed)
+                if (d.getIsAccordingToNeed())
                     this._accordingToNeedDoses.push(d);
             }
             return this._accordingToNeedDoses;
         }
     }
 
-    get plainDoses() {
+    getPlainDoses() {
         return this._plainDoses;
     }
 
@@ -138,23 +138,23 @@ export class DayWrapper {
         return this._plainDoses.length;
     }
 
-    get morningDose() {
+    getMorningDose() {
         return this._morningDose;
     }
 
-    get noonDose() {
+    getNoonDose() {
         return this._noonDose;
     }
 
-    get eveningDose() {
+    getEveningDose() {
         return this._eveningDose;
     }
 
-    get nightDose() {
+    getNightDose() {
         return this._nightDose;
     }
 
-    get allDoses() {
+    getAllDoses() {
         return this._allDoses;
     }
 
@@ -175,10 +175,10 @@ export class DayWrapper {
             return this._areAllDosesHaveTheSameQuantity;
         }
         this._areAllDosesHaveTheSameQuantity = true;
-        if (this.allDoses.length > 1) {
-            let dose0 = this.allDoses[0];
-            for (let i = 1; i < this.allDoses.length; i++) {
-                if (dose0.anyDoseQuantityString !== this.allDoses[i].anyDoseQuantityString) {
+        if (this.getAllDoses().length > 1) {
+            let dose0 = this.getAllDoses()[0];
+            for (let i = 1; i < this.getAllDoses().length; i++) {
+                if (dose0.getAnyDoseQuantityString() !== this.getAllDoses()[i].getAnyDoseQuantityString()) {
                     this._areAllDosesHaveTheSameQuantity = false;
                     break;
                 }
@@ -188,41 +188,41 @@ export class DayWrapper {
     }
 
     public containsAccordingToNeedDose(): boolean {
-        return this.allDoses.some(dose => dose.isAccordingToNeed);
+        return this.getAllDoses().some(dose => dose.getIsAccordingToNeed());
     }
 
     public containsTimedDose(): boolean {
-        return this.allDoses.some(dose => dose instanceof TimedDoseWrapper);
+        return this.getAllDoses().some(dose => dose instanceof TimedDoseWrapper);
     }
 
     public containsPlainDose(): boolean {
-        return this.allDoses.some(dose => dose instanceof PlainDoseWrapper);
+        return this.getAllDoses().some(dose => dose instanceof PlainDoseWrapper);
     }
 
     public containsPlainNotAccordingToNeedDose(): boolean {
-        return this.allDoses.some(dose => dose instanceof PlainDoseWrapper && !dose.isAccordingToNeed);
+        return this.getAllDoses().some(dose => dose instanceof PlainDoseWrapper && !dose.getIsAccordingToNeed());
     }
 
     public containsMorningNoonEveningNightDoses(): boolean {
-        return this.allDoses.some(dose => dose instanceof MorningDoseWrapper || dose instanceof NoonDoseWrapper
+        return this.getAllDoses().some(dose => dose instanceof MorningDoseWrapper || dose instanceof NoonDoseWrapper
             || dose instanceof EveningDoseWrapper || dose instanceof NightDoseWrapper);
     }
 
     public containsAccordingToNeedDosesOnly(): boolean {
-        return this.allDoses.every(d => d.isAccordingToNeed);
+        return this.getAllDoses().every(d => d.getIsAccordingToNeed());
     }
 
     public getSumOfDoses(): Interval<number> {
         let minValue = DayWrapper.newDosage();
         let maxValue = DayWrapper.newDosage();
-        for (let dose of this.allDoses) {
-            if (dose.doseQuantity) {
-                minValue = DayWrapper.addDosage(minValue, dose.doseQuantity);
-                maxValue = DayWrapper.addDosage(maxValue, dose.doseQuantity);
+        for (let dose of this.getAllDoses()) {
+            if (dose.getDoseQuantity()) {
+                minValue = DayWrapper.addDosage(minValue, dose.getDoseQuantity());
+                maxValue = DayWrapper.addDosage(maxValue, dose.getDoseQuantity());
             }
-            else if (dose.minimalDoseQuantity && dose.maximalDoseQuantity) {
-                minValue = DayWrapper.addDosage(minValue, dose.minimalDoseQuantity);
-                maxValue = DayWrapper.addDosage(maxValue, dose.maximalDoseQuantity);
+            else if (dose.getMinimalDoseQuantity() && dose.getMaximalDoseQuantity()) {
+                minValue = DayWrapper.addDosage(minValue, dose.getMinimalDoseQuantity());
+                maxValue = DayWrapper.addDosage(maxValue, dose.getMaximalDoseQuantity());
             }
             else {
                 throw new DosisTilTekstException("DoseQuantity eller minimalDoseQuantity+MaximalDoseQuantity skal være sat");

@@ -17,14 +17,14 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 0)
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        if (structure.getIterationInterval() !== 0)
             return false;
-        if (structure.days.length !== 1)
+        if (structure.getDays().length !== 1)
             return false;
-        let day: DayWrapper = structure.days[0];
+        let day: DayWrapper = structure.getDays()[0];
         if (!day.containsAccordingToNeedDosesOnly())
             return false;
         if (day.getAccordingToNeedDoses().length > 1)
@@ -33,13 +33,13 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
-        let day: DayWrapper = structure.days[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
+        let day: DayWrapper = structure.getDays()[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
         text += " efter behov";
-        if (structure.supplText)
-            text += TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
+        if (structure.getSupplText())
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         return text.toString();
     }
 }

@@ -8,7 +8,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
 
     public canConvert(dosageStructure: DosageWrapper): boolean {
         if (dosageStructure.structures) {
-            return dosageStructure.structures.structures.length > 1;
+            return dosageStructure.structures.getStructures().length > 1;
         }
 
         return false;
@@ -21,9 +21,9 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         }
         s += ":\n\n";
 
-        dosage.structures.structures.forEach(structure => {
+        dosage.structures.getStructures().forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
-                new StructuresWrapper(dosage.structures.unitOrUnits, [structure]));
+                new StructuresWrapper(dosage.structures.getUnitOrUnits(), [structure]));
             s += (new LongTextConverter().convertWrapper(w) + "\n\n");
         });
 

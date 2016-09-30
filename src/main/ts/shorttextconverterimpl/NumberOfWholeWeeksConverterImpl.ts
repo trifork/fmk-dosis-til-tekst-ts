@@ -10,17 +10,17 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
 
-        if (structure.iterationInterval % 7 > 0)
+        if (structure.getIterationInterval() % 7 > 0)
             return false;
-        if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime))
+        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
             return false;
-        if (structure.days.length === 0)
+        if (structure.getDays().length === 0)
             return false;
-        if (structure.days[0].dayNumber > 7)
+        if (structure.getDays()[0].getDayNumber() > 7)
             return false;
         if (!structure.daysAreInUninteruptedSequenceFromOne())
             return false;
@@ -34,13 +34,13 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
 
-        let day: DayWrapper = structure.days[0];
+        let day: DayWrapper = structure.getDays()[0];
 
         // Append dosage
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
 
         // Add times daily
         if (day.getNumberOfDoses() > 1)
@@ -48,8 +48,8 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         else
             text += " daglig";
 
-        let days: number = structure.days.length;
-        let pauseDays: number = structure.iterationInterval - days;
+        let days: number = structure.getDays().length;
+        let pauseDays: number = structure.getIterationInterval() - days;
 
         // If pause == 0 then this structure is equivalent to a structure with just one day and iteration=1
         if (pauseDays > 0) {

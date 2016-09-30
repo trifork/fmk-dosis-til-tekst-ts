@@ -16,15 +16,15 @@ export class UnitOrUnitsWrapper {
         this._unitPlural = unitPlural;
     }
 
-    public get unit() {
+    public getUnit() {
         return this._unit;
     }
 
-    public get unitSingular() {
+    public getUnitSingular() {
         return this._unitSingular;
     }
 
-    public get unitPlural() {
+    public getUnitPlural() {
         return this._unitPlural;
     }
 }

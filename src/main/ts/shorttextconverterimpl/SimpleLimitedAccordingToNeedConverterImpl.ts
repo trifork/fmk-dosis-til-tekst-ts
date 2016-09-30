@@ -16,15 +16,15 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 1)
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        if (structure.getIterationInterval() !== 1)
             return false;
-        if (structure.days.length !== 1)
+        if (structure.getDays().length !== 1)
             return false;
-        let day: DayWrapper = structure.days[0];
-        if (day.dayNumber !== 1)
+        let day: DayWrapper = structure.getDays()[0];
+        if (day.getDayNumber() !== 1)
             return false;
         if (!day.containsAccordingToNeedDosesOnly())
             return false;
@@ -34,10 +34,10 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
-        let day: DayWrapper = structure.days[0];
-        text += SimpleLimitedAccordingToNeedConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.unitOrUnits);
+        let day: DayWrapper = structure.getDays()[0];
+        text += SimpleLimitedAccordingToNeedConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.getUnitOrUnits());
         text += " efter behov";
 
         if (day.getNumberOfAccordingToNeedDoses() === 1)
@@ -45,8 +45,8 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         else
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";
 
-        if (structure.supplText)
-            text += TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
+        if (structure.getSupplText())
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
 
         return text.toString();
     }

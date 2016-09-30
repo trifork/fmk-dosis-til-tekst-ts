@@ -9,22 +9,22 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
 
-        if (structure.iterationInterval % 7 > 0)
+        if (structure.getIterationInterval() % 7 > 0)
             return false;
-        if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime))
+        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
             return false;
-        if (structure.days.length < 2)
+        if (structure.getDays().length < 2)
             return false;
         // Check there is only one day in each week
-        let daysAsList: DayWrapper[] = structure.days;
+        let daysAsList: DayWrapper[] = structure.getDays();
         for (let week = 0; week < daysAsList.length; week++) {
-            if (structure.days[week].dayNumber < (week * 7 + 1))
+            if (structure.getDays()[week].getDayNumber() < (week * 7 + 1))
                 return false;
-            if (structure.days[week].dayNumber > (week * 7 + 7))
+            if (structure.getDays()[week].getDayNumber() > (week * 7 + 7))
                 return false;
         }
         if (!structure.sameDayOfWeek())
@@ -39,13 +39,13 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
 
         let text = "";
 
         // Append dosage
-        let day: DayWrapper = structure.days[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
+        let day: DayWrapper = structure.getDays()[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
 
         // Add times daily
         if (day.getNumberOfDoses() > 1)
@@ -53,10 +53,10 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
         else
             text += " daglig ";
 
-        text += TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, false).name;
+        text += TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, false).getName();
 
-        let weeks: number = structure.days.length;
-        let pauseWeeks: number = structure.iterationInterval / 7 - weeks;
+        let weeks: number = structure.getDays().length;
+        let pauseWeeks: number = structure.getIterationInterval() / 7 - weeks;
 
         // If pause == 0 then this structure is equivalent to a structure with just one day and iteration=1
         if (pauseWeeks > 0) {

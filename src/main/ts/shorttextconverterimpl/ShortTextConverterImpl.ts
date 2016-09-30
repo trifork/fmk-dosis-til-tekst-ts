@@ -10,12 +10,12 @@ export abstract class ShortTextConverterImpl {
     public abstract doConvert(dosageStructure: DosageWrapper): string;
 
     protected static toValue(dose: DoseWrapper): string {
-        if (dose.doseQuantity !== undefined) {
-            return TextHelper.quantityToString(dose.doseQuantity);
+        if (dose.getDoseQuantity() !== undefined) {
+            return TextHelper.quantityToString(dose.getDoseQuantity());
         }
-        else if (dose.minimalDoseQuantity !== undefined && dose.maximalDoseQuantity !== undefined) {
-            return TextHelper.quantityToString(dose.minimalDoseQuantity) +
-                "-" + TextHelper.quantityToString(dose.maximalDoseQuantity);
+        else if (dose.getMinimalDoseQuantity() !== undefined && dose.getMaximalDoseQuantity() !== undefined) {
+            return TextHelper.quantityToString(dose.getMinimalDoseQuantity()) +
+                "-" + TextHelper.quantityToString(dose.getMaximalDoseQuantity());
         }
         else {
             return undefined;

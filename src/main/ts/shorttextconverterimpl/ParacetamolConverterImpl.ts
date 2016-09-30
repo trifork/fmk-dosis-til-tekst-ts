@@ -10,15 +10,15 @@ export class ParacetamolConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
 
-        if (structure.iterationInterval !== 1)
+        if (structure.getIterationInterval() !== 1)
             return false;
-        if (structure.days.length !== 1)
+        if (structure.getDays().length !== 1)
             return false;
-        let day: DayWrapper = structure.days[0];
+        let day: DayWrapper = structure.getDays()[0];
         if (!day.containsAccordingToNeedDose())
             return false;
         if (day.containsAccordingToNeedDosesOnly())
@@ -28,8 +28,8 @@ export class ParacetamolConverterImpl extends ShortTextConverterImpl {
         }
         if (!day.containsPlainDose())
             return false;
-        if (day.morningDose || day.noonDose
-            || day.eveningDose || day.nightDose)
+        if (day.getMorningDose() || day.getNoonDose()
+            || day.getEveningDose() || day.getNightDose())
             return false;
         if (!day.allDosesHaveTheSameQuantity())
             return false;
@@ -37,15 +37,15 @@ export class ParacetamolConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
 
-        let day: DayWrapper = structure.days[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
+        let day: DayWrapper = structure.getDays()[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
         text += " " + (day.getNumberOfPlainDoses() - day.getNumberOfAccordingToNeedDoses()) + "-" + (day.getNumberOfPlainDoses());
         text += " gange daglig";
-        if (structure.supplText)
-            text += TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
+        if (structure.getSupplText())
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         return text.toString();
     }
 

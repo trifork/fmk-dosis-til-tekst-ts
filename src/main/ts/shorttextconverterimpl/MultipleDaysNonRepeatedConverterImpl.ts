@@ -11,12 +11,12 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 0)
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        if (structure.getIterationInterval() !== 0)
             return false;
-        if (structure.days.length <= 1)
+        if (structure.getDays().length <= 1)
             return false;
         if (!structure.allDaysAreTheSame())
             return false;
@@ -31,35 +31,35 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         return true;
     }
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
 
-        let day: DayWrapper = structure.days[0];
-        let firstDay: DayWrapper = structure.days[0];
+        let day: DayWrapper = structure.getDays()[0];
+        let firstDay: DayWrapper = structure.getDays()[0];
         if (structure.containsMorningNoonEveningNightDoses()) {
 
-            text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay, dosage.structures.unitOrUnits);
-            MorningNoonEveningNightConverterImpl.getNoonText(firstDay, dosage.structures.unitOrUnits);
-            MorningNoonEveningNightConverterImpl.getEveningText(firstDay, dosage.structures.unitOrUnits);
-            MorningNoonEveningNightConverterImpl.getNightText(firstDay, dosage.structures.unitOrUnits);
+            text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay, dosage.structures.getUnitOrUnits());
+            MorningNoonEveningNightConverterImpl.getNoonText(firstDay, dosage.structures.getUnitOrUnits());
+            MorningNoonEveningNightConverterImpl.getEveningText(firstDay, dosage.structures.getUnitOrUnits());
+            MorningNoonEveningNightConverterImpl.getNightText(firstDay, dosage.structures.getUnitOrUnits());
         }
         else {
-            text += ShortTextConverterImpl.toDoseAndUnitValue(firstDay.getDose(0), dosage.structures.unitOrUnits);
-            text += " " + firstDay.allDoses.length + " " + TextHelper.gange(firstDay.allDoses.length) + " daglig";
+            text += ShortTextConverterImpl.toDoseAndUnitValue(firstDay.getDose(0), dosage.structures.getUnitOrUnits());
+            text += " " + firstDay.getAllDoses().length + " " + TextHelper.gange(firstDay.getAllDoses().length) + " daglig";
         }
 
-        for (let i: number = 0; i < structure.days.length; i++) {
+        for (let i: number = 0; i < structure.getDays().length; i++) {
 
-            let day: DayWrapper = structure.days[i];
+            let day: DayWrapper = structure.getDays()[i];
             if (i === 0)
-                text += " dag " + day.dayNumber;
-            else if (i === structure.days.length - 1)
-                text += " og " + day.dayNumber;
-            else text += ", " + day.dayNumber;
+                text += " dag " + day.getDayNumber();
+            else if (i === structure.getDays().length - 1)
+                text += " og " + day.getDayNumber();
+            else text += ", " + day.getDayNumber();
         }
 
-        if (structure.supplText)
-            text += TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
+        if (structure.getSupplText())
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
 
         return text.toString();
     }

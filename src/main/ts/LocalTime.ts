@@ -3,16 +3,16 @@ export class LocalTime {
     private _hour: number;
     private _minute: number;
 
-    public get minute(): number {
+    public getMinute(): number {
         return this._minute;
     }
 
-    public get second(): number {
+    public getSecond(): number {
         return this._second;
     }
     private _second: number;
 
-    public get hour(): number {
+    public getHour(): number {
         return this._hour;
     }
 

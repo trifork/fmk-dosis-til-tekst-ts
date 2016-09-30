@@ -10,15 +10,15 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 1)
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        if (structure.getIterationInterval() !== 1)
             return false;
-        if (structure.days.length !== 1)
+        if (structure.getDays().length !== 1)
             return false;
-        let day: DayWrapper = structure.days[0];
-        if (day.dayNumber !== 1)
+        let day: DayWrapper = structure.getDays()[0];
+        if (day.getDayNumber() !== 1)
             return false;
         if (day.containsTimedDose())
             return false;
@@ -28,42 +28,42 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
         if (!day.allDosesAreTheSame())
             return false;
 
-        if (day.allDoses[0].doseQuantity === undefined)
+        if (day.getAllDoses()[0].getDoseQuantity() === undefined)
             return false;
-        if (!RepeatedEyeOrEarConverterImpl.hasIntegerValue(day.allDoses[0].doseQuantity))
+        if (!RepeatedEyeOrEarConverterImpl.hasIntegerValue(day.getAllDoses()[0].getDoseQuantity()))
             return false;
-        let quantity: number = day.allDoses[0].doseQuantity;
+        let quantity: number = day.getAllDoses()[0].getDoseQuantity();
         if (!(quantity % 2 === 0))
             return false;
-        if (structure.supplText === undefined)
+        if (structure.getSupplText() === undefined)
             return false;
-        if (TextHelper.strEndsWith(structure.supplText, "i hvert øje")) {
-            if (TextHelper.strStartsWith(structure.supplText, ",")) {
-                if (structure.supplText !== (", " + (quantity / 2) + " i hvert øje"))
+        if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {
+            if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
+                if (structure.getSupplText() !== (", " + (quantity / 2) + " i hvert øje"))
                     return false;
             }
             else {
-                if (structure.supplText !== ((quantity / 2) + " i hvert øje"))
+                if (structure.getSupplText() !== ((quantity / 2) + " i hvert øje"))
                     return false;
             }
         }
-        else if (TextHelper.strEndsWith(structure.supplText, "i hvert øre")) {
-            if (TextHelper.strStartsWith(structure.supplText, ",")) {
-                if (structure.supplText !== (", " + (quantity / 2) + " i hvert øre"))
+        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øre")) {
+            if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
+                if (structure.getSupplText() !== (", " + (quantity / 2) + " i hvert øre"))
                     return false;
             }
             else {
-                if (structure.supplText !== ((quantity / 2) + " i hvert øre"))
+                if (structure.getSupplText() !== ((quantity / 2) + " i hvert øre"))
                     return false;
             }
         }
-        else if (TextHelper.strEndsWith(structure.supplText, "i hvert næsebor")) {
-            if (TextHelper.strStartsWith(structure.supplText, ",")) {
-                if (structure.supplText !== (", " + (quantity / 2) + " i hvert næsebor"))
+        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert næsebor")) {
+            if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
+                if (structure.getSupplText() !== (", " + (quantity / 2) + " i hvert næsebor"))
                     return false;
             }
             else {
-                if (structure.supplText !== ((quantity / 2) + " i hvert næsebor"))
+                if (structure.getSupplText() !== ((quantity / 2) + " i hvert næsebor"))
                     return false;
             }
         }
@@ -75,26 +75,26 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
 
         let text = "";
 
         // Append dosage
-        let day: DayWrapper = structure.days[0];
-        text += (ShortTextConverterImpl.toDoseLabelUnitValue(day.allDoses[0].doseQuantity / 2, day.allDoses[0].getLabel(), dosage.structures.unitOrUnits));
+        let day: DayWrapper = structure.getDays()[0];
+        text += (ShortTextConverterImpl.toDoseLabelUnitValue(day.getAllDoses()[0].getDoseQuantity() / 2, day.getAllDoses()[0].getLabel(), dosage.structures.getUnitOrUnits()));
 
         // Append iteration:
         text += this.makeIteration(structure, day);
 
         // Append suppl. text
         let supplText = "";
-        if (TextHelper.strEndsWith(structure.supplText, "i hvert øje")) {
+        if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {
             supplText = " i begge øjne";
         }
-        else if (TextHelper.strEndsWith(structure.supplText, "i hvert øre")) {
+        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øre")) {
             supplText = " i begge ører";
         }
-        else if (TextHelper.strEndsWith(structure.supplText, "i hvert næsebor")) {
+        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert næsebor")) {
             supplText = " i begge næsebor";
         }
 
@@ -105,7 +105,7 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
 
     private makeIteration(structure: StructureWrapper, day: DayWrapper): string {
 
-        let iterationInterval = structure.iterationInterval;
+        let iterationInterval = structure.getIterationInterval();
         let numberOfDoses = day.getNumberOfDoses();
 
         // Repeated daily
@@ -124,8 +124,8 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
             return " hver " + numberOfWholeMonths + ". måned";
 
         // Repeated weekly
-        let numberOfWholeWeeks = this.calculateNumberOfWholeWeeks(structure.iterationInterval);
-        let name = TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, false).name;
+        let numberOfWholeWeeks = this.calculateNumberOfWholeWeeks(structure.getIterationInterval());
+        let name = TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, false).getName();
         if (numberOfWholeWeeks === 1 && day.getNumberOfDoses() === 1)
             return " " + name + " hver uge";
         else if (numberOfWholeWeeks === 1 && numberOfDoses > 1)

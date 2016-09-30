@@ -38,45 +38,45 @@ export class StructureWrapper {
         this._dosagePeriodPostfix = dosagePeriodPostfix;
 
         if (days) {
-            this._days = days.sort((d1, d2) => d1.dayNumber - d2.dayNumber);
+            this._days = days.sort((d1, d2) => d1.getDayNumber() - d2.getDayNumber());
         }
         else {
             throw new DosisTilTekstException("StructureWrapper: days must be set in StructureWrapper");
         }
     }
 
-    get iterationInterval(): number {
+    getIterationInterval(): number {
         return this._iterationInterval;
     }
 
-    get supplText(): string {
+    getSupplText(): string {
         return this._supplText;
     }
 
-    get startDateOrDateTime(): DateOrDateTimeWrapper {
+    getStartDateOrDateTime(): DateOrDateTimeWrapper {
         return this._startDateOrDateTime;
     }
 
-    get endDateOrDateTime(): DateOrDateTimeWrapper {
+    getEndDateOrDateTime(): DateOrDateTimeWrapper {
         return this._endDateOrDateTime;
     }
 
-    get refToSource(): Object {
+    getRefToSource(): Object {
         return this._refToSource;
     }
 
-    get dosagePeriodPostfix(): string {
+    getDosagePeriodPostfix(): string {
         return this._dosagePeriodPostfix;
     }
 
-    set dosagePeriodPostfix(v: string) {
+    setDosagePeriodPostfix(v: string) {
         this._dosagePeriodPostfix = v;
     }
 
     public startsAndEndsSameDay(): boolean {
-        if (this._startDateOrDateTime && this.endDateOrDateTime) {
+        if (this._startDateOrDateTime && this.getEndDateOrDateTime()) {
             let startDate = this._startDateOrDateTime.getDateOrDateTime();
-            let endDate = this.endDateOrDateTime.getDateOrDateTime();
+            let endDate = this.getEndDateOrDateTime().getDateOrDateTime();
 
             return startDate.getFullYear() === endDate.getFullYear()
                 && startDate.getMonth() === endDate.getMonth()
@@ -87,18 +87,18 @@ export class StructureWrapper {
         }
     }
 
-    get days() {
+    public getDays() {
         return this._days;
     }
 
     public sameDayOfWeek(): boolean {
-        if (this.days.length === 1) {
+        if (this.getDays().length === 1) {
             return false;
         }
 
         let remainder = -1;
-        for (let day of this.days) {
-            let r = day.dayNumber % 7;
+        for (let day of this.getDays()) {
+            let r = day.getDayNumber() % 7;
             if (remainder >= 0 && remainder !== r)
                 return false;
             remainder = r;
@@ -110,7 +110,7 @@ export class StructureWrapper {
         if (this._areAllDaysTheSame === undefined) {
             this._areAllDaysTheSame = true;
             let day0: DayWrapper;
-            for (let day of this.days) {
+            for (let day of this.getDays()) {
                 if (day0) {
                     if (day0.getNumberOfDoses() !== day.getNumberOfDoses()) {
                         this._areAllDaysTheSame = false;
@@ -118,7 +118,7 @@ export class StructureWrapper {
                     }
                     else {
                         for (let d = 0; d < day0.getNumberOfDoses(); d++) {
-                            if (!day0.allDoses[d].theSameAs(day.allDoses[d])) {
+                            if (!day0.getAllDoses()[d].theSameAs(day.getAllDoses()[d])) {
                                 this._areAllDaysTheSame = false;
                                 break;
                             }
@@ -135,8 +135,8 @@ export class StructureWrapper {
 
     public daysAreInUninteruptedSequenceFromOne(): boolean {
         let dayNumber = 1;
-        for (let day of this.days) {
-            if (day.dayNumber !== dayNumber)
+        for (let day of this.getDays()) {
+            if (day.getDayNumber() !== dayNumber)
                 return false;
             dayNumber++;
         }
@@ -151,8 +151,8 @@ export class StructureWrapper {
         if (this._areAllDosesTheSame === undefined) {
             this._areAllDosesTheSame = true;
             let dose0: DoseWrapper;
-            for (let day of this.days) {
-                for (let dose of day.allDoses) {
+            for (let day of this.getDays()) {
+                for (let dose of day.getAllDoses()) {
                     if (dose0 === undefined) {
                         dose0 = dose;
                     }
@@ -168,29 +168,29 @@ export class StructureWrapper {
     }
 
     public containsMorningNoonEveningNightDoses(): boolean {
-        return this.days.some(d => d.containsMorningNoonEveningNightDoses());
+        return this.getDays().some(d => d.containsMorningNoonEveningNightDoses());
     }
 
     public containsPlainDose(): boolean {
-        return this.days.some(d => d.containsPlainDose());
+        return this.getDays().some(d => d.containsPlainDose());
     }
 
     public containsTimedDose(): boolean {
-        return this.days.some(d => d.containsTimedDose());
+        return this.getDays().some(d => d.containsTimedDose());
     }
 
     public containsAccordingToNeedDosesOnly(): boolean {
-        return this.days.every(d => d.containsAccordingToNeedDosesOnly());
+        return this.getDays().every(d => d.containsAccordingToNeedDosesOnly());
     }
 
     public containsAccordingToNeedDose(): boolean {
-        return this.days.some(d => d.containsAccordingToNeedDose());
+        return this.getDays().some(d => d.containsAccordingToNeedDose());
     }
 
     public getSumOfDoses(): Interval<number> {
         let allSum: Interval<number>;
 
-        for (let day of this.days) {
+        for (let day of this.getDays()) {
             let daySum = day.getSumOfDoses();
             if (allSum === undefined) {
                 allSum = daySum;

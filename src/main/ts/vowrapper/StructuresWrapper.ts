@@ -15,7 +15,7 @@ export class StructuresWrapper {
     constructor(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]) {
         this._unitOrUnits = unitOrUnits;
         structures.sort((s1, s2) => {
-            let i = s1.startDateOrDateTime.getDateOrDateTime().getTime() - s2.startDateOrDateTime.getDateOrDateTime().getTime();
+            let i = s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
             if (i !== 0)
                 return i;
             if (s1.containsAccordingToNeedDosesOnly())
@@ -27,21 +27,21 @@ export class StructuresWrapper {
         this._structures = structures;
     }
 
-    public get unitOrUnits() {
+    public getUnitOrUnits() {
         return this._unitOrUnits;
     }
 
-    public get structures(): StructureWrapper[] {
+    public getStructures(): StructureWrapper[] {
         return this._structures;
     }
 
     public hasOverlappingPeriodes(): boolean {
-        for (let i = 0; i < this.structures.length; i++) {
-            for (let j = i + 1; j < this.structures.length; j++) {
-                let dis = this.structures[i].startDateOrDateTime;
-                let die = this.structures[i].endDateOrDateTime;
-                let djs = this.structures[j].startDateOrDateTime;
-                let dje = this.structures[j].endDateOrDateTime;
+        for (let i = 0; i < this.getStructures().length; i++) {
+            for (let j = i + 1; j < this.getStructures().length; j++) {
+                let dis = this.getStructures()[i].getStartDateOrDateTime();
+                let die = this.getStructures()[i].getEndDateOrDateTime();
+                let djs = this.getStructures()[j].getStartDateOrDateTime();
+                let dje = this.getStructures()[j].getEndDateOrDateTime();
                 if (this.overlaps(dis, die, djs, dje))
                     return true;
             }
@@ -67,12 +67,12 @@ export class StructuresWrapper {
 
     private makeStart(ds: DateOrDateTimeWrapper): Date {
         let d: Date;
-        if (ds && ds.dateTime) {
-            d = new Date(ds.dateTime.getTime());
+        if (ds && ds.getDateTime()) {
+            d = new Date(ds.getDateTime().getTime());
             d.setMilliseconds(0);
         }
-        else if (ds && ds.date) {
-            d = new Date(ds.date.getTime());
+        else if (ds && ds.getDate()) {
+            d = new Date(ds.getDate().getTime());
             d.setHours(0);
             d.setMinutes(0);
             d.setSeconds(0);
@@ -87,12 +87,12 @@ export class StructuresWrapper {
     private makeEnd(de: DateOrDateTimeWrapper): Date {
         let d: Date;
 
-        if (de && de.dateTime) {
-            d = new Date(de.dateTime.getTime());
+        if (de && de.getDateTime()) {
+            d = new Date(de.getDateTime().getTime());
             d.setMilliseconds(0);
         }
-        else if (de && de.date) {
-            d = new Date(de.date.getTime());
+        else if (de && de.getDate()) {
+            d = new Date(de.getDate().getTime());
             d.setHours(0);
             d.setMinutes(0);
             d.setSeconds(0);

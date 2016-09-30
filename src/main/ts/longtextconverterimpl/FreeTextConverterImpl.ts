@@ -8,8 +8,8 @@ export class FreeTextConverterImpl extends SimpleLongTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        return this.convert(dosage.freeText.text,
-            dosage.freeText.startDateOrDateTime,
-            dosage.freeText.endDateOrDateTime);
+        return this.convert(dosage.freeText.getText(),
+            dosage.freeText.getStartDateOrDateTime(),
+            dosage.freeText.getEndDateOrDateTime());
     }
 }

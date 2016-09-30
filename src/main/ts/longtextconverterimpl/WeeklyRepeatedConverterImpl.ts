@@ -11,18 +11,18 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures) {
 
-            if (dosage.structures.structures.length !== 1)
+            if (dosage.structures.getStructures().length !== 1)
                 return false;
-            let structure: StructureWrapper = dosage.structures.structures[0];
-            if (structure.iterationInterval !== 7)
+            let structure: StructureWrapper = dosage.structures.getStructures()[0];
+            if (structure.getIterationInterval() !== 7)
                 return false;
-            if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime))
+            if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
                 return false;
-            if (structure.days.length > 7)
+            if (structure.getDays().length > 7)
                 return false;
-            if (structure.days[0].dayNumber === 0)
+            if (structure.getDays()[0].getDayNumber() === 0)
                 return false;
-            if (structure.days[structure.days.length - 1].dayNumber > 7)
+            if (structure.getDays()[structure.getDays().length - 1].getDayNumber() > 7)
                 return false;
             return true;
         }
@@ -30,15 +30,15 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        return this.convert(dosage.structures.unitOrUnits, dosage.structures.structures[0]);
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
     }
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
-        s += this.getDosageStartText(structure.startDateOrDateTime);
+        s += this.getDosageStartText(structure.getStartDateOrDateTime());
         s += ", forløbet gentages hver uge";
-        if (structure.endDateOrDateTime) {
-            s += this.getDosageEndText(structure.endDateOrDateTime);
+        if (structure.getEndDateOrDateTime()) {
+            s += this.getDosageEndText(structure.getEndDateOrDateTime());
         }
         s += this.getNoteText(structure);
         s += TextHelper.INDENT + "Doseringsforløb:\n";
@@ -56,8 +56,8 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;
-            s += TextHelper.INDENT + e.name + ": ";
-            s += this.makeDaysDosage(unitOrUnits, structure, e.day, true);
+            s += TextHelper.INDENT + e.getName() + ": ";
+            s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true);
         }
         return s;
     }
@@ -65,14 +65,14 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     public static sortDaysOfWeek(structure: StructureWrapper): Array<DayOfWeek> {
         // Convert all days (up to 7) to day of week and DK name ((1, Mandag) etc).
         // Sort according to day of week (Monday always first) using DayOfWeek's compareTo in SortedSet
-        let daysOfWeekSet = structure.days.map(day => TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, true));
+        let daysOfWeekSet = structure.getDays().map(day => TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, true));
         return daysOfWeekSet.sort(WeeklyRepeatedConverterImpl.daySort);
     }
 
     // Javascript day 0 = Sunday meaning special sorting of days
     static daySort(day1: DayOfWeek, day2: DayOfWeek): number {
-        let sortDay1 = day1.dayOfWeek === 0 ? 8 : day1.dayOfWeek;
-        let sortDay2 = day2.dayOfWeek === 0 ? 8 : day2.dayOfWeek;
+        let sortDay1 = day1.getDayOfWeek() === 0 ? 8 : day1.getDayOfWeek();
+        let sortDay2 = day2.getDayOfWeek() === 0 ? 8 : day2.getDayOfWeek();
 
         return sortDay1 - sortDay2;
     }

@@ -18,11 +18,11 @@ export class DateOrDateTimeWrapper {
         this._dateTime = dateTime;
     }
 
-    get date(): Date {
+    getDate(): Date {
         return this._date;
     }
 
-    get dateTime(): Date {
+    getDateTime(): Date {
         return this._dateTime;
     }
 
@@ -35,12 +35,12 @@ export class DateOrDateTimeWrapper {
 
     public isEqualTo(dt: DateOrDateTimeWrapper): boolean {
         if (dt) {
-            if (this.date)
-                return this.date.getTime() === dt.date.getTime();
-            else if (this.dateTime)
-                return this.dateTime.getTime() === dt.dateTime.getTime();
+            if (this.getDate())
+                return this.getDate().getTime() === dt.getDate().getTime();
+            else if (this.getDateTime())
+                return this.getDateTime().getTime() === dt.getDateTime().getTime();
             else
-                return !dt.date && !dt.dateTime;
+                return !dt.getDate() && !dt.getDateTime();
         }
         return false;
     }

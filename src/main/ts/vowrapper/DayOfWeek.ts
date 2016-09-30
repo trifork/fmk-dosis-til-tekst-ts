@@ -12,15 +12,15 @@ export class DayOfWeek {
         this._day = day;
     }
 
-    public get dayOfWeek(): number {
+    public getDayOfWeek(): number {
         return this._dayOfWeek;
     }
 
-    public get name(): string {
+    public getName(): string {
         return this._name;
     }
 
-    public get day(): DayWrapper {
+    public getDay(): DayWrapper {
         return this._day;
     }
 }

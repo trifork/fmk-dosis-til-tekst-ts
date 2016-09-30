@@ -7,33 +7,33 @@ import {TextHelper} from "../TextHelper";
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
     public canConvert(dosageStructure: DosageWrapper): boolean {
-        // The default converter must handle all cases with a single periode, to ensure that we always create a long 
-        // dosage text. This converter is added last in the LongTextConverters list of possible 
+        // The default converter must handle all cases with a single periode, to ensure that we always create a long
+        // dosage text. This converter is added last in the LongTextConverters list of possible
         // converters.
-        return dosageStructure.structures.structures.length === 1;
+        return dosageStructure.structures.getStructures().length === 1;
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        return this.convert(dosage.structures.unitOrUnits, dosage.structures.structures[0]);
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
     }
 
     private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
 
-        if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime)) {
+        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
             // Same day dosage
-            s += "Doseringen foretages kun " + this.datesToLongText(structure.startDateOrDateTime) + ":\n";
+            s += "Doseringen foretages kun " + this.datesToLongText(structure.getStartDateOrDateTime()) + ":\n";
         }
-        else if (structure.iterationInterval === 0) {
+        else if (structure.getIterationInterval() === 0) {
             // Not repeated dosage
-            s += this.getDosageStartText(structure.startDateOrDateTime);
+            s += this.getDosageStartText(structure.getStartDateOrDateTime());
             // If there is just one day with according to need dosages we don't want say when to stop
-            if (structure.days.length === 1 && structure.containsAccordingToNeedDosesOnly()) {
+            if (structure.getDays().length === 1 && structure.containsAccordingToNeedDosesOnly()) {
                 s += ":\n";
             }
             else {
-                if (structure.endDateOrDateTime) {
-                    s += this.getDosageEndText(structure.endDateOrDateTime);
+                if (structure.getEndDateOrDateTime()) {
+                    s += this.getDosageEndText(structure.getEndDateOrDateTime());
                 }
                 else {
                     s += " og ophører efter det angivne forløb";
@@ -41,24 +41,24 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
                 s += this.getNoteText(structure);
             }
         }
-        else if (structure.iterationInterval === 1) {
+        else if (structure.getIterationInterval() === 1) {
             // Daily dosage
-            s += this.getDosageStartText(structure.startDateOrDateTime);
-            if (structure.endDateOrDateTime) {
+            s += this.getDosageStartText(structure.getStartDateOrDateTime());
+            if (structure.getEndDateOrDateTime()) {
                 s += ", gentages hver dag";
-                s += this.getDosageEndText(structure.endDateOrDateTime);
+                s += this.getDosageEndText(structure.getEndDateOrDateTime());
                 s += ":\n";
             }
             else {
                 s += " og gentages hver dag:\n";
             }
         }
-        else if (structure.iterationInterval > 1) {
+        else if (structure.getIterationInterval() > 1) {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.startDateOrDateTime);
+            s += this.getDosageStartText(structure.getStartDateOrDateTime());
             s = this.appendRepetition(s, structure);
-            if (structure.endDateOrDateTime) {
-                s += this.getDosageEndText(structure.endDateOrDateTime);
+            if (structure.getEndDateOrDateTime()) {
+                s += this.getDosageEndText(structure.getEndDateOrDateTime());
             }
             s += this.getNoteText(structure);
         }
@@ -68,7 +68,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
     }
 
     private appendRepetition(s: string, structure: StructureWrapper): string {
-        return s + ", forløbet gentages efter " + structure.iterationInterval + " dage";
+        return s + ", forløbet gentages efter " + structure.getIterationInterval() + " dage";
     }
 
 }

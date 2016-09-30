@@ -150,19 +150,19 @@ export class TextHelper {
     }
 
     public static getUnit(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
-        if (unitOrUnits.unit)
-            return TextHelper.correctUnit(dose, unitOrUnits.unit);
-        else if (unitOrUnits.unitSingular && unitOrUnits.unitPlural)
-            return TextHelper.chooseUnit(dose, unitOrUnits.unitSingular, unitOrUnits.unitPlural);
+        if (unitOrUnits.getUnit())
+            return TextHelper.correctUnit(dose, unitOrUnits.getUnit());
+        else if (unitOrUnits.getUnitSingular() && unitOrUnits.getUnitPlural())
+            return TextHelper.chooseUnit(dose, unitOrUnits.getUnitSingular(), unitOrUnits.getUnitPlural());
         else
             return "";
     }
 
     public static getUnitFromDoseNumber(dose: number, unitOrUnits: UnitOrUnitsWrapper): string {
-        if (unitOrUnits.unit)
-            return TextHelper.correctUnitForDoseNumber(dose, unitOrUnits.unit);
-        else if (unitOrUnits.unitSingular && unitOrUnits.unitPlural)
-            return TextHelper.chooseUnitForDoseNumber(dose, unitOrUnits.unitSingular, unitOrUnits.unitPlural);
+        if (unitOrUnits.getUnit())
+            return TextHelper.correctUnitForDoseNumber(dose, unitOrUnits.getUnit());
+        else if (unitOrUnits.getUnitSingular() && unitOrUnits.getUnitPlural())
+            return TextHelper.chooseUnitForDoseNumber(dose, unitOrUnits.getUnitSingular(), unitOrUnits.getUnitPlural());
         else
             return "";
     }
@@ -196,11 +196,11 @@ export class TextHelper {
     }
 
     private static hasPluralUnit(dose: DoseWrapper): boolean {
-        if (dose.doseQuantity !== undefined) {
-            return dose.doseQuantity > 1.0 || dose.doseQuantity < 0.000000001;
+        if (dose.getDoseQuantity() !== undefined) {
+            return dose.getDoseQuantity() > 1.0 || dose.getDoseQuantity() < 0.000000001;
         }
-        else if (dose.maximalDoseQuantity !== undefined) {
-            return dose.maximalDoseQuantity > 1.0 || dose.maximalDoseQuantity < 0.000000001;
+        else if (dose.getMaximalDoseQuantity() !== undefined) {
+            return dose.getMaximalDoseQuantity() > 1.0 || dose.getMaximalDoseQuantity() < 0.000000001;
         }
         else {
             return false;
@@ -268,7 +268,7 @@ export class TextHelper {
 
     public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTimeWrapper, day: DayWrapper, initialUpperCase: boolean): DayOfWeek {
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
-        dateOnly.setDate(dateOnly.getDate() + day.dayNumber - 1);
+        dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
 
         let dayString = TextHelper.weekdays[dateOnly.getDay()];
         let name: string;

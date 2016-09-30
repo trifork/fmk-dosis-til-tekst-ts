@@ -25,11 +25,11 @@ export abstract class LongTextConverterImpl {
         if (!startDateOrDateTime)
             throw new DosisTilTekstException("startDateOrDateTime must be set");
 
-        if (startDateOrDateTime.date) {
-            return TextHelper.formatLongDate(startDateOrDateTime.date);
+        if (startDateOrDateTime.getDate()) {
+            return TextHelper.formatLongDate(startDateOrDateTime.getDate());
         }
         else {
-            let dateTime = startDateOrDateTime.dateTime;
+            let dateTime = startDateOrDateTime.getDateTime();
             // We do not want to show seconds precision if seconds are not specified or 0
             if (this.haveSeconds(dateTime)) {
                 return TextHelper.formatLongDateTime(dateTime);
@@ -47,7 +47,7 @@ export abstract class LongTextConverterImpl {
     protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
         let appendedLines = 0;
-        for (let day of structure.days) {
+        for (let day of structure.getDays()) {
               appendedLines++;
             if (appendedLines > 1) {
                 s += "\n";
@@ -56,9 +56,9 @@ export abstract class LongTextConverterImpl {
             let daysLabel = this.makeDaysLabel(structure, day);
 
             // We cannot have a day without label if there are other days (or "any day")
-            if (structure.days.length > 1 && daysLabel.length === 0 && structure.iterationInterval === 1)
+            if (structure.getDays().length > 1 && daysLabel.length === 0 && structure.getIterationInterval() === 1)
                 daysLabel = "Daglig: ";
-            else if (structure.days.length > 1 && daysLabel.length === 0 && structure.iterationInterval > 1)
+            else if (structure.getDays().length > 1 && daysLabel.length === 0 && structure.getIterationInterval() > 1)
                 daysLabel = "Dosering: "; // We probably never get here
 
             s += daysLabel;
@@ -68,17 +68,17 @@ export abstract class LongTextConverterImpl {
     }
 
     protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper): string {
-        if (day.dayNumber === 0) {
+        if (day.getDayNumber() === 0) {
             if (day.containsAccordingToNeedDosesOnly())
                 return "Efter behov: ";
             else
                 return "Dag ikke angivet: ";
         }
-        else if (structure.iterationInterval === 1) {
+        else if (structure.getIterationInterval() === 1) {
             return "";
         }
         else {
-            return TextHelper.makeDayString(structure.startDateOrDateTime, day.dayNumber) + ": ";
+            return TextHelper.makeDayString(structure.getStartDateOrDateTime(), day.getDayNumber()) + ": ";
         }
     }
 
@@ -86,8 +86,8 @@ export abstract class LongTextConverterImpl {
         let s = "";
 
         let supplText = "";
-        if (structure.supplText) {
-            supplText = TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
+        if (structure.getSupplText()) {
+            supplText = TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         }
 
         let daglig = "";
@@ -95,15 +95,15 @@ export abstract class LongTextConverterImpl {
             daglig = " daglig";
 
         if (day.getNumberOfDoses() === 1) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.supplText);
-            if (day.containsAccordingToNeedDosesOnly() && day.dayNumber > 0)
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText());
+            if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0)
                 s += " højst 1 gang" + daglig + supplText;
             else
                 s += supplText;
         }
         else if (day.getNumberOfDoses() > 1 && day.allDosesAreTheSame()) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.supplText);
-            if (day.containsAccordingToNeedDosesOnly() && day.dayNumber > 0)
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText());
+            if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0)
                 s += " højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
             else
                 s += " " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
@@ -111,12 +111,12 @@ export abstract class LongTextConverterImpl {
         else {
 
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                s += this.makeOneDose(day.getDose(d), unitOrUnits, structure.supplText) + supplText;
+                s += this.makeOneDose(day.getDose(d), unitOrUnits, structure.getSupplText()) + supplText;
                 if (d < day.getNumberOfDoses() - 1)
                     s += " + ";
             }
         }
-        let dosagePeriodPostfix = structure.dosagePeriodPostfix;
+        let dosagePeriodPostfix = structure.getDosagePeriodPostfix();
         if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
         }
@@ -126,12 +126,12 @@ export abstract class LongTextConverterImpl {
 
     private makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, supplText: string): string {
 
-        let s = dose.anyDoseQuantityString;
+        let s = dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);
         if (dose.getLabel().length > 0) {
             s += " " + dose.getLabel();
         }
-        if (dose.isAccordingToNeed) {
+        if (dose.getIsAccordingToNeed()) {
             s += " efter behov";
         }
         return s;
@@ -149,7 +149,7 @@ export abstract class LongTextConverterImpl {
     }
 
     private isComplex(structure: StructureWrapper): boolean {
-        if (structure.days.length === 1)
+        if (structure.getDays().length === 1)
             return false;
         return !structure.daysAreInUninteruptedSequenceFromOne();
     }

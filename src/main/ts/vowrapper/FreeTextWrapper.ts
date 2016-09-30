@@ -22,15 +22,15 @@ export class FreeTextWrapper {
         this._text = text;
     }
 
-    get startDateOrDateTime(): DateOrDateTimeWrapper {
+    public getStartDateOrDateTime(): DateOrDateTimeWrapper {
         return this._startDateOrDateTime;
     }
 
-    public get endDateOrDateTime(): DateOrDateTimeWrapper {
+    public getEndDateOrDateTime(): DateOrDateTimeWrapper {
         return this._endDateOrDateTime;
     }
 
-    public get text(): string {
+    public getText(): string {
         return this._text;
     }
 }

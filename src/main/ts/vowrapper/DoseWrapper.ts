@@ -51,51 +51,51 @@ export abstract class DoseWrapper {
         return !minimalQuantity && !maximalQuantity;
     }
 
-    public get minimalDoseQuantity() {
+    public getMinimalDoseQuantity() {
         return this._minimalDoseQuantity;
     }
 
-    public get maximalDoseQuantity() {
+    public getMaximalDoseQuantity() {
         return this._maximalDoseQuantity;
     }
 
-    public get doseQuantity() {
+    public getDoseQuantity() {
         return this._doseQuantity;
     }
 
-    public get minimalDoseQuantityString() {
+    public getMinimalDoseQuantityString() {
         return this._minimalDoseQuantityString;
     }
 
-    public get maximalDoseQuantityString() {
+    public getMaximalDoseQuantityString() {
         return this._maximalDoseQuantityString;
     }
 
-    public get doseQuantityString() {
+    public getDoseQuantityString() {
         return this._doseQuantityString;
     }
 
-    public get isAccordingToNeed() {
+    public getIsAccordingToNeed() {
         return this._isAccordingToNeed;
     }
 
-    public get anyDoseQuantityString() {
-        if (this.doseQuantityString)
-            return this.doseQuantityString;
+    public getAnyDoseQuantityString() {
+        if (this.getDoseQuantityString())
+            return this.getDoseQuantityString();
         else
-            return this.minimalDoseQuantityString + "-" + this.maximalDoseQuantityString;
+            return this.getMinimalDoseQuantityString() + "-" + this.getMaximalDoseQuantityString();
     }
 
     public theSameAs(other: DoseWrapper): boolean {
         if (this.getLabel() !== other.getLabel())
             return false;
-        if (this.isAccordingToNeed !== other.isAccordingToNeed)
+        if (this.getIsAccordingToNeed() !== other.getIsAccordingToNeed())
             return false;
-        if (!this.equalsWhereNullsAreTrue(this.minimalDoseQuantityString, other.minimalDoseQuantityString))
+        if (!this.equalsWhereNullsAreTrue(this.getMinimalDoseQuantityString(), other.getMinimalDoseQuantityString()))
             return false;
-        if (!this.equalsWhereNullsAreTrue(this.maximalDoseQuantityString, other.maximalDoseQuantityString))
+        if (!this.equalsWhereNullsAreTrue(this.getMaximalDoseQuantityString(), other.getMaximalDoseQuantityString()))
             return false;
-        if (!this.equalsWhereNullsAreTrue(this.doseQuantityString, other.doseQuantityString))
+        if (!this.equalsWhereNullsAreTrue(this.getDoseQuantityString(), other.getDoseQuantityString()))
             return false;
         return true;
     }

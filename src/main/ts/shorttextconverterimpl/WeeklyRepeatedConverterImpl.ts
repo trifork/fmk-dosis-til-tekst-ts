@@ -13,18 +13,18 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 7)
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        if (structure.getIterationInterval() !== 7)
             return false;
-        if (structure.startDateOrDateTime.isEqualTo(structure.endDateOrDateTime))
+        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
             return false;
-        if (structure.days.length > 7 || structure.days.length === 0)
+        if (structure.getDays().length > 7 || structure.getDays().length === 0)
             return false;
-        if (structure.days[0].dayNumber === 0)
+        if (structure.getDays()[0].getDayNumber() === 0)
             return false;
-        if (structure.days[structure.days.length - 1].dayNumber > 7)
+        if (structure.getDays()[structure.getDays().length - 1].getDayNumber() > 7)
             return false;
         if (!structure.allDaysAreTheSame()) // Otherwise the text is too long, and cannot fit into a short text
             return false;
@@ -36,13 +36,13 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure = dosage.structures.structures[0];
+        let structure = dosage.structures.getStructures()[0];
 
         let text = "";
 
         // Append dosage
-        let day: DayWrapper = structure.days[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
+        let day: DayWrapper = structure.getDays()[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
 
         // Add times daily
         if (day.getNumberOfDoses() > 1)
@@ -53,8 +53,8 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
 
         text += " hver uge";
 
-        if (structure.supplText)
-            text += TextHelper.maybeAddSpace(structure.supplText) + structure.supplText;
+        if (structure.getSupplText())
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
 
         return text.toString();
     }
@@ -67,11 +67,11 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
         let i = 0;
         for (let d of daysOfWeek) {
             if (i === daysOfWeek.length - 1 && daysOfWeek.length > 1)
-                text += " og " + d.name.toLowerCase();
+                text += " og " + d.getName().toLowerCase();
             else if (i === 0)
-                text += " " + d.name.toLowerCase();
+                text += " " + d.getName().toLowerCase();
             else if (i > 0)
-                text += ", " + d.name.toLowerCase();
+                text += ", " + d.getName().toLowerCase();
             i++;
         }
         return text.toString();

@@ -12,15 +12,15 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.structures.length !== 1)
+        if (dosage.structures.getStructures().length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.structures[0];
-        if (structure.iterationInterval !== 1)
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        if (structure.getIterationInterval() !== 1)
             return false;
-        if (structure.days.length !== 1)
+        if (structure.getDays().length !== 1)
             return false;
-        let day: DayWrapper = structure.days[0];
-        if (day.dayNumber !== 1)
+        let day: DayWrapper = structure.getDays()[0];
+        if (day.getDayNumber() !== 1)
             return false;
         if (day.containsTimedDose())
             return false;
@@ -34,14 +34,14 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.structures[0];
+        let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
-        let day: DayWrapper = structure.days[0];
-        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getMorningText(day, dosage.structures.unitOrUnits);
-        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getNoonText(day, dosage.structures.unitOrUnits);
-        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getEveningText(day, dosage.structures.unitOrUnits);
-        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getNightText(day, dosage.structures.unitOrUnits);
-        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getSupplText(structure.supplText);
+        let day: DayWrapper = structure.getDays()[0];
+        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getMorningText(day, dosage.structures.getUnitOrUnits());
+        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getNoonText(day, dosage.structures.getUnitOrUnits());
+        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getEveningText(day, dosage.structures.getUnitOrUnits());
+        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getNightText(day, dosage.structures.getUnitOrUnits());
+        text += MorningNoonEveningNightAndAccordingToNeedConverterImpl.getSupplText(structure.getSupplText());
 
         text += ", samt " + new SimpleLimitedAccordingToNeedConverterImpl().doConvert(dosage);
 
@@ -50,9 +50,9 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
 
     public static getMorningText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
-        if (day.morningDose) {
-            text += this.toDoseAndUnitValue(day.morningDose, unitOrUnits);
-            if (day.morningDose.isAccordingToNeed)
+        if (day.getMorningDose()) {
+            text += this.toDoseAndUnitValue(day.getMorningDose(), unitOrUnits);
+            if (day.getMorningDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
         return text;
@@ -60,18 +60,18 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
 
     public static getNoonText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
-        if (day.noonDose) {
-            if (day.morningDose && (day.eveningDose || day.nightDose))
+        if (day.getNoonDose()) {
+            if (day.getMorningDose() && (day.getEveningDose() || day.getNightDose()))
                 text += ", ";
-            else if (day.morningDose)
+            else if (day.getMorningDose())
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
-                text += this.toDoseAndUnitValue(day.noonDose, unitOrUnits);
-            else if (day.morningDose)
-                text += day.noonDose.getLabel();
+                text += this.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
+            else if (day.getMorningDose())
+                text += day.getNoonDose().getLabel();
             else
-                text += this.toDoseAndUnitValue(day.noonDose, unitOrUnits);
-            if (day.noonDose.isAccordingToNeed)
+                text += this.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
+            if (day.getNoonDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
         return text;
@@ -79,18 +79,18 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
 
     public static getEveningText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
-        if (day.eveningDose) {
-            if ((day.morningDose || day.noonDose) && day.nightDose)
+        if (day.getEveningDose()) {
+            if ((day.getMorningDose() || day.getNoonDose()) && day.getNightDose())
                 text += ", ";
-            else if (day.morningDose || day.noonDose)
+            else if (day.getMorningDose() || day.getNoonDose())
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
-                text += this.toDoseAndUnitValue(day.eveningDose, unitOrUnits);
-            else if (day.morningDose || day.noonDose)
-                text += day.eveningDose.getLabel();
+                text += this.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
+            else if (day.getMorningDose() || day.getNoonDose())
+                text += day.getEveningDose().getLabel();
             else
-                text += this.toDoseAndUnitValue(day.eveningDose, unitOrUnits);
-            if (day.eveningDose.isAccordingToNeed)
+                text += this.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
+            if (day.getEveningDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
         return text;
@@ -98,16 +98,16 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
 
     public static getNightText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
-        if (day.nightDose) {
-            if (day.morningDose || day.noonDose || day.eveningDose)
+        if (day.getNightDose()) {
+            if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose())
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
-                text += this.toDoseAndUnitValue(day.nightDose, unitOrUnits);
-            else if (day.morningDose || day.noonDose || day.eveningDose)
-                text += day.nightDose.getLabel();
+                text += this.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
+            else if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose())
+                text += day.getNightDose().getLabel();
             else
-                text += this.toDoseAndUnitValue(day.nightDose, unitOrUnits);
-            if (day.nightDose.isAccordingToNeed)
+                text += this.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
+            if (day.getNightDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
         return text;

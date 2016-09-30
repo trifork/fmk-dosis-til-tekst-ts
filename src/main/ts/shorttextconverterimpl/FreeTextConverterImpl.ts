@@ -8,6 +8,6 @@ export class FreeTextConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper): string {
-        return dosage.freeText.text;
+        return dosage.freeText.getText();
     }
 }
