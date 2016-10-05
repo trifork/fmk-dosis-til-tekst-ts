@@ -6,7 +6,7 @@ Windows:
 1) Install nodejs (http://nodejs.org) and npm
 2) 'npm install -g grunt-cli'
 3) 'npm install'
-4) 'grunt'
+4) 'node_modules\.bin\grunt'
 
 Linux:
 1) sudo add-apt-repository ppa:chris-lea/node.js  (standard distro grunt doesn't work :-( )
