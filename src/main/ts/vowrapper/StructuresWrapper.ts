@@ -3,8 +3,8 @@ import { StructureWrapper } from "./StructureWrapper";
 import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 
 export class StructuresWrapper {
-    private _unitOrUnits: UnitOrUnitsWrapper;
-    private _structures: StructureWrapper[];
+    private unitOrUnits: UnitOrUnitsWrapper;
+    private structures: StructureWrapper[];
 
     public static fromJsonObject(jsonObject: any) {
         return jsonObject ?
@@ -13,7 +13,7 @@ export class StructuresWrapper {
     }
 
     constructor(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]) {
-        this._unitOrUnits = unitOrUnits;
+        this.unitOrUnits = unitOrUnits;
         structures.sort((s1, s2) => {
             let i = s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
             if (i !== 0)
@@ -24,15 +24,15 @@ export class StructuresWrapper {
                 return -1;
         });
 
-        this._structures = structures;
+        this.structures = structures;
     }
 
     public getUnitOrUnits() {
-        return this._unitOrUnits;
+        return this.unitOrUnits;
     }
 
     public getStructures(): StructureWrapper[] {
-        return this._structures;
+        return this.structures;
     }
 
     public hasOverlappingPeriodes(): boolean {
