@@ -27,12 +27,12 @@ export class ShortTextConverter {
     private static _converters: ShortTextConverterImpl[];
 
 	/**
-	 * Populate a list of implemented converters 
+	 * Populate a list of implemented converters
 	 * Consider the order: The tests are evaluated in order, adding the most likely to succeed
 	 * first improves performance
 	 */
 
-    private static get converters() {
+    private static getConverters() {
         if (!ShortTextConverter._converters) {
             ShortTextConverter._converters = [
                 new AdministrationAccordingToSchemaConverterImpl(),
@@ -66,7 +66,7 @@ export class ShortTextConverter {
     }
 
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
-        for (let converter of ShortTextConverter.converters) {
+        for (let converter of ShortTextConverter.getConverters()) {
             if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= ShortTextConverter.MAX_LENGTH) {
                 return converter.constructor["name"];
             }
@@ -77,7 +77,7 @@ export class ShortTextConverter {
 	/**
 	 * Performs a conversion to a short text if possible. Otherwise null.
 	 * @param dosage
-	 * @return A short text string describing the dosage 
+	 * @return A short text string describing the dosage
 	 */
     public convertWrapper(dosage: DosageWrapper): string {
         return ShortTextConverter.doConvert(dosage, ShortTextConverter.MAX_LENGTH);
@@ -93,10 +93,10 @@ export class ShortTextConverter {
 	 * Performs a conversion to a short text with a custom maximum length. Returns translation if possible, otherwise null.
 	 * @param dosage
 	 * @param maxLength
-	 * @return A short text string describing the dosage 
+	 * @return A short text string describing the dosage
 	 */
     public static doConvert(dosage: DosageWrapper, maxLength: number): string {
-        for (let converter of ShortTextConverter.converters) {
+        for (let converter of ShortTextConverter.getConverters()) {
             if (converter.canConvert(dosage)) {
                 let s = converter.doConvert(dosage);
                 if (s.length <= maxLength)
@@ -107,7 +107,7 @@ export class ShortTextConverter {
     }
 
     public static canConvert(dosage: DosageWrapper): boolean {
-        for (let converter of ShortTextConverter.converters) {
+        for (let converter of ShortTextConverter.getConverters()) {
             if (converter.canConvert(dosage)) {
                 return true;
             }
