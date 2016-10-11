@@ -28,6 +28,7 @@ export class DayWrapper {
     // Helper / cached values
     private _areAllDosesTheSame: boolean;
     private _areAllDosesHaveTheSameQuantity: boolean;
+    private _areAllDosesExceptTheFirstTheSame: boolean;
     private _accordingToNeedDoses: Array<DoseWrapper>;
 
     public static fromJsonObject(jsonObject: any) {
@@ -185,6 +186,27 @@ export class DayWrapper {
             }
         }
         return this._areAllDosesHaveTheSameQuantity;
+    }
+
+
+    public allDosesButTheFirstAreTheSame(): boolean {
+        if (this._areAllDosesExceptTheFirstTheSame) {
+            return this._areAllDosesExceptTheFirstTheSame;
+        }
+        else {
+            this._areAllDosesExceptTheFirstTheSame = true;
+            let dose0: DoseWrapper;
+            for (let i = 1; i < this.getNumberOfDoses(); i++) {
+                if (!dose0) {
+                    dose0 = this.getAllDoses()[i];
+                }
+                else if (!dose0.theSameAs(this.getAllDoses()[i])) {
+                    this._areAllDosesExceptTheFirstTheSame = false;
+                    break;
+                }
+            }
+        }
+        return this._areAllDosesExceptTheFirstTheSame;
     }
 
     public containsAccordingToNeedDose(): boolean {

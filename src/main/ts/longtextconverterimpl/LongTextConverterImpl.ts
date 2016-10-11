@@ -48,7 +48,7 @@ export abstract class LongTextConverterImpl {
         let s = "";
         let appendedLines = 0;
         for (let day of structure.getDays()) {
-              appendedLines++;
+            appendedLines++;
             if (appendedLines > 1) {
                 s += "\n";
             }
@@ -108,6 +108,17 @@ export abstract class LongTextConverterImpl {
             else
                 s += " " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
         }
+        else if (day.getNumberOfDoses() > 2 && day.allDosesButTheFirstAreTheSame()) {
+            // Eks.: 1 stk. kl. 08:00 og 2 stk. 4 gange daglig
+
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText()) + supplText;
+            if (0 < day.getNumberOfDoses() - 1) {
+                s += " + ";
+            }
+            let dayWithoutFirstDose: DayWrapper = new DayWrapper(day.getDayNumber(), day.getAllDoses().slice(1, day.getAllDoses().length));
+            s += this.makeDaysDosage(unitOrUnits, structure, dayWithoutFirstDose, false);
+        }
+
         else {
 
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
