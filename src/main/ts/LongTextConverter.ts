@@ -13,7 +13,7 @@ export class LongTextConverter {
 
     private static _converters: LongTextConverterImpl[];
 
-    private static get converters() {
+    private static getConverters() {
         if (!LongTextConverter._converters) {
             LongTextConverter._converters = new Array<LongTextConverterImpl>();
             LongTextConverter._converters.push(new AdministrationAccordingToSchemaConverterImpl());
@@ -35,7 +35,7 @@ export class LongTextConverter {
     }
 
     public convertWrapper(dosage: DosageWrapper): string {
-        for (let converter of LongTextConverter.converters) {
+        for (let converter of LongTextConverter.getConverters()) {
             if (converter.canConvert(dosage)) {
                 return converter.doConvert(dosage);
             }
@@ -44,7 +44,7 @@ export class LongTextConverter {
     }
 
     public static getConverter(dosage: DosageWrapper): LongTextConverterImpl {
-        for (let converter of this.converters) {
+        for (let converter of this.getConverters()) {
             if (converter.canConvert(dosage))
                 return converter;
         }
@@ -56,7 +56,7 @@ export class LongTextConverter {
     }
 
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
-        for (let converter of LongTextConverter.converters) {
+        for (let converter of LongTextConverter.getConverters()) {
             if (converter.canConvert(dosage)) {
                 return converter.constructor["name"];
             }
