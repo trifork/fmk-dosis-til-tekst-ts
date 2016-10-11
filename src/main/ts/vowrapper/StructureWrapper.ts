@@ -7,13 +7,13 @@ import { DosisTilTekstException } from "../DosisTilTekstException";
 export class StructureWrapper {
 
     // Mapped values
-    private _iterationInterval: number;
-    private _supplText: string;
-    private _startDateOrDateTime: DateOrDateTimeWrapper;
-    private _endDateOrDateTime: DateOrDateTimeWrapper;
-    private _days: Array<DayWrapper>;
-    private _refToSource;
-    private _dosagePeriodPostfix: string;
+    private iterationInterval: number;
+    private supplText: string;
+    private startDateOrDateTime: DateOrDateTimeWrapper;
+    private endDateOrDateTime: DateOrDateTimeWrapper;
+    private days: Array<DayWrapper>;
+    private refToSource;
+    private dosagePeriodPostfix: string;
 
     // Cached values
     private _areAllDaysTheSame: boolean;
@@ -31,14 +31,14 @@ export class StructureWrapper {
     }
 
     constructor(iterationInterval: number, supplText: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, days: Array<DayWrapper>, dosagePeriodPostfix: string) {
-        this._iterationInterval = iterationInterval;
-        this._supplText = supplText;
-        this._startDateOrDateTime = startDateOrDateTime;
-        this._endDateOrDateTime = endDateOrDateTime;
-        this._dosagePeriodPostfix = dosagePeriodPostfix;
+        this.iterationInterval = iterationInterval;
+        this.supplText = supplText;
+        this.startDateOrDateTime = startDateOrDateTime;
+        this.endDateOrDateTime = endDateOrDateTime;
+        this.dosagePeriodPostfix = dosagePeriodPostfix;
 
         if (days) {
-            this._days = days.sort((d1, d2) => d1.getDayNumber() - d2.getDayNumber());
+            this.days = days.sort((d1, d2) => d1.getDayNumber() - d2.getDayNumber());
         }
         else {
             throw new DosisTilTekstException("StructureWrapper: days must be set in StructureWrapper");
@@ -46,36 +46,36 @@ export class StructureWrapper {
     }
 
     getIterationInterval(): number {
-        return this._iterationInterval;
+        return this.iterationInterval;
     }
 
     getSupplText(): string {
-        return this._supplText;
+        return this.supplText;
     }
 
     getStartDateOrDateTime(): DateOrDateTimeWrapper {
-        return this._startDateOrDateTime;
+        return this.startDateOrDateTime;
     }
 
     getEndDateOrDateTime(): DateOrDateTimeWrapper {
-        return this._endDateOrDateTime;
+        return this.endDateOrDateTime;
     }
 
     getRefToSource(): Object {
-        return this._refToSource;
+        return this.refToSource;
     }
 
     getDosagePeriodPostfix(): string {
-        return this._dosagePeriodPostfix;
+        return this.dosagePeriodPostfix;
     }
 
     setDosagePeriodPostfix(v: string) {
-        this._dosagePeriodPostfix = v;
+        this.dosagePeriodPostfix = v;
     }
 
     public startsAndEndsSameDay(): boolean {
-        if (this._startDateOrDateTime && this.getEndDateOrDateTime()) {
-            let startDate = this._startDateOrDateTime.getDateOrDateTime();
+        if (this.startDateOrDateTime && this.getEndDateOrDateTime()) {
+            let startDate = this.startDateOrDateTime.getDateOrDateTime();
             let endDate = this.getEndDateOrDateTime().getDateOrDateTime();
 
             return startDate.getFullYear() === endDate.getFullYear()
@@ -88,7 +88,7 @@ export class StructureWrapper {
     }
 
     public getDays() {
-        return this._days;
+        return this.days;
     }
 
     public sameDayOfWeek(): boolean {

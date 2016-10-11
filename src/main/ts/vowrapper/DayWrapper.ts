@@ -11,25 +11,25 @@ import { NightDoseWrapper } from "./NightDoseWrapper";
 export class DayWrapper {
 
     // Wrapped values
-    private _dayNumber: number;
-    private _allDoses: Array<DoseWrapper>;
+    private dayNumber: number;
+    private allDoses: Array<DoseWrapper>;
 
     // Doses were separate types before 2012-06-01. We keep them for now to maintain
     // compatibility in the dosis-to-text conversion
     // AccordingToNeed is merged into each type since 2012-06-01 schemas
     // private List<AccordingToNeedDoseWrapper> accordingToNeedDoses = new ArrayList<AccordingToNeedDoseWrapper>();
-    private _plainDoses: Array<PlainDoseWrapper> = [];
-    private _timedDoses: Array<TimedDoseWrapper> = [];
-    private _morningDose: MorningDoseWrapper;
-    private _noonDose: NoonDoseWrapper;
-    private _eveningDose: EveningDoseWrapper;
-    private _nightDose: NightDoseWrapper;
+    private plainDoses: Array<PlainDoseWrapper> = [];
+    private timedDoses: Array<TimedDoseWrapper> = [];
+    private morningDose: MorningDoseWrapper;
+    private noonDose: NoonDoseWrapper;
+    private eveningDose: EveningDoseWrapper;
+    private nightDose: NightDoseWrapper;
 
     // Helper / cached values
-    private _areAllDosesTheSame: boolean;
-    private _areAllDosesHaveTheSameQuantity: boolean;
-    private _areAllDosesExceptTheFirstTheSame: boolean;
-    private _accordingToNeedDoses: Array<DoseWrapper>;
+    private areAllDosesTheSame: boolean;
+    private areAllDosesHaveTheSameQuantity: boolean;
+    private areAllDosesExceptTheFirstTheSame: boolean;
+    private accordingToNeedDoses: Array<DoseWrapper>;
 
     public static fromJsonObject(jsonObject: any) {
 
@@ -65,34 +65,34 @@ export class DayWrapper {
 
     public constructor(dayNumber: number, doses: DoseWrapper[]) {
 
-        this._allDoses = doses;
+        this.allDoses = doses;
 
         for (let dose of doses) {
 
-            this._dayNumber = dayNumber;
+            this.dayNumber = dayNumber;
             if (dose) {
                 if (dose instanceof PlainDoseWrapper)
-                    this._plainDoses.push(<PlainDoseWrapper>dose);
+                    this.plainDoses.push(<PlainDoseWrapper>dose);
                 else if (dose instanceof TimedDoseWrapper)
-                    this._timedDoses.push(<TimedDoseWrapper>dose);
+                    this.timedDoses.push(<TimedDoseWrapper>dose);
                 else if (dose instanceof MorningDoseWrapper)
-                    this._morningDose = <MorningDoseWrapper>dose;
+                    this.morningDose = <MorningDoseWrapper>dose;
                 else if (dose instanceof NoonDoseWrapper)
-                    this._noonDose = <NoonDoseWrapper>dose;
+                    this.noonDose = <NoonDoseWrapper>dose;
                 else if (dose instanceof EveningDoseWrapper)
-                    this._eveningDose = <EveningDoseWrapper>dose;
+                    this.eveningDose = <EveningDoseWrapper>dose;
                 else if (dose instanceof NightDoseWrapper)
-                    this._nightDose = <NightDoseWrapper>dose;
+                    this.nightDose = <NightDoseWrapper>dose;
             }
 
-            this._areAllDosesTheSame = true;
+            this.areAllDosesTheSame = true;
             let compareDose: DoseWrapper;
             for (let dose of this.getAllDoses()) {
                 if (!compareDose) {
                     compareDose = dose;
                 }
                 else if (!compareDose.theSameAs(dose)) {
-                    this._areAllDosesTheSame = false;
+                    this.areAllDosesTheSame = false;
                     break;
                 }
             }
@@ -100,15 +100,15 @@ export class DayWrapper {
     }
 
     getDayNumber() {
-        return this._dayNumber;
+        return this.dayNumber;
     }
 
     public getNumberOfDoses() {
-        return this._allDoses.length;
+        return this.allDoses.length;
     }
 
     public getDose(index: number): DoseWrapper {
-        return this._allDoses[index];
+        return this.allDoses[index];
     }
 
 
@@ -118,45 +118,45 @@ export class DayWrapper {
 
     public getAccordingToNeedDoses(): Array<DoseWrapper> {
         // Since the 2012/06/01 namespace "according to need" is just a flag
-        if (this._accordingToNeedDoses) {
-            return this._accordingToNeedDoses;
+        if (this.accordingToNeedDoses) {
+            return this.accordingToNeedDoses;
         }
         else {
-            this._accordingToNeedDoses = new Array<DoseWrapper>();
-            for (let d of this._allDoses) {
+            this.accordingToNeedDoses = new Array<DoseWrapper>();
+            for (let d of this.allDoses) {
                 if (d.getIsAccordingToNeed())
-                    this._accordingToNeedDoses.push(d);
+                    this.accordingToNeedDoses.push(d);
             }
-            return this._accordingToNeedDoses;
+            return this.accordingToNeedDoses;
         }
     }
 
     getPlainDoses() {
-        return this._plainDoses;
+        return this.plainDoses;
     }
 
     public getNumberOfPlainDoses() {
-        return this._plainDoses.length;
+        return this.plainDoses.length;
     }
 
     getMorningDose() {
-        return this._morningDose;
+        return this.morningDose;
     }
 
     getNoonDose() {
-        return this._noonDose;
+        return this.noonDose;
     }
 
     getEveningDose() {
-        return this._eveningDose;
+        return this.eveningDose;
     }
 
     getNightDose() {
-        return this._nightDose;
+        return this.nightDose;
     }
 
     getAllDoses() {
-        return this._allDoses;
+        return this.allDoses;
     }
 
     /**
@@ -164,7 +164,7 @@ export class DayWrapper {
      * @return true if all dosages are of the same type and has the same quantity
      */
     public allDosesAreTheSame(): boolean {
-        return this._areAllDosesTheSame;
+        return this.areAllDosesTheSame;
     }
 
     /**
@@ -172,41 +172,41 @@ export class DayWrapper {
      * @return true if all dosages has the same quantity
      */
     public allDosesHaveTheSameQuantity(): boolean {
-        if (this._areAllDosesHaveTheSameQuantity) {
-            return this._areAllDosesHaveTheSameQuantity;
+        if (this.areAllDosesHaveTheSameQuantity) {
+            return this.areAllDosesHaveTheSameQuantity;
         }
-        this._areAllDosesHaveTheSameQuantity = true;
+        this.areAllDosesHaveTheSameQuantity = true;
         if (this.getAllDoses().length > 1) {
             let dose0 = this.getAllDoses()[0];
             for (let i = 1; i < this.getAllDoses().length; i++) {
                 if (dose0.getAnyDoseQuantityString() !== this.getAllDoses()[i].getAnyDoseQuantityString()) {
-                    this._areAllDosesHaveTheSameQuantity = false;
+                    this.areAllDosesHaveTheSameQuantity = false;
                     break;
                 }
             }
         }
-        return this._areAllDosesHaveTheSameQuantity;
+        return this.areAllDosesHaveTheSameQuantity;
     }
 
 
     public allDosesButTheFirstAreTheSame(): boolean {
-        if (this._areAllDosesExceptTheFirstTheSame) {
-            return this._areAllDosesExceptTheFirstTheSame;
+        if (this.areAllDosesExceptTheFirstTheSame) {
+            return this.areAllDosesExceptTheFirstTheSame;
         }
         else {
-            this._areAllDosesExceptTheFirstTheSame = true;
+            this.areAllDosesExceptTheFirstTheSame = true;
             let dose0: DoseWrapper;
             for (let i = 1; i < this.getNumberOfDoses(); i++) {
                 if (!dose0) {
                     dose0 = this.getAllDoses()[i];
                 }
                 else if (!dose0.theSameAs(this.getAllDoses()[i])) {
-                    this._areAllDosesExceptTheFirstTheSame = false;
+                    this.areAllDosesExceptTheFirstTheSame = false;
                     break;
                 }
             }
         }
-        return this._areAllDosesExceptTheFirstTheSame;
+        return this.areAllDosesExceptTheFirstTheSame;
     }
 
     public containsAccordingToNeedDose(): boolean {

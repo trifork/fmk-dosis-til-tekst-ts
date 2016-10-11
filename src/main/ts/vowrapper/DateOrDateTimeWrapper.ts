@@ -2,8 +2,8 @@ import { DosisTilTekstException } from "../DosisTilTekstException";
 
 export class DateOrDateTimeWrapper {
 
-    private _date: Date;
-    private _dateTime: Date;
+    private date: Date;
+    private dateTime: Date;
 
     public static fromJsonObject(jsonObject: any) {
         if (jsonObject) {
@@ -14,23 +14,23 @@ export class DateOrDateTimeWrapper {
     }
 
     public constructor(date: Date, dateTime: Date) {
-        this._date = date;
-        this._dateTime = dateTime;
+        this.date = date;
+        this.dateTime = dateTime;
     }
 
     getDate(): Date {
-        return this._date;
+        return this.date;
     }
 
     getDateTime(): Date {
-        return this._dateTime;
+        return this.dateTime;
     }
 
     public getDateOrDateTime(): Date {
-        if (this._date)
-            return this._date;
+        if (this.date)
+            return this.date;
         else
-            return this._dateTime;
+            return this.dateTime;
     }
 
     public isEqualTo(dt: DateOrDateTimeWrapper): boolean {

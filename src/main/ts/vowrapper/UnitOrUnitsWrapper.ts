@@ -1,8 +1,8 @@
 export class UnitOrUnitsWrapper {
 
-    private _unit: string;
-    private _unitSingular: string;
-    private _unitPlural: string;
+    private unit: string;
+    private unitSingular: string;
+    private unitPlural: string;
 
     public static fromJsonObject(jsonObject: any) {
         return jsonObject ?
@@ -11,20 +11,20 @@ export class UnitOrUnitsWrapper {
     }
 
     constructor(unit: string, unitSingular: string, unitPlural: string) {
-        this._unit = unit;
-        this._unitSingular = unitSingular;
-        this._unitPlural = unitPlural;
+        this.unit = unit;
+        this.unitSingular = unitSingular;
+        this.unitPlural = unitPlural;
     }
 
     public getUnit() {
-        return this._unit;
+        return this.unit;
     }
 
     public getUnitSingular() {
-        return this._unitSingular;
+        return this.unitSingular;
     }
 
     public getUnitPlural() {
-        return this._unitPlural;
+        return this.unitPlural;
     }
 }

@@ -3,7 +3,7 @@ import {DoseWrapper} from "./DoseWrapper";
 
 export class TimedDoseWrapper extends DoseWrapper {
 
-    private _time: LocalTime;
+    private time: LocalTime;
 
     public static fromJsonObject(jsonObject: any) {
         return jsonObject ?
@@ -21,17 +21,17 @@ export class TimedDoseWrapper extends DoseWrapper {
         doseQuantitystring: string, minimalDoseQuantitystring: string, maximalDoseQuantitystring: string,
         isAccordingToNeed: boolean) {
         super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
-        this._time = time;
+        this.time = time;
     }
 
     static LABEL = "kl.";
 
     public getLabel() {
-        return TimedDoseWrapper.LABEL + " " + this._time.toString();
+        return TimedDoseWrapper.LABEL + " " + this.time.toString();
     }
 
     public getTime(): string {
-        return this._time.toString();
+        return this.time.toString();
     }
 
     public theSameAs(other: DoseWrapper): boolean {

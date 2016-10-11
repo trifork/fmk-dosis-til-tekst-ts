@@ -2,9 +2,9 @@ import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 
 export class FreeTextWrapper {
 
-    private _startDateOrDateTime: DateOrDateTimeWrapper;
-    private _endDateOrDateTime: DateOrDateTimeWrapper;
-    private _text: string;
+    private startDateOrDateTime: DateOrDateTimeWrapper;
+    private endDateOrDateTime: DateOrDateTimeWrapper;
+    private text: string;
 
     public static fromJsonObject(jsonObject: any): FreeTextWrapper {
         return jsonObject ? new FreeTextWrapper(DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime),
@@ -17,20 +17,20 @@ export class FreeTextWrapper {
     }
 
     constructor(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, text: string) {
-        this._startDateOrDateTime = startDateOrDateTime;
-        this._endDateOrDateTime = endDateOrDateTime;
-        this._text = text;
+        this.startDateOrDateTime = startDateOrDateTime;
+        this.endDateOrDateTime = endDateOrDateTime;
+        this.text = text;
     }
 
     public getStartDateOrDateTime(): DateOrDateTimeWrapper {
-        return this._startDateOrDateTime;
+        return this.startDateOrDateTime;
     }
 
     public getEndDateOrDateTime(): DateOrDateTimeWrapper {
-        return this._endDateOrDateTime;
+        return this.endDateOrDateTime;
     }
 
     public getText(): string {
-        return this._text;
+        return this.text;
     }
 }
