@@ -1,7 +1,7 @@
 {
   "name": "fmk-dosis-til-tekst-ts",
   "author": "Trifork",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "scripts": {
     "grunt.prod": "./node_modules/.bin/grunt publish",
     "grunt.dev": "./node_modules/.bin/grunt --watch",
