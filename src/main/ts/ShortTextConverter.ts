@@ -79,13 +79,13 @@ export class ShortTextConverter {
 	 * @param dosage
 	 * @return A short text string describing the dosage
 	 */
-    public convertWrapper(dosage: DosageWrapper): string {
-        return ShortTextConverter.doConvert(dosage, ShortTextConverter.MAX_LENGTH);
+    public convertWrapper(dosage: DosageWrapper, maxLength = ShortTextConverter.MAX_LENGTH): string {
+        return ShortTextConverter.doConvert(dosage, maxLength);
     }
 
-    public convert(dosageJson: any): string {
+    public convert(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
-        return ShortTextConverter.doConvert(dosage, ShortTextConverter.MAX_LENGTH);
+        return ShortTextConverter.doConvert(dosage, maxLength);
     }
 
 
