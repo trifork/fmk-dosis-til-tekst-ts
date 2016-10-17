@@ -40,7 +40,7 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
     public static getMorningText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
         let text = "";
         if (day.getMorningDose()) {
-            text += this.toDoseAndUnitValue(day.getMorningDose(), unitOrUnits);
+            text += ShortTextConverterImpl.toDoseAndUnitValue(day.getMorningDose(), unitOrUnits);
             if (day.getMorningDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
@@ -56,11 +56,11 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
             else if (day.getMorningDose())
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
-                text += this.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
+                text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
             else if (day.getMorningDose())
                 text += day.getNoonDose().getLabel();
             else
-                text += this.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
+                text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
             if (day.getNoonDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
@@ -78,11 +78,11 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
             else if (day.getMorningDose() || day.getNoonDose())
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
-                text += this.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
+                text += ShortTextConverterImpl.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
             else if (day.getMorningDose() || day.getNoonDose())
                 text += day.getEveningDose().getLabel();
             else
-                text += this.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
+                text += ShortTextConverterImpl.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
             if (day.getEveningDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
@@ -98,11 +98,11 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
             if (day.getMorningDose() || day.getNoonDose()  || day.getEveningDose() )
                 text += " og ";
             if (!day.allDosesHaveTheSameQuantity())
-                text += this.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
+                text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
             else if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose() )
                 text += day.getNightDose().getLabel();
             else
-                text += this.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
+                text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
             if (day.getNightDose().getIsAccordingToNeed())
                 text += " efter behov";
         }

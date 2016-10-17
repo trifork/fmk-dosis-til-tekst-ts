@@ -37,7 +37,7 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
         let day: DayWrapper = structure.getDays()[0];
-        text += SimpleLimitedAccordingToNeedConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.getUnitOrUnits());
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.getUnitOrUnits());
         text += " efter behov";
 
         if (day.getNumberOfAccordingToNeedDoses() === 1)
