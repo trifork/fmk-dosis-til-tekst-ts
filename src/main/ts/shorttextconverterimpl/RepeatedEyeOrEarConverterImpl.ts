@@ -30,7 +30,7 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
 
         if (day.getAllDoses()[0].getDoseQuantity() === undefined)
             return false;
-        if (!RepeatedEyeOrEarConverterImpl.hasIntegerValue(day.getAllDoses()[0].getDoseQuantity()))
+        if (!ShortTextConverterImpl.hasIntegerValue(day.getAllDoses()[0].getDoseQuantity()))
             return false;
         let quantity: number = day.getAllDoses()[0].getDoseQuantity();
         if (!(quantity % 2 === 0))
