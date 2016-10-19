@@ -150,6 +150,8 @@ export class TextHelper {
     }
 
     public static getUnit(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+        if (!unitOrUnits) return "";
+
         if (unitOrUnits.getUnit())
             return TextHelper.correctUnit(dose, unitOrUnits.getUnit());
         else if (unitOrUnits.getUnitSingular() && unitOrUnits.getUnitPlural())
