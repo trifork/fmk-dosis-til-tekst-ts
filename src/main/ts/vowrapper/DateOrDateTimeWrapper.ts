@@ -35,9 +35,9 @@ export class DateOrDateTimeWrapper {
 
     public isEqualTo(dt: DateOrDateTimeWrapper): boolean {
         if (dt) {
-            if (this.getDate())
+            if (this.getDate() && dt.getDate())
                 return this.getDate().getTime() === dt.getDate().getTime();
-            else if (this.getDateTime())
+            else if (this.getDateTime() && dt.getDateTime())
                 return this.getDateTime().getTime() === dt.getDateTime().getTime();
             else
                 return !dt.getDate() && !dt.getDateTime();
