@@ -98,6 +98,8 @@ export abstract class LongTextConverterImpl {
             s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText());
             if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0)
                 s += " højst 1 gang" + daglig + supplText;
+            else if (!hasDaysLabel && day.containsPlainDose())    // Ex. 12 ml 1 gang daglig
+                s += " 1 gang" + daglig + supplText;
             else
                 s += supplText;
         }
