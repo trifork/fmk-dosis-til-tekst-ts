@@ -28,7 +28,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
                 [tempStructure]));
-        if (!ShortTextConverter.canConvert(tempDosage))
+        if (!ShortTextConverter.getInstance().canConvert(tempDosage))
             return false;
 
         // Structure 1
@@ -41,7 +41,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
                 [fixedStructure]));
-        if (!ShortTextConverter.canConvert(fixedDosage))
+        if (!ShortTextConverter.getInstance().canConvert(fixedDosage))
             return false;
 
         return true;

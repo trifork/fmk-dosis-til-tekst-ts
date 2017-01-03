@@ -12,30 +12,28 @@ import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimp
 export class LongTextConverter {
 
     private static _converters: LongTextConverterImpl[];
+    private static _instance: LongTextConverter = new LongTextConverter();
 
-    private static getConverters() {
-        if (!LongTextConverter._converters) {
-            LongTextConverter._converters = new Array<LongTextConverterImpl>();
-            LongTextConverter._converters.push(new AdministrationAccordingToSchemaConverterImpl());
-            LongTextConverter._converters.push(new FreeTextConverterImpl());
-            LongTextConverter._converters.push(new EmptyStructureConverterImpl());
-            LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
-            LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
-            LongTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
-            LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
-            LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl());
-        }
+    public static getInstance(): LongTextConverter { return LongTextConverter._instance; }
 
-        return LongTextConverter._converters;
+    constructor() {
+        LongTextConverter._converters = new Array<LongTextConverterImpl>();
+        LongTextConverter._converters.push(new AdministrationAccordingToSchemaConverterImpl());
+        LongTextConverter._converters.push(new FreeTextConverterImpl());
+        LongTextConverter._converters.push(new EmptyStructureConverterImpl());
+        LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
+        LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
+        LongTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
+        LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
+        LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl());
     }
-
     public convert(dosageJson: any): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
         return this.convertWrapper(dosage);
     }
 
     public convertWrapper(dosage: DosageWrapper): string {
-        for (let converter of LongTextConverter.getConverters()) {
+        for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 return converter.doConvert(dosage);
             }
@@ -43,20 +41,21 @@ export class LongTextConverter {
         return null;
     }
 
+    /*
     public static getConverter(dosage: DosageWrapper): LongTextConverterImpl {
         for (let converter of this.getConverters()) {
             if (converter.canConvert(dosage))
                 return converter;
         }
         return null;
-    }
+    } */
 
-     public getConverterClassName(dosageJson: any): string {
+    public getConverterClassName(dosageJson: any): string {
         return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
-        for (let converter of LongTextConverter.getConverters()) {
+        for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 return converter.constructor["name"];
             }

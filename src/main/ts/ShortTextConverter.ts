@@ -23,8 +23,8 @@ import { DosageWrapper } from "./vowrapper/DosageWrapper";
 export class ShortTextConverter {
 
     private static MAX_LENGTH = 70;
-
     private static _converters: ShortTextConverterImpl[];
+    private static _instance: ShortTextConverter = new ShortTextConverter();
 
 	/**
 	 * Populate a list of implemented converters
@@ -32,41 +32,40 @@ export class ShortTextConverter {
 	 * first improves performance
 	 */
 
-    private static getConverters() {
-        if (!ShortTextConverter._converters) {
-            ShortTextConverter._converters = [
-                new AdministrationAccordingToSchemaConverterImpl(),
-                new FreeTextConverterImpl(),
-                new MorningNoonEveningNightEyeOrEarConverterImpl(),
-                new MorningNoonEveningNightConverterImpl(),
-                new WeeklyMorningNoonEveningNightConverterImpl(),
-                new RepeatedEyeOrEarConverterImpl(),
-                new RepeatedConverterImpl(),
-                new SimpleNonRepeatedConverterImpl(),
-                new MorningNoonEveningNightInNDaysConverterImpl(),
-                new SimpleAccordingToNeedConverterImpl(),
-                new LimitedNumberOfDaysConverterImpl(),
+    constructor() {
+        ShortTextConverter._converters = [
+            new AdministrationAccordingToSchemaConverterImpl(),
+            new FreeTextConverterImpl(),
+            new MorningNoonEveningNightEyeOrEarConverterImpl(),
+            new MorningNoonEveningNightConverterImpl(),
+            new WeeklyMorningNoonEveningNightConverterImpl(),
+            new RepeatedEyeOrEarConverterImpl(),
+            new RepeatedConverterImpl(),
+            new SimpleNonRepeatedConverterImpl(),
+            new MorningNoonEveningNightInNDaysConverterImpl(),
+            new SimpleAccordingToNeedConverterImpl(),
+            new LimitedNumberOfDaysConverterImpl(),
 
-                new SimpleLimitedAccordingToNeedConverterImpl(),
-                new WeeklyRepeatedConverterImpl(),
-                new ParacetamolConverterImpl(),
-                new MorningNoonEveningNightAndAccordingToNeedConverterImpl(),
-                new MultipleDaysNonRepeatedConverterImpl(),
-                new NumberOfWholeWeeksConverterImpl(),
-                new DayInWeekConverterImpl(),
-                new CombinedTwoPeriodesConverterImpl()
-            ];
-        }
-
-        return ShortTextConverter._converters;
+            new SimpleLimitedAccordingToNeedConverterImpl(),
+            new WeeklyRepeatedConverterImpl(),
+            new ParacetamolConverterImpl(),
+            new MorningNoonEveningNightAndAccordingToNeedConverterImpl(),
+            new MultipleDaysNonRepeatedConverterImpl(),
+            new NumberOfWholeWeeksConverterImpl(),
+            new DayInWeekConverterImpl(),
+            new CombinedTwoPeriodesConverterImpl()
+        ];
     }
+
+
+    public static getInstance(): ShortTextConverter { return ShortTextConverter._instance; }
 
     public getConverterClassName(dosageJson: any): string {
         return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
-        for (let converter of ShortTextConverter.getConverters()) {
+        for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= ShortTextConverter.MAX_LENGTH) {
                 return converter.constructor["name"];
             }
@@ -80,12 +79,12 @@ export class ShortTextConverter {
 	 * @return A short text string describing the dosage
 	 */
     public convertWrapper(dosage: DosageWrapper, maxLength = ShortTextConverter.MAX_LENGTH): string {
-        return ShortTextConverter.doConvert(dosage, maxLength);
+        return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
     }
 
     public convert(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
-        return ShortTextConverter.doConvert(dosage, maxLength);
+        return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
     }
 
 
@@ -95,8 +94,8 @@ export class ShortTextConverter {
 	 * @param maxLength
 	 * @return A short text string describing the dosage
 	 */
-    public static doConvert(dosage: DosageWrapper, maxLength: number): string {
-        for (let converter of ShortTextConverter.getConverters()) {
+    public doConvert(dosage: DosageWrapper, maxLength: number): string {
+        for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 let s = converter.doConvert(dosage);
                 if (s.length <= maxLength)
@@ -106,8 +105,8 @@ export class ShortTextConverter {
         return null;
     }
 
-    public static canConvert(dosage: DosageWrapper): boolean {
-        for (let converter of ShortTextConverter.getConverters()) {
+    public canConvert(dosage: DosageWrapper): boolean {
+        for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 return true;
             }
