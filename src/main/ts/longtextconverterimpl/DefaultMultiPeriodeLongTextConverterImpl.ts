@@ -1,10 +1,18 @@
-import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { LongTextConverter } from "../LongTextConverter";
+import { LongTextConverterImpl } from "./LongTextConverterImpl";
+import { Factory } from "../Factory";
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { StructuresWrapper } from "../vowrapper/StructuresWrapper";
 
 export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterImpl {
+
+    longTextConverter: LongTextConverter;
+
+    public constructor(longTextConverter: LongTextConverter) {
+        super();
+        this.longTextConverter = longTextConverter;
+    }
 
     public canConvert(dosageStructure: DosageWrapper): boolean {
         if (dosageStructure.structures) {
@@ -24,7 +32,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         dosage.structures.getStructures().forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
                 new StructuresWrapper(dosage.structures.getUnitOrUnits(), [structure]));
-            s += (LongTextConverter.getInstance().convertWrapper(w) + "\n\n");
+            s += (this.longTextConverter.convertWrapper(w) + "\n\n");
         });
 
         return s.trim();

@@ -25,7 +25,7 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
         LongTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
         LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
-        LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl());
+        LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl(this));
     }
     public convert(dosageJson: any): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
