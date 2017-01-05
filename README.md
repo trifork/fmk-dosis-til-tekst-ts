@@ -1,20 +1,14 @@
-Typescript port of fmk-dosis-til-tekst.
+Dosis-til-tekst-js is a javascript component that can generate short and long dosage-texts, given a structured dosage defining how a patient must take his medicine.
 
-To build the project:
+2 converters are available, and they are used like this:
 
-Windows:
-1) Install nodejs (http://nodejs.org) and npm
-2) 'npm install -g grunt-cli'
-3) 'npm install'
-4) 'node_modules\.bin\grunt'
+```
+dosistiltekst.Factory.getLongTextConverter().convert(dosage) 
+```
+and
+```
+dosistiltekst.Factory.getLongTextConverter().convert(dosage) 
+```
 
-Linux:
-1) sudo add-apt-repository ppa:chris-lea/node.js  (standard distro grunt doesn't work :-( )
-2) sudo apt-get update 
-3) sudo apt-get install nodejs 
-4) sudo npm install -g grunt-cli 
+..where dosage is the json-representation of the structured dosage.
 
-Mac:
-...who cares :-)
-
-The typescript code is compiled and webpack'ed into target/dosistiltekst.js

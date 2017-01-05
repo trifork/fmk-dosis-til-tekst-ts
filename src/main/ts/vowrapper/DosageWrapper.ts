@@ -18,15 +18,15 @@ export class DosageWrapper {
     }
 
     public static makeStructuredDosage(structures: StructuresWrapper): DosageWrapper {
-        return new DosageWrapper(null, null, structures);
+        return new DosageWrapper(undefined, undefined, structures);
     }
 
     public static makeFreeTextDosage(freeText: FreeTextWrapper): DosageWrapper {
-        return new DosageWrapper(null, freeText, null);
+        return new DosageWrapper(undefined, freeText, undefined);
     }
 
     public static makeAccordingToSchemaDosage(administrationAccordingToSchema: AdministrationAccordingToSchemaWrapper): DosageWrapper {
-        return new DosageWrapper(administrationAccordingToSchema, null, null);
+        return new DosageWrapper(administrationAccordingToSchema, undefined, undefined);
     }
 
     constructor(administrationAccordingToSchema: AdministrationAccordingToSchemaWrapper, freeText: FreeTextWrapper, structures: StructuresWrapper) {

@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
 
-    entry: "./src/main/ts/Factory.ts",
+    entry: "./src/main/ts/index.ts",
 
     output: {
 
