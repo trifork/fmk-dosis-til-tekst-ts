@@ -1,7 +1,7 @@
 {
   "name": "fmk-dosis-til-tekst-ts",
   "author": "Sundhedsdatastyrelsen",
-  "version": "0.0.15",
+  "version": "1.1.1",
   "scripts": {
     "grunt.prod": "./node_modules/.bin/grunt publish",
     "grunt.dev": "./node_modules/.bin/grunt --watch",
@@ -36,9 +36,6 @@
     "target/lib/longtextconverterimpl/*.d.ts",
     "target/lib/shorttextconverterimpl/*.d.ts"
   ],
-  "publishConfig": {
-    "registry": "http://nexus.dkfmkci01.trifork.com/content/repositories/npm-fmk-internal/"
-  },
   "registry": {
       "type": "git",
       "url": "https://github.com/trifork/fmk-dosis-til-tekst-ts/fmk-dosis-til-tekst-ts.git"

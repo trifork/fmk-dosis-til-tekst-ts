@@ -15,6 +15,6 @@ Linux:
 4) sudo npm install -g grunt-cli 
 
 Mac:
-...who cares :-)
+?
 
 The typescript code is compiled and webpack'ed into target/dosistiltekst.js
