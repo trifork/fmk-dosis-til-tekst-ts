@@ -99,7 +99,7 @@ export class DayWrapper {
         }
     }
 
-    getDayNumber() {
+    public getDayNumber() {
         return this.dayNumber;
     }
 
@@ -238,11 +238,11 @@ export class DayWrapper {
         let minValue = DayWrapper.newDosage();
         let maxValue = DayWrapper.newDosage();
         for (let dose of this.getAllDoses()) {
-            if (dose.getDoseQuantity()) {
+            if (dose.getDoseQuantity() !== undefined) {
                 minValue = DayWrapper.addDosage(minValue, dose.getDoseQuantity());
                 maxValue = DayWrapper.addDosage(maxValue, dose.getDoseQuantity());
             }
-            else if (dose.getMinimalDoseQuantity() && dose.getMaximalDoseQuantity()) {
+            else if (dose.getMinimalDoseQuantity() !== undefined && dose.getMaximalDoseQuantity() !== undefined) {
                 minValue = DayWrapper.addDosage(minValue, dose.getMinimalDoseQuantity());
                 maxValue = DayWrapper.addDosage(maxValue, dose.getMaximalDoseQuantity());
             }
@@ -262,7 +262,7 @@ export class DayWrapper {
     }
 
     private static addDosage(bd: number, d: number): number {
-        if (d) {
+        if (d !== undefined) {
             return bd + d;
         }
 

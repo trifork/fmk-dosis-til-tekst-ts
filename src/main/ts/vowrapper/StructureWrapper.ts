@@ -91,6 +91,13 @@ export class StructureWrapper {
         return this.days;
     }
 
+    public getDay(dayNumber: number): DayWrapper {
+        for (let day of this.days)
+            if (day.getDayNumber() === dayNumber)
+                return day;
+        return undefined;
+    }
+
     public sameDayOfWeek(): boolean {
         if (this.getDays().length === 1) {
             return false;

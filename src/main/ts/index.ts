@@ -51,3 +51,6 @@ export {LongTextConverter} from "./LongTextConverter";
 export {ShortTextConverter} from "./ShortTextConverter";
 export {TextHelper} from "./TextHelper";
 export {Validator} from "./Validator";
+export {DosageTypeCalculator} from "./DosageTypeCalculator";
+export {DosageTypeCalculator144} from "./DosageTypeCalculator144";
+export {DailyDosisCalculator} from "./DailyDosisCalculator";
