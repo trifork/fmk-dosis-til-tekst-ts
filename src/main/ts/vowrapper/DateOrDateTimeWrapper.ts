@@ -7,6 +7,10 @@ export class DateOrDateTimeWrapper {
 
     public static fromJsonObject(jsonObject: any) {
         if (jsonObject) {
+            if (jsonObject.date) {
+                let dateparts = jsonObject.date.split("-");
+                return new DateOrDateTimeWrapper(new Date(Number(dateparts[0]), Number(dateparts[1]) - 1, Number(dateparts[2])), undefined);
+            }
             return new DateOrDateTimeWrapper(jsonObject.date ? new Date(jsonObject.date) : undefined, jsonObject.dateTime ? new Date(jsonObject.dateTime) : undefined);
         }
 
