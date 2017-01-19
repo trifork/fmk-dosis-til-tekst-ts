@@ -36,6 +36,6 @@ module.exports = function (grunt) {
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
 	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack']);
-	grunt.registerTask('publish', ['default', 'npm-publish']);
+	grunt.registerTask('publish', ['npm-publish']);
 
 };
