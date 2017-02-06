@@ -66,7 +66,7 @@ Eksempel
 	        ]
 	    ),
         new dosistiltekst.DayWrapper(2, [
-	        new dosistiltekst.NoonDoseWrapper(undefined, 1, 3, undefined, "1", "3", true)
+	        new dosistiltekst.NoonDoseWrapper(undefined, 1, 3, undefined, "1", "3", false)
 	        ])
     ];
 
@@ -78,11 +78,25 @@ Eksempel
     shorttext = shortTextConverter.convertWrapper(dosagestructures, 100);
     longtext = longTextConverter.convertWrapper(dosagestructures, 500);
     document.getElementById("structured").innerHTML = "Short text: " + shorttext + "<br/>Long text: " + longtext;
+
+    // Combined
+	var combined = dosistiltekst.CombinedTextConverter.convertWrapper(dosagestructures);
+	document.getElementById("structuredCombined").innerHTML = "<ul><li>" + combined.getCombinedShortText() + "</li><li>" + combined.getCombinedLongText() + "</li><li>" + combined.getCombinedDailyDosis().getInterval().minimum + "-" +  combined.getCombinedDailyDosis().getInterval().maximum + "</li></ul>";
+		
+	// Iterate each period - in this case, only onemptied
+	for(i = 0; i < combined.getPeriodTexts().length; i++) {
+		var periodText = combined.getPeriodTexts()[i];
+		// Each periodText is a tuple of three elements
+		document.getElementById("structuredCombined").innerHTML += "<ul><li>" + periodText[0] + "</li><li>" + periodText[1] + "</li><li>" + periodText[2].getInterval().minimum + "-" +  periodText[2].getInterval().maximum + "</li></ul>";
+	}
+
     </script>
 </body>
 
 </html>
 ```
+Endelig er der også mulighed for, vha. CombinedTextConverter, at få både kort og lang doseringstekst såvel samlet for alle strukturerede perioder samt enkeltvist per periode, samt daglig dosis beregnet på en gang.
+
 
 ###Generel anvendelse
 Konverteringsklasserne tilgås vha. flg. linjer:
@@ -154,4 +168,5 @@ shorttext = shortTextConverter.convertWrapper(dosagestructures, 100);
 longtext = longTextConverter.convertWrapper(dosagestructures, 500);
 ```
 Det sidste argument i kaldene til convertWrapper metoderne angiver max-længden af de genererede strenge.
+Alternativt kan den kombinerede converter kaldes, jvf. ovenstående eksempel.
 

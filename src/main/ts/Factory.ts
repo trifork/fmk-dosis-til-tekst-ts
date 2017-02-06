@@ -3,6 +3,7 @@ import { FreeTextWrapper } from "./vowrapper/FreeTextWrapper";
 
 import { LongTextConverter } from "./LongTextConverter";
 import { ShortTextConverter } from "./ShortTextConverter";
+import { CombinedTextConverter } from "./CombinedTextConverter";
 import { DateOrDateTimeWrapper } from "./vowrapper/DateOrDateTimeWrapper";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
@@ -16,6 +17,10 @@ export class Factory {
 
     public static getShortTextConverter() {
         return ShortTextConverter.getInstance();
+    }
+
+    private static getCombinedTextConverter(): CombinedTextConverter {
+        return null;
     }
 
     // These are dummy methods in order to let webpack know about the types

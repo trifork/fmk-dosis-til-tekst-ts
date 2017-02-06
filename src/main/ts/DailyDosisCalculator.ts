@@ -21,6 +21,10 @@ export class DailyDosisCalculator {
         return DailyDosisCalculator.calculateWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
+    public static calculateStr(jsonStr: string) {
+        return DailyDosisCalculator.calculate(JSON.parse(jsonStr));
+    }
+
     public static calculateWrapper(dosage: DosageWrapper): DailyDosis {
         if (dosage.isAdministrationAccordingToSchema())
             return new DailyDosis(undefined, undefined, undefined);

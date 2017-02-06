@@ -18,6 +18,10 @@ export class DosageTypeCalculator144 {
         return DosageTypeCalculator144.calculateWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
+    public static calculateStr(jsonStr: string) {
+        return DosageTypeCalculator144.calculate(JSON.parse(jsonStr));
+    }
+
     public static calculateWrapper(dosage: DosageWrapper): DosageType {
         if (dosage.isAdministrationAccordingToSchema())
             return DosageType.Unspecified;

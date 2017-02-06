@@ -87,6 +87,10 @@ export class ShortTextConverter {
         return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
     }
 
+    public convertStr(jsonStr: string) {
+        return this.convert(JSON.parse(jsonStr));
+    }
+
 
 	/**
 	 * Performs a conversion to a short text with a custom maximum length. Returns translation if possible, otherwise null.

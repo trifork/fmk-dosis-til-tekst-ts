@@ -27,6 +27,11 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
         LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl(this));
     }
+
+    public convertStr(jsonStr: string) {
+        return this.convert(JSON.parse(jsonStr));
+    }
+
     public convert(dosageJson: any): string {
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
         return this.convertWrapper(dosage);

@@ -49,6 +49,7 @@ export {LocalTime} from "./LocalTime";
 export {LoggerService} from "./LoggerService";
 export {LongTextConverter} from "./LongTextConverter";
 export {ShortTextConverter} from "./ShortTextConverter";
+export {CombinedTextConverter} from "./CombinedTextConverter";
 export {TextHelper} from "./TextHelper";
 export {Validator} from "./Validator";
 export {DosageTypeCalculator} from "./DosageTypeCalculator";
