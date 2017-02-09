@@ -23,13 +23,15 @@ export class CombinedTextConverter {
         let dailyDosis = DailyDosisCalculator.calculateWrapper(dosage);
         let periodTexts: Array<[string, string, DailyDosis]> = new Array<[string, string, DailyDosis]>();
 
-        for (let period of dosage.structures.getStructures()) {
-            let structuresWithOnePeriod: StructuresWrapper = new StructuresWrapper(dosage.structures.getUnitOrUnits(), [period]);
-            let dosageWrapperWithOnePeriod = DosageWrapper.makeStructuredDosage(structuresWithOnePeriod);
-            let periodShortText = ShortTextConverter.getInstance().convertWrapper(dosageWrapperWithOnePeriod);
-            let periodLongText = LongTextConverter.getInstance().convertWrapper(dosageWrapperWithOnePeriod);
-            let dailyDosis = DailyDosisCalculator.calculateWrapper(dosageWrapperWithOnePeriod);
-            periodTexts.push([periodShortText, periodLongText, dailyDosis]);
+        if (dosage.isStructured()) {
+            for (let period of dosage.structures.getStructures()) {
+                let structuresWithOnePeriod: StructuresWrapper = new StructuresWrapper(dosage.structures.getUnitOrUnits(), [period]);
+                let dosageWrapperWithOnePeriod = DosageWrapper.makeStructuredDosage(structuresWithOnePeriod);
+                let periodShortText = ShortTextConverter.getInstance().convertWrapper(dosageWrapperWithOnePeriod);
+                let periodLongText = LongTextConverter.getInstance().convertWrapper(dosageWrapperWithOnePeriod);
+                let dailyDosis = DailyDosisCalculator.calculateWrapper(dosageWrapperWithOnePeriod);
+                periodTexts.push([periodShortText, periodLongText, dailyDosis]);
+            }
         }
 
         return new CombinedConversion(shortText, longText, dailyDosis, periodTexts);
