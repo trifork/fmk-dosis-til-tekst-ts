@@ -9,6 +9,8 @@
          "diagnostics": true
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+		"build-internal",
+		"build-public"
     ]
 }

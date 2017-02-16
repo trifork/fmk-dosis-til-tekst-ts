@@ -1,20 +1,14 @@
 var path = require('path');
 
-module.exports = {
+module.exports ={
 
     entry: "./src/main/ts/index.ts",
 
     output: {
-
-        filename: "target/dosistiltekst.js",
-
-        // export itself to a global var
-        libraryTarget: "var",
-        // name of the global var
-        library: "dosistiltekst"
+        filename: "target/dosistiltekst-commonjs.js",
+        libraryTarget: "commonjs",
+        library: "dosistiltekst-commonjs"
     },
-    // FOR THE SERVER VERSION, USE externals: [ list of node modules ]
-    // externals: [ 'fs'],
 
     resolve: {
         extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],

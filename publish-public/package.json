@@ -1,0 +1,24 @@
+{
+    "name": "fmk-dosis-til-tekst-ts",
+    "author": "Sundhedsdatastyrelsen",
+    "version": "1.1.4",
+    "license": "MPL-1.1",
+    "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
+	"main": "../target/dosistiltekst.js",
+    "typings": "../target/lib/index.d.ts",
+    "files": [
+        "../target/dosistiltekst.js",
+        "../target/lib/*.d.ts",
+        "../target/lib/vowrapper/*.d.ts",
+        "../target/lib/longtextconverterimpl/*.d.ts",
+        "../target/lib/shorttextconverterimpl/*.d.ts"
+    ],
+    
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "registry": {
+        "type": "git",
+        "url": "https://github.com/trifork/fmk-dosis-til-tekst-ts/fmk-dosis-til-tekst-ts.git"
+    }
+}

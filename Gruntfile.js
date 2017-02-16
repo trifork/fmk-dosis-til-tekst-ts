@@ -2,6 +2,7 @@
 
 module.exports = function (grunt) {
 	var webpackConfig = require("./webpack.config.js");
+	var webpackCommonJSConfig = require("./webpack.commonjs.config");
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -22,20 +23,15 @@ module.exports = function (grunt) {
 				"src/main/ts/**/*.ts"
 			]
 		},
-
-		'npm-publish': {
-			options: {
-				abortIfDirty: false
-			}
-		},
 		webpack: {
-      		dosistiltekst: webpackConfig
+      		dosistiltekst: webpackConfig,
+			dosistiltekstCommonJS: webpackCommonJSConfig
     	}
 	});
 
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
-	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack']);
-	grunt.registerTask('publish', ['npm-publish']);
-
+	grunt.registerTask('default', ['clean', 'tslint', 'ts']);
+	grunt.registerTask('webpack-var', ['webpack:dosistiltekst']);
+	grunt.registerTask('webpack-commonjs', ['webpack:dosistiltekstCommonJS']);
 };
