@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
-	grunt.registerTask('default', ['clean', 'tslint', 'ts']);
+	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack:dosistiltekst']);
 	grunt.registerTask('webpack-var', ['webpack:dosistiltekst']);
 	grunt.registerTask('webpack-commonjs', ['webpack:dosistiltekstCommonJS']);
 };
