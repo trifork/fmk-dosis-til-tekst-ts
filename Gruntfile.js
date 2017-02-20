@@ -53,7 +53,7 @@ module.exports = function (grunt) {
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
 
-	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack-var']);
+	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack-var', 'webpack-commonjs']);
 	grunt.registerTask('webpack-var', ['webpack:dosistiltekst', 'copy:copyForDosisTilTekst']);
 	grunt.registerTask('webpack-commonjs', ['webpack:dosistiltekstCommonJS','copy:dosisTilTekstCommonJS']);
 };
