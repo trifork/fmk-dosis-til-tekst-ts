@@ -26,12 +26,34 @@ module.exports = function (grunt) {
 		webpack: {
       		dosistiltekst: webpackConfig,
 			dosistiltekstCommonJS: webpackCommonJSConfig
-    	}
+    	},
+
+         copy: {
+            dosisTilTekstCommonJS: {
+                files: [
+                    { src: 'target/dosistiltekst-commonjs.js*', dest: 'publish-internal/' },
+                    { src: 'target/lib/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'target/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' }
+                ]
+            },
+            copyForDosisTilTekst: {
+                files: [
+                    { src: 'target/dosistiltekst.js*', dest: 'publish-public/' },
+                    { src: 'target/lib/*.d.ts', dest: 'publish-public/' },
+                    { src: 'target/lib/vowrapper/*.d.ts', dest: 'publish-public/' },
+                    { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-public/' },
+                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' }
+                ]
+            }
+         }
 	});
 
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
-	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack:dosistiltekst']);
-	grunt.registerTask('webpack-var', ['webpack:dosistiltekst']);
-	grunt.registerTask('webpack-commonjs', ['webpack:dosistiltekstCommonJS']);
+
+	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack-var']);
+	grunt.registerTask('webpack-var', ['webpack:dosistiltekst', 'copy:copyForDosisTilTekst']);
+	grunt.registerTask('webpack-commonjs', ['webpack:dosistiltekstCommonJS','copy:dosisTilTekstCommonJS']);
 };
