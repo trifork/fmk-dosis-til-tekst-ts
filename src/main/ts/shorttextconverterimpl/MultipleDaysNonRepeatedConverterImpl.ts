@@ -34,7 +34,6 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
         let text = "";
 
-        let day: DayWrapper = structure.getDays()[0];
         let firstDay: DayWrapper = structure.getDays()[0];
         if (structure.containsMorningNoonEveningNightDoses()) {
 

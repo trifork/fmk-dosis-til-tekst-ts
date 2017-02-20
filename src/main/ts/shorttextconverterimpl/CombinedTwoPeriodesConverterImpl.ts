@@ -23,24 +23,22 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         if (structure0.containsAccordingToNeedDose())
             return false;
 
-        let tempStructure: StructureWrapper = dosage.structures.getStructures()[0];
         let tempDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
-                [tempStructure]));
+                [structure0]));
         if (!ShortTextConverter.getInstance().canConvert(tempDosage))
             return false;
 
         // Structure 1
-        let structure1: StructureWrapper = dosage.structures.getStructures()[dosage.structures.getStructures().length - 1];
-        if (structure1.containsAccordingToNeedDose())
+        let structureLast: StructureWrapper = dosage.structures.getStructures()[dosage.structures.getStructures().length - 1];
+        if (structureLast.containsAccordingToNeedDose())
             return false;
 
-        let fixedStructure: StructureWrapper = dosage.structures.getStructures()[dosage.structures.getStructures().length - 1];
         let fixedDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
-                [fixedStructure]));
+                [structureLast]));
         if (!ShortTextConverter.getInstance().canConvert(fixedDosage))
             return false;
 
