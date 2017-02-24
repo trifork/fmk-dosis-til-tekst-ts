@@ -6,7 +6,7 @@ module.exports ={
 
     output: {
         filename: "target/dosistiltekst-commonjs.js",
-        libraryTarget: "commonjs",
+        libraryTarget: "commonjs2",
         library: "dosistiltekst-commonjs"
     },
 
