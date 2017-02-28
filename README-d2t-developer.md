@@ -18,3 +18,6 @@ Mac:
 ?
 
 The typescript code is compiled and webpack'ed into target/dosistiltekst.js
+
+Run unit-tests:
+mocha "src/test/ts/*.js" (with --debug-brk in case you want to attach VS Code debugger)

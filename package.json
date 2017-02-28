@@ -7,12 +7,17 @@
     "grunt.dev": "./node_modules/.bin/grunt --watch",
     "build.prod": "npm i && npm run grunt.prod",
     "build.dev": "npm run grunt.dev",
-    "build": "npm run build.dev"
+    "build": "npm run build.dev",
+    "pretest": "tsc src/test/ts/DosageTypeCalculator144Test.ts --module commonjs --outDir src/test/target ",
+    "test": "mocha \"src/test/target/test/ts/*.js\""
   },
   "license": "MPL-1.1",
   "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
   "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/mocha": "^2.2.39",
     "awesome-typescript-loader": "~1.1.1",
+    "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
@@ -22,11 +27,13 @@
     "grunt-tslint": "^3.0.3",
     "grunt-webpack": "^1.0.18",
     "load-grunt-tasks": "^3.5.0",
+    "mocha": "^3.2.0",
+    "ts-node": "^2.1.0",
     "tslint": "^3.15.1",
-    "typescript": "^1.8.10",
+    "typescript": "^2.1.6",
     "typings": "^0.8.1",
     "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.15.0"
+    "webpack-dev-server": "^1.4.23"
   },
   "main": "target/dosistiltekst.js",
   "typings": "target/lib/index.d.ts",

@@ -209,4 +209,8 @@ export class StructureWrapper {
         return allSum;
     }
 
+    public isEmpty(): boolean {
+        return this.getDays().length === 0;
+    }
+
 }
