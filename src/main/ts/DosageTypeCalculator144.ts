@@ -109,7 +109,7 @@ export class DosageTypeCalculator144 {
                 }
             }
 
-            if (pnStructures.length > 0) {
+            if (!handled && pnStructures.length > 0) {
                 if (DosageTypeCalculator144.abuts(es, pnStructures[0])) {
                     pnStructures.splice(0, 0, es);
                     handled = true;
@@ -176,7 +176,8 @@ export class DosageTypeCalculator144 {
     }
 
     public static dateTimeAbuts(dateTime1: Date, dateTime2: Date): boolean {
-        return DosageTypeCalculator144.secondsBetween(dateTime1, dateTime2) === 1;
+        let secondsBetween: number = DosageTypeCalculator144.secondsBetween(dateTime1, dateTime2);
+        return secondsBetween >= 0 && secondsBetween <= 1;
     }
 
     public static dateAbuts(d1: Date, d2: Date): boolean {

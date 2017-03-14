@@ -50,6 +50,13 @@ describe('abuts function with dateTimes', () => {
         expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.true;
     });
 
+	// First structure with end date - equals seconds structures start (only possible due to old data in production, validation rejects new dosages of that kind)
+    it('should return that structures with enddates are abuts', () => {
+        let s1 = new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 1, 10, 0, 0)), new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 2, 11, 0, 0)), [], undefined);
+        let s2 = new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 2, 11, 0, 0)), new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 3, 8, 0, 0)), [], undefined);
+        expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.true;
+    });
+
     it('should return false when periods overlaps', () => {
         let s1 = new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 1, 10, 0, 0)), new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 3, 9, 0, 0)), [], undefined);
         let s2 = new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 3, 8, 0, 1)), new DateOrDateTimeWrapper(undefined, new Date(2017, 1, 5, 11, 0, 0)), [], undefined);
