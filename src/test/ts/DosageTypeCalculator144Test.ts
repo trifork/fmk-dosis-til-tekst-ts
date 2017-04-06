@@ -6,6 +6,7 @@ import { DosageTypeCalculator144, MorningDoseWrapper, StructuresWrapper, Structu
 describe('dateAbuts function', () => {
     it('should check if dates are abuts', () => {
         expect(DosageTypeCalculator144.dateAbuts(new Date(2017, 2, 1), new Date(2017, 2, 2))).to.be.true;
+        expect(DosageTypeCalculator144.dateAbuts(new Date(2017, 3, 26), new Date(2017, 3, 27))).to.be.true;   // DST
         expect(DosageTypeCalculator144.dateAbuts(new Date(2017, 2, 1), new Date(2017, 2, 3))).to.be.false;
     });
 });
