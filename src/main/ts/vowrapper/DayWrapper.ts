@@ -209,6 +209,10 @@ export class DayWrapper {
         return this.areAllDosesExceptTheFirstTheSame;
     }
 
+    public containsOnlyPNOrFixedDoses(): boolean {
+        return this.containsAccordingToNeedDosesOnly() || this.containsFixedDosesOnly();
+    }
+
     public containsAccordingToNeedDose(): boolean {
         return this.getAllDoses().some(dose => dose.getIsAccordingToNeed());
     }
@@ -232,6 +236,11 @@ export class DayWrapper {
 
     public containsAccordingToNeedDosesOnly(): boolean {
         return this.getAllDoses().every(d => d.getIsAccordingToNeed());
+    }
+
+
+    public containsFixedDosesOnly(): boolean {
+        return this.getAllDoses().every(d => !d.getIsAccordingToNeed());
     }
 
     public getSumOfDoses(): Interval<number> {

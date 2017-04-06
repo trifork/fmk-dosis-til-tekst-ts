@@ -44,6 +44,7 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
             if (day.getMorningDose().getIsAccordingToNeed())
                 text += " efter behov";
         }
+
         return text;
     }
 
@@ -51,11 +52,13 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
         let text = "";
 
         if (day.getNoonDose()) {
-            if (day.getMorningDose() && (day.getEveningDose() || day.getNightDose()))
+            // Er der en morgen-dosis og kommer der en efterflg. dosistekst ELLER der er tale om blandet PN/fast, brug ","
+            if (day.getMorningDose() && ((day.getEveningDose() || day.getNightDose()) || !day.containsOnlyPNOrFixedDoses()))
                 text += ", ";
-            else if (day.getMorningDose())
+            else if (day.getMorningDose() && day.containsOnlyPNOrFixedDoses())    // Kun "og" hvis ikke blandet af PN og fast, da teksten ellers bliver uklar
                 text += " og ";
-            if (!day.allDosesHaveTheSameQuantity())
+
+            if (!day.allDosesHaveTheSameQuantity() || !day.containsOnlyPNOrFixedDoses())
                 text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNoonDose(), unitOrUnits);
             else if (day.getMorningDose())
                 text += day.getNoonDose().getLabel();
@@ -73,11 +76,13 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
         let text = "";
 
         if (day.getEveningDose()) {
-            if ((day.getMorningDose() || day.getNoonDose()) && day.getNightDose())
+            // Er der en morgen/midag-dosis og kommer der en efterflg. dosistekst ELLER der er tale om blandet PN/fast, brug ","
+            if ((day.getMorningDose() || day.getNoonDose()) && ((day.getNightDose() || !day.containsOnlyPNOrFixedDoses()))) // Brug "," hvis PN er involveret, da teksten ellers bliver uklar
                 text += ", ";
-            else if (day.getMorningDose() || day.getNoonDose())
+            else if ((day.getMorningDose() || day.getNoonDose()) && day.containsOnlyPNOrFixedDoses())   // Kun "og" hvis ikke blandet af PN og fast, da teksten ellers bliver uklar
                 text += " og ";
-            if (!day.allDosesHaveTheSameQuantity())
+
+            if (!day.allDosesHaveTheSameQuantity() || !day.containsOnlyPNOrFixedDoses())
                 text += ShortTextConverterImpl.toDoseAndUnitValue(day.getEveningDose(), unitOrUnits);
             else if (day.getMorningDose() || day.getNoonDose())
                 text += day.getEveningDose().getLabel();
@@ -95,11 +100,17 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
         let text = "";
 
         if (day.getNightDose()) {
-            if (day.getMorningDose() || day.getNoonDose()  || day.getEveningDose() )
-                text += " og ";
-            if (!day.allDosesHaveTheSameQuantity())
+            if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose()) {
+                if (day.containsOnlyPNOrFixedDoses()) {    // Kun "og" hvis ikke blandet PN/fast, da teksten ellers bliver uklar
+                    text += " og ";
+                }
+                else {
+                    text += ", ";
+                }
+            }
+            if (!day.allDosesHaveTheSameQuantity() || !day.containsOnlyPNOrFixedDoses())
                 text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
-            else if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose() )
+            else if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose())
                 text += day.getNightDose().getLabel();
             else
                 text += ShortTextConverterImpl.toDoseAndUnitValue(day.getNightDose(), unitOrUnits);
