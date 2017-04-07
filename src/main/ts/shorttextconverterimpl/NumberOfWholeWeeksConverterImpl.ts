@@ -48,6 +48,10 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         else
             text += " daglig";
 
+        if (structure.getSupplText()) {
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+        }
+
         let days: number = structure.getDays().length;
         let pauseDays: number = structure.getIterationInterval() - days;
 
