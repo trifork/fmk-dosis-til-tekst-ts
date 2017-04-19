@@ -74,8 +74,8 @@ export class DailyDosisCalculator {
     private static calculateAvg(sum: Interval<number>, divisor: number, unitOrUnits: UnitOrUnitsWrapper): DailyDosis {
 
         let avg: Interval<number> = {
-            minimum: parseFloat((sum.minimum / divisor).toPrecision(9)),
-            maximum: parseFloat((sum.maximum / divisor).toPrecision(9))
+            minimum: parseFloat((sum.minimum / divisor).toFixed(9)),
+            maximum: parseFloat((sum.maximum / divisor).toFixed(9))
         };
 
         if (avg.maximum - avg.minimum < 0.000000001)
