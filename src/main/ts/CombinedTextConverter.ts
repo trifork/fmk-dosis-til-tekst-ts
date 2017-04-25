@@ -9,10 +9,18 @@ import { DailyDosis } from "./DailyDosis";
 export class CombinedTextConverter {
 
     public static convertStr(jsonStr: string) {
+        if (jsonStr === undefined || jsonStr === null) {
+            return null;
+        }
+
         return CombinedTextConverter.convert(JSON.parse(jsonStr));
     }
 
     public static convert(dosageJson: any): CombinedConversion {
+        if (dosageJson === undefined || dosageJson === null) {
+            return null;
+        }
+
         let dosage: DosageWrapper = DosageWrapper.fromJsonObject(dosageJson);
         return CombinedTextConverter.convertWrapper(dosage);
     }

@@ -83,11 +83,21 @@ export class ShortTextConverter {
     }
 
     public convert(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
+
+        if (dosageJson === undefined || dosageJson === null) {
+            return null;
+        }
+
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
         return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
     }
 
     public convertStr(jsonStr: string) {
+
+        if (jsonStr === undefined || jsonStr === null) {
+            return null;
+        }
+
         return this.convert(JSON.parse(jsonStr));
     }
 

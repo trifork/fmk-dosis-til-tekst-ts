@@ -29,10 +29,19 @@ export class LongTextConverter {
     }
 
     public convertStr(jsonStr: string) {
+
+        if (jsonStr === undefined || jsonStr === null) {
+            return null;
+        }
+
         return this.convert(JSON.parse(jsonStr));
     }
 
     public convert(dosageJson: any): string {
+
+        if (dosageJson === undefined || dosageJson === null) {
+            return null;
+        }
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
         return this.convertWrapper(dosage);
     }
