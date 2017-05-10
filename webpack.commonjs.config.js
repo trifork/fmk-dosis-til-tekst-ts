@@ -11,11 +11,9 @@ module.exports ={
     },
 
     resolve: {
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
-        modulesDirectories: [ "node_modules" ]
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     bail: true,
-    debug: true,
     devtool: "source-map",
     module: {
         loaders: [

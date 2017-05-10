@@ -60,16 +60,16 @@ export class DosageTypeCalculator {
     }
 
     public static isAccordingToNeed(structure: StructureWrapper): boolean {
-        // If the dosage contains only according to need doses, it is quite simply just  
+        // If the dosage contains only according to need doses, it is quite simply just
         // an according to need dosage
         return structure.containsAccordingToNeedDosesOnly();
     }
 
     private static isTemporary(structure: StructureWrapper): boolean {
-        // If there is no end date defined the dosage must not be iterated 
+        // If there is no end date defined the dosage must not be iterated
         if (structure.getEndDateOrDateTime() === undefined && structure.getIterationInterval() > 0)
             return false;
-        // If there is an according to need dose in the dosage it is not a (clean) 
+        // If there is an according to need dose in the dosage it is not a (clean)
         // temporary dosage.
         if (structure.containsAccordingToNeedDose())
             return false;
@@ -83,7 +83,7 @@ export class DosageTypeCalculator {
         // If the dosage isn't iterated it isn't fixed
         if (structure.getIterationInterval() === 0)
             return false;
-        // If there is an according to need dose in the dosage it is not a (clean) 
+        // If there is an according to need dose in the dosage it is not a (clean)
         // temporary dosage.
         if (structure.containsAccordingToNeedDose())
             return false;

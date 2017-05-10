@@ -6,10 +6,10 @@ import { StructureWrapper } from "./vowrapper/StructureWrapper";
 import { DosageType } from "./DosageType";
 
 
-/*** 
+/***
  * From FMK 1.4.4 and above, only 3 dosage types are available: Fixed, AccordingToNeed and Combined (besides Unspec.).
  * Use this DosageTypeCalculator144 for all services using FMK 1.4.4 and higher, and use DosageTypeCalculator for FMK 1.4.2 and below
- * 
+ *
  *
  */
 export class DosageTypeCalculator144 {
@@ -85,7 +85,7 @@ export class DosageTypeCalculator144 {
         emptyStructures.sort(DosageTypeCalculator144.structureSorter);
 
 		/* Find all gaps in the fixed and pn structures, and insert fitting emptystructures in the gaps
-		 * We know that some should fit, since it is validated in the DosageStructureValidator, that no gaps are present.  
+		 * We know that some should fit, since it is validated in the DosageStructureValidator, that no gaps are present.
 		 */
         DosageTypeCalculator144.fillGapsWithEmptyPeriods(fixedStructures, emptyStructures);
         DosageTypeCalculator144.fillGapsWithEmptyPeriods(pnStructures, emptyStructures);
@@ -152,7 +152,7 @@ export class DosageTypeCalculator144 {
                 && DosageTypeCalculator144.dateTimeAbuts(first.getEndDateOrDateTime().getDateTime(), second.getStartDateOrDateTime().getDateTime())) {
                 return true;
             }
-            // If an interval ends with a date and the next ends with a datetime we cannot determine if they abut 
+            // If an interval ends with a date and the next ends with a datetime we cannot determine if they abut
         }
 
         // No end date, definitely not abut
@@ -221,8 +221,8 @@ export class DosageTypeCalculator144 {
         return structures.getStructures().some((structure, index, array) => structure.containsAccordingToNeedDose() && !structure.containsAccordingToNeedDosesOnly());
     }
 
-	/* Check if at least one structure with fixed dose's only AND at least one structure with PN only doses exists 
-	 * Precondition: since this method is called after hasAtLeastOneCombinedStructure(), 
+	/* Check if at least one structure with fixed dose's only AND at least one structure with PN only doses exists
+	 * Precondition: since this method is called after hasAtLeastOneCombinedStructure(),
 	 * then we suggest that all Structures contains either fixed or PN doses, not combined inside one Structure
 	 */
     private static hasMixedNotEmptyStructures(structures: StructuresWrapper): boolean {

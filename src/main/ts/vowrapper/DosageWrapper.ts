@@ -37,7 +37,7 @@ export class DosageWrapper {
     }
 
     /**
-     * @return Returns true if the dosage is "according to schema..." 
+     * @return Returns true if the dosage is "according to schema..."
      */
     public isAdministrationAccordingToSchema(): boolean {
         return this.administrationAccordingToSchema !== null && this.administrationAccordingToSchema !== undefined;
@@ -58,23 +58,23 @@ export class DosageWrapper {
     }
 
     /**
-     * @return The free text dosage, or null if the dosage is not of this kind 
-     
+     * @return The free text dosage, or null if the dosage is not of this kind
+
     get freeText(): FreeTextWrapper {
         return this.freeText;
     }*/
 
     /**
      * @return "according to schema..." dosage
-     
+
     get administrationAccordingToSchema(): AdministrationAccordingToSchemaWrapper {
         return this._administrationAccordingToSchema;
     }*/
 
     /**
-     * @return A wrapped DosageTimes object containing a structured dosage, or null if the 
-     * dosage is not of this kind 
-     
+     * @return A wrapped DosageTimes object containing a structured dosage, or null if the
+     * dosage is not of this kind
+
     get structures(): StructuresWrapper {
         return this._structures;
     }

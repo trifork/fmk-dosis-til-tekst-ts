@@ -46,8 +46,15 @@ module.exports = function (grunt) {
                     { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-public/' },
                     { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' }
                 ]
+            },
+            copyForPrepareTestSchemas: {
+                files: [
+                    { expand: true, cwd: '../fmk-schemas/etc/schemas/2012/', src: '**/*.xsd', dest: '../schemas/2012/' },
+                    { expand: true, cwd: '../fmk-schemas/etc/schemas/oio/', src: '**/*.xsd', dest: '../schemas/oio/' },
+                    { src: '../fmk-schemas/etc/schemas/fmk-1.4-all-types.xsd', dest: '../schemas/fmk-1.4-all-types.xsd' }
+                ]
             }
-         }
+         },
 	});
 
 	// Load all grunt tasks

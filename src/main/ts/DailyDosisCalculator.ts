@@ -7,8 +7,8 @@ import { DailyDosis } from "./DailyDosis";
 import { Interval } from "./Interval";
 
 /**
- * Class for calculating the avg. daily dosis from the dosage structure. 
- * This is possible when: 
+ * Class for calculating the avg. daily dosis from the dosage structure.
+ * This is possible when:
  * - The dosage is given in structured form (not "in local system" or free text)
  * - The dosage is for one periode
  * - The free text in the dosage doesn't alter the dosage expressed in dosage value and unit
@@ -51,19 +51,19 @@ export class DailyDosisCalculator {
         // we cannot calculate an average dosis
         if (structure.containsAccordingToNeedDose())
             return new DailyDosis(undefined, undefined, undefined);
-        // If there is a dosage for day zero (meaning not related to a specific day) 
+        // If there is a dosage for day zero (meaning not related to a specific day)
         // we cannot calculate an average dosis
         if (structure.getDay(0) !== undefined)
             return new DailyDosis(undefined, undefined, undefined);
-        // Otherwise we will calculate an average dosage. 
+        // Otherwise we will calculate an average dosage.
         // If the iteration interval is zero, the dosage is not repeated. This means
-        // that the dosage for each day is given. 
+        // that the dosage for each day is given.
         if (structure.getIterationInterval() === 0)
             return DailyDosisCalculator.calculateAvg(
                 structure.getSumOfDoses(),
                 structure.getDays()[structure.getDays().length - 1].getDayNumber(),
                 unitOrUnits);
-        // Else the dosage is repeated, and the iteration interval states after how many days 
+        // Else the dosage is repeated, and the iteration interval states after how many days
         else
             return DailyDosisCalculator.calculateAvg(
                 structure.getSumOfDoses(),
