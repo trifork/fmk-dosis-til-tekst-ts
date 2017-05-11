@@ -60,3 +60,4 @@ export { DailyDosisCalculator } from "./DailyDosisCalculator";
 export { FMKVersion, DosageProposalXMLGenerator } from "./DosageProposalXMLGenerator/DosageProposalXMLGenerator";
 export { DosageProposalXML } from "./DosageProposalXMLGenerator/DosageProposalXML";
 export { XML140Generator } from "./DosageProposalXMLGenerator/XML140Generator";
+export { XML142Generator } from "./DosageProposalXMLGenerator/XML142Generator";

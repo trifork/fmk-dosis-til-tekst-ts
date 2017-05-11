@@ -4,7 +4,11 @@ import { XMLGenerator } from "./XMLGenerator";
 
 export class XML140Generator extends AbstractXMLGenerator implements XMLGenerator {
 
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string = undefined): string {
+    protected getDayNamespace(): string {
+        return "m12";
+    }
+
+    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
         let dosageElement: string =
             "<m12:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2012/06/01 ../../../2012/06/01/Dosage.xsd\" " +
@@ -31,7 +35,7 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return dosageElement + subElement + "</m12:Structure></m12:Dosage>";
     }
 
-    private generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
+    protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
         let xml = "";
 
         if (iteration === 0) {
@@ -55,12 +59,12 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return xml;
     }
 
-    private generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
+    protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
 
         let mmanMapping = this.parseMapping(mapping);
         let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
 
-        xml += "<m12:Day>" +
+        xml += "<" + this.getDayNamespace() + ":Day>" +
             "<m12:Number>1</m12:Number>";
 
         if (mmanMapping.getMorning()) {
@@ -91,13 +95,13 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
                 + "</m12:Dose>";
         }
 
-        xml += "</m12:Day>";
+        xml += "</" + this.getDayNamespace() + ":Day>";
 
         return xml;
     }
 
 
-    private generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean): string {
+    protected generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean): string {
 
     
         if (mapping.indexOf("dag ") >= 0) {
@@ -113,10 +117,10 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         let splittedMapping = mapping.split(";");
         let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
 
-        xml += "<m12:Day>" +
+        xml += "<" + this.getDayNamespace() + ":Day>" +
             "<m12:Number>1</m12:Number>" +
             this.getQuantityString(splittedMapping, isPN) +
-            "</m12:Day>";
+            "</" + this.getDayNamespace() + ":Day>";
 
         return xml;
     }
@@ -145,9 +149,9 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
             let dayno = result[1];
             let quantity = result[2];
 
-            xml += "<m12:Day><m12:Number>" + dayno + "</m12:Number>"
+            xml += "<" + this.getDayNamespace() + ":Day><m12:Number>" + dayno + "</m12:Number>"
                 + this.getQuantityString(quantity.split(";"), isPN)
-                + "</m12:Day>";
+                + "</" + this.getDayNamespace() + ":Day>";
         }
 
         return xml;

@@ -2,6 +2,8 @@ import { MMANMapping } from './MMANMapping';
 
 export abstract class AbstractXMLGenerator {
 
+    protected abstract getDayNamespace(): string;
+
     public parseMapping(mapping: string): MMANMapping {
         let splittedMapping = mapping.split("+");
         let mmanMapping = new MMANMapping();
