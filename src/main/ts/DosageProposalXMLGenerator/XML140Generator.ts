@@ -4,7 +4,8 @@ import { XMLGenerator } from "./XMLGenerator";
 
 export class XML140Generator extends AbstractXMLGenerator implements XMLGenerator {
 
-    protected getDayNamespace(): string {
+    // Namespace to be used for all elements expect for Day elements in dosages, that due to the mixed namespaces in 1.4.2 has its own dosageNS parameter on many of the methods
+    protected getNamespace(): string {
         return "m12";
     }
 
@@ -20,13 +21,13 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
 
         switch (type) {
             case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
+                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m12");
                 break;
             case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false);
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m12");
                 break;
             case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true);
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m12");
                 break;
             default:
                 throw new DosisTilTekstException("No support for type value '" + type + "'");
@@ -59,87 +60,87 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return xml;
     }
 
-    protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
+    protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, dosageNS: string): string {
 
         let mmanMapping = this.parseMapping(mapping);
         let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
 
-        xml += "<" + this.getDayNamespace() + ":Day>" +
-            "<m12:Number>1</m12:Number>";
+        xml += "<" + this.getNamespace() + ":Day>" +
+            "<" + dosageNS + ":Number>1</" + dosageNS + ":Number>";
 
         if (mmanMapping.getMorning()) {
-            xml += "<m12:Dose>"
-                + "<m12:Time>morning</m12:Time>"
-                + "<m12:Quantity>" + mmanMapping.getMorning() + "</m12:Quantity>"
-                + "</m12:Dose>";
+            xml += "<" + dosageNS + ":Dose>"
+                + "<" + dosageNS + ":Time>morning</" + dosageNS + ":Time>"
+                + "<" + dosageNS + ":Quantity>" + mmanMapping.getMorning() + "</" + dosageNS + ":Quantity>"
+                + "</" + dosageNS + ":Dose>";
         }
 
         if (mmanMapping.getNoon()) {
-            xml += "<m12:Dose>"
-                + "<m12:Time>noon</m12:Time>"
-                + "<m12:Quantity>" + mmanMapping.getNoon() + "</m12:Quantity>"
-                + "</m12:Dose>";
+            xml += "<" + dosageNS + ":Dose>"
+                + "<" + dosageNS + ":Time>noon</" + dosageNS + ":Time>"
+                + "<" + dosageNS + ":Quantity>" + mmanMapping.getNoon() + "</" + dosageNS + ":Quantity>"
+                + "</" + dosageNS + ":Dose>";
         }
 
         if (mmanMapping.getEvening()) {
-            xml += "<m12:Dose>"
-                + "<m12:Time>evening</m12:Time>"
-                + "<m12:Quantity>" + mmanMapping.getEvening() + "</m12:Quantity>"
-                + "</m12:Dose>";
+            xml += "<" + dosageNS + ":Dose>"
+                + "<" + dosageNS + ":Time>evening</" + dosageNS + ":Time>"
+                + "<" + dosageNS + ":Quantity>" + mmanMapping.getEvening() + "</" + dosageNS + ":Quantity>"
+                + "</" + dosageNS + ":Dose>";
         }
 
         if (mmanMapping.getNight()) {
-            xml += "<m12:Dose>"
-                + "<m12:Time>night</m12:Time>"
-                + "<m12:Quantity>" + mmanMapping.getNight() + "</m12:Quantity>"
-                + "</m12:Dose>";
+            xml += "<" + dosageNS + ":Dose>"
+                + "<" + dosageNS + ":Time>night</" + dosageNS + ":Time>"
+                + "<" + dosageNS + ":Quantity>" + mmanMapping.getNight() + "</" + dosageNS + ":Quantity>"
+                + "</" + dosageNS + ":Dose>";
         }
 
-        xml += "</" + this.getDayNamespace() + ":Day>";
+        xml += "</" + this.getNamespace() + ":Day>";
 
         return xml;
     }
 
 
-    protected generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean): string {
+    protected generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string): string {
 
     
         if (mapping.indexOf("dag ") >= 0) {
-            return this.generateXmlForSeparateDays(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN);
+            return this.generateXmlForSeparateDays(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN, dosageNS);
         }
         else {
-            return this.generateXmlForSameDay(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN);
+            return this.generateXmlForSameDay(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN, dosageNS);
         }
     }
 
-    private generateXmlForSameDay(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean): string {
+    private generateXmlForSameDay(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string): string {
 
         let splittedMapping = mapping.split(";");
         let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
 
-        xml += "<" + this.getDayNamespace() + ":Day>" +
-            "<m12:Number>1</m12:Number>" +
-            this.getQuantityString(splittedMapping, isPN) +
-            "</" + this.getDayNamespace() + ":Day>";
+        xml += "<" + this.getNamespace() + ":Day>" +
+            "<" + dosageNS + ":Number>1</" + dosageNS + ":Number>" +
+            this.getQuantityString(splittedMapping, isPN, dosageNS) +
+            "</" + this.getNamespace() + ":Day>";
 
         return xml;
     }
 
-    private getQuantityString(quantities: string[], isPN: boolean): string {
+    protected getQuantityString(quantities: string[], isPN: boolean, dosageNS: string): string {
         let xml = "";
 
         for (let dose of quantities) {
-            xml += "<m12:Dose><m12:Quantity>" + dose + "</m12:Quantity>";
+            xml += "<" + dosageNS + ":Dose><" + dosageNS + ":Quantity>" + dose + "</" + dosageNS + ":Quantity>";
             if(isPN) {
-                xml += "<m12:IsAccordingToNeed/>";
+                xml += "<" + dosageNS + ":IsAccordingToNeed/>";
             }
-            xml += "</m12:Dose>";
+            xml += "</" + dosageNS + ":Dose>";
         }
 
         return xml;
     }
 
-    private generateXmlForSeparateDays(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean): string {
+    private generateXmlForSeparateDays(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string): string {
 
         let regexp = /dag\s(\d+):\s(\d+(\.\d+)?(;\d+(\.\d+)?)?)/g;  /* Match på ex. "dag 1: 1", "dag 1: 1;2", "dag 1: 1 dag 2: 2" og "dag 1: 1;1 dag 2: 1;3" */
         let result: string[];
@@ -149,9 +150,9 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
             let dayno = result[1];
             let quantity = result[2];
 
-            xml += "<" + this.getDayNamespace() + ":Day><m12:Number>" + dayno + "</m12:Number>"
-                + this.getQuantityString(quantity.split(";"), isPN)
-                + "</" + this.getDayNamespace() + ":Day>";
+            xml += "<" + this.getNamespace() + ":Day><" + dosageNS + ":Number>" + dayno + "</" + dosageNS + ":Number>"
+                + this.getQuantityString(quantity.split(";"), isPN, dosageNS)
+                + "</" + this.getNamespace() + ":Day>";
         }
 
         return xml;

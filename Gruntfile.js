@@ -50,8 +50,12 @@ module.exports = function (grunt) {
             copyForPrepareTestSchemas: {
                 files: [
                     { expand: true, cwd: '../fmk-schemas/etc/schemas/2012/', src: '**/*.xsd', dest: '../schemas/2012/' },
+                    { expand: true, cwd: '../fmk-schemas/etc/schemas/2015/01/01', src: '**/*.xsd', dest: '../schemas/2015/01/01/' },
+                    { expand: true, cwd: '../fmk-schemas/etc/schemas/2015/06/01', src: '**/*.xsd', dest: '../schemas/2015/06/01/' },
                     { expand: true, cwd: '../fmk-schemas/etc/schemas/oio/', src: '**/*.xsd', dest: '../schemas/oio/' },
-                    { src: '../fmk-schemas/etc/schemas/fmk-1.4-all-types.xsd', dest: '../schemas/fmk-1.4-all-types.xsd' }
+                    { src: '../fmk-schemas/etc/schemas/fmk-1.4-all-types.xsd', dest: '../schemas/fmk-1.4-all-types.xsd' },
+                    { src: '../fmk-schemas/etc/schemas/fmk-1.4.4-all-types.xsd', dest: '../schemas/fmk-1.4.4-all-types.xsd' },
+                    { src: '../fmk-schemas/etc/schemas/fmk-1.4.6-all-types.xsd', dest: '../schemas/fmk-1.4.6-all-types.xsd' }
                 ]
             }
          },

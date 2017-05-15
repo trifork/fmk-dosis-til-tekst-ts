@@ -2,7 +2,8 @@ import { MMANMapping } from './MMANMapping';
 
 export abstract class AbstractXMLGenerator {
 
-    protected abstract getDayNamespace(): string;
+    // Namespace to be used for all elements expect for Day elements in dosages, that due to the mixed namespaces in 1.4.2 has its own dosageNS parameter on many of the methods
+    protected abstract getNamespace(): string;
 
     public parseMapping(mapping: string): MMANMapping {
         let splittedMapping = mapping.split("+");

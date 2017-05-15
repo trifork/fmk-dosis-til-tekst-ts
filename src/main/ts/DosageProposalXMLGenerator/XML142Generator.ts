@@ -5,12 +5,12 @@ import { XML140Generator } from "./XML140Generator";
 
 export class XML142Generator extends XML140Generator implements XMLGenerator {
 
-    protected getDayNamespace(): string {
+    // Namespace to be used for all elements expect for Day elements in dosages, that due to the mixed namespaces in 1.4.2 has its own dosageNS parameter on many of the methods
+    protected getNamespace(): string {
         return "m13";
     }
 
-
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string = undefined): string {
+    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
         let dosageElement: string =
             "<m13:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2013/06/01 ../../../2013/06/01/DosageForRequest.xsd\" " +
@@ -27,13 +27,13 @@ export class XML142Generator extends XML140Generator implements XMLGenerator {
 
         switch (type) {
             case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
+                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m12");
                 break;
             case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false);
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m12");
                 break;
             case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true);
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m12");
                 break;
             default:
                 throw new DosisTilTekstException("No support for type value '" + type + "'");
@@ -43,20 +43,20 @@ export class XML142Generator extends XML140Generator implements XMLGenerator {
     }
 
     protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
-        let xml = "<m13:Structure>";
+        let xml = "<" + this.getNamespace() + ":Structure>";
 
         if (iteration === 0) {
-            xml += "<m13:NotIterated/>";
+            xml += "<" + this.getNamespace() + ":NotIterated/>";
         }
         else {
-            xml += "<m13:IterationInterval>" + iteration + "</m13:IterationInterval>";
+            xml += "<" + this.getNamespace() + ":IterationInterval>" + iteration + "</" + this.getNamespace() + ":IterationInterval>";
         }
 
-        xml += "<m13:StartDate>2010-01-01</m13:StartDate>" +
-            "<m13:EndDate>2110-01-01</m13:EndDate>";
+        xml += "<" + this.getNamespace() + ":StartDate>2010-01-01</" + this.getNamespace() + ":StartDate>" +
+            "<" + this.getNamespace() + ":EndDate>2110-01-01</" + this.getNamespace() + ":EndDate>";
 
         if (supplementaryText && supplementaryText.length > 0) {
-            xml += "<m13:SupplementaryText>" + this.escape(supplementaryText) + "</m13:SupplementaryText>";
+            xml += "<" + this.getNamespace() + ":SupplementaryText>" + this.escape(supplementaryText) + "</" + this.getNamespace() + ":SupplementaryText>";
         }
 
         return xml;

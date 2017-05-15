@@ -61,3 +61,5 @@ export { FMKVersion, DosageProposalXMLGenerator } from "./DosageProposalXMLGener
 export { DosageProposalXML } from "./DosageProposalXMLGenerator/DosageProposalXML";
 export { XML140Generator } from "./DosageProposalXMLGenerator/XML140Generator";
 export { XML142Generator } from "./DosageProposalXMLGenerator/XML142Generator";
+export { XML144Generator } from "./DosageProposalXMLGenerator/XML144Generator";
+export { XML146Generator } from "./DosageProposalXMLGenerator/XML146Generator";
