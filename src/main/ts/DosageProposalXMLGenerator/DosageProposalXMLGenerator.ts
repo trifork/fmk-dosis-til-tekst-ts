@@ -81,7 +81,6 @@ export class DosageProposalXMLGenerator {
 
                 while ((result = this.xml146Generator.daysMappingRegExp.exec(mapping)) != null) {
                     let dayno = parseInt(result[1]);
-                    console.log(dayno);
                     let day: DayWrapper = new DayWrapper(dayno, DosageProposalXMLGenerator.getDoses(result[2], type));
                     dayWrappers.push(day);
                 }
