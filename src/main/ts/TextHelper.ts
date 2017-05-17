@@ -268,9 +268,9 @@ export class TextHelper {
         return dateTimeString.substr(0, dateTimeString.length - 3);
     }
 
-    public static pad(n: number, length: number) : string {
+    public static pad(n: number, length: number): string {
         let s = String(n);
-        while (s.length < (length || 2)) {s = "0" + s;}
+        while (s.length < (length || 2)) { s = "0" + s; }
         return s;
     }
 

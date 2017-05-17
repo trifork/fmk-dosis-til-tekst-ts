@@ -39,7 +39,7 @@ export class DosageProposalXMLGenerator {
 
     public static generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: FMKVersion, dosageProposalVersion: number): DosageProposalXML {
 
-        if(dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
+        if (dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
             throw new Error("Unsupported dosageProposalXMLGeneratorVersion, only version " + DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion + " is supported");
         }
 

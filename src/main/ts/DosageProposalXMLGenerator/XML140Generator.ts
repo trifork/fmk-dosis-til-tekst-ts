@@ -37,7 +37,7 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return dosageElement + subElement + "</m12:Structure></m12:Dosage>";
     }
 
-    protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date) : string {
+    protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date): string {
         let xml = "";
 
         if (iteration === 0) {
