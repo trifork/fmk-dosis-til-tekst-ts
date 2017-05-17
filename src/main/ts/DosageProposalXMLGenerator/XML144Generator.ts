@@ -11,7 +11,7 @@ export class XML144Generator extends XML142Generator implements XMLGenerator {
     }
 
 
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
+    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, beginDate: Date, endDate: Date, supplementaryText?: string): string {
         let dosageElement: string =
             "<m15:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2015/01/01 ../../../2015/01/01/DosageForRequest.xsd\" " +
@@ -27,13 +27,13 @@ export class XML144Generator extends XML142Generator implements XMLGenerator {
 
         switch (type) {
             case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m15");
+                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m15", beginDate, endDate);
                 break;
             case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m15");
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m15", beginDate, endDate);
                 break;
             case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m15");
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m15", beginDate, endDate);
                 break;
             default:
                 throw new DosisTilTekstException("No support for type value '" + type + "'");

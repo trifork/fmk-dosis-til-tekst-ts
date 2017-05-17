@@ -37,7 +37,7 @@ describe('XMLGenerator140 M+M+A+N', () => {
 
     it('should handle M+M+A+N dose, testing entire xml structure', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('M+M+A+N', 1, '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand');
+        let xml = generator.generateXml('M+M+A+N', 1, '1+2+3+4', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1), 'tages med rigeligt vand');
 
         validateAndExpect(xml).to.equal("<m12:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2012/06/01 ../../../2012/06/01/Dosage.xsd\" " +
@@ -77,7 +77,7 @@ describe('XMLGenerator140 M+M+A+N', () => {
 
     it('should handle M dose', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('M+M+A+N', 1, '1', 'tablet', 'tabletter', 'tages med rigeligt vand');
+        let xml = generator.generateXml('M+M+A+N', 1, '1', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1), 'tages med rigeligt vand');
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -90,7 +90,7 @@ describe('XMLGenerator140 M+M+A+N', () => {
 
     it('should handle M+M dose', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('M+M+A+N', 1, '1+2', 'tablet', 'tabletter', 'tages med rigeligt vand');
+        let xml = generator.generateXml('M+M+A+N', 1, '1+2', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1), 'tages med rigeligt vand');
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -107,7 +107,7 @@ describe('XMLGenerator140 M+M+A+N', () => {
 
     it('should handle M+M+A dose', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('M+M+A+N', 1, '1+2+3', 'tablet', 'tabletter', 'tages med rigeligt vand');
+        let xml = generator.generateXml('M+M+A+N', 1, '1+2+3', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1), 'tages med rigeligt vand');
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -128,7 +128,7 @@ describe('XMLGenerator140 M+M+A+N', () => {
 
     it('should handle A dose', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('M+M+A+N', 1, '0+0+0+0.5', 'tablet', 'tabletter');
+        let xml = generator.generateXml('M+M+A+N', 1, '0+0+0+0.5', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -146,7 +146,7 @@ describe('XMLGenerator140 N daglig', () => {
 
     it('should handle 1', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('N daglig', 1, '1', 'tablet', 'tabletter');
+        let xml = generator.generateXml('N daglig', 1, '1', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -159,7 +159,7 @@ describe('XMLGenerator140 N daglig', () => {
 
     it('should handle 1;2', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('N daglig', 1, '1;2', 'tablet', 'tabletter');
+        let xml = generator.generateXml('N daglig', 1, '1;2', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -173,9 +173,28 @@ describe('XMLGenerator140 N daglig', () => {
         );
     });
 
+     it('should handle dag 1: 3 dag 2: 4 dose', () => {
+        let generator = new XML140Generator();
+        let xml = generator.generateXml('N daglig', 1, 'dag 1: 3 dag 2: 4', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
+        validateAndExpect(xml).to.contain(
+            "<m12:Day>" +
+            "<m12:Number>1</m12:Number>" +
+            "<m12:Dose>" +
+            "<m12:Quantity>3</m12:Quantity>" +
+            "</m12:Dose>" +
+            "</m12:Day>" +
+            "<m12:Day>" +
+            "<m12:Number>2</m12:Number>" +
+            "<m12:Dose>" +
+            "<m12:Quantity>4</m12:Quantity>" +
+            "</m12:Dose>" +
+            "</m12:Day>"
+        );
+    });
+
     it('should handle dag 1: 2;3 dag 2: 4;5 dose', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('N daglig', 1, 'dag 1: 2;3 dag 2: 4;5', 'tablet', 'tabletter');
+        let xml = generator.generateXml('N daglig', 1, 'dag 1: 2;3 dag 2: 4;5', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -204,7 +223,7 @@ describe('XMLGenerator140 PN', () => {
     before(loadSchema);
     it('should handle 1', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('PN', 1, '1', 'tablet', 'tabletter');
+        let xml = generator.generateXml('PN', 1, '1', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -218,7 +237,7 @@ describe('XMLGenerator140 PN', () => {
 
     it('should handle 1;2', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('PN', 1, '1;2', 'tablet', 'tabletter');
+        let xml = generator.generateXml('PN', 1, '1;2', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -236,7 +255,7 @@ describe('XMLGenerator140 PN', () => {
 
     it('should handle dag 1: 2;3 dag 2: 4;5 dose', () => {
         let generator = new XML140Generator();
-        let xml = generator.generateXml('PN', 1, 'dag 1: 2;3 dag 2: 4;5', 'tablet', 'tabletter');
+        let xml = generator.generateXml('PN', 1, 'dag 1: 2;3 dag 2: 4;5', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
         validateAndExpect(xml).to.contain(
             "<m12:Day>" +
             "<m12:Number>1</m12:Number>" +
@@ -257,6 +276,27 @@ describe('XMLGenerator140 PN', () => {
             "</m12:Dose>" +
             "<m12:Dose>" +
             "<m12:Quantity>5</m12:Quantity>" +
+            "<m12:IsAccordingToNeed/>" +
+            "</m12:Dose>" +
+            "</m12:Day>"
+        );
+    });
+
+      it('should handle dag 1: 3 dag 2: 4 dose', () => {
+        let generator = new XML140Generator();
+        let xml = generator.generateXml('PN', 1, 'dag 1: 3 dag 2: 4', 'tablet', 'tabletter', new Date(2010, 1, 1), new Date(2110, 1, 1));
+        validateAndExpect(xml).to.contain(
+            "<m12:Day>" +
+            "<m12:Number>1</m12:Number>" +
+            "<m12:Dose>" +
+            "<m12:Quantity>3</m12:Quantity>" +
+            "<m12:IsAccordingToNeed/>" +
+            "</m12:Dose>" +
+            "</m12:Day>" +
+            "<m12:Day>" +
+            "<m12:Number>2</m12:Number>" +
+            "<m12:Dose>" +
+            "<m12:Quantity>4</m12:Quantity>" +
             "<m12:IsAccordingToNeed/>" +
             "</m12:Dose>" +
             "</m12:Day>"

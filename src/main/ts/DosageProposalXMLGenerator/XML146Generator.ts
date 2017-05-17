@@ -11,17 +11,16 @@ export class XML146Generator extends XML144Generator implements XMLGenerator {
     }
 
 
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
+    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, beginDate: Date, endDate: Date, supplementaryText?: string): string {
         let dosageElement: string =
             "<m16:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2015/06/01 ../../../2015/06/01/DosageForRequest.xsd\" " +
             "xmlns:m16=\"http://www.dkma.dk/medicinecard/xml.schema/2015/06/01\" " +
-            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
-
-        dosageElement += ("<m16:UnitTexts source=\"Doseringsforslag\">" +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+            "<m16:UnitTexts source=\"Doseringsforslag\">" +
             "<m16:Singular>" + this.escape(unitTextSingular) + "</m16:Singular>" +
             "<m16:Plural>" + this.escape(unitTextPlural) + "</m16:Plural>" +
-            "</m16:UnitTexts>");
+            "</m16:UnitTexts>";
 
         if (type === "PN") {
             dosageElement += "<m16:StructuresAccordingToNeed>";
@@ -29,18 +28,18 @@ export class XML146Generator extends XML144Generator implements XMLGenerator {
         else {
             dosageElement += "<m16:StructuresFixed>";
         }
-        
+
         let subElement: string;
 
         switch (type) {
             case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m16");
+                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m16", beginDate, endDate);
                 break;
             case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m16");
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m16", beginDate, endDate);
                 break;
             case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m16");
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m16", beginDate, endDate);
                 break;
             default:
                 throw new DosisTilTekstException("No support for type value '" + type + "'");

@@ -268,6 +268,16 @@ export class TextHelper {
         return dateTimeString.substr(0, dateTimeString.length - 3);
     }
 
+    public static pad(n: number, length: number) : string {
+        let s = String(n);
+        while (s.length < (length || 2)) {s = "0" + s;}
+        return s;
+    }
+
+    public static formatYYYYMMDD(d: Date): string {
+        return TextHelper.pad(d.getFullYear(), 4) + "-" + TextHelper.pad(d.getMonth(), 2) + "-" + TextHelper.pad(d.getDate(), 2);
+    }
+
     public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTimeWrapper, day: DayWrapper, initialUpperCase: boolean): DayOfWeek {
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);

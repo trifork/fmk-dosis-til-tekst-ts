@@ -1,6 +1,7 @@
 import { DosisTilTekstException } from "../DosisTilTekstException";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { XMLGenerator } from "./XMLGenerator";
+import { TextHelper } from "../TextHelper";
 
 export class XML140Generator extends AbstractXMLGenerator implements XMLGenerator {
 
@@ -9,7 +10,7 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return "m12";
     }
 
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
+    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, beginDate: Date, endDate: Date, supplementaryText?: string): string {
         let dosageElement: string =
             "<m12:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2012/06/01 ../../../2012/06/01/Dosage.xsd\" " +
@@ -21,22 +22,22 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
 
         switch (type) {
             case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m12");
+                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m12", beginDate, endDate);
                 break;
             case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m12");
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m12", beginDate, endDate);
                 break;
             case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m12");
+                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m12", beginDate, endDate);
                 break;
             default:
-                throw new DosisTilTekstException("No support for type value '" + type + "'");
+                throw new Error("No support for type value '" + type + "'");
         }
 
         return dosageElement + subElement + "</m12:Structure></m12:Dosage>";
     }
 
-    protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
+    protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date) : string {
         let xml = "";
 
         if (iteration === 0) {
@@ -46,8 +47,8 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
             xml += "<m12:IterationInterval>" + iteration + "</m12:IterationInterval>";
         }
 
-        xml += "<m12:StartDate>2010-01-01</m12:StartDate>" +
-            "<m12:EndDate>2110-01-01</m12:EndDate>" +
+        xml += "<m12:StartDate>" + TextHelper.formatYYYYMMDD(beginDate) + "</m12:StartDate>" +
+            "<m12:EndDate>" + TextHelper.formatYYYYMMDD(endDate) + "</m12:EndDate>" +
             "<m12:UnitTexts source=\"Doseringsforslag\">" +
             "<m12:Singular>" + this.escape(unitTextSingular) + "</m12:Singular>" +
             "<m12:Plural>" + this.escape(unitTextPlural) + "</m12:Plural>" +
@@ -60,10 +61,10 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return xml;
     }
 
-    protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, dosageNS: string): string {
+    protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, dosageNS: string, beginDate: Date, endDate: Date): string {
 
-        let mmanMapping = this.parseMapping(mapping);
-        let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
+        let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
+        let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, beginDate, endDate);
 
         xml += "<" + this.getNamespace() + ":Day>" +
             "<" + dosageNS + ":Number>1</" + dosageNS + ":Number>";
@@ -102,21 +103,21 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
     }
 
 
-    protected generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string): string {
+    protected generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string, beginDate: Date, endDate: Date): string {
 
-    
+
         if (mapping.indexOf("dag ") >= 0) {
-            return this.generateXmlForSeparateDays(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN, dosageNS);
+            return this.generateXmlForSeparateDays(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN, dosageNS, beginDate, endDate);
         }
         else {
-            return this.generateXmlForSameDay(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN, dosageNS);
+            return this.generateXmlForSameDay(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, isPN, dosageNS, beginDate, endDate);
         }
     }
 
-    private generateXmlForSameDay(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string): string {
+    private generateXmlForSameDay(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string, beginDate: Date, endDate: Date): string {
 
         let splittedMapping = mapping.split(";");
-        let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
+        let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, beginDate, endDate);
 
         xml += "<" + this.getNamespace() + ":Day>" +
             "<" + dosageNS + ":Number>1</" + dosageNS + ":Number>" +
@@ -131,7 +132,7 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
 
         for (let dose of quantities) {
             xml += "<" + dosageNS + ":Dose><" + dosageNS + ":Quantity>" + dose + "</" + dosageNS + ":Quantity>";
-            if(isPN) {
+            if (isPN) {
                 xml += "<" + dosageNS + ":IsAccordingToNeed/>";
             }
             xml += "</" + dosageNS + ":Dose>";
@@ -140,13 +141,12 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
         return xml;
     }
 
-    private generateXmlForSeparateDays(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string): string {
+    private generateXmlForSeparateDays(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string, beginDate: Date, endDate: Date): string {
 
-        let regexp = /dag\s(\d+):\s(\d+(\.\d+)?(;\d+(\.\d+)?)?)/g;  /* Match på ex. "dag 1: 1", "dag 1: 1;2", "dag 1: 1 dag 2: 2" og "dag 1: 1;1 dag 2: 1;3" */
+        let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, beginDate, endDate);
         let result: string[];
-        let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText);
 
-        while ((result = regexp.exec(mapping)) != null) {
+        while ((result = this.daysMappingRegExp.exec(mapping)) != null) {
             let dayno = result[1];
             let quantity = result[2];
 
