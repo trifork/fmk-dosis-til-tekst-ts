@@ -21,13 +21,6 @@ import { EveningDoseWrapper } from "../vowrapper/EveningDoseWrapper";
 import { NightDoseWrapper } from "../vowrapper/NightDoseWrapper";
 import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
 
-export enum FMKVersion {
-    FMK140,
-    FMK142,
-    FMK144,
-    FMK146
-}
-
 export class DosageProposalXMLGenerator {
 
     private static readonly xml140Generator: XML140Generator = new XML140Generator();
@@ -37,7 +30,7 @@ export class DosageProposalXMLGenerator {
 
     private static readonly dosageProposalXMLGeneratorVersion = 1;
 
-    public static generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: FMKVersion, dosageProposalVersion: number): DosageProposalXML {
+    public static generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: string, dosageProposalVersion: number): DosageProposalXML {
 
         if (dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
             throw new Error("Unsupported dosageProposalXMLGeneratorVersion, only version " + DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion + " is supported");
@@ -104,15 +97,16 @@ export class DosageProposalXMLGenerator {
         return doses;
     }
 
-    static getXMLGenerator(fmkversion: FMKVersion): XMLGenerator {
+    static getXMLGenerator(fmkversion: string): XMLGenerator {
+
         switch (fmkversion) {
-            case FMKVersion.FMK140:
+            case "FMK140":
                 return DosageProposalXMLGenerator.xml140Generator;
-            case FMKVersion.FMK142:
+            case "FMK142":
                 return DosageProposalXMLGenerator.xml142Generator;
-            case FMKVersion.FMK144:
+            case "FMK144":
                 return DosageProposalXMLGenerator.xml144Generator;
-            case FMKVersion.FMK146:
+            case "FMK146":
                 return DosageProposalXMLGenerator.xml146Generator;
             default:
                 throw new Error("Unexpected fmk version: " + fmkversion);

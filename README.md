@@ -187,7 +187,7 @@ var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet(type, 
 
 Typescript definition:
 ```typescript
-generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: FMKVersion, dosageProposalVersion: number): DosageProposalXML 
+generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: string, dosageProposalVersion: number): DosageProposalXML 
 
 ```
 
@@ -201,14 +201,14 @@ Argumenterne til kaldet er:
 - supplementaryText: supplerende doseringstekst
 - dosageStartDate: doseringsstartdato
 - dosageEndDate: doseringsslutdato
-- fmkversion: p.t. enten FMKVersion.FMK140, FMKVersion.FMK142, FMKVersion.FMK144 eller FMKVersion.FMK146
+- fmkversion: p.t. enten "FMK140", "FMK142", "FMK144" eller "FMK146"
 - dosageProposalVersion: for fremtidig versioneringsbrug af såvel komponent som doseringsforslag, SKAL p.t. sættes til 1.
 
 Efter kaldet indeholder snippet variablen hhv. doserings-xml samt den korte og den lange doseringstekst, som kan hentes hhv. vha. getXml(), getShortDosageTranslation() og getLongDosageTranslation().
 
 Eksempel på anvendelse:
 ```javascript
-var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet("PN", 1, "1", "tablet", "tabletter", ", tages med rigeligt vand", new Date(2017,04,17), new Date(2017,05,01), dosistiltekst.FMKVersion.FMK146, 1);
+var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet("PN", 1, "1", "tablet", "tabletter", ", tages med rigeligt vand", new Date(2017,04,17), new Date(2017,05,01), "FMK146", 1);
 ```
 snippet.getXml() vil returnere
 ```xml

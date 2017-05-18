@@ -3,7 +3,7 @@
 	"compileOnSave": false,
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"target": "es6",
+		"target": "es5",
 		"module": "es2015",
 		"declaration": true,
 		"sourceMap": true,
