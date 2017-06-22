@@ -2,6 +2,7 @@ import { DosisTilTekstException } from "../DosisTilTekstException";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { XMLGenerator } from "./XMLGenerator";
 import { XML142Generator } from "./XML142Generator";
+import { DosagePeriod } from "./DosagePeriod";
 
 export class XML144Generator extends XML142Generator implements XMLGenerator {
 
@@ -11,7 +12,7 @@ export class XML144Generator extends XML142Generator implements XMLGenerator {
     }
 
 
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, beginDate: Date, endDate: Date, supplementaryText?: string): string {
+    public generateXml(periods: DosagePeriod[], unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
         let dosageElement: string =
             "<m15:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2015/01/01 ../../../2015/01/01/DosageForRequest.xsd\" " +
@@ -23,22 +24,21 @@ export class XML144Generator extends XML142Generator implements XMLGenerator {
             "<m15:Plural>" + this.escape(unitTextPlural) + "</m15:Plural>" +
             "</m15:UnitTexts>";
 
-        let subElement: string;
+        dosageElement += this.generateStructuresXml(periods, unitTextSingular, unitTextPlural, supplementaryText);
 
-        switch (type) {
+        return dosageElement + "</" + this.getNamespace() + ":Structures></" + this.getNamespace() + ":Dosage>";
+    }
+
+    protected generatePeriodXml(period: DosagePeriod, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
+        switch (period.getType()) {
             case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m15", beginDate, endDate);
-                break;
+                return this.generateMMANXml(period.getIteration(), period.getMapping(), unitTextSingular, unitTextPlural, supplementaryText, this.getNamespace(), period.getBeginDate(), period.getEndDate());
             case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m15", beginDate, endDate);
-                break;
+                return this.generateDailyXml(period.getIteration(), period.getMapping(), unitTextSingular, unitTextPlural, supplementaryText, false, this.getNamespace(), period.getBeginDate(), period.getEndDate());
             case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m15", beginDate, endDate);
-                break;
+                return this.generateDailyXml(period.getIteration(), period.getMapping(), unitTextSingular, unitTextPlural, supplementaryText, true, this.getNamespace(), period.getBeginDate(), period.getEndDate());
             default:
-                throw new DosisTilTekstException("No support for type value '" + type + "'");
+                throw new DosisTilTekstException("No support for type value '" + period.getType() + "'");
         }
-
-        return dosageElement + subElement + "</m15:Structure></m15:Structures></m15:Dosage>";
     }
 }

@@ -26,7 +26,7 @@ export class ShortTextConverter {
     private static _converters: ShortTextConverterImpl[];
     private static _instance: ShortTextConverter = new ShortTextConverter();
 
-	/**
+    /**
 	 * Populate a list of implemented converters
 	 * Consider the order: The tests are evaluated in order, adding the most likely to succeed
 	 * first improves performance
@@ -73,7 +73,7 @@ export class ShortTextConverter {
         return null;
     }
 
-	/**
+    /**
 	 * Performs a conversion to a short text if possible. Otherwise null.
 	 * @param dosage
 	 * @return A short text string describing the dosage
@@ -102,7 +102,7 @@ export class ShortTextConverter {
     }
 
 
-	/**
+    /**
 	 * Performs a conversion to a short text with a custom maximum length. Returns translation if possible, otherwise null.
 	 * @param dosage
 	 * @param maxLength

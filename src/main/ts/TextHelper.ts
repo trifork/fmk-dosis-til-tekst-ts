@@ -275,7 +275,7 @@ export class TextHelper {
     }
 
     public static formatYYYYMMDD(d: Date): string {
-        return TextHelper.pad(d.getFullYear(), 4) + "-" + TextHelper.pad(d.getMonth(), 2) + "-" + TextHelper.pad(d.getDate(), 2);
+        return TextHelper.pad(d.getFullYear(), 4) + "-" + TextHelper.pad(d.getMonth() + 1, 2) + "-" + TextHelper.pad(d.getDate(), 2);
     }
 
     public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTimeWrapper, day: DayWrapper, initialUpperCase: boolean): DayOfWeek {

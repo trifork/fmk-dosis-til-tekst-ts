@@ -1,6 +1,22 @@
 {
     "version": "0.2.0",
     "configurations": [
+         {
+			// Name of configuration; appears in the launch configuration drop down menu.
+			"name": "Run mocha",
+			// Type of configuration. Possible values: "node", "mono".
+			"type": "node",
+            "request": "launch",
+			// Workspace relative or absolute path to the program.
+			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+			// Automatically stop program after launch.
+			"stopOnEntry": false,
+			// Command line arguments passed to the program.
+			"args": ["-f", "should handle {M+M+A+N}{N daglig}{PN} dose, testing entire xml structure", "src/test/target/test/ts/**/*.js"],
+            "env": { "NODE_ENV": "testing"},
+            "cwd": "${workspaceRoot}"
+
+		},
         {
             "name": "Launch",
             "type": "node",
@@ -28,8 +44,8 @@
             "port": 5858,
             "address": "localhost",
             "restart": false,
-            "sourceMaps": false,
-            "outDir": null,
+            "sourceMaps": true,
+            "outFiles": ["src/test/target/test/ts/**/*.js"],
             "localRoot": "${workspaceRoot}",
             "remoteRoot": null
         },

@@ -36,7 +36,7 @@ export class DosageTypeCalculator144 {
             return DosageType.Combined;
         }
         else {
-			/* Invariant at this point: all structures are a) fixed or empty .... or b) PN or empty
+            /* Invariant at this point: all structures are a) fixed or empty .... or b) PN or empty
 			 * The dosagetype is then found by finding the dosagetype of the first not-empty Structure
 			 * If only empty structures are present, return fixed...just because */
 
@@ -58,7 +58,7 @@ export class DosageTypeCalculator144 {
         return s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
     }
 
-	/*
+    /*
 	 * Precondition: all structures contains only fixed or pn doses
 	 * In case some contained mixed, this method would never have been called, since we then know that the DosageType would be combined
 	 */
@@ -84,7 +84,7 @@ export class DosageTypeCalculator144 {
         pnStructures.sort(DosageTypeCalculator144.structureSorter);
         emptyStructures.sort(DosageTypeCalculator144.structureSorter);
 
-		/* Find all gaps in the fixed and pn structures, and insert fitting emptystructures in the gaps
+        /* Find all gaps in the fixed and pn structures, and insert fitting emptystructures in the gaps
 		 * We know that some should fit, since it is validated in the DosageStructureValidator, that no gaps are present.
 		 */
         DosageTypeCalculator144.fillGapsWithEmptyPeriods(fixedStructures, emptyStructures);
@@ -221,7 +221,7 @@ export class DosageTypeCalculator144 {
         return structures.getStructures().some((structure, index, array) => structure.containsAccordingToNeedDose() && !structure.containsAccordingToNeedDosesOnly());
     }
 
-	/* Check if at least one structure with fixed dose's only AND at least one structure with PN only doses exists
+    /* Check if at least one structure with fixed dose's only AND at least one structure with PN only doses exists
 	 * Precondition: since this method is called after hasAtLeastOneCombinedStructure(),
 	 * then we suggest that all Structures contains either fixed or PN doses, not combined inside one Structure
 	 */

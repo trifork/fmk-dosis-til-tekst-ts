@@ -3,6 +3,7 @@ import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { XMLGenerator } from "./XMLGenerator";
 import { XML140Generator } from "./XML140Generator";
 import { TextHelper } from "../TextHelper";
+import { DosagePeriod } from "./DosagePeriod";
 
 export class XML142Generator extends XML140Generator implements XMLGenerator {
 
@@ -11,7 +12,9 @@ export class XML142Generator extends XML140Generator implements XMLGenerator {
         return "m13";
     }
 
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, beginDate: Date, endDate: Date, supplementaryText?: string): string {
+
+
+    public generateXml(periods: DosagePeriod[], unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
         let dosageElement: string =
             "<m13:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2013/06/01 ../../../2013/06/01/DosageForRequest.xsd\" " +
@@ -24,27 +27,40 @@ export class XML142Generator extends XML140Generator implements XMLGenerator {
             "<m12:Plural>" + this.escape(unitTextPlural) + "</m12:Plural>" +
             "</m13:UnitTexts>";
 
+        dosageElement += this.generateStructuresXml(periods, unitTextSingular, unitTextPlural, supplementaryText);
+
+        return dosageElement + "</" + this.getNamespace() + ":Structures></" + this.getNamespace() + ":Dosage>";
+    }
+
+    protected generateStructuresXml(periods: DosagePeriod[], unitTextSingular: string, unitTextPlural: string, supplementaryText?: string) {
+        let dosageElement = "";
         let subElement: string;
 
-        switch (type) {
-            case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m12", beginDate, endDate);
-                break;
-            case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m12", beginDate, endDate);
-                break;
-            case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m12", beginDate, endDate);
-                break;
-            default:
-                throw new DosisTilTekstException("No support for type value '" + type + "'");
-        }
+        periods.forEach(p => {
+            dosageElement += ("<" + this.getNamespace() + ":Structure>");
+            subElement = this.generatePeriodXml(p, unitTextSingular, unitTextPlural, supplementaryText);
+            dosageElement += subElement + "</" + this.getNamespace() + ":Structure>";
+        });
 
-        return dosageElement + subElement + "</m13:Structure></m13:Structures></m13:Dosage>";
+        return dosageElement;
+    }
+
+    protected generatePeriodXml(period: DosagePeriod, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
+        switch (period.getType()) {
+            case "M+M+A+N":
+                return this.generateMMANXml(period.getIteration(), period.getMapping(), unitTextSingular, unitTextPlural, supplementaryText, "m12", period.getBeginDate(), period.getEndDate());
+            case "N daglig":
+                return this.generateDailyXml(period.getIteration(), period.getMapping(), unitTextSingular, unitTextPlural, supplementaryText, false, "m12", period.getBeginDate(), period.getEndDate());
+            case "PN":
+                return this.generateDailyXml(period.getIteration(), period.getMapping(), unitTextSingular, unitTextPlural, supplementaryText, true, "m12", period.getBeginDate(), period.getEndDate());
+            default:
+                throw new DosisTilTekstException("No support for type value '" + period.getType() + "'");
+        }
     }
 
     protected generateCommonXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date): string {
-        let xml = "<" + this.getNamespace() + ":Structure>";
+
+        let xml = "";
 
         if (iteration === 0) {
             xml += "<" + this.getNamespace() + ":NotIterated/>";

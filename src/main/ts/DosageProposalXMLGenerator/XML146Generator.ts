@@ -2,6 +2,7 @@ import { DosisTilTekstException } from "../DosisTilTekstException";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { XMLGenerator } from "./XMLGenerator";
 import { XML144Generator } from "./XML144Generator";
+import { DosagePeriod } from "./DosagePeriod";
 
 export class XML146Generator extends XML144Generator implements XMLGenerator {
 
@@ -10,8 +11,7 @@ export class XML146Generator extends XML144Generator implements XMLGenerator {
         return "m16";
     }
 
-
-    public generateXml(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, beginDate: Date, endDate: Date, supplementaryText?: string): string {
+    public generateXml(periods: DosagePeriod[], unitTextSingular: string, unitTextPlural: string, supplementaryText?: string): string {
         let dosageElement: string =
             "<m16:Dosage " +
             "xsi:schemaLocation=\"http://www.dkma.dk/medicinecard/xml.schema/2015/06/01 ../../../2015/06/01/DosageForRequest.xsd\" " +
@@ -22,40 +22,22 @@ export class XML146Generator extends XML144Generator implements XMLGenerator {
             "<m16:Plural>" + this.escape(unitTextPlural) + "</m16:Plural>" +
             "</m16:UnitTexts>";
 
-        if (type === "PN") {
-            dosageElement += "<m16:StructuresAccordingToNeed>";
-        }
-        else {
-            dosageElement += "<m16:StructuresFixed>";
-        }
+        let fixedPeriods = periods.filter(p => p.getType() !== "PN");
+        let pnPeriods = periods.filter(p => p.getType() === "PN");
 
-        let subElement: string;
-
-        switch (type) {
-            case "M+M+A+N":
-                subElement = this.generateMMANXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, "m16", beginDate, endDate);
-                break;
-            case "N daglig":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, false, "m16", beginDate, endDate);
-                break;
-            case "PN":
-                subElement = this.generateDailyXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, true, "m16", beginDate, endDate);
-                break;
-            default:
-                throw new DosisTilTekstException("No support for type value '" + type + "'");
+        if (fixedPeriods.length > 0) {
+            dosageElement += "<" + this.getNamespace() + ":StructuresFixed>";
+            dosageElement += this.generateStructuresXml(fixedPeriods, unitTextSingular, unitTextPlural, supplementaryText);
+            dosageElement += "</" + this.getNamespace() + ":StructuresFixed>";
         }
 
-        dosageElement += (subElement + "</m16:Structure>");
-
-        if (type === "PN") {
-            dosageElement += "</m16:StructuresAccordingToNeed>";
+        if (pnPeriods.length > 0) {
+            dosageElement += "<" + this.getNamespace() + ":StructuresAccordingToNeed>";
+            dosageElement += this.generateStructuresXml(pnPeriods, unitTextSingular, unitTextPlural, supplementaryText);
+            dosageElement += "</" + this.getNamespace() + ":StructuresAccordingToNeed>";
         }
-        else {
-            dosageElement += "</m16:StructuresFixed>";
-        }
-        dosageElement += "</m16:Dosage>";
 
-        return dosageElement;
+        return dosageElement + "</" + this.getNamespace() + ":Dosage>";
     }
 
     protected getQuantityString(quantities: string[], isPN: boolean, dosageNS: string): string {

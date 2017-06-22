@@ -178,29 +178,29 @@ Alternativt kan den kombinerede converter kaldes, jvf. ovenstående eksempel.
 Doserings-XML generering ud fra doseringsforslag
 ==============
 
-Dosis-til-tekst-ts komponenten har udover doseringstekst funktionalitet, også en funktion til at generere doserings-xml til brug i et FMK request, givet en doserings-repræsentation identisk med den der anvendes i NSP'ens KRS importer af doseringsforslag (se: TODO - link til NSP-doc). Funktionen kaldes således i javascript:
+Dosis-til-tekst-ts komponenten har udover doseringstekst funktionalitet, også en funktion til at generere doserings-xml til brug i et FMK request, givet en doserings-repræsentation identisk med den der anvendes i NSP'ens KRS importer af doseringsforslag (se: TODO - link til NSP-doc). 
+Funktionen kaldes således i javascript:
 
 
 ```javascript
-var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet(type, iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, dosageStartDate, dosageEndDate, fmkVersion, dosageProposalVersion);
+var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet(type, iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, dosageStartDates, dosageEndDates, fmkVersion, dosageProposalVersion);
 ```
 
 Typescript definition:
 ```typescript
-generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: string, dosageProposalVersion: number): DosageProposalXML 
-
+generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number): DosageProposalXML 
 ```
 
 
 Argumenterne til kaldet er:
-- type: enten "M+M+A+N" (ved morgen+middag+aften+nat), "N daglig" eller "PN".
-- iteration: iterationer i doseringen
-- mapping: en såkaldt "simpel streng", se ovenståede NSP-dokument for definition. Bemærk at der p.t. ikke er support for flere doseringsperioder.
+- type: enten "M+M+A+N" (ved morgen+middag+aften+nat), "N daglig" eller "PN". Ved flere perioder, indsættes hver periode-værdi i {}, eks. '{M+M+A+N}{PN}'
+- iteration: iterationer i doseringen. Ved flere perioder, indsættes hver periode-værdi i {}, eks. '{2}{1}'
+- mapping: en såkaldt "simpel streng", se ovenståede NSP-dokument for definition.
 - unitTextSingular: entals-form af doseringsenhed
 - unitTextPlural: flertals-form af doseringsenhed
 - supplementaryText: supplerende doseringstekst
-- dosageStartDate: doseringsstartdato
-- dosageEndDate: doseringsslutdato
+- dosageStartDate: array af doseringsstartdatoer, en pr. periode.
+- dosageEndDate: array af doseringsslutdatoer, en pr. periode.
 - fmkversion: p.t. enten "FMK140", "FMK142", "FMK144" eller "FMK146"
 - dosageProposalVersion: for fremtidig versioneringsbrug af såvel komponent som doseringsforslag, SKAL p.t. sættes til 1.
 
@@ -208,7 +208,7 @@ Efter kaldet indeholder snippet variablen hhv. doserings-xml samt den korte og d
 
 Eksempel på anvendelse:
 ```javascript
-var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet("PN", 1, "1", "tablet", "tabletter", ", tages med rigeligt vand", new Date(2017,04,17), new Date(2017,05,01), "FMK146", 1);
+var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet("PN", 1, "1", "tablet", "tabletter", ", tages med rigeligt vand", [new Date(2017,04,17)], [new Date(2017,05,01)], "FMK146", 1);
 ```
 snippet.getXml() vil returnere
 ```xml

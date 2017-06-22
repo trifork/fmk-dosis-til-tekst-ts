@@ -20,6 +20,7 @@ import { NoonDoseWrapper } from "../vowrapper/NoonDoseWrapper";
 import { EveningDoseWrapper } from "../vowrapper/EveningDoseWrapper";
 import { NightDoseWrapper } from "../vowrapper/NightDoseWrapper";
 import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
+import { DosagePeriod } from "./DosagePeriod";
 
 export class DosageProposalXMLGenerator {
 
@@ -30,17 +31,68 @@ export class DosageProposalXMLGenerator {
 
     private static readonly dosageProposalXMLGeneratorVersion = 1;
 
-    public static generateXMLSnippet(type: string, iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDate: Date, endDate: Date, fmkversion: string, dosageProposalVersion: number): DosageProposalXML {
+    public static getPeriodStrings(s: string): string[] {
+        let firstBracePos = s.indexOf("{");
+        if (firstBracePos === -1) {
+            // Only one period without braces
+            return [s];
+        }
+
+        let periods: Array<string> = [];
+        let openBracePos: number = 0;
+        let closeBracePos: number = 0;
+
+        while (closeBracePos < s.length - 1) {
+            openBracePos = s.indexOf("{", closeBracePos);
+            closeBracePos = s.indexOf("}", openBracePos);
+            if (closeBracePos === -1) {
+                throw new Error("Mismatching {} braces in period string " + s);
+            }
+            periods.push(s.substr(openBracePos + 1, closeBracePos - openBracePos - 1));
+        }
+
+        return periods;
+    }
+
+
+    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number): DosageProposalXML {
 
         if (dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
             throw new Error("Unsupported dosageProposalXMLGeneratorVersion, only version " + DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion + " is supported");
         }
 
-        let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(type, iteration, mapping, unitTextSingular, unitTextPlural, beginDate, endDate, supplementaryText);
+        let periodTypes: string[] = DosageProposalXMLGenerator.getPeriodStrings(type);
+        let periodMappings: string[] = DosageProposalXMLGenerator.getPeriodStrings(mapping);
+        let periodIterations: number[] = DosageProposalXMLGenerator.getPeriodStrings(iteration).map(i => parseInt(i));
 
-        let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural),
-            [new StructureWrapper(iteration, supplementaryText, new DateOrDateTimeWrapper(beginDate, undefined), new DateOrDateTimeWrapper(endDate, undefined), DosageProposalXMLGenerator.getDayWrappers(type, mapping), undefined)]
-        ));
+        if (periodTypes.length !== periodMappings.length) {
+            throw new Error("Number of periods in 'type' argument " + periodTypes.length + " differs from number of periods in 'mapping' argument " + periodMappings.length);
+        }
+
+        if (periodTypes.length !== beginDates.length) {
+            throw new Error("Number of periods in 'type' argument " + periodTypes.length + " differs from number of periods in 'beginDates' argument " + beginDates.length);
+        }
+
+
+        if (periodTypes.length !== endDates.length) {
+            throw new Error("Number of periods in 'type' argument " + periodTypes.length + " differs from number of periods in 'endDates' argument " + endDates.length);
+        }
+
+        if (periodTypes.length !== periodIterations.length) {
+            throw new Error("Number of periods in 'type' argument " + periodTypes.length + " differs from number of periods in 'iteration' argument " + periodIterations.length);
+        }
+
+
+        let periodWrappers: StructureWrapper[] = [];
+        let dosagePeriods: DosagePeriod[] = [];
+
+        for (let periodNo = 0; periodNo < periodTypes.length; periodNo++) {
+            periodWrappers.push(new StructureWrapper(periodIterations[periodNo], supplementaryText, new DateOrDateTimeWrapper(beginDates[periodNo], undefined), new DateOrDateTimeWrapper(endDates[periodNo], undefined), DosageProposalXMLGenerator.getDayWrappers(periodTypes[periodNo], periodMappings[periodNo]), undefined));
+            dosagePeriods.push(new DosagePeriod(periodTypes[periodNo], periodMappings[periodNo], periodIterations[periodNo], beginDates[periodNo], endDates[periodNo]));
+        }
+
+        let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
+        let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), periodWrappers));
 
         return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper), LongTextConverter.getInstance().convertWrapper(dosageWrapper));
     }
