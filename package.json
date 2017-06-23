@@ -1,7 +1,7 @@
 {
   "name": "fmk-dosis-til-tekst-ts",
   "author": "Sundhedsdatastyrelsen",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "scripts": {
     "grunt.prod": "./node_modules/.bin/grunt default",
     "grunt.dev": "./node_modules/.bin/grunt --watch",
@@ -10,7 +10,7 @@
     "build": "npm run build.dev",
     "preparetestschemasonjenkins": "./node_modules/.bin/grunt copy:copyForPrepareTestSchemasOnJenkins",
     "pretest": "tsc --project ./tsconfig.unittest.json",
-    "test": "mocha \"src/test/target/test/ts/**/*.js\""
+    "test": "mocha \"src/test/target/test/ts/**/*.js\"" 
   },
   "license": "MPL-1.1",
   "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
