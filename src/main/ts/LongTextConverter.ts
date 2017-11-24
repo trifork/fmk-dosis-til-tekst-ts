@@ -68,6 +68,14 @@ export class LongTextConverter {
         return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
+    public getConverterClassNameStr(jsonStr: string): string {
+        if (jsonStr === undefined || jsonStr === null) {
+            return null;
+        }
+
+        return this.getConverterClassName(JSON.parse(jsonStr));
+    }
+
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage)) {

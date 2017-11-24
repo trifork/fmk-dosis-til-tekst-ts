@@ -64,6 +64,14 @@ export class ShortTextConverter {
         return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
+    public getConverterClassNameStr(jsonStr: string): string {
+        if (jsonStr === undefined || jsonStr === null) {
+            return null;
+        }
+
+        return this.getConverterClassName(JSON.parse(jsonStr));
+    }
+
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= ShortTextConverter.MAX_LENGTH) {
