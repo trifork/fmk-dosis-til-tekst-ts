@@ -15,7 +15,7 @@ export class NightDoseWrapper extends DoseWrapper {
             : undefined;
     }
 
-    static LABEL = "før sengetid";
+    static LABEL = "nat";
 
     public getLabel() {
         return NightDoseWrapper.LABEL;

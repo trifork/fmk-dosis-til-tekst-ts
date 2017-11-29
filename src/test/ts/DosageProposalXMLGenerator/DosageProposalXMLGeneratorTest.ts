@@ -18,7 +18,7 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
 
     it('should handle M+M+A+N dose', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
-        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter før sengetid tages med rigeligt vand");
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter nat tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
 
@@ -42,8 +42,8 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
 
     it('should handle Night only', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '0+0+0+1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
-        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet før sengetid tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet før sengetid tages med rigeligt vand");
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet nat tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet nat tages med rigeligt vand");
     });
 
 });
@@ -182,7 +182,7 @@ describe('generateXMLSnippet Multiperiode', () => {
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringen indeholder flere perioder:\n\n" +
             "Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører søndag den 31. januar 2010:\n" +
             "   Doseringsforløb:\n" +
-            "   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter før sengetid tages med rigeligt vand\n\n" +
+            "   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter nat tages med rigeligt vand\n\n" +
 
             "Doseringsforløbet starter mandag den 1. februar 2010, forløbet gentages hver 2. dag, og ophører søndag den 28. februar 2010.\n" +
             "Bemærk at doseringen varierer:\n" +
