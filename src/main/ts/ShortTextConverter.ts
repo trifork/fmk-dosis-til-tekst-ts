@@ -100,13 +100,13 @@ export class ShortTextConverter {
         return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
     }
 
-    public convertStr(jsonStr: string) {
+    public convertStr(jsonStr: string, maxLength = ShortTextConverter.MAX_LENGTH) {
 
         if (jsonStr === undefined || jsonStr === null) {
             return null;
         }
 
-        return this.convert(JSON.parse(jsonStr));
+        return this.convert(JSON.parse(jsonStr), maxLength);
     }
 
 
