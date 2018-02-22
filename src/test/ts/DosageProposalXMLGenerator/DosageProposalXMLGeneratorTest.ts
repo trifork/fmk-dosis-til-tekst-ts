@@ -88,6 +88,18 @@ describe('generateXMLSnippet PN', () => {
         expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig tages med rigeligt vand");
     });
 
+    it('should handle 1 with long suppl.text', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet efter behov højst 1 gang daglig tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
+        expect(snippet.getShortDosageTranslation()).to.be.null;
+    });
+
+    it('should handle 1 with long suppl.text and longer shorttext', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion, 10000);
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet efter behov højst 1 gang daglig tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
+    });
+
     it('should handle 1.1;2.2', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1.1;2.2', 'ml', 'ml', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1,1 ml efter behov tages med rigeligt vand + 2,2 ml efter behov tages med rigeligt vand");

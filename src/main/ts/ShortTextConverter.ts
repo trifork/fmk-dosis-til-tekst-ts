@@ -22,7 +22,7 @@ import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
 export class ShortTextConverter {
 
-    private static MAX_LENGTH = 70;
+    public static MAX_LENGTH = 70;
     private static _converters: ShortTextConverterImpl[];
     private static _instance: ShortTextConverter = new ShortTextConverter();
 

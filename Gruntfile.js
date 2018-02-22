@@ -35,7 +35,8 @@ module.exports = function (grunt) {
                     { src: 'target/lib/*.d.ts', dest: 'publish-internal/' },
                     { src: 'target/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
                     { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
-                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' }
+                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'target/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-internal/' }
                 ]
             },
             copyForDosisTilTekst: {
@@ -44,7 +45,8 @@ module.exports = function (grunt) {
                     { src: 'target/lib/*.d.ts', dest: 'publish-public/' },
                     { src: 'target/lib/vowrapper/*.d.ts', dest: 'publish-public/' },
                     { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-public/' },
-                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' }
+                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' },
+                    { src: 'target/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-public/' }
                 ]
             },
             copyForPrepareTestSchemas: {

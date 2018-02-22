@@ -55,7 +55,7 @@ export class DosageProposalXMLGenerator {
     }
 
 
-    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number): DosageProposalXML {
+    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number, shortTextMaxLength: number = ShortTextConverter.MAX_LENGTH): DosageProposalXML {
 
         if (dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
             throw new Error("Unsupported dosageProposalXMLGeneratorVersion, only version " + DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion + " is supported");
@@ -94,7 +94,7 @@ export class DosageProposalXMLGenerator {
         let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
         let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), periodWrappers));
 
-        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper), LongTextConverter.getInstance().convertWrapper(dosageWrapper));
+        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper, shortTextMaxLength), LongTextConverter.getInstance().convertWrapper(dosageWrapper));
     }
 
     static getDayWrappers(type: string, mapping: string): DayWrapper[] {

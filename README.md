@@ -188,7 +188,7 @@ var snippet = dosistiltekst.DosageProposalXMLGenerator.generateXMLSnippet(type, 
 
 Typescript definition:
 ```typescript
-generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number): DosageProposalXML 
+generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number, shortTextMaxLength: number = 70): DosageProposalXML 
 ```
 
 
@@ -203,6 +203,7 @@ Argumenterne til kaldet er:
 - dosageEndDate: array af doseringsslutdatoer, en pr. periode.
 - fmkversion: p.t. enten "FMK140", "FMK142", "FMK144" eller "FMK146"
 - dosageProposalVersion: for fremtidig versioneringsbrug af såvel komponent som doseringsforslag, SKAL p.t. sættes til 1.
+- shortTextMaxLength (optionel): hvis der ønskes en længere kort doseringstekst end FMK-snitfladernes sædvanlige 70 karakterer, kan denne parameter sættes til et højere tal. Hvis den korte tekst overstiger shortTextMaxLength returneres null i getShortDosageTranslation().
 
 Efter kaldet indeholder snippet variablen hhv. doserings-xml samt den korte og den lange doseringstekst, som kan hentes hhv. vha. getXml(), getShortDosageTranslation() og getLongDosageTranslation().
 
