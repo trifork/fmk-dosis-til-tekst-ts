@@ -20,7 +20,7 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
             return false;
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
             return false;
-        if (structure.getDays().length > 7)
+        if (structure.getDays().length > 7 || structure.getDays().length === 0)
             return false;
         if (structure.getDays()[0].getDayNumber() === 0)
             return false;
