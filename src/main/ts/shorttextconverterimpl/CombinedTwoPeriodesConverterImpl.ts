@@ -53,11 +53,11 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
                 dosage.structures.getUnitOrUnits(),
                 [tempStructure]));
         let tempText: String = new ShortTextConverter().convertWrapper(tempDosage, 10000); // 10000 to avoid anything longer than 70 chars being cut
-        
-        if(!tempText) {
+
+        if (!tempText) {
             return null;
         }
-        
+
         let fixedStructure: StructureWrapper = dosage.structures.getStructures()[dosage.structures.getStructures().length - 1];
         let fixedDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
