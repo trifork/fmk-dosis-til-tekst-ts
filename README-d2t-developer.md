@@ -20,6 +20,7 @@ Mac:
 The typescript code is compiled and webpack'ed into target/dosistiltekst.js, accesible as a var, and as commonjs module into target/dosistiltekst-commonjs.js
 
 Run unit-tests:
+npm run pretest
 mocha "src/test/target/test/ts/*.js" (with --debug-brk in case you want to attach VS Code debugger)
 
 Jenkins:

@@ -120,7 +120,7 @@ export class ShortTextConverter {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 let s = converter.doConvert(dosage);
-                if (s.length <= maxLength)
+                if (s && s.length <= maxLength)
                     return s;
             }
         }
