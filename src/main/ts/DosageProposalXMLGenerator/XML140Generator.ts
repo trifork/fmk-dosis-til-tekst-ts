@@ -48,8 +48,15 @@ export class XML140Generator extends AbstractXMLGenerator implements XMLGenerato
             xml += "<m12:IterationInterval>" + iteration + "</m12:IterationInterval>";
         }
 
-        xml += "<m12:StartDate>" + TextHelper.formatYYYYMMDD(beginDate) + "</m12:StartDate>" +
-            "<m12:EndDate>" + TextHelper.formatYYYYMMDD(endDate) + "</m12:EndDate>" +
+        xml += "<m12:StartDate>" + TextHelper.formatYYYYMMDD(beginDate) + "</m12:StartDate>";
+        if (endDate) {
+            xml += "<m12:EndDate>" + TextHelper.formatYYYYMMDD(endDate) + "</m12:EndDate>";
+        }
+        else {
+            xml += "<m12:DosageEndingUndetermined/>";
+        }
+
+        xml +=
             "<m12:UnitTexts source=\"Doseringsforslag\">" +
             "<m12:Singular>" + this.escape(unitTextSingular) + "</m12:Singular>" +
             "<m12:Plural>" + this.escape(unitTextPlural) + "</m12:Plural>" +

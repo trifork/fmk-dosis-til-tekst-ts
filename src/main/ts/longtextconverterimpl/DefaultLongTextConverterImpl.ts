@@ -32,7 +32,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
                 s += ":\n";
             }
             else {
-                if (structure.getEndDateOrDateTime()) {
+                if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                     s += this.getDosageEndText(structure.getEndDateOrDateTime());
                 }
                 else {
@@ -44,7 +44,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         else if (structure.getIterationInterval() === 1) {
             // Daily dosage
             s += this.getDosageStartText(structure.getStartDateOrDateTime());
-            if (structure.getEndDateOrDateTime()) {
+            if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                 s += ", gentages hver dag";
                 s += this.getDosageEndText(structure.getEndDateOrDateTime());
                 s += ":\n";
@@ -57,7 +57,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // Dosage repeated after more than one day
             s += this.getDosageStartText(structure.getStartDateOrDateTime());
             s = this.appendRepetition(s, structure);
-            if (structure.getEndDateOrDateTime()) {
+            if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                 s += this.getDosageEndText(structure.getEndDateOrDateTime());
             }
             s += this.getNoteText(structure);

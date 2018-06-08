@@ -67,7 +67,7 @@ export class DosageTypeCalculator {
 
     private static isTemporary(structure: StructureWrapper): boolean {
         // If there is no end date defined the dosage must not be iterated
-        if (structure.getEndDateOrDateTime() === undefined && structure.getIterationInterval() > 0)
+        if ((structure.getEndDateOrDateTime() === undefined || structure.getEndDateOrDateTime().getDateOrDateTime() === undefined) && structure.getIterationInterval() > 0)
             return false;
         // If there is an according to need dose in the dosage it is not a (clean)
         // temporary dosage.
@@ -93,7 +93,7 @@ export class DosageTypeCalculator {
     private static isOneTime(structure: StructureWrapper): boolean {
         let isSameDayDateInterval: boolean = structure.startsAndEndsSameDay();
         // If we have and end date it must be the same day as the start date
-        if (structure.getEndDateOrDateTime() !== undefined && !isSameDayDateInterval)
+        if (structure.getEndDateOrDateTime() !== undefined && structure.getEndDateOrDateTime().getDateOrDateTime() !== undefined && !isSameDayDateInterval)
             return false;
         // We don't want to have a day 0 defined, as it contains only meaningful information
         // if the dosage is given according to need

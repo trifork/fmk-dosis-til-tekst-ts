@@ -16,6 +16,12 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
 
     let dosageProposalXMLGeneratorVersion = 1;
 
+    it('should handle M+M+A+N dose without enddate', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010 og gentages hver dag:\n   Doseringsforløb:\n   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter nat tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.be.null;
+    });
+
     it('should handle M+M+A+N dose', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter nat tages med rigeligt vand");

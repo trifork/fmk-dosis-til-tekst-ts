@@ -37,7 +37,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         let s = "";
         s += this.getDosageStartText(structure.getStartDateOrDateTime());
         s += ", forløbet gentages hver uge";
-        if (structure.getEndDateOrDateTime()) {
+        if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime()) {
             s += this.getDosageEndText(structure.getEndDateOrDateTime());
         }
         s += this.getNoteText(structure);

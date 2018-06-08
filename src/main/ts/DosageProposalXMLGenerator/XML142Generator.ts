@@ -69,8 +69,13 @@ export class XML142Generator extends XML140Generator implements XMLGenerator {
             xml += "<" + this.getNamespace() + ":IterationInterval>" + iteration + "</" + this.getNamespace() + ":IterationInterval>";
         }
 
-        xml += "<" + this.getNamespace() + ":StartDate>" + TextHelper.formatYYYYMMDD(beginDate) + "</" + this.getNamespace() + ":StartDate>" +
-            "<" + this.getNamespace() + ":EndDate>" + TextHelper.formatYYYYMMDD(endDate) + "</" + this.getNamespace() + ":EndDate>";
+        xml += "<" + this.getNamespace() + ":StartDate>" + TextHelper.formatYYYYMMDD(beginDate) + "</" + this.getNamespace() + ":StartDate>";
+        if (endDate) {
+            xml += "<" + this.getNamespace() + ":EndDate>" + TextHelper.formatYYYYMMDD(endDate) + "</" + this.getNamespace() + ":EndDate>";
+        }
+        else {
+            xml += "<" + this.getNamespace() + ":DosageEndingUndetermined/>";
+        }
 
         if (supplementaryText && supplementaryText.length > 0) {
             xml += "<" + this.getNamespace() + ":SupplementaryText>" + this.escape(supplementaryText) + "</" + this.getNamespace() + ":SupplementaryText>";

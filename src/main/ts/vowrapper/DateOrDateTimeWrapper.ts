@@ -40,7 +40,7 @@ export class DateOrDateTimeWrapper {
             else if (this.getDateTime() && dt.getDateTime())
                 return this.getDateTime().getTime() === dt.getDateTime().getTime();
             else
-                return !dt.getDate() && !dt.getDateTime();
+                return !dt.getDate() && !dt.getDateTime() && !this.getDate() && !this.getDateTime();
         }
         return false;
     }

@@ -32,7 +32,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         let s = "";
         s += this.getDosageStartText(structure.getStartDateOrDateTime());
 
-        if (structure.getEndDateOrDateTime()) {
+        if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += ", gentages hver dag";
             s += this.getDosageEndText(structure.getEndDateOrDateTime());
             s += ":\n";

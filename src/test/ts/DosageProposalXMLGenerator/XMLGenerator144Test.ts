@@ -94,6 +94,17 @@ describe('XMLGenerator144 M+M+A+N', () => {
             "</m15:Day>");
     });
 
+    it('should handle M dose without enddate', () => {
+        let generator = new XML144Generator();
+        let xml = generator.generateXml([new DosagePeriod('M+M+A+N', '1', 1, beginDate, undefined)], 'tablet', 'tabletter', 'tages med rigeligt vand');
+        validateAndExpect(xml).to.contain(
+            "<m15:Structure>" +
+            "<m15:IterationInterval>1</m15:IterationInterval>" +
+            "<m15:StartDate>2010-01-01</m15:StartDate>" +
+            "<m15:DosageEndingUndetermined/>" +
+            "<m15:SupplementaryText>tages med rigeligt vand</m15:SupplementaryText>");
+    });
+
     it('should handle M+M dose', () => {
         let generator = new XML144Generator();
         let xml = generator.generateXml([new DosagePeriod('M+M+A+N', '1+2', 1, beginDate, endDate)], 'tablet', 'tabletter', 'tages med rigeligt vand');
