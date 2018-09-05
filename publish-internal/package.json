@@ -16,7 +16,7 @@
     ],
     
     "publishConfig": {
-	    "registry": "http://nexus.dkfmkci01.trifork.com/content/repositories/npm-fmk-internal/"
+	    "registry": "http://ci.fmk.netic.dk/nexus/content/repositories/npm-fmk-internal/"
     },
     "registry": {
         "type": "git",
