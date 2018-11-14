@@ -43,7 +43,9 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
         s += TextHelper.INDENT + "Doseringsforløb:\n";
         s += this.getDaysText(unitOrUnits, structure);
-        return s.toString();
+
+        s = this.appendSupplText(structure, s);
+        return s;
     }
 
 }

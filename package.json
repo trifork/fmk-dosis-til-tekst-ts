@@ -10,7 +10,7 @@
     "build": "npm run build.dev",
     "preparetestschemasonjenkins": "./node_modules/.bin/grunt copy:copyForPrepareTestSchemasOnJenkins",
     "pretest": "tsc --project ./tsconfig.unittest.json",
-    "test": "mocha \"src/test/target/test/ts/**/*.js\"" 
+    "test": "mocha \"src/test/target/test/ts/**/*.js\""
   },
   "license": "MPL-1.1",
   "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
@@ -21,7 +21,6 @@
     "awesome-typescript-loader": "~3.1.3",
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-npm": "0.0.2",

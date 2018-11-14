@@ -1,10 +1,10 @@
-import {DayOfWeek} from "../vowrapper/DayOfWeek";
-import {LongTextConverterImpl} from "./LongTextConverterImpl";
-import {StructureWrapper} from "../vowrapper/StructureWrapper";
-import {DosageWrapper} from "../vowrapper/DosageWrapper";
-import {UnitOrUnitsWrapper} from "../vowrapper/UnitOrUnitsWrapper";
-import {TextHelper} from "../TextHelper";
-import {DayWrapper} from "../vowrapper/DayWrapper";
+import { DayOfWeek } from "../vowrapper/DayOfWeek";
+import { LongTextConverterImpl } from "./LongTextConverterImpl";
+import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import { DosageWrapper } from "../vowrapper/DosageWrapper";
+import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
+import { TextHelper } from "../TextHelper";
+import { DayWrapper } from "../vowrapper/DayWrapper";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -43,8 +43,13 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         s += this.getNoteText(structure);
         s += TextHelper.INDENT + "Doseringsforløb:\n";
         s += this.getDayNamesText(unitOrUnits, structure);
+
+        s = this.appendSupplText(structure, s);
+
         return s;
     }
+
+
 
     protected getDayNamesText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         // Make a sorted list of weekdays

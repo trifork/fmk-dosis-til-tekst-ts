@@ -1,8 +1,8 @@
-import {DosageWrapper} from "../vowrapper/DosageWrapper";
-import {LongTextConverterImpl} from "./LongTextConverterImpl";
-import {UnitOrUnitsWrapper} from "../vowrapper/UnitOrUnitsWrapper";
-import {StructureWrapper} from "../vowrapper/StructureWrapper";
-import {TextHelper} from "../TextHelper";
+import { DosageWrapper } from "../vowrapper/DosageWrapper";
+import { LongTextConverterImpl } from "./LongTextConverterImpl";
+import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
+import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import { TextHelper } from "../TextHelper";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -64,6 +64,9 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         }
         s += TextHelper.INDENT + "Doseringsforløb:\n";
         s += this.getDaysText(unitOrUnits, structure);
+
+        s = this.appendSupplText(structure, s);
+
         return s;
     }
 

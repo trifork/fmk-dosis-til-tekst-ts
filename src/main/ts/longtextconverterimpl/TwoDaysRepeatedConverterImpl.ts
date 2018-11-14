@@ -1,9 +1,9 @@
-import {LongTextConverterImpl} from "./LongTextConverterImpl";
-import {DosageWrapper} from "../vowrapper/DosageWrapper";
-import {StructureWrapper} from "../vowrapper/StructureWrapper";
-import {UnitOrUnitsWrapper} from "../vowrapper/UnitOrUnitsWrapper";
-import {TextHelper} from "../TextHelper";
-import {DayWrapper} from "../vowrapper/DayWrapper";
+import { LongTextConverterImpl } from "./LongTextConverterImpl";
+import { DosageWrapper } from "../vowrapper/DosageWrapper";
+import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
+import { TextHelper } from "../TextHelper";
+import { DayWrapper } from "../vowrapper/DayWrapper";
 
 export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -46,7 +46,9 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
         s += TextHelper.INDENT + "Doseringsforløb:\n";
         s += this.getDaysText(unitOrUnits, structure);
 
-        return s.toString();
+        s = this.appendSupplText(structure, s);
+
+        return s;
     }
 
     protected makeDaysLabel(dosageStructure: StructureWrapper, day: DayWrapper): string {

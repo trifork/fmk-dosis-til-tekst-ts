@@ -2,7 +2,7 @@ import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { DoseWrapper } from "../vowrapper/DoseWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
-import { DosisTilTekstException  } from "../DosisTilTekstException";
+import { DosisTilTekstException } from "../DosisTilTekstException";
 import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
@@ -11,6 +11,13 @@ export abstract class LongTextConverterImpl {
 
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
     public abstract doConvert(dosageStructure: DosageWrapper): string;
+
+    protected appendSupplText(structure: StructureWrapper, s: string) {
+        if (structure.getSupplText()) {
+            s += ".\n" + TextHelper.INDENT + "Bemærk: " + structure.getSupplText();
+        }
+        return s;
+    }
 
     protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper) {
         return "Doseringsforløbet starter " + this.datesToLongText(startDateOrDateTime);
@@ -84,36 +91,30 @@ export abstract class LongTextConverterImpl {
 
     protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean): string {
         let s = "";
-
-        let supplText = "";
-        if (structure.getSupplText()) {
-            supplText = TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
-        }
-
         let daglig = "";
         if (!hasDaysLabel)
             daglig = " daglig";
 
         if (day.getNumberOfDoses() === 1) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText());
+            s += this.makeOneDose(day.getDose(0), unitOrUnits);
             if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0)
-                s += " højst 1 gang" + daglig + supplText;
+                s += " højst 1 gang" + daglig;
             else if (!hasDaysLabel && day.containsPlainDose())    // Ex. 12 ml 1 gang daglig
-                s += " 1 gang" + daglig + supplText;
-            else
-                s += supplText;
+                s += " 1 gang" + daglig;
         }
         else if (day.getNumberOfDoses() > 1 && day.allDosesAreTheSame()) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText());
-            if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0)
-                s += " højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
-            else
-                s += " " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig + supplText;
+            s += this.makeOneDose(day.getDose(0), unitOrUnits);
+            if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0) {
+                s += " højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig;
+            }
+            else {
+                s += " " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + daglig;
+            }
         }
         else if (day.getNumberOfDoses() > 2 && day.allDosesButTheFirstAreTheSame()) {
             // Eks.: 1 stk. kl. 08:00 og 2 stk. 4 gange daglig
 
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, structure.getSupplText()) + supplText;
+            s += this.makeOneDose(day.getDose(0), unitOrUnits);
             if (0 < day.getNumberOfDoses() - 1) {
                 s += " + ";
             }
@@ -124,7 +125,7 @@ export abstract class LongTextConverterImpl {
         else {
 
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                s += this.makeOneDose(day.getDose(d), unitOrUnits, structure.getSupplText()) + supplText;
+                s += this.makeOneDose(day.getDose(d), unitOrUnits);
                 if (d < day.getNumberOfDoses() - 1)
                     s += " + ";
             }
@@ -137,7 +138,7 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    private makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, supplText: string): string {
+    private makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
 
         let s = dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);
