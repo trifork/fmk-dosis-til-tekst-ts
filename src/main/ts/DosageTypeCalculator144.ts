@@ -167,7 +167,11 @@ export class DosageTypeCalculator144 {
 
     static daysBetween(startDate: Date, endDate: Date): number {
         let millisecondsPerDay = 24 * 60 * 60 * 1000;
-        return (DosageTypeCalculator144.treatAsUTC(endDate).valueOf() - DosageTypeCalculator144.treatAsUTC(startDate).valueOf()) / millisecondsPerDay;
+        let d1 = DosageTypeCalculator144.treatAsUTC(endDate);
+        let d2 = DosageTypeCalculator144.treatAsUTC(startDate);
+        d1.setUTCHours(0);
+        d2.setUTCHours(0);
+        return (d1.valueOf() - d2.valueOf()) / millisecondsPerDay;
     }
 
     static secondsBetween(startDate: Date, endDate: Date): number {
