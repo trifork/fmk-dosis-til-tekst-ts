@@ -35,7 +35,7 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         let text = "";
 
         let firstDay: DayWrapper = structure.getDays()[0];
-        if (structure.containsMorningNoonEveningNightDoses()) { 
+        if (structure.containsMorningNoonEveningNightDoses()) {
             text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay, dosage.structures.getUnitOrUnits());
             text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay, dosage.structures.getUnitOrUnits());
             text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay, dosage.structures.getUnitOrUnits());
