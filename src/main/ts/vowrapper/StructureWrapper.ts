@@ -53,6 +53,10 @@ export class StructureWrapper {
         return this.supplText;
     }
 
+    setSupplText(st: string) {
+        this.supplText = st;
+    }
+
     getStartDateOrDateTime(): DateOrDateTimeWrapper {
         return this.startDateOrDateTime;
     }

@@ -48,26 +48,38 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
     public doConvert(dosage: DosageWrapper): string {
 
         let tempStructure: StructureWrapper = dosage.structures.getStructures()[0];
+        let tempSupplText: string = tempStructure.getSupplText();
+        tempStructure.setSupplText(null);
         let tempDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
                 [tempStructure]));
         let tempText: String = new ShortTextConverter().convertWrapper(tempDosage, 10000); // 10000 to avoid anything longer than 70 chars being cut
+        tempStructure.setSupplText(tempSupplText);
 
         if (!tempText) {
             return null;
         }
 
         let fixedStructure: StructureWrapper = dosage.structures.getStructures()[dosage.structures.getStructures().length - 1];
+        let fixedSupplText: string = fixedStructure.getSupplText();
+        fixedStructure.setSupplText(null);
         let fixedDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
                 [fixedStructure]));
         let fixedText: string = new ShortTextConverter().convertWrapper(fixedDosage, 10000); // 10000 to avoid anything longer than 70 chars being cut
+        fixedStructure.setSupplText(fixedSupplText);
+
+        let supplText: string = "";
+        if (tempStructure.getSupplText())
+            supplText += TextHelper.maybeAddSpace(tempStructure.getSupplText()) + tempStructure.getSupplText();
+        if (fixedStructure.getSupplText() && tempStructure.getSupplText() != fixedStructure.getSupplText())
+            supplText += TextHelper.maybeAddSpace(fixedStructure.getSupplText()) + fixedStructure.getSupplText();
 
         let days = tempStructure.getDays()[tempStructure.getDays().length - 1].getDayNumber();
         if (days === 1) {
-            return "første dag " + tempText + ", herefter " + fixedText;
+            return "første dag " + tempText + ", herefter " + fixedText + supplText;
         }
         else {
             let tempTail = undefined;
@@ -79,9 +91,9 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
                 tempTail = " i " + days + " dage";
 
             if (tempTail && tempText.indexOf(tempTail) > 0)
-                return tempText + ", herefter " + fixedText;
+                return tempText + ", herefter " + fixedText + supplText;
             else
-                return tempText + tempTail + ", herefter " + fixedText;
+                return tempText + tempTail + ", herefter " + fixedText + supplText;
         }
     }
 }

@@ -32,25 +32,25 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
     it('should handle Morning only', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet morgen.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet morgen tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet morgen.\n   Bemærk: tages med rigeligt vand");
     });
 
     it('should handle Noon only', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '0+1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet middag.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet middag tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet middag.\n   Bemærk: tages med rigeligt vand");
     });
 
     it('should handle Evening only', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '0+0+1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet aften.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet aften tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet aften.\n   Bemærk: tages med rigeligt vand");
     });
 
     it('should handle Night only', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '0+0+0+1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet nat.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet nat tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet nat.\n   Bemærk: tages med rigeligt vand");
     });
 
 });
@@ -63,7 +63,7 @@ describe('generateXMLSnippet N daglig', () => {
     it('should handle 1', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet 1 gang daglig.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet daglig tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet daglig.\n   Bemærk: tages med rigeligt vand");
     });
 
     it('should handle 1;2', () => {
@@ -92,7 +92,8 @@ describe('generateXMLSnippet PN', () => {
     it('should handle 1', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet efter behov højst 1 gang daglig.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig tages med rigeligt vand");
+        //expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig.\n   Bemærk: tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.be.null;
     });
 
     it('should handle 1 with long suppl.text', () => {
@@ -104,7 +105,7 @@ describe('generateXMLSnippet PN', () => {
     it('should handle 1 with long suppl.text and longer shorttext', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion, 10000);
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet efter behov højst 1 gang daglig.\n   Bemærk: tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig.\n   Bemærk: tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
     });
 
     it('should handle 1.1;2.2', () => {

@@ -99,10 +99,7 @@ export class TextHelper {
     }
 
     public static maybeAddSpace(supplText: string): string {
-        if (supplText && (supplText.substr(0, 1) === "," || supplText.substr(0, 1) === "."))
-            return "";
-        else
-            return " ";
+        return ".\n" + TextHelper.INDENT + "Bemærk: ";
     }
 
     public static trim(numberStr: string): string {
