@@ -42,7 +42,7 @@ export class SimpleNonRepeatedConverterImpl extends ShortTextConverterImpl {
         let dose: DoseWrapper = day.getAllDoses()[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(dose, dosage.structures.getUnitOrUnits());
         if (structure.getSupplText())
-            text += " " + structure.getSupplText();
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         return text;
     }
 }
