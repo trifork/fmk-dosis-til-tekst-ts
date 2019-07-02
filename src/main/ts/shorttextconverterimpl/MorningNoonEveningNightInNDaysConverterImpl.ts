@@ -43,8 +43,10 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
         text += MorningNoonEveningNightConverterImpl.getNoonText(day, dosage.structures.getUnitOrUnits());
         text += MorningNoonEveningNightConverterImpl.getEveningText(day, dosage.structures.getUnitOrUnits());
         text += MorningNoonEveningNightConverterImpl.getNightText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getSupplText(structure.getSupplText());
         text += (" i " + dosage.structures.getStructures()[0].getDays()[dosage.structures.getStructures()[0].getDays().length - 1].getDayNumber() + " dage");
+        text += TextHelper.NOT_REPEATED;
+        text += MorningNoonEveningNightConverterImpl.getSupplText(structure.getSupplText());
+
         return text;
     }
 }

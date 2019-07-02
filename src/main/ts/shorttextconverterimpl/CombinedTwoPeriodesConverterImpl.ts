@@ -90,10 +90,18 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             else
                 tempTail = " i " + days + " dage";
 
+            let eventuallyNotRepeated = "";
+
+            if (tempText.lastIndexOf(TextHelper.NOT_REPEATED) >= 0) {
+                // (gentages ikke) already added, remove it from tempText and add it after dage/uger
+                tempText = tempText.replace(TextHelper.NOT_REPEATED, "");
+                eventuallyNotRepeated = TextHelper.NOT_REPEATED;
+            }
+
             if (tempTail && tempText.indexOf(tempTail) > 0)
-                return tempText + ", herefter " + fixedText + supplText;
+                return tempText + eventuallyNotRepeated + ", herefter " + fixedText + supplText;
             else
-                return tempText + tempTail + ", herefter " + fixedText + supplText;
+                return tempText + tempTail + eventuallyNotRepeated + ", herefter " + fixedText + supplText;
         }
     }
 }

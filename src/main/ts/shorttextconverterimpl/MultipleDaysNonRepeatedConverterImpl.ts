@@ -56,9 +56,11 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
             else text += ", " + day.getDayNumber();
         }
 
+        text += TextHelper.NOT_REPEATED;
+
         if (structure.getSupplText())
             text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
 
-        return text.toString();
+        return text;
     }
 }

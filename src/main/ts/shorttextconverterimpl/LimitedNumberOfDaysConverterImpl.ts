@@ -18,6 +18,7 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
+
         if (dosage.structures.getStructures().length !== 1)
             return false;
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
@@ -47,6 +48,7 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
         else {
             text += " " + day.getAllDoses().length + " " + TextHelper.gange(day.getAllDoses().length) + " daglig";
             let days: number = structure.getDays()[structure.getDays().length - 1].getDayNumber();
+
             if (days === 7)
                 text += " i 1 uge";
             else if (days % 7 === 0)
@@ -54,8 +56,13 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
             else
                 text += " i " + days + " dage";
         }
-        if (structure.getSupplText())
+
+        text += TextHelper.NOT_REPEATED;
+
+        if (structure.getSupplText()) {
             text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
-        return text.toString();
+        }
+
+        return text;
     }
 }

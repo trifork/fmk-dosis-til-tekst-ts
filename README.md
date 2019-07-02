@@ -6,6 +6,10 @@ Dosis-til-tekst-ts er en javascript komponent, der kan
 
 Dosis-til-tekst-ts er en typescript-omskrivning af den eksisterende java-udgave til brug for Fælles Medicinkort klienter. Vha. omskrivningen, er det nu muligt at anvende dosis-til-tekst vha. javascript og typescript, d.v.s. også fra eksempelvis webbaserede FMK-klienter. API'et er stort set opbygget som den gamle java udgave af dosis-til-tekst, specielt vedr. wrapper-klasserne, der anvendes til at definere doseringsstrukturerne.
 
+Changelog
+--
+Se [CHANGELOG](CHANGELOG)
+
 Anvendelse fra javascript
 --
 Komponenten er tilgængelig via npmjs.org vha. npm (Node Package Manager, kan hentes fra https://www.npmjs.com/package/npm). Den hentes vha. `npm i fmk-dosis-til-tekst-ts`. Selve js-filen kan herefter findes under node_modules/fmk-dosis-til-tekst-ts/target/dosistiltekst.js. Ved eksempelvis at inkludere dosistiltekst.js filen på en html-side, kan man tilgå komponentens funktionalitet. 

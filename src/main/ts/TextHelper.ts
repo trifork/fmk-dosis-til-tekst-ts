@@ -8,6 +8,7 @@ export class TextHelper {
 
     public static VERSION: string = "2014-02-10";
     public static INDENT = "   ";
+    public static NOT_REPEATED: string = " (gentages ikke)";
 
     //    private static final FastDateFormat longDateTimeFormatter = FastDateFormat.getInstance(LONG_DATE_TIME_FORMAT, new Locale("da", "DK"));
     //    private static final FastDateFormat longDateTimeFormatterNoSecs = FastDateFormat.getInstance(LONG_DATE_TIME_FORMAT_NO_SECS, new Locale("da", "DK"));
