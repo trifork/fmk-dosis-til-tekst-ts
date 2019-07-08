@@ -1,3 +1,5 @@
+1.1.21
+- FMK-5252 Manglende "(gentages ikke)" tekst ved doseringer af typen "2 tabletter morgen daglig"
 1.1.20
 - "(gentages ikke)" tilføjes til den korte oversættelsestekst ved doseringer med iterationsinterval 0, for at undgå misforståelser ved engangs-doseringer. (dog kun hvis der er plads indenfor de 70 tegn, alternativt indenfor maxLength parameteren)
 - MorningNoonEveningNightInNDays indsætter nu "i X dage" før den supplerende tekst, og ikke som en afsluttende del af den supplerende tekst-blok.
