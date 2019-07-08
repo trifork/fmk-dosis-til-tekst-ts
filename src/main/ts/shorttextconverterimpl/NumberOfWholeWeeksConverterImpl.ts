@@ -49,9 +49,6 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         else
             text += " daglig";
 
-        if (structure.getSupplText()) {
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
-        }
 
         let days: number = structure.getDays().length;
         let pauseDays: number = structure.getIterationInterval() - days;
@@ -82,6 +79,10 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         }
         else if (structure.getIterationInterval() === 0) {
             text += TextHelper.NOT_REPEATED;
+        }
+
+        if (structure.getSupplText()) {
+            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         }
 
         return text;
