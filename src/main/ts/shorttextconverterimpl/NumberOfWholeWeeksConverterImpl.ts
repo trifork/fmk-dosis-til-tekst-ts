@@ -83,7 +83,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         else if (structure.getIterationInterval() === 0) {
             text += TextHelper.NOT_REPEATED;
         }
-        
+
         return text;
     }
 }
