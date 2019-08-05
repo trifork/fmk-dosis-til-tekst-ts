@@ -155,6 +155,8 @@ Herefter oprettes doseringsperioderne som et array af StructureWrapper's, med é
 	    new dosistiltekst.StructureWrapper(2, 'tages med rigeligt væske', startdate, enddate, days)
 	];
 ```
+Hvis doseringen ikke er gentaget, angives 0 som iterationInterval (iterationInterval = 1. parameter til StructureWrapper constructor).
+
 En "doseringsdag" angiver hvordan lægemidlet skal tages på den enkelte dag. En "doseringsdag", repræsenteret ved `DayWrapper` objekter, angiver et dagsnummer samt et array af enkelt-doseringer, som kan være enten en morgen, middag, aften, nat-dosering (`MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper`), dosering med tidspunkt (`DateOrDateTimeWrapper`) eller en daglig dosering (`PlainDoseWrapper`). Parametrene til eksempelvis MorningDoseWrapper er hhv. fast værdi, minimumværdi, maximumvære, 3 parametre der p.t. ikke anvendes (er medtaget af hensyn til bagudkompatibilitet med java-udgaven), samt angivelse af om enkeltdoseringen er efter behov. Herunder et eksempel på 2 doseringsdage, hver dag med et doseringselement, hhv. en morgen-dosering med 2 tabletter og en middagsdosering mellem 1 og 3 tabletter efter behov:
 ```javascript
  var days = [
