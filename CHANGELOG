@@ -1,3 +1,5 @@
+1.1.23
+- FMK-5299 dosis2text i kombination med x gange daglig / gentages ikke ødelægger et medicinkort 
 1.1.22
 - FMK-5255 Supplerende tekst placeret forkert ved engangs/ugentlige doseringer
 1.1.21
