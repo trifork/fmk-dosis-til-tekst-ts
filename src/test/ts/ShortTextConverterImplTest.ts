@@ -47,16 +47,16 @@ describe('ShortTextConverter', () => {
         expect(ShortTextConverter.getInstance().convertWrapper(dose)).to.equal("1 tablet nat daglig (gentages ikke).\n   Bemærk: suppl tekst");
     });
 
-    
+
     it('should add (ikke gentaget) on "2 tabletter morgen', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             [new StructureWrapper(0, "test af suppl", new DateOrDateTimeWrapper(new Date(), undefined), undefined, [
                 new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)
-                    
+
                 ])
             ], undefined)]));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("2 tabletter morgen daglig (gentages ikke).\n   Bemærk: test af suppl");
-        
+
     });
 
 
@@ -93,5 +93,33 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("Første dag 1 tablet 3 gange (gentages ikke), herefter 1 tablet 2 gange daglig");
         expect(ShortTextConverter.getInstance().convertWrapper(dose)).to.equal("Første dag 1 tablet 3 gange, herefter 1 tablet 2 gange daglig");
     });
+
+    it('should not add  null', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(), undefined), undefined, [
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)
+                    ]),
+            ], undefined)
+            ]));
+        console.log("info", ShortTextConverter.getInstance().getConverterClassNameWrapper(dose, 170));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("1 tablet morgen daglig (gentages ikke)");
+    });
+
+
+    it('should not crash (FMK-5299)', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(2019, 8, 1), undefined), new DateOrDateTimeWrapper(new Date(2019, 8, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined),
+            new StructureWrapper(1, undefined, new DateOrDateTimeWrapper(new Date(2019, 8, 2), undefined), undefined, [
+                new DayWrapper(1, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined)
+
+            ]));
+        console.log("info", ShortTextConverter.getInstance().getConverterClassNameWrapper(dose, 170));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("Første dag 1 tablet (gentages ikke), herefter 2 tabletter 1 gang daglig");
+    });
+
+    
 });
 

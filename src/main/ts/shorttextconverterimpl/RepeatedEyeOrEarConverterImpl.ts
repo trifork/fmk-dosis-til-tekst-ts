@@ -35,7 +35,7 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
         let quantity: number = day.getAllDoses()[0].getDoseQuantity();
         if (!(quantity % 2 === 0))
             return false;
-        if (structure.getSupplText() === undefined)
+        if (!structure.getSupplText())
             return false;
         if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {
             if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
