@@ -79,7 +79,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
         let days = tempStructure.getDays()[tempStructure.getDays().length - 1].getDayNumber();
         if (days === 1) {
-            return "Første dag " + tempText + ", herefter " + fixedText + supplText;
+            return "første dag " + tempText + ", herefter " + fixedText + supplText;
         }
         else {
             let tempTail = undefined;
@@ -93,7 +93,6 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             let eventuallyNotRepeated = "";
 
             if (tempText.lastIndexOf(TextHelper.NOT_REPEATED) >= 0) {
-
                 // (gentages ikke) already added, remove it from tempText and add it after dage/uger
                 tempText = tempText.replace(TextHelper.NOT_REPEATED, "");
                 eventuallyNotRepeated = TextHelper.NOT_REPEATED;

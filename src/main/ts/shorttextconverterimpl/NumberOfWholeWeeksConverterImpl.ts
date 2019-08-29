@@ -4,7 +4,6 @@ import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
-import { ShortTextConverter } from "../ShortTextConverter";
 
 export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
 
@@ -77,14 +76,11 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
                 text += ", herefter " + pauseDays + " dages pause";
             }
         }
-        else if (structure.getIterationInterval() === 0) {
-            text += TextHelper.NOT_REPEATED;
-        }
 
         if (structure.getSupplText()) {
             text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         }
-
+        
         return text;
     }
 }
