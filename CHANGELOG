@@ -1,3 +1,5 @@
+1.1.25
+- Bugfix vedr FMK-5366 (suppl. tekst rækkefølge i MorningNoonEveningNightInNDaysConverter)
 1.1.24
 - FMK-5366 Tilbagerul tilføjelsen af "(ikke gentaget)" fra FMK-5252
 1.1.23
