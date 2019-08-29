@@ -80,7 +80,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         if (structure.getSupplText()) {
             text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
         }
-        
+
         return text;
     }
 }
