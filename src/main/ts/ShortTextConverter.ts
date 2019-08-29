@@ -60,8 +60,8 @@ export class ShortTextConverter {
 
     public static getInstance(): ShortTextConverter { return ShortTextConverter._instance; }
 
-    public getConverterClassName(dosageJson: any): string {
-        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
+    public getConverterClassName(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
+        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson), maxLength);
     }
 
     public getConverterClassNameStr(jsonStr: string): string {
@@ -72,9 +72,9 @@ export class ShortTextConverter {
         return this.getConverterClassName(JSON.parse(jsonStr));
     }
 
-    public getConverterClassNameWrapper(dosage: DosageWrapper): string {
+    public getConverterClassNameWrapper(dosage: DosageWrapper, maxLength: number = ShortTextConverter.MAX_LENGTH): string {
         for (let converter of ShortTextConverter._converters) {
-            if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= ShortTextConverter.MAX_LENGTH) {
+            if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= maxLength) {
                 return converter.constructor["name"];
             }
         }

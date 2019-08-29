@@ -79,7 +79,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
         let days = tempStructure.getDays()[tempStructure.getDays().length - 1].getDayNumber();
         if (days === 1) {
-            return "første dag " + tempText + ", herefter " + fixedText + supplText;
+            return "Første dag " + tempText + ", herefter " + fixedText + supplText;
         }
         else {
             let tempTail = undefined;

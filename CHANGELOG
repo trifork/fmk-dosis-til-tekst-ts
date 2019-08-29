@@ -1,3 +1,5 @@
+1.1.24
+- FMK-5366 Tilbagerul tilføjelsen af "(ikke gentaget)" fra FMK-5252
 1.1.23
 - FMK-5299 dosis2text i kombination med x gange daglig / gentages ikke ødelægger et medicinkort 
 1.1.22
