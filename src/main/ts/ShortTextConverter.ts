@@ -19,7 +19,6 @@ import { NumberOfWholeWeeksConverterImpl } from "./shorttextconverterimpl/Number
 import { DayInWeekConverterImpl } from "./shorttextconverterimpl/DayInWeekConverterImpl";
 import { CombinedTwoPeriodesConverterImpl } from "./shorttextconverterimpl/CombinedTwoPeriodesConverterImpl";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
-import { TextHelper } from "./TextHelper";
 
 export class ShortTextConverter {
 
@@ -61,8 +60,8 @@ export class ShortTextConverter {
 
     public static getInstance(): ShortTextConverter { return ShortTextConverter._instance; }
 
-    public getConverterClassName(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
-        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson), maxLength);
+    public getConverterClassName(dosageJson: any): string {
+        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
     }
 
     public getConverterClassNameStr(jsonStr: string): string {
@@ -73,23 +72,13 @@ export class ShortTextConverter {
         return this.getConverterClassName(JSON.parse(jsonStr));
     }
 
-    public getConverterClassNameWrapper(dosage: DosageWrapper, maxLength: number): string {
+    public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of ShortTextConverter._converters) {
-            if (converter.canConvert(dosage)) {
-
-                let s: string = converter.doConvert(dosage);
-                if (s.length <= maxLength) {
-                    return converter.constructor["name"];
-                } else if (this.notRepeatedHasBeenAdded(dosage, s, maxLength)) {
-                    return converter.constructor["name"];
-                }
+            if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= ShortTextConverter.MAX_LENGTH) {
+                return converter.constructor["name"];
             }
         }
         return null;
-    }
-
-    public notRepeatedHasBeenAdded(dosage: DosageWrapper, s: string, maxLength: number): boolean {
-        return s.indexOf(TextHelper.NOT_REPEATED) >= 0 && s.length - TextHelper.NOT_REPEATED.length < maxLength && dosage.hasNotIteratedDosageStructure();
     }
 
     /**
@@ -131,18 +120,8 @@ export class ShortTextConverter {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 let s = converter.doConvert(dosage);
-
-                if (s) {
-
-                    if (s.length <= maxLength) {
-                        return s;
-                    }
-                    else if (this.notRepeatedHasBeenAdded(dosage, s, maxLength) && s.length - TextHelper.NOT_REPEATED.length <= maxLength) {
-                        // In case we have added "(gentages ikke)", but it causes the shorttext to be too long, remove it again in case it fits without
-                        let indexNotRepeated = s.indexOf(TextHelper.NOT_REPEATED);
-                        return s.substr(0, indexNotRepeated) + s.substr(indexNotRepeated + TextHelper.NOT_REPEATED.length);
-                    }
-                }
+                if (s && s.length <= maxLength)
+                    return s;
             }
         }
         return null;

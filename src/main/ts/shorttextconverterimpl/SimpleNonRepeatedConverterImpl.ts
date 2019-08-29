@@ -41,10 +41,8 @@ export class SimpleNonRepeatedConverterImpl extends ShortTextConverterImpl {
         let day: DayWrapper = structure.getDays()[0];
         let dose: DoseWrapper = day.getAllDoses()[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(dose, dosage.structures.getUnitOrUnits());
-        text += TextHelper.NOT_REPEATED;
         if (structure.getSupplText())
             text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
-
         return text;
     }
 }

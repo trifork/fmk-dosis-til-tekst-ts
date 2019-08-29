@@ -57,19 +57,6 @@ export class DosageWrapper {
         return this.structures !== undefined && this.structures !== null;
     }
 
-    public hasNotIteratedDosageStructure(): boolean {
-        if (this.isStructured()) {
-
-            for (let structure of this.structures.getStructures()) {
-                if (structure.getIterationInterval() === 0) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @return The free text dosage, or null if the dosage is not of this kind
 

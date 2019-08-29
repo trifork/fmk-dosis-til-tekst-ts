@@ -38,10 +38,8 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
         let day: DayWrapper = structure.getDays()[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
         text += " efter behov";
-        text += TextHelper.NOT_REPEATED;
         if (structure.getSupplText())
             text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
-
-        return text;
+        return text.toString();
     }
 }
