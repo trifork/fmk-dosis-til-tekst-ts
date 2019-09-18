@@ -89,13 +89,13 @@ export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
         // Append suppl. text
         let supplText = "";
         if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {
-            supplText = TextHelper.maybeAddSpace("i begge øjne") + "i begge øjne";
+            supplText = TextHelper.addShortSupplText("i begge øjne");
         }
         else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øre")) {
-            supplText = TextHelper.maybeAddSpace("i begge ører") + "i begge ører";
+            supplText = TextHelper.addShortSupplText("i begge ører");
         }
         else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert næsebor")) {
-            supplText = TextHelper.maybeAddSpace("i begge næsebor") + "i begge næsebor";
+            supplText = TextHelper.addShortSupplText("i begge næsebor");
         }
 
         text += supplText;

@@ -46,7 +46,7 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";
 
         if (structure.getSupplText())
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
 
         return text.toString();
     }

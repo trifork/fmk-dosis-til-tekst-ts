@@ -38,7 +38,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
 
         // Append suppl. text
         if (structure.getSupplText())
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
 
         return text;
     }

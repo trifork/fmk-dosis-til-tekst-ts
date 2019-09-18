@@ -56,7 +56,7 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
         text += TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, false).getName();
 
         if (structure.getSupplText()) {
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
         }
 
         let weeks: number = structure.getDays().length;

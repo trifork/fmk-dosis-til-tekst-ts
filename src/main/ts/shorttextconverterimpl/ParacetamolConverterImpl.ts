@@ -45,7 +45,7 @@ export class ParacetamolConverterImpl extends ShortTextConverterImpl {
         text += " " + (day.getNumberOfPlainDoses() - day.getNumberOfAccordingToNeedDoses()) + "-" + (day.getNumberOfPlainDoses());
         text += " gange daglig";
         if (structure.getSupplText())
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
         return text.toString();
     }
 

@@ -57,7 +57,7 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         }
 
         if (structure.getSupplText())
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
 
         return text.toString();
     }

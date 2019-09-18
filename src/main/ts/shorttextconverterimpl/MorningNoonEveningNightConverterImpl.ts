@@ -123,7 +123,7 @@ export class MorningNoonEveningNightConverterImpl extends ShortTextConverterImpl
 
     public static getSupplText(supplText: string): string {
         if (supplText) {
-            return TextHelper.maybeAddSpace(supplText) + supplText;
+            return TextHelper.addShortSupplText(supplText);
         }
 
         return "";

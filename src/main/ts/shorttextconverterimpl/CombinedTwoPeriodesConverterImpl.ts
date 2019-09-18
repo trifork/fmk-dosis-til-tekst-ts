@@ -73,9 +73,9 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
         let supplText: string = "";
         if (tempStructure.getSupplText())
-            supplText += TextHelper.maybeAddSpace(tempStructure.getSupplText()) + tempStructure.getSupplText();
+            supplText += TextHelper.addShortSupplText(tempStructure.getSupplText());
         if (fixedStructure.getSupplText() && tempStructure.getSupplText() !== fixedStructure.getSupplText())
-            supplText += TextHelper.maybeAddSpace(fixedStructure.getSupplText()) + fixedStructure.getSupplText();
+            supplText += TextHelper.addShortSupplText(fixedStructure.getSupplText());
 
         let days = tempStructure.getDays()[tempStructure.getDays().length - 1].getDayNumber();
         if (days === 1) {

@@ -116,7 +116,7 @@ export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends Shor
     public static getSupplText(supplText: string): string {
         let text = "";
         if (supplText)
-            text += TextHelper.maybeAddSpace(supplText) + supplText;
+            text += TextHelper.addShortSupplText(supplText);
 
         return text;
     }

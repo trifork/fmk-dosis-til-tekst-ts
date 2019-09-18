@@ -39,7 +39,7 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
         text += " efter behov";
         if (structure.getSupplText())
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
         return text.toString();
     }
 }

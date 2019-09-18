@@ -98,10 +98,6 @@ export class TextHelper {
             return "gang";
     }
 
-    public static maybeAddSpace(supplText: string): string {
-        return ".\nBemærk: ";
-    }
-
     public static trim(numberStr: string): string {
         if (numberStr.indexOf(".") < 0 && numberStr.indexOf(",") < 0)
             return numberStr;
@@ -289,6 +285,9 @@ export class TextHelper {
 
     }
 
+    public static addShortSupplText(supplText: string): string {
+        return ".\nBemærk: " + supplText;
+    }
 
     public static strStartsWith(str: string, prefix: string): boolean {
         return str.indexOf(prefix) === 0;

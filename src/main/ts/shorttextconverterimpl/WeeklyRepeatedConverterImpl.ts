@@ -54,7 +54,7 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
         text += " hver uge";
 
         if (structure.getSupplText())
-            text += TextHelper.maybeAddSpace(structure.getSupplText()) + structure.getSupplText();
+            text += TextHelper.addShortSupplText(structure.getSupplText());
 
         return text.toString();
     }
