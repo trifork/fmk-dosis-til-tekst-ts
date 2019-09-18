@@ -14,7 +14,7 @@ export abstract class LongTextConverterImpl {
 
     protected appendSupplText(structure: StructureWrapper, s: string) {
         if (structure.getSupplText()) {
-            s += ".\n" + TextHelper.INDENT + "Bemærk: " + structure.getSupplText();
+            s += ".\nBemærk: " + structure.getSupplText();
         }
         return s;
     }
