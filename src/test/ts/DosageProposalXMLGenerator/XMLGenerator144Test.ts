@@ -4,41 +4,23 @@
 import { expect, assert } from 'chai';
 
 import { XML144Generator, DosagePeriod } from "../../../main/ts/index";
-import * as fs from 'ts-node';
-import * as xsd from 'libxml-xsd';
+import * as validator from 'xsd-schema-validator';
 
 let schema;
 let beginDate = new Date(2010, 0, 1);
 let endDate = new Date(2110, 0, 1);
 
+
 function validateAndExpect(xml: string): Chai.Assertion {
-    let result = schema.validate(xml);
-    assert.isNull(result, "Validation errors: " + result + "\nXML: " + xml)
+    validator.validateXML(xml, '../schemas/fmk-1.4.4-all-types.xsd', function(err, result) {
+        assert.isNull(err, "Validation errors: " + err + "\nXML: " + xml)
+      });
+
+    
     return expect(xml);
 }
 
-
-function loadSchema() {
-    try {
-        if (schema === undefined) {
-            let fmk14schema = fs.getFile("../schemas/fmk-1.4.4-all-types.xsd");
-            schema = xsd.parse(fmk14schema);
-        }
-    }
-    catch (e) {
-        if (e.code == "ENOENT") {
-            throw new Error("Could not load fmk-1.4.4-all-types.xsd. Try running 'grunt copy:copyForPrepareTestSchemas' before running test.")
-        }
-        else {
-            throw e;
-        }
-    }
-}
-
-
 describe('XMLGenerator144 M+M+A+N', () => {
-
-    before(loadSchema);
 
     it('should handle M+M+A+N dose, testing entire xml structure', () => {
         let generator = new XML144Generator();
@@ -159,8 +141,6 @@ describe('XMLGenerator144 M+M+A+N', () => {
 
 describe('XMLGenerator144 N daglig', () => {
 
-    before(loadSchema);
-
     it('should handle 1', () => {
         let generator = new XML144Generator();
         let xml = generator.generateXml([new DosagePeriod('N daglig', '1', 1, beginDate, endDate)], 'tablet', 'tabletter');
@@ -236,8 +216,6 @@ describe('XMLGenerator144 N daglig', () => {
 });
 
 describe('XMLGenerator144 PN', () => {
-
-    before(loadSchema);
 
     it('should handle 1', () => {
         let generator = new XML144Generator();

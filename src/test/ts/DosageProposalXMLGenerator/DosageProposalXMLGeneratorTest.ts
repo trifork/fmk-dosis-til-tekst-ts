@@ -22,6 +22,7 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010 og gentages hver dag:\n   Doseringsforløb:\n   1 tablet morgen + 2 tabletter middag + 3 tabletter aften + 4 tabletter nat.\n   Bemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
+    
 
     it('should handle M+M+A+N dose', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
@@ -65,6 +66,13 @@ describe('generateXMLSnippet N daglig', () => {
         expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet 1 gang daglig.\n   Bemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.equal("1 tablet daglig.\nBemærk: tages med rigeligt vand");
     });
+
+    it('should handle 1 daily iter 7 without enddate', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '7', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet 1 gang daglig.\n   Bemærk: tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet daglig.\nBemærk: tages med rigeligt vand");
+    });
+
 
     it('should handle 1;2', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '1', '1;2', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);

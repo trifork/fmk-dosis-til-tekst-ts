@@ -27,14 +27,14 @@
     "grunt-ts": "^5.4.0",
     "grunt-tslint": "^5.0.1",
     "grunt-webpack": "^2.0.1",
-    "libxml-xsd": "^0.5.2",
     "load-grunt-tasks": "^3.5.0",
     "mocha": "^6.1.4",
     "ts-node": "^3.0.4",
     "tslint": "^5.17.0",
     "typescript": "^2.3.2",
     "typings": "^2.1.1",
-    "webpack": "^2.5.0"
+    "webpack": "^2.5.0",
+    "xsd-schema-validator": "^0.6.0"
   },
   "main": "target/dosistiltekst.js",
   "typings": "target/lib/index.d.ts",
@@ -49,5 +49,8 @@
   "registry": {
     "type": "git",
     "url": "https://github.com/trifork/fmk-dosis-til-tekst-ts/fmk-dosis-til-tekst-ts.git"
+  },
+  "dependencies": {
+    "@types/xsd-schema-validator": "^0.5.4"
   }
 }

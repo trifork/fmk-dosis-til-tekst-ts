@@ -1,8 +1,6 @@
 import { DosageProposalXML } from "./DosageProposalXML";
 import { DosisTilTekstException } from "../DosisTilTekstException";
 import { XMLGenerator } from "./XMLGenerator";
-import { XML140Generator } from "./XML140Generator";
-import { XML142Generator } from "./XML142Generator";
 import { XML144Generator } from "./XML144Generator";
 import { XML146Generator } from "./XML146Generator";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
@@ -24,8 +22,6 @@ import { DosagePeriod } from "./DosagePeriod";
 
 export class DosageProposalXMLGenerator {
 
-    private static readonly xml140Generator: XML140Generator = new XML140Generator();
-    private static readonly xml142Generator: XML142Generator = new XML142Generator();
     private static readonly xml144Generator: XML144Generator = new XML144Generator();
     private static readonly xml146Generator: XML146Generator = new XML146Generator();
 
@@ -152,10 +148,6 @@ export class DosageProposalXMLGenerator {
     static getXMLGenerator(fmkversion: string): XMLGenerator {
 
         switch (fmkversion) {
-            case "FMK140":
-                return DosageProposalXMLGenerator.xml140Generator;
-            case "FMK142":
-                return DosageProposalXMLGenerator.xml142Generator;
             case "FMK144":
                 return DosageProposalXMLGenerator.xml144Generator;
             case "FMK146":
