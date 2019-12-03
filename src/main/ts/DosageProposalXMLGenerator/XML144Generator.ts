@@ -29,7 +29,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
         return dosageElement + "</" + this.getNamespace() + ":Structures></" + this.getNamespace() + ":Dosage>";
     }
 
-    
+
     protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, dosageNS: string, beginDate: Date, endDate: Date): string {
 
         let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
@@ -84,7 +84,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
 
         return dosageElement;
     }
-    
+
     protected generateDailyXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string, beginDate: Date, endDate: Date): string {
 
 
@@ -96,7 +96,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
         }
     }
 
-    
+
     private generateXmlForSameDay(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string, beginDate: Date, endDate: Date): string {
 
         let splittedMapping = mapping.split(";");
@@ -141,7 +141,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
         return xml;
     }
 
-    
+
     protected generatePeriodXml(period: DosagePeriod, unitTextSingular: string, unitTextPlural: string, supplementaryText: string): string {
         switch (period.getType()) {
             case "M+M+A+N":
