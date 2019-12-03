@@ -78,23 +78,6 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             , 10000)).to.eq("1 injektionssprøjte(30 MIE) morgen dag 1, 4, 8, 11, 15, 18, 22 og 25 i 25 dage, herefter 1 injektionssprøjte(30 MIE) mandag hver uge.\nBemærk: 1 sprøjte: 30 MIE");
     });
 
-    it('should add (ikke gentaget)', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
-            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(), undefined), undefined, [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
-                new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
-                new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
-            ], undefined),
-
-            new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(), undefined), undefined, [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false), new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
-            ], undefined)
-            ]));
-        console.log("info", ShortTextConverter.getInstance().getConverterClassNameWrapper(dose, 170));
-        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("Første dag 1 tablet 3 gange, herefter 1 tablet 2 gange daglig");
-        expect(ShortTextConverter.getInstance().convertWrapper(dose)).to.equal("Første dag 1 tablet 3 gange, herefter 1 tablet 2 gange daglig");
-    });
-
     it('should not add  null', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(), undefined), undefined, [

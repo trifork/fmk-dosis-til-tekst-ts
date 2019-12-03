@@ -69,8 +69,8 @@ describe('generateXMLSnippet N daglig', () => {
 
     it('should handle 1 daily iter 7 without enddate', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '7', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
-        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, gentages hver dag, og ophører onsdag den 1. januar 2110:\n   Doseringsforløb:\n   1 tablet 1 gang daglig.\n   Bemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet daglig.\nBemærk: tages med rigeligt vand");
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, forløbet gentages hver uge:\n   Doseringsforløb:\n   Fredag: 1 tablet.\n   Bemærk: tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet fredag hver uge.\nBemærk: tages med rigeligt vand");
     });
 
 
