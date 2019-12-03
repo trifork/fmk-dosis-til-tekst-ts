@@ -2,7 +2,7 @@ import { MMANMapping } from "./MMANMapping";
 
 export abstract class AbstractXMLGenerator {
 
-    public readonly daysMappingRegExp = /dag\s(\d+):\s(\d+(\.\d+)?(;\d+(\.\d+)?)?)/g;  /* Match på ex. "dag 1: 1.0", "dag 1: 1.2;2.3", "dag 1: 1 dag 2: 2" og "dag 1: 1;1 dag 2: 1;3" */
+    public readonly daysMappingRegExp = /dag\s(\d+):\s(\d+(\.\d+)?([;+]\d+(\.\d+)?)*)/g;  /* Match på ex. "dag 1: 1.0", "dag 1: 1.2;2.3", "dag 1: 1 dag 2: 2" "dag 1: 1+1 dag 2: 1+3" */
 
     // Namespace to be used for all elements expect for Day elements in dosages, that due to the mixed namespaces in 1.4.2 has its own dosageNS parameter on many of the methods
     protected abstract getNamespace(): string;

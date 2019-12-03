@@ -11,7 +11,6 @@ describe('ShortTextConverter', () => {
                 new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
                 new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
             ], undefined)]));
-        console.log("EQ: " + dose.structures.getStructures()[0].getDays()[0].getMorningDose().theSameAs(dose.structures.getStructures()[0].getDays()[0].getEveningDose()));
         expect(ShortTextConverter.getInstance().convertWrapper(dose)).to.be.null;
     });
 
@@ -85,7 +84,6 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
                     ]),
             ], undefined)
             ]));
-        console.log("info", ShortTextConverter.getInstance().getConverterClassNameWrapper(dose, 170));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("1 tablet morgen daglig");
     });
 
@@ -100,7 +98,6 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             ], undefined)
 
             ]));
-        console.log("info", ShortTextConverter.getInstance().getConverterClassNameWrapper(dose, 170));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("Første dag 1 tablet, herefter 2 tabletter 1 gang daglig");
     });
 
@@ -111,7 +108,6 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             ], undefined)
 
             ]));
-        console.log("info", ShortTextConverter.getInstance().getConverterClassNameWrapper(dose, 170));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("1 tablet morgen daglig");
     });
     

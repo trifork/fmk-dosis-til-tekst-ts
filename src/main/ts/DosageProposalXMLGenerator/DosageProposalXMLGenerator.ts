@@ -88,31 +88,41 @@ export class DosageProposalXMLGenerator {
         }
 
         let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
+
+
         let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), periodWrappers));
 
         return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper, shortTextMaxLength), LongTextConverter.getInstance().convertWrapper(dosageWrapper));
     }
 
+    static isMMAN(type: string): boolean {
+        return type === "M+M+A+N";
+    }
+
+    static getMMANDoses(mapping: string): DoseWrapper[] {
+        let doses: DoseWrapper[] = [];
+        let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
+        if (mmanMapping.getMorning()) {
+            doses.push(new MorningDoseWrapper(mmanMapping.getMorning(), undefined, undefined, undefined, undefined, undefined, false));
+        }
+        if (mmanMapping.getNoon()) {
+            doses.push(new NoonDoseWrapper(mmanMapping.getNoon(), undefined, undefined, undefined, undefined, undefined, false));
+        }
+        if (mmanMapping.getEvening()) {
+            doses.push(new EveningDoseWrapper(mmanMapping.getEvening(), undefined, undefined, undefined, undefined, undefined, false));
+        }
+        if (mmanMapping.getNight()) {
+            doses.push(new NightDoseWrapper(mmanMapping.getNight(), undefined, undefined, undefined, undefined, undefined, false));
+        }
+
+        return doses;
+    }
+
     static getDayWrappers(type: string, mapping: string): DayWrapper[] {
 
-
         let dayWrappers: DayWrapper[];
-        if (type === "M+M+A+N") {
-            let doses: DoseWrapper[] = [];
-            let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
-            if (mmanMapping.getMorning()) {
-                doses.push(new MorningDoseWrapper(mmanMapping.getMorning(), undefined, undefined, undefined, undefined, undefined, false));
-            }
-            if (mmanMapping.getNoon()) {
-                doses.push(new NoonDoseWrapper(mmanMapping.getNoon(), undefined, undefined, undefined, undefined, undefined, false));
-            }
-            if (mmanMapping.getEvening()) {
-                doses.push(new EveningDoseWrapper(mmanMapping.getEvening(), undefined, undefined, undefined, undefined, undefined, false));
-            }
-            if (mmanMapping.getNight()) {
-                doses.push(new NightDoseWrapper(mmanMapping.getNight(), undefined, undefined, undefined, undefined, undefined, false));
-            }
-
+        if (DosageProposalXMLGenerator.isMMAN(type) && (mapping.indexOf("dag ") < 0)) {
+            let doses: DoseWrapper[] = DosageProposalXMLGenerator.getMMANDoses(mapping);
             dayWrappers = [new DayWrapper(1, doses)];
         }
         else {
@@ -122,8 +132,17 @@ export class DosageProposalXMLGenerator {
 
                 while ((result = this.xml146Generator.daysMappingRegExp.exec(mapping)) != null) {
                     let dayno = parseInt(result[1]);
-                    let day: DayWrapper = new DayWrapper(dayno, DosageProposalXMLGenerator.getDoses(result[2], type));
-                    dayWrappers.push(day);
+
+                    if (DosageProposalXMLGenerator.isMMAN(type)) {
+                        let doses: DoseWrapper[] = DosageProposalXMLGenerator.getMMANDoses(result[2]);
+                        let day: DayWrapper = new DayWrapper(dayno, doses);
+                        dayWrappers.push(day);
+                    }
+                    else {
+
+                        let day: DayWrapper = new DayWrapper(dayno, DosageProposalXMLGenerator.getDoses(result[2], type));
+                        dayWrappers.push(day);
+                    }
                 }
             }
             else {

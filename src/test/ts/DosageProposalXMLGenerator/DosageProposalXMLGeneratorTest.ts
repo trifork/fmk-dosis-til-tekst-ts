@@ -54,6 +54,13 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
         expect(snippet.getShortDosageTranslation()).to.equal("1 tablet nat.\nBemærk: tages med rigeligt vand");
     });
 
+    // FMK-5729
+    it('should handle M+M+A+N, iteration 0, mapping dag 2: 1+0+0+0 dag 3: 0+2+0+0', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '0', 'dag 2: 1+0+0+0 dag 3: 0+2+0+0', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter fredag den 1. januar 2010, og ophører onsdag den 1. januar 2110.\nBemærk at doseringen varierer og har et komplekst forløb:\n   Doseringsforløb:\n   Lørdag den 2. januar 2010: 1 tablet morgen\n   Søndag den 3. januar 2010: 2 tabletter middag.\n   Bemærk: tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.be.null;
+    });
+
 });
 
 
