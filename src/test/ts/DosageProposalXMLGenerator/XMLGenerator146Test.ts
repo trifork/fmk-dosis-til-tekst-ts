@@ -4,15 +4,16 @@
 import { expect, assert } from 'chai';
 
 import { XML146Generator, DosagePeriod } from "../../../main/ts/index";
-import * as fs from 'ts-node';
+
 import * as validator from 'xsd-schema-validator';
 
 let beginDate = new Date(2010, 0, 1);
 let endDate = new Date(2110, 0, 1);
 
 function validateAndExpect(xml: string): Chai.Assertion {
-    validator.validateXML(xml, '../schemas/fmk-1.4.6-all-types.xsd', function(err, result) {
-        assert.isNull(err, "Validation errors: " + err + "\nXML: " + xml)
+    validator.validateXML('<?xml version="1.0" encoding="UTF-8"?>' + xml, '../schemas/fmk-1.4.6-all-types.xsd', function(err, result) {
+        assert.isNull(err, "Validation errors: " + err + "\nXML: " + xml);
+        result.valid = true;
       });
 
     
