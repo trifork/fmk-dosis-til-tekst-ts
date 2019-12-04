@@ -13,11 +13,11 @@ let endDate = new Date(2110, 0, 1);
 function validateAndExpect(xml: string): Chai.Assertion {
     validator.validateXML('<?xml version="1.0" encoding="UTF-8"?>' + xml, '../schemas/fmk-1.4.6-all-types.xsd', function(err, result) {
         if(err) {
-            console.log("result.result: " + result.result + "\n");
-            console.log("result.valid: " + result.valid + "\n");
+            console.error("result.result: " + result.result + "\n");
+            console.error("result.valid: " + result.valid + "\n");
             if(result.messages) { 
-                console.log("result.messages:\n");
-                result.messages.forEach( m => console.log(m)); 
+                console.error("result.messages:\n");
+                result.messages.forEach( m => console.error(m)); 
             } 
             assert.isNull(err, "Validation errors: " + err + "\nXML: " + xml);
         }
