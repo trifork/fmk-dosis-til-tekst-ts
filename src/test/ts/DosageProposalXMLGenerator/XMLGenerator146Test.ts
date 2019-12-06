@@ -3,16 +3,20 @@
 
 import { expect, assert } from 'chai';
 
-import { XML146Generator, DosagePeriod } from "../../../main/ts/index";
+import { XML146Generator, DosagePeriod} from "../../../main/ts/index";
 
-import * as validator from 'xsd-schema-validator';
+import * as xmlvalidator from 'xsd-schema-validator';
 
 let beginDate = new Date(2010, 0, 1);
 let endDate = new Date(2110, 0, 1);
 
 function validateAndExpect(xml: string): Chai.Assertion {
-    validator.validateXML('<?xml version="1.0" encoding="UTF-8"?>' + xml, '../schemas/fmk-1.4.6-all-types.xsd', function(err, result) {
+
+    xmlvalidator.validateXML('<?xml version="1.0" encoding="UTF-8"?>' + xml, '../schemas/fmk-1.4.6-all-types.xsd', function(err, result) {
         if(err) {
+            
+            console.error("err.Message: " + err.message);
+            
             console.error("result.result: " + result.result + "\n");
             console.error("result.valid: " + result.valid + "\n");
             if(result.messages) { 
