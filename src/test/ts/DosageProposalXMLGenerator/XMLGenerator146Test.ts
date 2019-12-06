@@ -46,9 +46,9 @@ function expectAccordingToNeed(xml: string) {
         .and.not.to.contain("</m16:StructuresFixed>");
     ;
 }
-/*
-describe('XML146Generator M+M+A+N', () => {
 
+describe('XML146Generator M+M+A+N', () => {
+/*
     it('should handle M+M+A+N dose, testing entire xml structure', () => {
         let generator = new XML146Generator();
         let xml = generator.generateXml([new DosagePeriod('M+M+A+N', '1+2+3+4', 1, beginDate, endDate)], 'tablet', 'tabletter', 'tages med rigeligt vand');
@@ -103,7 +103,7 @@ describe('XML146Generator M+M+A+N', () => {
         expectFixed(xml)
     });
 
-/*
+
     it('should handle M dose', () => {
         let generator = new XML146Generator();
         let xml = generator.generateXml([new DosagePeriod('M+M+A+N', '1', 1, beginDate, endDate)], 'tablet', 'tabletter', 'tages med rigeligt vand');
@@ -422,4 +422,3 @@ describe('XMLGenerator144 Multiperiode', () => {
         expectAccordingToNeed(xml);
     });
 });
-*/
