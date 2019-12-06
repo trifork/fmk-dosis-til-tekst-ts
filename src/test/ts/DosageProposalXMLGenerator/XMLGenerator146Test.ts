@@ -90,7 +90,7 @@ describe('XML146Generator M+M+A+N', () => {
             "</m16:Dosage>");
     });
 
-    
+    */
     it('should handle M dose without enddate', () => {
         let generator = new XML146Generator();
         let xml = generator.generateXml([new DosagePeriod('M+M+A+N', '1', 1, beginDate, undefined)], 'tablet', 'tabletter', 'tages med rigeligt vand');
@@ -103,7 +103,7 @@ describe('XML146Generator M+M+A+N', () => {
         expectFixed(xml)
     });
 
-
+/*
     it('should handle M dose', () => {
         let generator = new XML146Generator();
         let xml = generator.generateXml([new DosagePeriod('M+M+A+N', '1', 1, beginDate, endDate)], 'tablet', 'tabletter', 'tages med rigeligt vand');
