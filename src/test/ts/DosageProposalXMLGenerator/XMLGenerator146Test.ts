@@ -173,7 +173,7 @@ describe('XML146Generator M+M+A+N', () => {
         expectFixed(xml)
     });
 });
-*/
+
 describe('XML146Generator N daglig', () => {
 
     it('should handle 1', () => {
@@ -422,3 +422,4 @@ describe('XMLGenerator144 Multiperiode', () => {
         expectAccordingToNeed(xml);
     });
 });
+*/
