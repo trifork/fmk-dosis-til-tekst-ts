@@ -311,7 +311,7 @@ describe('XML146Generator PN', () => {
         );
         expectAccordingToNeed(xml);
     });
-
+});
 
 describe('XMLGenerator144 Multiperiode', () => {
 
@@ -396,7 +396,6 @@ describe('XMLGenerator144 Multiperiode', () => {
             "</m16:StructuresAccordingToNeed>" +
             "</m16:Dosage>");
     });
-});
 
     it('should handle dag 1: 2;3 dag 2: 4;5 dose', () => {
         let generator = new XML146Generator();
