@@ -41,7 +41,7 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         text += " efter behov";
 
         if (day.getNumberOfAccordingToNeedDoses() === 1)
-            text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gang daglig";
+            text += ", højst 1 gang daglig";
         else
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";
 

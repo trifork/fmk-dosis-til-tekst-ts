@@ -1,6 +1,7 @@
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
+import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 
@@ -22,47 +23,40 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
             // Same day dosage
-            s += "Doseringen foretages kun " + this.datesToLongText(structure.getStartDateOrDateTime()) + ":\n";
+            s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
         else if (structure.getIterationInterval() === 0) {
             // Not repeated dosage
-            s += this.getDosageStartText(structure.getStartDateOrDateTime());
-            // If there is just one day with according to need dosages we don't want say when to stop
-            if (structure.getDays().length === 1 && structure.containsAccordingToNeedDosesOnly()) {
-                s += ":\n";
+            if (structure.getDays().length === 1) {
+                s += this.getSingleDayDosageStartText(structure.getStartDateOrDateTime(), structure.getDays()[0].getDayNumber());
             }
             else {
+                s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+            }
+
+            // If there is just one day with according to need dosages we don't want say when to stop
+            if (structure.getDays().length !== 1 || !structure.containsAccordingToNeedDosesOnly()) {
                 if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                     s += this.getDosageEndText(structure.getEndDateOrDateTime());
                 }
-                else {
-                    s += " og ophører efter det angivne forløb";
-                }
-                s += this.getNoteText(structure);
             }
         }
         else if (structure.getIterationInterval() === 1) {
             // Daily dosage
-            s += this.getDosageStartText(structure.getStartDateOrDateTime());
+            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                s += ", gentages hver dag";
                 s += this.getDosageEndText(structure.getEndDateOrDateTime());
-                s += ":\n";
-            }
-            else {
-                s += " og gentages hver dag:\n";
             }
         }
         else if (structure.getIterationInterval() > 1) {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.getStartDateOrDateTime());
-            s = this.appendRepetition(s, structure);
+            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                 s += this.getDosageEndText(structure.getEndDateOrDateTime());
             }
-            s += this.getNoteText(structure);
         }
-        s += TextHelper.INDENT + "Doseringsforløb:\n";
+        s += ":\n";
         s += this.getDaysText(unitOrUnits, structure);
 
         s = this.appendSupplText(structure, s);
@@ -70,8 +64,15 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         return s;
     }
 
-    private appendRepetition(s: string, structure: StructureWrapper): string {
-        return s + ", forløbet gentages efter " + structure.getIterationInterval() + " dage";
+    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number) {
+
+        if (iterationInterval > 1) {
+            return "Dosering som gentages hver " + iterationInterval + ". dag fra d. " + this.datesToLongText(startDateOrDateTime);
+        }
+        else {
+            return "Dosering fra d. " + this.datesToLongText(startDateOrDateTime);
+        }
+
     }
 
 }

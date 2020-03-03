@@ -9,20 +9,20 @@ export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl 
 
         if (startDateOrDateTime && endDateOrDateTime && startDateOrDateTime.isEqualTo(endDateOrDateTime)) {
             // Same day dosage
-            s += "Doseringen foretages kun " + this.datesToLongText(endDateOrDateTime) + ".\n" + "   Dosering:\n   ";
+            s += "Dosering kun d. " + this.datesToLongText(startDateOrDateTime) + ":\n";
         }
         else if (startDateOrDateTime) {
-            s += this.getDosageStartText(startDateOrDateTime);
+            s += this.getDosageStartText(startDateOrDateTime, 0);
             if (endDateOrDateTime) {
-                s += " og ophører " + this.datesToLongText(endDateOrDateTime) + ".\n" + "   Doseringsforløb:\n   ";
+                s += " til " + this.datesToLongText(endDateOrDateTime) + ":\n";
             }
             else {
-                s += ".\n   Doseringsforløb:\n   ";
+                s += ":\n";
             }
         }
         else if (!startDateOrDateTime) {
             if (endDateOrDateTime) {
-                s += "Doseringsforløbet ophører " + this.datesToLongText(endDateOrDateTime) + ".\n" + "   Doseringsforløb:\n   ";
+                s += "Dosering til " + this.datesToLongText(endDateOrDateTime) + ":\n";
             }
         }
 

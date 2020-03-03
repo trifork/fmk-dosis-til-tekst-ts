@@ -2,8 +2,8 @@ import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { TextHelper } from "../TextHelper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
+import { TextHelper } from "../TextHelper";
 
 export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -16,7 +16,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
                 return false;
             if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
                 return false;
-            if (structure.getDays().length > 2)
+            if (structure.getDays().length > 1)
                 return false;
 
             if (structure.getDays().length === 1)
@@ -37,14 +37,14 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
-        let s = this.getDosageStartText(structure.getStartDateOrDateTime());
-        s += ", forløbet gentages hver 2. dag";
+        let s = this.getDosageStartText(structure.getStartDateOrDateTime(), 2);
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += this.getDosageEndText(structure.getEndDateOrDateTime());
         }
-        s += this.getNoteText(structure);
-        s += TextHelper.INDENT + "Doseringsforløb:\n";
-        s += this.getDaysText(unitOrUnits, structure);
+        s += ":\n" + this.getDaysText(unitOrUnits, structure);
+        if (structure.getDays().length === 1) {
+            s += " hver 2. dag";
+        }
 
         s = this.appendSupplText(structure, s);
 
@@ -53,6 +53,28 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 
     protected makeDaysLabel(dosageStructure: StructureWrapper, day: DayWrapper): string {
         return "Dag " + day.getDayNumber() + ": ";
+    }
+
+    protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+        let s = "";
+        let appendedLines = 0;
+        for (let day of structure.getDays()) {
+            appendedLines++;
+            if (appendedLines > 1) {
+                s += "\n";
+            }
+            s += TextHelper.INDENT;
+            let daysLabel = "";
+
+            if (structure.getDays()[0].getDayNumber() === 2) {
+                daysLabel = this.makeDaysLabel(structure, day); // Add fx "Dag 1:" if more than one day, or only Day number 2
+            }
+
+            s += daysLabel;
+            s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
+        }
+
+        return s;
     }
 
 }
