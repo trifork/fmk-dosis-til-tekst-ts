@@ -4,10 +4,12 @@ import { DayWrapper } from "./vowrapper/DayWrapper";
 import { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
 import { DayOfWeek } from "./vowrapper/DayOfWeek";
 
+declare function log(msg: string): void;
+
 export class TextHelper {
 
     public static VERSION: string = "2014-02-10";
-    public static INDENT = "   ";
+    public static INDENT = ""; // "   "; Indentation disabled for now (CHJ 22.01.2020 - keeping comment for now)
 
     //    private static final FastDateFormat longDateTimeFormatter = FastDateFormat.getInstance(LONG_DATE_TIME_FORMAT, new Locale("da", "DK"));
     //    private static final FastDateFormat longDateTimeFormatterNoSecs = FastDateFormat.getInstance(LONG_DATE_TIME_FORMAT_NO_SECS, new Locale("da", "DK"));
@@ -236,24 +238,49 @@ export class TextHelper {
         "december"
     ];
 
-    public static makeDayString(startDateOrDateTime: DateOrDateTimeWrapper, dayNumber: number): string {
-        let d = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
-        d.setDate(d.getDate() + dayNumber - 1);
-        let dateString = TextHelper.formatLongDate(d);
-        return dateString.charAt(0).toUpperCase() + dateString.substr(1);
+    private static abbrevMonths: string[] = [
+        "jan.",
+        "feb.",
+        "mar.",
+        "apr.",
+        "maj",
+        "juni",
+        "juli",
+        "aug.",
+        "sep.",
+        "okt.",
+        "nov.",
+        "dec."
+    ];
+
+    public static getWeekday(dayNumber: number): string {
+        return TextHelper.weekdays[dayNumber];
+    }
+
+    public static makeDayString(dayNumber: number): string {
+        return "Dag " + dayNumber + ": ";
     }
 
     public static makeFromDateOnly(date: Date): Date {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
     }
 
-    public static formatLongDate(date: Date): string {
-        return TextHelper.weekdays[date.getDay()] + " den " + date.getDate() + ". " + TextHelper.months[date.getMonth()] + " " + date.getFullYear();
+    public static formatLongDateAbbrevMonth(date: Date): string {
+        return date.getDate() + ". " + TextHelper.abbrevMonths[date.getMonth()] + " " + date.getFullYear();
+    }
+
+    public static makeDateString(startDateOrDateTime: DateOrDateTimeWrapper, dayNumber: number): string {
+        let d = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
+        d.setDate(d.getDate() + dayNumber - 1);
+        let dateString = TextHelper.formatLongDateAbbrevMonth(d);
+        return dateString.charAt(0).toUpperCase() + dateString.substr(1) + ": ";
     }
 
     public static formatLongDateTime(dateTime: Date): string {
         // "EEEEEEE "den" d"." MMMMMMM yyyy "kl." HH:mm:ss";
-        return TextHelper.formatLongDate(dateTime) + " kl. " + TextHelper.pad(dateTime.getHours(), 2) + ":" + TextHelper.pad(dateTime.getMinutes(), 2) + ":" + TextHelper.pad(dateTime.getSeconds(), 2);
+        log("getSeconds: " + dateTime.getSeconds());
+
+        return TextHelper.formatLongDateAbbrevMonth(dateTime) + " kl. " + TextHelper.pad(dateTime.getHours(), 2) + ":" + TextHelper.pad(dateTime.getMinutes(), 2) + ":" + TextHelper.pad(dateTime.getSeconds(), 2);
     }
 
     public static formatLongDateNoSecs(dateTime: Date): string {

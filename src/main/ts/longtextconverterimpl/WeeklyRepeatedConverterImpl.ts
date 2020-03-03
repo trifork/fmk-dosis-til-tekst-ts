@@ -4,7 +4,8 @@ import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { TextHelper } from "../TextHelper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
+import { DoseWrapper } from "../vowrapper/DoseWrapper";
+import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -35,14 +36,11 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
-        s += this.getDosageStartText(structure.getStartDateOrDateTime());
-        s += ", forløbet gentages hver uge";
+        s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += this.getDosageEndText(structure.getEndDateOrDateTime());
         }
-        s += this.getNoteText(structure);
-        s += TextHelper.INDENT + "Doseringsforløb:\n";
-        s += this.getDayNamesText(unitOrUnits, structure);
+        s += ":\n" + this.getDayNamesText(unitOrUnits, structure);
 
         s = this.appendSupplText(structure, s);
 
@@ -50,6 +48,24 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
 
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper): string {
+
+        let s = dose.getAnyDoseQuantityString();
+        s += " " + TextHelper.getUnit(dose, unitOrUnits);
+
+
+        let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
+        dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
+
+        s += " hver " + TextHelper.getWeekday(dateOnly.getDay());
+        if (dose.getLabel().length > 0) {
+            s += " " + dose.getLabel();
+        }
+        if (dose.getIsAccordingToNeed()) {
+            s += " efter behov";
+        }
+        return s;
+    }
 
     protected getDayNamesText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         // Make a sorted list of weekdays
@@ -61,8 +77,8 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;
-            s += TextHelper.INDENT + e.getName() + ": ";
             s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true);
+
         }
         return s;
     }
@@ -81,4 +97,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
         return sortDay1 - sortDay2;
     }
+
+    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number) {
+
+        return "Dosering fra d. " + this.datesToLongText(startDateOrDateTime);
+    }
+
 }
