@@ -1,7 +1,7 @@
 {
   "name": "fmk-dosis-til-tekst-ts",
   "author": "Sundhedsdatastyrelsen",
-  "version": "1.1.29",
+  "version": "1.2.0",
   "scripts": {
     "grunt.prod": "./node_modules/.bin/grunt default",
     "grunt.dev": "./node_modules/.bin/grunt --watch",
