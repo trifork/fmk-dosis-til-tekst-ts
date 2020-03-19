@@ -278,9 +278,7 @@ export class TextHelper {
 
     public static formatLongDateTime(dateTime: Date): string {
         // "EEEEEEE "den" d"." MMMMMMM yyyy "kl." HH:mm:ss";
-        log("getSeconds: " + dateTime.getSeconds());
-
-        return TextHelper.formatLongDateAbbrevMonth(dateTime) + " kl. " + TextHelper.pad(dateTime.getHours(), 2) + ":" + TextHelper.pad(dateTime.getMinutes(), 2) + ":" + TextHelper.pad(dateTime.getSeconds(), 2);
+        return TextHelper.formatLongDateAbbrevMonth(dateTime) + " kl. " + dateTime.getHours() + ":" + TextHelper.pad(dateTime.getMinutes(), 2) + ":" + TextHelper.pad(dateTime.getSeconds(), 2);
     }
 
     public static formatLongDateNoSecs(dateTime: Date): string {

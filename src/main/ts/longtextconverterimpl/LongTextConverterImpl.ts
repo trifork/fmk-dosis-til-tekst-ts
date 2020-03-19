@@ -94,19 +94,17 @@ export abstract class LongTextConverterImpl {
             s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
         }
 
-        /*
-        if (structure.getIterationInterval() > 2 && structure.getIterationInterval() !== 7) {
+
+        if (structure.getIterationInterval() > 2 && structure.getIterationInterval() !== 7 && structure.getDays().length === structure.getIterationInterval()) {
             let daysLabel = "";
             let day = structure.getDays()[0];
 
-            if (structure.getDays().length > 1) {
-                daysLabel = this.makeDaysLabel(structure, day); // Add fx "Dag 1:"
-            }
+            daysLabel = this.makeDaysLabel(structure, day); // Add fx "Dag 1:"
 
             s += "\n" + daysLabel;
             s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
             s += "\n...";
-        }*/
+        }
 
         return s;
     }
@@ -177,6 +175,12 @@ export abstract class LongTextConverterImpl {
             if (day.getDayNumber() > 0 || (day.getDayNumber() === 0 && structure.getIterationInterval() === 1)) {
                 if (day.getNumberOfDoses() === 1) {
                     s += " højst 1 gang dagligt";
+                }
+                else if (!hasDaysLabel && structure.getIterationInterval() === 1) {    // Ex. 12 ml 1 gang daglig
+                    if (day.getNumberOfDoses() === 1 || !day.allDosesAreTheSame()) {
+                        // Exclude day.getNumberOfDoses() > 1 && day.allDosesAreTheSame() since they already have "højst X 2 gange daglig" from the code above
+                        s += " -" + daglig;      // Ex. 1 tablet nat efter behov - hver dag
+                    }                   // else...ex.: 1 tablet 2 gange hver dag
                 }
             }
             else {
