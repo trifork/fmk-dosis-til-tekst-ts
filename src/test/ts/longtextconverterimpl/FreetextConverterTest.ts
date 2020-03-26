@@ -10,6 +10,6 @@ describe('FreeTextConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
-            "1,5 tabl om morgenen");
+            "\"1,5 tabl om morgenen\"");
     });
 });
