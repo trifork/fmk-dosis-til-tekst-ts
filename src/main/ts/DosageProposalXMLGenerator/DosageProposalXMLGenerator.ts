@@ -4,6 +4,7 @@ import { XML144Generator } from "./XML144Generator";
 import { XML144E2Generator } from "./XML144E2Generator";
 import { XML144E4Generator } from "./XML144E4Generator";
 import { XML146Generator } from "./XML146Generator";
+import { XML146E2Generator } from "./XML146E2Generator";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { ShortTextConverter } from "../ShortTextConverter";
 import { LongTextConverter } from "../LongTextConverter";
@@ -27,6 +28,7 @@ export class DosageProposalXMLGenerator {
     private static readonly xml144E2Generator: XML144E2Generator = new XML144E2Generator();
     private static readonly xml144E4Generator: XML144E4Generator = new XML144E4Generator();
     private static readonly xml146Generator: XML146Generator = new XML146Generator();
+    private static readonly xml146E2Generator: XML146E2Generator = new XML146E2Generator();
 
     private static readonly dosageProposalXMLGeneratorVersion = 1;
 
@@ -178,6 +180,8 @@ export class DosageProposalXMLGenerator {
                 return DosageProposalXMLGenerator.xml144E4Generator;
             case "FMK146":
                 return DosageProposalXMLGenerator.xml146Generator;
+            case "FMK146E2":
+                return DosageProposalXMLGenerator.xml146E2Generator;
             default:
                 throw new Error("Unexpected fmk version: " + fmkversion);
         }
