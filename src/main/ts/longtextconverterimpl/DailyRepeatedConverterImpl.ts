@@ -30,13 +30,18 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
-        s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+        s += this.getDosageStartText(structure.getStartDateOrDateTime());
 
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
+            s += ", gentages hver dag";
             s += this.getDosageEndText(structure.getEndDateOrDateTime());
+            s += ":\n";
         }
-        s += ":\n";
+        else {
+            s += " og gentages hver dag:\n";
+        }
 
+        s += TextHelper.INDENT + "Doseringsforløb:\n";
         s += this.getDaysText(unitOrUnits, structure);
 
         s = this.appendSupplText(structure, s);

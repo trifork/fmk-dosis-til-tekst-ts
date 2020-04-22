@@ -23,17 +23,13 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
     }
 
     public doConvert(dosage: DosageWrapper): string {
+        let s = "Doseringen indeholder flere perioder";
+        if (dosage.structures.hasOverlappingPeriodes()) {
+            s += ", bemærk at der er overlappende perioder";
+        }
+        s += ":\n\n";
 
-        let s: string = "";
-        let sortedStructures = dosage.structures.getStructures().sort((s1, s2) => {
-
-            // Sort by fixed/PN, and then by startdate
-            if (s1.containsAccordingToNeedDosesOnly()) return 1;
-            else if (s2.containsAccordingToNeedDosesOnly()) return -1;
-            else return s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
-        });
-
-        sortedStructures.forEach(structure => {
+        dosage.structures.getStructures().forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
                 new StructuresWrapper(dosage.structures.getUnitOrUnits(), [structure]));
             s += (this.longTextConverter.convertWrapper(w) + "\n\n");
