@@ -27,8 +27,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 22. jan. 2020:\n" +
-            "2 tabletter hver mandag morgen efter behov højst 1 gang dagligt\n" +
-            "1 tablet hver torsdag morgen efter behov højst 1 gang dagligt");
+            "2 tabletter hver mandag morgen efter behov højst 1 gang\n" +
+            "1 tablet hver torsdag morgen efter behov højst 1 gang");
     });
 });
 

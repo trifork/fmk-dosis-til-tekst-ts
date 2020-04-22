@@ -22,9 +22,11 @@ describe('ShortTextConverter', () => {
                 new DayWrapper(3, [new NoonDoseWrapper(2.5, undefined, undefined, undefined, undefined, undefined, false)])
             ], undefined)]));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 100)).to.equal('2,5 ml middag dag 1 og 3');
-        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal('Dosering fra d. 13. apr. 2019 til d. 15. apr. 2019:\n' +
-            '13. apr. 2019: 2,5 ml middag\n' +
-            '15. apr. 2019: 2,5 ml middag');
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal('Doseringsforløbet starter lørdag den 13. april 2019, og ophører mandag den 15. april 2019.\n' +
+            'Bemærk at doseringen har et komplekst forløb:\n' +
+            '   Doseringsforløb:\n' +
+            '   Lørdag den 13. april 2019: 2,5 ml middag\n' +
+            '   Mandag den 15. april 2019: 2,5 ml middag');
 
     });
 

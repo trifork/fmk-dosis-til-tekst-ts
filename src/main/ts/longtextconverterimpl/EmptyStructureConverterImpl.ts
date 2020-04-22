@@ -1,8 +1,6 @@
-import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { TextHelper } from "../TextHelper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import {LongTextConverterImpl} from "./LongTextConverterImpl";
+import {DosageWrapper} from "../vowrapper/DosageWrapper";
+import {TextHelper} from "../TextHelper";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
@@ -15,24 +13,12 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
     public doConvert(dosageStructure: DosageWrapper): string {
 
-        return this.convert(dosageStructure.structures.getUnitOrUnits(), dosageStructure.structures.getStructures()[0]);
-    }
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
-        let s = "";
-
-
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
-            // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
-        }
-        else {
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
-            if (structure.getEndDateOrDateTime()) {
-                s += this.getDosageEndText(structure.getStartDateOrDateTime());
-            }
+        let s = "Doseringsforløbet starter " + this.datesToLongText(dosageStructure.structures.getStructures()[0].getStartDateOrDateTime());
+        if (dosageStructure.structures.getStructures()[0].getEndDateOrDateTime()) {
+            s += " og ophører " + this.datesToLongText(dosageStructure.structures.getStructures()[0].getEndDateOrDateTime());
         }
 
-        s += ":\nBemærk: skal ikke anvendes i denne periode!\n";
+        s += ":\n" + TextHelper.INDENT + "Bemærk: skal ikke anvendes i denne periode!\n";
 
         return s;
     }

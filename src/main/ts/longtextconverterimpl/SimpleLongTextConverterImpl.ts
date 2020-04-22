@@ -14,7 +14,7 @@ export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl 
         else if (startDateOrDateTime) {
             s += this.getDosageStartText(startDateOrDateTime, 0);
             if (endDateOrDateTime) {
-                s += " til d. " + this.datesToLongText(endDateOrDateTime) + ":\n";
+                s += " til " + this.datesToLongText(endDateOrDateTime) + ":\n";
             }
             else {
                 s += ":\n";
@@ -22,7 +22,7 @@ export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl 
         }
         else if (!startDateOrDateTime) {
             if (endDateOrDateTime) {
-                s += "Dosering til d. " + this.datesToLongText(endDateOrDateTime) + ":\n";
+                s += "Dosering til " + this.datesToLongText(endDateOrDateTime) + ":\n";
             }
         }
 
