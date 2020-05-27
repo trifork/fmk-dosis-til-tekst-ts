@@ -28,7 +28,7 @@ Due to xml-schema validation done during unittests, the fmk xsd's has to be pres
 have to create a schemas-folder in the parent folder of the project folder :-( On jenkins this is somewhat problematic due to missing rights for the jenkins user,
 meaning that in case this folder is missing or is incomplete due to new FMK versions, causing the tests to fail, the solution is:
 ```sh
- cd /data/jenkins-data/jobs/fmk-dosis-til-tekst-ts/workspace
- sudo grunt copyForPrepareTestSchemasOnJenkins
+ cd /pack/jenkins/jobs/fmk-dosis-til-tekst-ts/workspace
+ sudo npm run preparetestschemasonjenkins
  ```
  

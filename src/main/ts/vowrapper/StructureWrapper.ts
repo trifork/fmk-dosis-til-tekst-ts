@@ -191,7 +191,7 @@ export class StructureWrapper {
     }
 
     public containsAccordingToNeedDosesOnly(): boolean {
-        return this.getDays().every(d => d.containsAccordingToNeedDosesOnly());
+        return this.getDays().length > 0 && this.getDays().every(d => d.containsAccordingToNeedDosesOnly());
     }
 
     public containsAccordingToNeedDose(): boolean {

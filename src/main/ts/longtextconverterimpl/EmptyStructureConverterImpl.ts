@@ -28,11 +28,11 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
         else {
             s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
             if (structure.getEndDateOrDateTime()) {
-                s += this.getDosageEndText(structure.getStartDateOrDateTime());
+                s += this.getDosageEndText(structure.getEndDateOrDateTime());
             }
         }
 
-        s += ":\nBemærk: skal ikke anvendes i denne periode!\n";
+        s += ":\nBemærk: skal ikke anvendes i denne periode!";
 
         return s;
     }
