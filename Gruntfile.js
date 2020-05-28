@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 
-		clean: ['target'],
+		clean: ['target', 'test/target', 'src/test/target'],
 
 		ts: {
 			default: {

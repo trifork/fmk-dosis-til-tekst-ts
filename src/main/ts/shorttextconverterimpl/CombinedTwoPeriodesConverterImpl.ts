@@ -20,6 +20,14 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         let structure0: StructureWrapper = dosage.structures.getStructures()[0];
         if (structure0.getIterationInterval() !== 0)
             return false;
+
+        // If last daynumber is 1, start and end must match
+        let tempStructure: StructureWrapper = dosage.structures.getStructures()[0];
+        let dayNo = tempStructure.getDays()[tempStructure.getDays().length - 1].getDayNumber();
+
+        if (dayNo === 1 && !structure0.startsAndEndsSameDay()) {
+            return false;
+        }
         if (structure0.containsAccordingToNeedDose())
             return false;
 
