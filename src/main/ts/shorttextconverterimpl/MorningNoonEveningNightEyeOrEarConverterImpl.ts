@@ -35,7 +35,7 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         let quantity: number = day.getAllDoses()[0].getDoseQuantity();
         if (!(quantity % 2 === 0))
             return false;
-        if (structure.getSupplText() === undefined)
+        if (!structure.getSupplText())
             return false;
 
         if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {

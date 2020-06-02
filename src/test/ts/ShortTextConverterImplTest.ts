@@ -108,6 +108,32 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             ]));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("1 tablet morgen daglig");
     });
+
+    it('should not crash either (FMK-6245)', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(1452639600000), undefined), new DateOrDateTimeWrapper(new Date(1591480800000), undefined), [
+                new DayWrapper(1, [new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined),
+            new StructureWrapper(1, undefined, new DateOrDateTimeWrapper(new Date(1591567200000), undefined), new DateOrDateTimeWrapper(new Date(1654639200000), undefined), [
+                new DayWrapper(1, [new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined)
+
+            ]));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.be.null;
+    });    
+
+    it('combined should work with one day', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(1452639600000), undefined), new DateOrDateTimeWrapper(new Date(1452639600000), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined),
+            new StructureWrapper(1, undefined, new DateOrDateTimeWrapper(new Date(1591567200000), undefined), new DateOrDateTimeWrapper(new Date(1654639200000), undefined), [
+                new DayWrapper(1, [new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined)
+
+            ]));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("Første dag 2 tabletter, herefter 2 tabletter nat");
+    });   
     
 });
 
