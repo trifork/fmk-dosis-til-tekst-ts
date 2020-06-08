@@ -122,6 +122,20 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.be.null;
     });    
 
+    it('should be able to survive empty first period (FMK-6273)', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(1590962400000), undefined), new DateOrDateTimeWrapper(new Date(1591480800000), undefined), [
+                
+            ], undefined),
+            new StructureWrapper(5, undefined, new DateOrDateTimeWrapper(new Date(1591567200000), undefined), new DateOrDateTimeWrapper(new Date(1654639200000), undefined), [
+                new DayWrapper(1, [new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined)
+
+            ]));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.be.null;
+    });    
+
+
     it('combined should work with one day', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(1452639600000), undefined), new DateOrDateTimeWrapper(new Date(1452639600000), undefined), [
