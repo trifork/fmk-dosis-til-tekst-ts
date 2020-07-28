@@ -148,6 +148,17 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             ]));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("Første dag 2 tabletter, herefter 2 tabletter nat");
     });   
+
+    it('not-iterated should survive without enddate', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(1452639600000), undefined), undefined, [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined)
+
+
+            ]));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("1 tablet 1 gang");
+    });   
     
 });
 

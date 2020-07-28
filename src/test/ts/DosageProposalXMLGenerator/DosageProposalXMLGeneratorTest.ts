@@ -98,6 +98,12 @@ describe('generateXMLSnippet N daglig', () => {
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering som gentages hver 2. dag fra d. 1. jan. 2010 til d. 1. jan. 2110:\nDag 1: 2 tabletter og 3 tabletter\nDag 2: 4 tabletter og 5 tabletter\nBemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
+
+    it('should handle not iterated without enddate (FMK-6364)', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '0', '1', 'tablet', 'tabletter', 'engangsdosis. Gentages ikke', beginDates,  [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
+        expect(snippet.getLongDosageTranslation()).to.equal("Dosering kun d. 1. jan. 2010:\n1 tablet\nBemærk: engangsdosis. Gentages ikke");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet 1 gang.\nBemærk: engangsdosis. Gentages ikke");
+    });
  
 });
 
