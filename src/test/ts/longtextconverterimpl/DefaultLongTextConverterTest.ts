@@ -8,15 +8,29 @@ describe('DefaultLongTextConverterImpl', () => {
     it('should return 1-time dosage', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
                 new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
                 new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
             ], undefined)]));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering kun d. 4. dec. 2018:\n" +
+            "Dosering kun d. 5. dec. 2018:\n" +
             "2 tabletter morgen, 2 tabletter aften og 2 tabletter nat");
     });
+
+    it('not-iterated should not write daglig', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(Date.parse("2020-08-27")), undefined), new DateOrDateTimeWrapper(new Date(Date.parse("2020-09-02")), undefined), [
+            new DayWrapper(1, [new MorningDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+        ], undefined)
+
+
+        ]));
+    
+    expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal("Dosering kun d. 27. aug. 2020:\n3 tabletter morgen");
+
+    });
+
 
     it('should return 1-time dosage with suppl text', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

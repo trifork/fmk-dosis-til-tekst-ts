@@ -35,7 +35,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             }
 
             // If there is just one day with according to need dosages we don't want say when to stop
-            if (structure.getDays().length !== 1 || !structure.containsAccordingToNeedDosesOnly()) {
+            if (structure.getDays().length !== 1) {
                 if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                     s += this.getDosageEndText(structure.getEndDateOrDateTime());
                 }
