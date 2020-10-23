@@ -37,6 +37,6 @@ describe('EmptyStructureConverterImpl', () => {
             "Bemærk: skal ikke anvendes i denne periode!\n\n" +
 
             "Dosering fra d. 1. juni 2020 til d. 22. juli 2020:\n" +
-            "1 tablet morgen - hver dag");
+            "1 tablet hver morgen");
     });
 });

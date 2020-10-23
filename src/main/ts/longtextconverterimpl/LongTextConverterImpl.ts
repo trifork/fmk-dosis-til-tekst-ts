@@ -46,8 +46,9 @@ export abstract class LongTextConverterImpl {
     }
 
 
-    protected getDosageEndText(endDateOrDateTime: DateOrDateTimeWrapper) {
-        return " til d. " + this.datesToLongText(endDateOrDateTime);
+    protected getDosageEndText(structure: StructureWrapper) {
+
+        return " til d. " + this.datesToLongText(structure.getEndDateOrDateTime());
     }
 
     protected datesToLongText(startDateOrDateTime: DateOrDateTimeWrapper): string {
@@ -93,19 +94,6 @@ export abstract class LongTextConverterImpl {
             s += daysLabel;
             s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
         }
-
-
-        if (structure.getIterationInterval() > 2 && structure.getIterationInterval() !== 7 && structure.getDays().length === structure.getIterationInterval()) {
-            let daysLabel = "";
-            let day = structure.getDays()[0];
-
-            daysLabel = this.makeDaysLabel(structure, day); // Add fx "Dag 1:"
-
-            s += "\n" + daysLabel;
-            s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
-            s += "\n...";
-        }
-
         return s;
     }
 

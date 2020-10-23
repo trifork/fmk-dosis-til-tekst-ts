@@ -22,7 +22,7 @@ describe('DailyRepeatedConverterImpl', () => {
             ], undefined)]));
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018 til d. 19. jan. 2019:\n" +
-            "1 tablet nat - hver dag");
+            "1 tablet hver nat");
     });
 
     it('should return MMAN and hver dag with enddate', () => {
@@ -62,6 +62,18 @@ describe('DailyRepeatedConverterImpl', () => {
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
             "2 tabletter efter behov højst 4 gange dagligt");
+    });
+
+    it('should return "hver morgen"', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
+                new DayWrapper(1, 
+                    [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)
+                ])
+            ], undefined)]));
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 4. dec. 2018:\n" +
+            "2 tabletter hver morgen");
     });
 });
 

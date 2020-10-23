@@ -45,7 +45,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
                 new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])], undefined)]));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering som gentages hver 2. dag fra d. 22. jan. 2020 til d. 26. jan. 2020:\n" +
+            "Dosering fra d. 22. jan. 2020 til d. 26. jan. 2020 - gentages hver 2. dag:\n" +
             "Dag 1: 1 tablet morgen\n" +
             "Dag 2: 2 tabletter morgen");
     });
@@ -57,7 +57,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
                 new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, true)])], undefined)]));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering som gentages hver 2. dag fra d. 22. jan. 2020 til d. 26. jan. 2020:\n" +
+            "Dosering fra d. 22. jan. 2020 til d. 26. jan. 2020 - gentages hver 2. dag:\n" +
             "Dag 1: 1 tablet morgen efter behov højst 1 gang dagligt\n" +
             "Dag 2: 2 tabletter morgen efter behov højst 1 gang dagligt");
     });

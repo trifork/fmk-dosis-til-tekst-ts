@@ -3,6 +3,8 @@ import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
+import { DoseWrapper } from "../vowrapper/DoseWrapper";
+import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 
 export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -33,13 +35,34 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
 
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-            s += this.getDosageEndText(structure.getEndDateOrDateTime());
+            s += this.getDosageEndText(structure);
         }
         s += ":\n";
 
-        s += this.getDaysText(unitOrUnits, structure);
+        if (structure.getDay(1).getAllDoses().length === 1 && structure.getDay(1).containsMorningNoonEveningNightDoses()) {
+            s += this.makeOneIteratedDose(structure.getDay(1).getDose(0), unitOrUnits, 1, structure.getStartDateOrDateTime());
+        }
+        else {
+            s += this.getDaysText(unitOrUnits, structure);
+        }
+
 
         s = this.appendSupplText(structure, s);
+        return s;
+    }
+
+    // ex.: 1 tablet hver aften (uden denne metode ville teksten blive: 1 tablet aften - hver dag)
+    protected makeOneIteratedDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper): string {
+
+        let s = dose.getAnyDoseQuantityString();
+        s += " " + TextHelper.getUnit(dose, unitOrUnits) + " hver";
+
+        if (dose.getLabel().length > 0) {
+            s += " " + dose.getLabel();
+        }
+        if (dose.getIsAccordingToNeed()) {
+            s += " efter behov";
+        }
         return s;
     }
 

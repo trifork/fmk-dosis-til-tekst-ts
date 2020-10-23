@@ -45,7 +45,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         // Add times daily
         if (day.getNumberOfDoses() > 1)
             text += " " + day.getNumberOfDoses() + " gange daglig";
-        else if(structure.getIterationInterval() > 0)
+        else if (structure.getIterationInterval() > 0)
             text += " daglig";
         else
             text += " 1 gang";

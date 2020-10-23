@@ -56,13 +56,11 @@ describe('DefaultLongTextConverterImpl', () => {
             ], undefined)]));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering som gentages hver 4. dag fra d. 4. dec. 2018:\n" +
+            "Dosering fra d. 4. dec. 2018 - gentages hver 4. dag:\n" +
             "Dag 1: 1 tablet morgen\n" +
             "Dag 2: 0,5 tablet morgen\n" +
             "Dag 3: 2 tabletter morgen\n" +
-            "Dag 4: 1,5 tabletter morgen\n" +
-            "Dag 1: 1 tablet morgen\n" +
-            "...");
+            "Dag 4: 1,5 tabletter morgen");
     });
 
     it('should return list of dates when not iterated', () => {

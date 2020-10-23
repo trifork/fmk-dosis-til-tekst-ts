@@ -38,7 +38,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         let s = "";
         s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-            s += this.getDosageEndText(structure.getEndDateOrDateTime());
+            s += this.getDosageEndText(structure);
         }
         s += ":\n" + this.getDayNamesText(unitOrUnits, structure);
 
@@ -50,14 +50,17 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
     protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper): string {
 
-        let s = dose.getAnyDoseQuantityString();
-        s += " " + TextHelper.getUnit(dose, unitOrUnits);
-
-
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
-        s += " hver " + TextHelper.getWeekday(dateOnly.getDay());
+        let s = TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ": ";
+
+        s += dose.getAnyDoseQuantityString();
+        s += " " + TextHelper.getUnit(dose, unitOrUnits);
+        
+        
+
+
         if (dose.getLabel().length > 0) {
             s += " " + dose.getLabel();
         }

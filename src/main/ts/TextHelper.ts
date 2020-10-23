@@ -223,6 +223,16 @@ export class TextHelper {
         "lørdag"
     ];
 
+    private static weekdaysUppercase: string[] = [
+        "Søndag",
+        "Mandag",
+        "Tirsdag",
+        "Onsdag",
+        "Torsdag",
+        "Fredag",
+        "Lørdag"
+    ];
+
     private static months: string[] = [
         "januar",
         "februar",
@@ -255,6 +265,10 @@ export class TextHelper {
 
     public static getWeekday(dayNumber: number): string {
         return TextHelper.weekdays[dayNumber];
+    }
+
+    public static getWeekdayUppercase(dayNumber: number): string {
+        return TextHelper.weekdaysUppercase[dayNumber];
     }
 
     public static makeDayString(dayNumber: number): string {

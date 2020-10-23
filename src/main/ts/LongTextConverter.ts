@@ -7,6 +7,8 @@ import { DefaultLongTextConverterImpl } from "./longtextconverterimpl/DefaultLon
 import { EmptyStructureConverterImpl } from "./longtextconverterimpl/EmptyStructureConverterImpl";
 import { TwoDaysRepeatedConverterImpl } from "./longtextconverterimpl/TwoDaysRepeatedConverterImpl";
 import { WeeklyRepeatedConverterImpl } from "./longtextconverterimpl/WeeklyRepeatedConverterImpl";
+import { BiWeeklyRepeatedConverterImpl } from "./longtextconverterimpl/BiWeeklyRepeatedConverterImpl";
+import { RepeatedConverterImpl } from "./longtextconverterimpl/RepeatedConverterImpl";
 import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
 
 export class LongTextConverter {
@@ -24,6 +26,8 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
         LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
         LongTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
+        LongTextConverter._converters.push(new BiWeeklyRepeatedConverterImpl());
+        LongTextConverter._converters.push(new RepeatedConverterImpl());
         LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
         LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl(this));
     }

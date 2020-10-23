@@ -28,7 +28,7 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
         else {
             s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
             if (structure.getEndDateOrDateTime()) {
-                s += this.getDosageEndText(structure.getEndDateOrDateTime());
+                s += this.getDosageEndText(structure);
             }
         }
 

@@ -39,7 +39,10 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = this.getDosageStartText(structure.getStartDateOrDateTime(), 2);
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-            s += this.getDosageEndText(structure.getEndDateOrDateTime());
+            s += this.getDosageEndText(structure);
+        }
+        if (structure.getDays().length > 1) {
+            s += " - gentages hver 2. dag";
         }
         s += ":\n" + this.getDaysText(unitOrUnits, structure);
         if (structure.getDays().length === 1) {

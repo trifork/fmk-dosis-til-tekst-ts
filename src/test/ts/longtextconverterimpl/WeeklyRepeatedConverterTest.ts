@@ -5,7 +5,7 @@ import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWr
 
 describe('WeeklyRepeatedConverterImpl', () => {
 
-    it('should return hver mandag and torsdag morgen', () => {
+    it('should return mandag and torsdag morgen', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
                 new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
@@ -14,9 +14,23 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 22. jan. 2020:\n" +
-            "2 tabletter hver mandag morgen\n" +
-            "1 tablet hver torsdag morgen");
+            "Mandag: 2 tabletter morgen\n" +
+            "Torsdag: 1 tablet morgen");
     });
+
+    it('should return mandag og torsdag', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)]));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 22. jan. 2020:\n" +
+            "Mandag: 2 tabletter\n" +
+            "Torsdag: 1 tablet");
+    });
+
 
     it('should return hver mandag and torsdag morgen efter behov', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
@@ -27,8 +41,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 22. jan. 2020:\n" +
-            "2 tabletter hver mandag morgen efter behov højst 1 gang dagligt\n" +
-            "1 tablet hver torsdag morgen efter behov højst 1 gang dagligt");
+            "Mandag: 2 tabletter morgen efter behov højst 1 gang dagligt\n" +
+            "Torsdag: 1 tablet morgen efter behov højst 1 gang dagligt");
     });
 });
 

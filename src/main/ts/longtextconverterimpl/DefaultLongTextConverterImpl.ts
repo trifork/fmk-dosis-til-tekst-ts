@@ -37,7 +37,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // If there is just one day with according to need dosages we don't want say when to stop
             if (structure.getDays().length !== 1) {
                 if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                    s += this.getDosageEndText(structure.getEndDateOrDateTime());
+                    s += this.getDosageEndText(structure);
                 }
             }
         }
@@ -45,7 +45,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // Daily dosage
             s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                s += this.getDosageEndText(structure.getEndDateOrDateTime());
+                s += this.getDosageEndText(structure);
             }
         }
         else if (structure.getIterationInterval() > 1) {
@@ -53,8 +53,9 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
 
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                s += this.getDosageEndText(structure.getEndDateOrDateTime());
+                s += this.getDosageEndText(structure);
             }
+            s += " - gentages hver " + structure.getIterationInterval() + ". dag";
         }
         s += ":\n";
         s += this.getDaysText(unitOrUnits, structure);
@@ -63,16 +64,4 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
         return s;
     }
-
-    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number) {
-
-        if (iterationInterval > 1) {
-            return "Dosering som gentages hver " + iterationInterval + ". dag fra d. " + this.datesToLongText(startDateOrDateTime);
-        }
-        else {
-            return "Dosering fra d. " + this.datesToLongText(startDateOrDateTime);
-        }
-
-    }
-
 }
