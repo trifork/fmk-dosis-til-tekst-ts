@@ -8,7 +8,7 @@ import { DailyDosis } from "./DailyDosis";
 
 export class CombinedTextConverter {
 
-    public static convertStr(jsonStr: string) {
+    public static convertStr(jsonStr: string, options: string = "") {       // Options ignored, for future use
         if (jsonStr === undefined || jsonStr === null) {
             return null;
         }

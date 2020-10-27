@@ -28,7 +28,7 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl(this));
     }
 
-    public convertStr(jsonStr: string) {
+    public convertStr(jsonStr: string, options: string) {   // Options ignored in this version, for future use
 
         if (jsonStr === undefined || jsonStr === null) {
             return null;
