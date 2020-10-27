@@ -19,6 +19,7 @@ import { NumberOfWholeWeeksConverterImpl } from "./shorttextconverterimpl/Number
 import { DayInWeekConverterImpl } from "./shorttextconverterimpl/DayInWeekConverterImpl";
 import { CombinedTwoPeriodesConverterImpl } from "./shorttextconverterimpl/CombinedTwoPeriodesConverterImpl";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
+import { TextOptions } from "./TextOptions";
 
 export class ShortTextConverter {
 
@@ -27,10 +28,10 @@ export class ShortTextConverter {
     private static _instance: ShortTextConverter = new ShortTextConverter();
 
     /**
-	 * Populate a list of implemented converters
-	 * Consider the order: The tests are evaluated in order, adding the most likely to succeed
-	 * first improves performance
-	 */
+     * Populate a list of implemented converters
+     * Consider the order: The tests are evaluated in order, adding the most likely to succeed
+     * first improves performance
+     */
 
     constructor() {
         ShortTextConverter._converters = [
@@ -74,7 +75,7 @@ export class ShortTextConverter {
 
     public getConverterClassNameWrapper(dosage: DosageWrapper, maxLength: number = ShortTextConverter.MAX_LENGTH): string {
         for (let converter of ShortTextConverter._converters) {
-            if (converter.canConvert(dosage) && converter.doConvert(dosage).length <= maxLength) {
+            if (converter.canConvert(dosage) && converter.doConvert(dosage, TextOptions.STANDARD).length <= maxLength) {
                 return converter.constructor["name"];
             }
         }
@@ -82,44 +83,44 @@ export class ShortTextConverter {
     }
 
     /**
-	 * Performs a conversion to a short text if possible. Otherwise null.
-	 * @param dosage
-	 * @return A short text string describing the dosage
-	 */
-    public convertWrapper(dosage: DosageWrapper, maxLength = ShortTextConverter.MAX_LENGTH): string {
-        return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
+     * Performs a conversion to a short text if possible. Otherwise null.
+     * @param dosage
+     * @return A short text string describing the dosage
+     */
+    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, maxLength = ShortTextConverter.MAX_LENGTH): string {
+        return ShortTextConverter.getInstance().doConvert(dosage, options, maxLength);
     }
 
-    public convert(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
+    public convert(dosageJson: any, options: TextOptions, maxLength = ShortTextConverter.MAX_LENGTH): string {
 
         if (dosageJson === undefined || dosageJson === null) {
             return null;
         }
 
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
-        return ShortTextConverter.getInstance().doConvert(dosage, maxLength);
+        return ShortTextConverter.getInstance().doConvert(dosage, options, maxLength);
     }
 
-    public convertStr(jsonStr: string, maxLength = ShortTextConverter.MAX_LENGTH) {
+    public convertStr(jsonStr: string, options: string = TextOptions.STANDARD.toString(), maxLength = ShortTextConverter.MAX_LENGTH) {
 
         if (jsonStr === undefined || jsonStr === null) {
             return null;
         }
 
-        return this.convert(JSON.parse(jsonStr), maxLength);
+        return this.convert(JSON.parse(jsonStr), (<any>TextOptions)[options], maxLength);
     }
 
 
     /**
-	 * Performs a conversion to a short text with a custom maximum length. Returns translation if possible, otherwise null.
-	 * @param dosage
-	 * @param maxLength
-	 * @return A short text string describing the dosage
-	 */
-    public doConvert(dosage: DosageWrapper, maxLength: number): string {
+     * Performs a conversion to a short text with a custom maximum length. Returns translation if possible, otherwise null.
+     * @param dosage
+     * @param maxLength
+     * @return A short text string describing the dosage
+     */
+    public doConvert(dosage: DosageWrapper, options: TextOptions, maxLength: number): string {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
-                let s = converter.doConvert(dosage);
+                let s = converter.doConvert(dosage, options);
                 if (s && s.length <= maxLength)
                     return s;
             }

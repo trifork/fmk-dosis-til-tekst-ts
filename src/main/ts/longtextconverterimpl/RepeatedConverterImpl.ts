@@ -3,6 +3,7 @@ import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import { TextOptions } from "../TextOptions";
 
 export class RepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -14,15 +15,15 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
             if (dosage.structures.getStructures().length !== 1)
                 return false;
             let structure: StructureWrapper = dosage.structures.getStructures()[0];
-            if (structure.getIterationInterval() <= 2 || structure.getIterationInterval() === 7)  
+            if (structure.getIterationInterval() <= 2 || structure.getIterationInterval() === 7)
                 return false; // DailyRepeated/TwoDaysRepeated/Weekly repeated already handles iteration=1, 2 and 7
             if (structure.getDays().length > 1)
                 return false;
             if (structure.getDays()[0].getDayNumber() !== 1)
                 return false;
-            if(structure.getDays()[0].getNumberOfDoses() !== 1)
+            if (structure.getDays()[0].getNumberOfDoses() !== 1)
                 return false;
-            if(structure.containsAccordingToNeedDosesOnly())
+            if (structure.containsAccordingToNeedDosesOnly())
                 return false;
 
             return true;
@@ -30,7 +31,7 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
+    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
         return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
     }
 
@@ -41,7 +42,7 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
             // Same day dosage
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
-        
+
         else {
             // Dosage repeated after more than one day
             s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
@@ -60,7 +61,7 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
     protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper): string {
         let s = "";
         let daglig = "";
-        
+
         s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime());
         s += " hver " + structure.getIterationInterval() + ". dag";
 

@@ -10,6 +10,7 @@ import { WeeklyRepeatedConverterImpl } from "./longtextconverterimpl/WeeklyRepea
 import { BiWeeklyRepeatedConverterImpl } from "./longtextconverterimpl/BiWeeklyRepeatedConverterImpl";
 import { RepeatedConverterImpl } from "./longtextconverterimpl/RepeatedConverterImpl";
 import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
+import { TextOptions } from "./TextOptions";
 
 export class LongTextConverter {
 
@@ -32,41 +33,32 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl(this));
     }
 
-    public convertStr(jsonStr: string) {
+    public convertStr(jsonStr: string, options: string) {
 
         if (jsonStr === undefined || jsonStr === null) {
             return null;
         }
 
-        return this.convert(JSON.parse(jsonStr));
+        return this.convert(JSON.parse(jsonStr), (<any>TextOptions)[options]);
     }
 
-    public convert(dosageJson: any): string {
+    public convert(dosageJson: any, options: TextOptions): string {
 
         if (dosageJson === undefined || dosageJson === null) {
             return null;
         }
         let dosage = DosageWrapper.fromJsonObject(dosageJson);
-        return this.convertWrapper(dosage);
+        return this.convertWrapper(dosage, options);
     }
 
-    public convertWrapper(dosage: DosageWrapper): string {
+    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD): string {
         for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage)) {
-                return converter.doConvert(dosage);
+                return converter.doConvert(dosage, options);
             }
         }
         return null;
     }
-
-    /*
-    public static getConverter(dosage: DosageWrapper): LongTextConverterImpl {
-        for (let converter of this.getConverters()) {
-            if (converter.canConvert(dosage))
-                return converter;
-        }
-        return null;
-    } */
 
     public getConverterClassName(dosageJson: any): string {
         return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));

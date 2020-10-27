@@ -6,11 +6,12 @@ import { DosisTilTekstException } from "../DosisTilTekstException";
 import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import { TextOptions } from "../TextOptions";
 
 export abstract class LongTextConverterImpl {
 
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
-    public abstract doConvert(dosageStructure: DosageWrapper): string;
+    public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions): string;
 
     protected appendSupplText(structure: StructureWrapper, s: string) {
         if (structure.getSupplText()) {
@@ -76,7 +77,7 @@ export abstract class LongTextConverterImpl {
         return dateTime.getSeconds() !== 0;
     }
 
-    protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
         let appendedLines = 0;
         for (let day of structure.getDays()) {
@@ -88,7 +89,7 @@ export abstract class LongTextConverterImpl {
             let daysLabel = "";
 
             if ((structure.getDays().length > 1) || (structure.getDays().length < structure.getIterationInterval())) {
-                daysLabel = this.makeDaysLabel(structure, day); // Add fx "Dag 1:" if more than one day, or only a number of days less than the iteration interval
+                daysLabel = this.makeDaysLabel(structure, day, options); // Add fx "Dag 1:" if more than one day, or only a number of days less than the iteration interval
             }
 
             s += daysLabel;
@@ -97,7 +98,7 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper): string {
+    protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper, options: TextOptions): string {
         if (day.getDayNumber() === 0) {
             if (day.containsAccordingToNeedDosesOnly())
                 return "";
@@ -107,9 +108,18 @@ export abstract class LongTextConverterImpl {
         else if (structure.getIterationInterval() === 1) {
             return "";
         }
-        else if (structure.getIterationInterval() === 0 && structure.getDays().length > 1) {
-            // 18. apr 2019: 2 tabletter....
-            return TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
+        else if (structure.getIterationInterval() === 0) {
+            if (structure.getDays().length > 1 && options !== TextOptions.VKA) {
+                // 18. apr 2019: 2 tabletter....
+                return TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
+            }
+            else if (options === TextOptions.VKA) {
+                // Tirsdag d. 27. okt. 2020: 2 tabletter....
+                let dateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
+                dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
+
+                return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
+            }
         }
         else {
             // Dag 1: 2 tabletter....
@@ -117,7 +127,7 @@ export abstract class LongTextConverterImpl {
         }
     }
 
-    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean): string {
+    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean, options: TextOptions = TextOptions.STANDARD): string {
         let s = "";
         let daglig = "";
         if (!hasDaysLabel)
@@ -159,7 +169,7 @@ export abstract class LongTextConverterImpl {
             }
         }
 
-        if (day.containsAccordingToNeedDosesOnly()) {
+        if (day.containsAccordingToNeedDosesOnly() && day.getNumberOfDoses() > 0) {
             if (day.getDayNumber() > 0 || (day.getDayNumber() === 0 && structure.getIterationInterval() === 1)) {
                 if (day.getNumberOfDoses() === 1) {
                     s += " højst 1 gang dagligt";

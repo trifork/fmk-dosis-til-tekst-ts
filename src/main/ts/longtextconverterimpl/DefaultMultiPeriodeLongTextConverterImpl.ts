@@ -4,6 +4,7 @@ import { Factory } from "../Factory";
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { StructuresWrapper } from "../vowrapper/StructuresWrapper";
+import { TextOptions } from "../TextOptions";
 
 export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -22,7 +23,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
+    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
 
         let s: string = "";
         let sortedStructures = dosage.structures.getStructures().sort((s1, s2) => {
@@ -36,7 +37,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         sortedStructures.forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
                 new StructuresWrapper(dosage.structures.getUnitOrUnits(), [structure]));
-            s += (this.longTextConverter.convertWrapper(w) + "\n\n");
+            s += (this.longTextConverter.convertWrapper(w, options) + "\n\n");
         });
 
         return s.trim();

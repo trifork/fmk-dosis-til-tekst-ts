@@ -3,6 +3,7 @@ import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
+import { TextOptions } from "../TextOptions";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
@@ -13,10 +14,10 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
             && dosageStructure.structures.getStructures()[0].getDays().length === 0;
     }
 
-    public doConvert(dosageStructure: DosageWrapper): string {
-
+    public doConvert(dosageStructure: DosageWrapper, options: TextOptions): string {
         return this.convert(dosageStructure.structures.getUnitOrUnits(), dosageStructure.structures.getStructures()[0]);
     }
+
     private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
         let s = "";
 

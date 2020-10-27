@@ -2,6 +2,7 @@
 
 import { expect, assert } from 'chai';
 import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, LocalTime } from "../../../main/ts/index";
+import { TextOptions } from '../../../main/ts/TextOptions';
 
 describe('DefaultLongTextConverterImpl', () => {
 
@@ -106,5 +107,24 @@ describe('DefaultLongTextConverterImpl', () => {
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
             "1 tablet aften efter behov højst 1 gang dagligt" );
+    });
+
+    it('should return 0-dosages for empty days with option VKA', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
+            new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+            new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
+            new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+        ], undefined)]));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
+            "Dosering fra d. 27. okt. 2020 til d. 1. nov. 2020:\n" +
+            "Tirsdag d. 27. okt. 2020: 1 tablet\n" +
+            "Onsdag d. 28. okt. 2020: 0 tabletter\n" +
+            "Torsdag d. 29. okt. 2020: 2 tabletter\n" +
+            "Fredag d. 30. okt. 2020: 0 tabletter\n" +
+            "Lørdag d. 31. okt. 2020: 3 tabletter\n" +
+            "Søndag d. 1. nov. 2020: 0 tabletter");
     });
 });

@@ -54,8 +54,8 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
         s += dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);
-        
-        
+
+
 
 
         if (dose.getLabel().length > 0) {

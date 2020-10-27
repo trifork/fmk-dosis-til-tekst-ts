@@ -2,12 +2,13 @@ import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { DoseWrapper } from "../vowrapper/DoseWrapper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { TextHelper } from "../TextHelper";
+import { TextOptions } from "../TextOptions";
 
 export abstract class ShortTextConverterImpl {
 
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
 
-    public abstract doConvert(dosageStructure: DosageWrapper): string;
+    public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions ): string;
 
     protected static toValue(dose: DoseWrapper): string {
         if (dose.getDoseQuantity() !== undefined) {

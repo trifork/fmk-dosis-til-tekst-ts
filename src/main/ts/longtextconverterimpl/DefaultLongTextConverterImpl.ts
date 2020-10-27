@@ -1,9 +1,11 @@
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
+import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
+import { DayWrapper } from "../vowrapper/DayWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { TextOptions } from "../TextOptions";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -14,11 +16,32 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         return dosageStructure.structures.getStructures().length === 1;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
+    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    private fillInEmptyVKADosages(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper) {
+
+        let dayno: number = 1;
+
+        for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
+            if (!structure.getDay(dayno)) {
+                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, unitOrUnits.getUnitPlural(), undefined, undefined, false);
+                let emptyDay = new DayWrapper(dayno, [emptyDose]);
+                structure.getDays().push(emptyDay);
+            }
+            dayno++;
+        }
+
+        structure.getDays().sort((day1, day2) => day1.getDayNumber() - day2.getDayNumber());
+    }
+
+    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+
+        if (options === TextOptions.VKA && structure.getIterationInterval() === 0) {
+            this.fillInEmptyVKADosages(unitOrUnits, structure);
+        }
+
         let s = "";
 
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
@@ -58,7 +81,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             s += " - gentages hver " + structure.getIterationInterval() + ". dag";
         }
         s += ":\n";
-        s += this.getDaysText(unitOrUnits, structure);
+        s += this.getDaysText(unitOrUnits, structure, options);
 
         s = this.appendSupplText(structure, s);
 

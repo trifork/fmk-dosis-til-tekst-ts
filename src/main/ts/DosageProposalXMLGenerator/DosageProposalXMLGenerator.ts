@@ -21,6 +21,7 @@ import { EveningDoseWrapper } from "../vowrapper/EveningDoseWrapper";
 import { NightDoseWrapper } from "../vowrapper/NightDoseWrapper";
 import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
 import { DosagePeriod } from "./DosagePeriod";
+import { TextOptions } from "../TextOptions";
 
 export class DosageProposalXMLGenerator {
 
@@ -97,7 +98,7 @@ export class DosageProposalXMLGenerator {
 
         let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), periodWrappers));
 
-        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper, shortTextMaxLength), LongTextConverter.getInstance().convertWrapper(dosageWrapper));
+        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper, TextOptions.STANDARD, shortTextMaxLength), LongTextConverter.getInstance().convertWrapper(dosageWrapper, TextOptions.STANDARD));
     }
 
     static isMMAN(type: string): boolean {

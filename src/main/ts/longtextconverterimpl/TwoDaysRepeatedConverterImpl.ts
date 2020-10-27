@@ -4,6 +4,7 @@ import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { TextHelper } from "../TextHelper";
+import { TextOptions } from "../TextOptions";
 
 export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -32,7 +33,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
+    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
         return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
     }
 

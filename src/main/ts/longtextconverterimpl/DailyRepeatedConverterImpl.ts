@@ -5,6 +5,7 @@ import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { DoseWrapper } from "../vowrapper/DoseWrapper";
 import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
+import { TextOptions } from "../TextOptions";
 
 export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -26,11 +27,11 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
 
-    public doConvert(dosage: DosageWrapper): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
+    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
         s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
 
@@ -43,7 +44,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
             s += this.makeOneIteratedDose(structure.getDay(1).getDose(0), unitOrUnits, 1, structure.getStartDateOrDateTime());
         }
         else {
-            s += this.getDaysText(unitOrUnits, structure);
+            s += this.getDaysText(unitOrUnits, structure, options);
         }
 
 
