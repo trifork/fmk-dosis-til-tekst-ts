@@ -77,12 +77,12 @@ describe('DefaultLongTextConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
-            "18. apr. 2019: 2 tabletter morgen, 2 tabletter middag og 2 tabletter aften\n" +
-            "19. apr. 2019: 2 tabletter morgen, 1 tablet middag og 2 tabletter aften\n" +
-            "20. apr. 2019: 1 tablet morgen, 1 tablet middag og 2 tabletter aften\n" +
-            "21. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
-            "22. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
-            "23. apr. 2019: 1 tablet aften" );
+            "Torsdag d. 18. apr. 2019: 2 tabletter morgen, 2 tabletter middag og 2 tabletter aften\n" +
+            "Fredag d. 19. apr. 2019: 2 tabletter morgen, 1 tablet middag og 2 tabletter aften\n" +
+            "Lørdag d. 20. apr. 2019: 1 tablet morgen, 1 tablet middag og 2 tabletter aften\n" +
+            "Søndag d. 21. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
+            "Mandag d. 22. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
+            "Tirsdag d. 23. apr. 2019: 1 tablet aften" );
     });
 
     it('should return Dosering kun for day=0 and iter=0', () => {

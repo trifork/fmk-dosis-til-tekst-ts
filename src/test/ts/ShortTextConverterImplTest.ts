@@ -38,8 +38,8 @@ describe('ShortTextConverter', () => {
             ], undefined)]));
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 100)).to.equal('2,5 ml middag dag 1 og 3');
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal('Dosering fra d. 13. apr. 2019 til d. 15. apr. 2019:\n' +
-            '13. apr. 2019: 2,5 ml middag\n' +
-            '15. apr. 2019: 2,5 ml middag');
+            'Lørdag d. 13. apr. 2019: 2,5 ml middag\n' +
+            'Mandag d. 15. apr. 2019: 2,5 ml middag');
 
     });
 

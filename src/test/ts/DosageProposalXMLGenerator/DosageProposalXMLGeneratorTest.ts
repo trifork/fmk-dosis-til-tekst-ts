@@ -57,7 +57,7 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
     // FMK-5729
     it('should handle M+M+A+N, iteration 0, mapping dag 2: 1+0+0+0 dag 3: 0+2+0+0', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '0', 'dag 2: 1+0+0+0 dag 3: 0+2+0+0', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
-        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 1. jan. 2110:\n2. jan. 2010: 1 tablet morgen\n3. jan. 2010: 2 tabletter middag\nBemærk: tages med rigeligt vand");
+        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 1. jan. 2110:\nLørdag d. 2. jan. 2010: 1 tablet morgen\nSøndag d. 3. jan. 2010: 2 tabletter middag\nBemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
 
@@ -144,7 +144,7 @@ describe('generateXMLSnippet PN', () => {
 
     it('should handle dag 1: 2 dag 2: 3 dose without iteration', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '0', 'dag 1: 2 dag 3: 4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
-        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 1. jan. 2110:\n1. jan. 2010: 2 tabletter efter behov højst 1 gang dagligt\n3. jan. 2010: 4 tabletter efter behov højst 1 gang dagligt\nBemærk: tages med rigeligt vand");
+        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 1. jan. 2110:\nFredag d. 1. jan. 2010: 2 tabletter efter behov højst 1 gang dagligt\nSøndag d. 3. jan. 2010: 4 tabletter efter behov højst 1 gang dagligt\nBemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
 

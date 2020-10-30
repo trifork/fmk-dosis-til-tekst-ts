@@ -16,7 +16,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             if (dosage.structures.getStructures().length !== 1)
                 return false;
             let structure: StructureWrapper = dosage.structures.getStructures()[0];
-            if (structure.getIterationInterval() !== 14)
+            if (structure.getIterationInterval() <= 7 || structure.getIterationInterval() % 7 !== 0)
                 return false;
             if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
                 return false;
@@ -24,7 +24,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
                 return false;
             if (structure.getDays()[0].getNumberOfDoses() !== 1)
                 return false;
-            if (structure.getDays()[0].getDayNumber() > 13)
+            if (structure.getDays()[0].getDayNumber() > 7)
                 return false;
             return true;
         }
@@ -37,7 +37,10 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += this.getDosageEndText(structure);
         }
-        s += ":\nHver 2. " + this.getDayNamesText(unitOrUnits, structure);
+
+        s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+
+        s += ":\nHver " + Math.floor(structure.getIterationInterval() / 7) + ". " + this.getDayNamesText(unitOrUnits, structure);
 
         s = this.appendSupplText(structure, s);
 
@@ -50,7 +53,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
-        let s = TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ": ";
+        let s = TextHelper.getWeekday(dateOnly.getDay()) + ": ";
 
         s += dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);

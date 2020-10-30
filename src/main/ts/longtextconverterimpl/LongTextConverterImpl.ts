@@ -109,17 +109,11 @@ export abstract class LongTextConverterImpl {
             return "";
         }
         else if (structure.getIterationInterval() === 0) {
-            if (structure.getDays().length > 1 && options !== TextOptions.VKA) {
-                // 18. apr 2019: 2 tabletter....
-                return TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
-            }
-            else if (options === TextOptions.VKA) {
                 // Tirsdag d. 27. okt. 2020: 2 tabletter....
                 let dateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
                 dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
 
                 return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
-            }
         }
         else {
             // Dag 1: 2 tabletter....
