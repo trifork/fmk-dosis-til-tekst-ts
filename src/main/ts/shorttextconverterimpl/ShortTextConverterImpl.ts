@@ -12,11 +12,11 @@ export abstract class ShortTextConverterImpl {
 
     protected static toValue(dose: DoseWrapper): string {
         if (dose.getDoseQuantity() !== undefined) {
-            return TextHelper.quantityToString(dose.getDoseQuantity());
+            return TextHelper.formatQuantity(dose.getDoseQuantity());
         }
         else if (dose.getMinimalDoseQuantity() !== undefined && dose.getMaximalDoseQuantity() !== undefined) {
-            return TextHelper.quantityToString(dose.getMinimalDoseQuantity()) +
-                "-" + TextHelper.quantityToString(dose.getMaximalDoseQuantity());
+            return TextHelper.formatQuantity(dose.getMinimalDoseQuantity()) +
+                "-" + TextHelper.formatQuantity(dose.getMaximalDoseQuantity());
         }
         else {
             return undefined;
@@ -25,7 +25,7 @@ export abstract class ShortTextConverterImpl {
 
     protected static toQuantityValue(dose: number): string {
         if (dose !== undefined) {
-            return TextHelper.quantityToString(dose);
+            return TextHelper.formatQuantity(dose);
         }
         else {
             return undefined;

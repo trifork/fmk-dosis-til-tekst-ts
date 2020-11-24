@@ -15,8 +15,6 @@ export class TextHelper {
     //    private static final FastDateFormat longDateTimeFormatterNoSecs = FastDateFormat.getInstance(LONG_DATE_TIME_FORMAT_NO_SECS, new Locale("da", "DK"));
     //    private static final FastDateFormat longDateFormatter = FastDateFormat.getInstance(LONG_DATE_FORMAT, new Locale("da", "DK"));
 
-    private static _decimalsToFractions: { [key: string]: string; } = { "0,5": "1/2", "0,25": "1/4", "0,75": "3/4", "1,5": "1 1/2" };
-
     private static _unit: string[][] = [
         ["ampul", "ampuller"],
         ["applikatordosis", "applikatordoser"],
@@ -111,19 +109,6 @@ export class TextHelper {
 
     public static formatDate(date: Date): string {
         return date.toISOString().substr(0, 10);
-    }
-
-    public static quantityToString(quantity: number): string {
-
-        let quantityString = TextHelper.formatQuantity(quantity);
-        let fractions = TextHelper._decimalsToFractions[quantityString];
-
-        if (fractions) {
-            return fractions;
-        }
-        else {
-            return quantityString;
-        }
     }
 
     public static unitToSingular(plural: string): string {
