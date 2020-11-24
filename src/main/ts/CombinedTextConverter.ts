@@ -34,7 +34,7 @@ export class CombinedTextConverter {
 
         if (dosage.isStructured()) {
             for (let period of dosage.structures.getStructures()) {
-                let structuresWithOnePeriod: StructuresWrapper = new StructuresWrapper(dosage.structures.getUnitOrUnits(), [period]);
+                let structuresWithOnePeriod: StructuresWrapper = new StructuresWrapper(dosage.structures.getUnitOrUnits(), dosage.structures.getStartDateOrDateTime(), dosage.structures.getEndDateOrDateTime(), [period], true);
                 let dosageWrapperWithOnePeriod = DosageWrapper.makeStructuredDosage(structuresWithOnePeriod);
                 let periodShortText = ShortTextConverter.getInstance().convertWrapper(dosageWrapperWithOnePeriod, options);
                 let periodLongText = LongTextConverter.getInstance().convertWrapper(dosageWrapperWithOnePeriod, options);

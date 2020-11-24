@@ -1,4 +1,5 @@
 export enum TextOptions {
     STANDARD,
-    VKA
+    VKA,
+    VKA_WITH_MARKUP
 }

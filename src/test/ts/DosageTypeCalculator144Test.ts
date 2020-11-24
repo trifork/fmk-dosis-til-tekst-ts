@@ -84,10 +84,11 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+            null, null, 
             [
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, true)])], undefined)
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(0, fixedStructures.length);
@@ -100,10 +101,11 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+            null, null,
             [
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)])], undefined)
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(1, fixedStructures.length);
@@ -116,12 +118,13 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+            null, null,
             [
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)])], undefined)
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(2, fixedStructures.length);
@@ -134,12 +137,12 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
-            [
+            null, null, [
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)])], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [], undefined)
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(2, fixedStructures.length);
@@ -152,12 +155,13 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+            null, null, 
             [
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, true)])], undefined)
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(0, fixedStructures.length);
@@ -170,12 +174,12 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
-            [
+            null, null,[
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, true)])], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [], undefined)
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(0, fixedStructures.length);
@@ -188,14 +192,14 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
-            [
+            null, null,[
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2016, 12, 29), undefined), new DateOrDateTimeWrapper(new Date(2016, 12, 31), undefined),
                     [], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, true)])], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [], undefined),
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(0, fixedStructures.length);
@@ -208,14 +212,14 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
-            [
+            null, null,[
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2016, 12, 29), undefined), new DateOrDateTimeWrapper(new Date(2016, 12, 31), undefined),
                     [], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)])], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [], undefined),
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(3, fixedStructures.length);
@@ -228,7 +232,7 @@ describe('splitInFixedAndPN function', () => {
         let pnStructures: StructureWrapper[] = [];
 
         let sw = new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
-            [
+            null, null,[
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2016, 12, 29), undefined), new DateOrDateTimeWrapper(new Date(2016, 12, 31), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)])], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 1), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 2), undefined),
@@ -237,7 +241,7 @@ describe('splitInFixedAndPN function', () => {
                     [], undefined),
                 new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2017, 1, 3), undefined), new DateOrDateTimeWrapper(new Date(2017, 1, 10), undefined),
                     [new DayWrapper(1, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)])], undefined),
-            ]);
+            ], false);
 
         DosageTypeCalculator144.splitInFixedAndPN(sw, fixedStructures, pnStructures);
         assert.equal(3, fixedStructures.length);

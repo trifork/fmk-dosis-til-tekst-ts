@@ -8,7 +8,7 @@ describe('EmptyStructureConverterImpl', () => {
     // FMK-6211
     it('should return correct from/to', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
-            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 10), undefined), [], undefined)]));
+            null, null, [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 10), undefined), [], undefined)], false));
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018 til d. 10. dec. 2018:\n" +
             "Bemærk: skal ikke anvendes i denne periode!");
@@ -27,7 +27,8 @@ describe('EmptyStructureConverterImpl', () => {
 
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
-            [periode1, periode2, emptyperiod]));
+            null, null,
+            [periode1, periode2, emptyperiod], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 15. nov. 2019 til d. 27. maj 2020:\n" +

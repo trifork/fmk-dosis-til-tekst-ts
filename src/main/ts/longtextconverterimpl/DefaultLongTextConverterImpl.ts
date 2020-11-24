@@ -6,6 +6,7 @@ import { DayWrapper } from "../vowrapper/DayWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
+import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -17,7 +18,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper, options: TextOptions): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getEndDateOrDateTime(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage());
     }
 
     private fillInEmptyVKADosages(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper) {
@@ -36,9 +37,9 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         structure.getDays().sort((day1, day2) => day1.getDayNumber() - day2.getDayNumber());
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    private convert(unitOrUnits: UnitOrUnitsWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
 
-        if (options === TextOptions.VKA && structure.getIterationInterval() === 0) {
+        if (DefaultLongTextConverterImpl.convertAsVKA(options) && structure.getIterationInterval() === 0) {
             this.fillInEmptyVKADosages(unitOrUnits, structure);
         }
 
@@ -84,6 +85,16 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         s += this.getDaysText(unitOrUnits, structure, options);
 
         s = this.appendSupplText(structure, s);
+
+        if (DefaultLongTextConverterImpl.convertAsVKA(options)
+            && structure.getIterationInterval() === 0
+            && structure.getEndDateOrDateTime()
+            && treatmentEndDateTime
+            && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime()
+            && !isPartOfMultiPeriodDosage
+        ) {
+            s += "\nBemærk: Dosering herefter er ikke angivet";
+        }
 
         return s;
     }

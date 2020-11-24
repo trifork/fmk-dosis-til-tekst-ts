@@ -38,7 +38,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         let tempDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
-                [structure0]));
+                null, null,
+                [structure0], false));
         if (!ShortTextConverter.getInstance().canConvert(tempDosage))
             return false;
 
@@ -50,7 +51,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         let fixedDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
-                [structureLast]));
+                dosage.structures.getStartDateOrDateTime(), dosage.structures.getEndDateOrDateTime(),
+                [structureLast], true));
         if (!ShortTextConverter.getInstance().canConvert(fixedDosage))
             return false;
 
@@ -65,7 +67,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         let tempDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
-                [tempStructure]));
+                dosage.structures.getStartDateOrDateTime(), dosage.structures.getEndDateOrDateTime(),
+                [tempStructure], true));
         let tempText: String = new ShortTextConverter().convertWrapper(tempDosage, 10000); // 10000 to avoid anything longer than 70 chars being cut
         tempStructure.setSupplText(tempSupplText);
 
@@ -79,7 +82,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         let fixedDosage: DosageWrapper = new DosageWrapper(undefined, undefined,
             new StructuresWrapper(
                 dosage.structures.getUnitOrUnits(),
-                [fixedStructure]));
+                dosage.structures.getStartDateOrDateTime(), dosage.structures.getEndDateOrDateTime(),
+                [fixedStructure], true));
         let fixedText: string = new ShortTextConverter().convertWrapper(fixedDosage, 10000); // 10000 to avoid anything longer than 70 chars being cut
         fixedStructure.setSupplText(fixedSupplText);
 

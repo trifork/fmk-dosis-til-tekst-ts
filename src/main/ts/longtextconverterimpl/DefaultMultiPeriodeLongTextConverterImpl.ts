@@ -36,7 +36,11 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
 
         sortedStructures.forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
-                new StructuresWrapper(dosage.structures.getUnitOrUnits(), [structure]));
+                new StructuresWrapper(dosage.structures.getUnitOrUnits(),
+                    dosage.structures.getStartDateOrDateTime(),
+                    dosage.structures.getEndDateOrDateTime(),
+                    [structure],
+                    sortedStructures.length > 1));
             s += (this.longTextConverter.convertWrapper(w, options) + "\n\n");
         });
 

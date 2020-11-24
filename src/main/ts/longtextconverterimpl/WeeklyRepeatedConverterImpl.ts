@@ -9,6 +9,7 @@ import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 import { TextOptions } from "../TextOptions";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
+import { DefaultLongTextConverterImpl } from "./DefaultLongTextConverterImpl";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -44,14 +45,8 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             s += this.getDosageEndText(structure);
         }
 
-        if (options === TextOptions.VKA) {
-            s += " - gentages hver uge:\n";
-        } else {
-            s += ":\n";
-        }
-
+        s += " - gentages hver uge:\n";
         s += this.getDayNamesText(unitOrUnits, structure, options);
-
         s = this.appendSupplText(structure, s);
 
         return s;
@@ -84,7 +79,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         // Make a sorted list of weekdays
         let s = "";
 
-        if (options === TextOptions.VKA) {
+        if (DefaultLongTextConverterImpl.convertAsVKA(options)) {
             // In case of weekly schedule and weekly iterated dosage, fill missing weekdays with 0-dosages
             structure = WeeklyRepeatedConverterImpl.fillWithEmptyWeekdays(structure, unitOrUnits);
         }

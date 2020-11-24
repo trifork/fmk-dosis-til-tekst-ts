@@ -13,6 +13,10 @@ export abstract class LongTextConverterImpl {
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
     public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions): string;
 
+    protected static convertAsVKA(textOptions: TextOptions): boolean {
+        return textOptions === TextOptions.VKA || textOptions === TextOptions.VKA_WITH_MARKUP;
+    }
+
     protected appendSupplText(structure: StructureWrapper, s: string) {
         if (structure.getSupplText()) {
             s += "\n" + TextHelper.INDENT + "Bemærk: " + structure.getSupplText();
@@ -109,11 +113,11 @@ export abstract class LongTextConverterImpl {
             return "";
         }
         else if (structure.getIterationInterval() === 0) {
-                // Tirsdag d. 27. okt. 2020: 2 tabletter....
-                let dateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
-                dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
+            // Tirsdag d. 27. okt. 2020: 2 tabletter....
+            let dateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
+            dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
 
-                return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
+            return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
         }
         else {
             // Dag 1: 2 tabletter....

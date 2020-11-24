@@ -96,7 +96,7 @@ export class DosageProposalXMLGenerator {
         let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
 
 
-        let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), periodWrappers));
+        let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), null, null, periodWrappers, false));
 
         return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper, TextOptions.STANDARD, shortTextMaxLength), LongTextConverter.getInstance().convertWrapper(dosageWrapper, TextOptions.STANDARD));
     }

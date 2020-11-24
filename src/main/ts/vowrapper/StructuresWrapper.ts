@@ -4,15 +4,19 @@ import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 
 export class StructuresWrapper {
     private unitOrUnits: UnitOrUnitsWrapper;
+    private startDateOrDateTime: DateOrDateTimeWrapper;
+    private endDateOrDateTime: DateOrDateTimeWrapper;
     private structures: StructureWrapper[];
+    private isPartOfMultiPeriodDosage: boolean;
 
     public static fromJsonObject(jsonObject: any) {
+        const structures: StructureWrapper[] = jsonObject.structures.map(s => StructureWrapper.fromJsonObject(s));
         return jsonObject ?
-            new StructuresWrapper(UnitOrUnitsWrapper.fromJsonObject(jsonObject.unitOrUnits), jsonObject.structures.map(s => StructureWrapper.fromJsonObject(s)))
+            new StructuresWrapper(UnitOrUnitsWrapper.fromJsonObject(jsonObject.unitOrUnits), DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime), structures, structures.length > 1)
             : undefined;
     }
 
-    constructor(unitOrUnits: UnitOrUnitsWrapper, structures: StructureWrapper[]) {
+    constructor(unitOrUnits: UnitOrUnitsWrapper, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, structures: StructureWrapper[], isPartOfMultiPeriodDosage: boolean) {
         this.unitOrUnits = unitOrUnits;
         structures.sort((s1, s2) => {
             let i = s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
@@ -25,14 +29,29 @@ export class StructuresWrapper {
         });
 
         this.structures = structures;
+        this.startDateOrDateTime = startDateOrDateTime;
+        this.endDateOrDateTime = endDateOrDateTime;
+        this.isPartOfMultiPeriodDosage = isPartOfMultiPeriodDosage;
     }
 
     public getUnitOrUnits() {
         return this.unitOrUnits;
     }
 
+    public getStartDateOrDateTime(): DateOrDateTimeWrapper {
+        return this.startDateOrDateTime;
+    }
+
+    public getEndDateOrDateTime(): DateOrDateTimeWrapper {
+        return this.endDateOrDateTime;
+    }
+
     public getStructures(): StructureWrapper[] {
         return this.structures;
+    }
+
+    public getIsPartOfMultiPeriodDosage(): boolean {
+        return this.isPartOfMultiPeriodDosage;
     }
 
     public hasOverlappingPeriodes(): boolean {
