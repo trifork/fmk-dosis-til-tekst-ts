@@ -216,5 +216,16 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
         expect(ShortTextConverter.getInstance().convertWrapper(dose, 200)).to.equal("0,5 tablet 1 gang");
     });
 
+    // FMK-6477
+    it('should return empty short dosage text for VKA', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(1452639600000), undefined), undefined, [
+                new DayWrapper(1, [new PlainDoseWrapper(0.5, undefined, undefined, undefined, undefined, undefined, false)]),
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA, 200)).to.be.null;
+    });
+
 });
 

@@ -13,7 +13,7 @@ export abstract class LongTextConverterImpl {
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
     public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions): string;
 
-    protected static convertAsVKA(textOptions: TextOptions): boolean {
+    public static convertAsVKA(textOptions: TextOptions): boolean {
         return textOptions === TextOptions.VKA || textOptions === TextOptions.VKA_WITH_MARKUP;
     }
 

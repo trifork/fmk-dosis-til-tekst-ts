@@ -20,6 +20,7 @@ import { DayInWeekConverterImpl } from "./shorttextconverterimpl/DayInWeekConver
 import { CombinedTwoPeriodesConverterImpl } from "./shorttextconverterimpl/CombinedTwoPeriodesConverterImpl";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
 import { TextOptions } from "./TextOptions";
+import { LongTextConverterImpl } from "./longtextconverterimpl/LongTextConverterImpl";
 
 export class ShortTextConverter {
 
@@ -118,6 +119,11 @@ export class ShortTextConverter {
      * @return A short text string describing the dosage
      */
     public doConvert(dosage: DosageWrapper, options: TextOptions, maxLength: number): string {
+
+        if (LongTextConverterImpl.convertAsVKA(options)) {
+            return null;
+        }
+
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 let s = converter.doConvert(dosage, options);
