@@ -26,13 +26,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
     public doConvert(dosage: DosageWrapper, options: TextOptions): string {
 
         let s: string = "";
-        let sortedStructures = dosage.structures.getStructures().sort((s1, s2) => {
-
-            // Sort by fixed/PN, and then by startdate
-            if (s1.containsAccordingToNeedDosesOnly()) return 1;
-            else if (s2.containsAccordingToNeedDosesOnly()) return -1;
-            else return s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
-        });
+        let sortedStructures = dosage.structures.getStructures().sort(StructuresWrapper.dosagePeriodSorter);
 
         sortedStructures.forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(

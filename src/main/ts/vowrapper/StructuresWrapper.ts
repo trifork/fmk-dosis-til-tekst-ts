@@ -18,20 +18,24 @@ export class StructuresWrapper {
 
     constructor(unitOrUnits: UnitOrUnitsWrapper, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, structures: StructureWrapper[], isPartOfMultiPeriodDosage: boolean) {
         this.unitOrUnits = unitOrUnits;
-        structures.sort((s1, s2) => {
-            let i = s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
-            if (i !== 0)
-                return i;
-            if (s1.containsAccordingToNeedDosesOnly())
-                return 1;
-            else
-                return -1;
-        });
+        structures.sort(StructuresWrapper.dosagePeriodSorter);
 
         this.structures = structures;
         this.startDateOrDateTime = startDateOrDateTime;
         this.endDateOrDateTime = endDateOrDateTime;
         this.isPartOfMultiPeriodDosage = isPartOfMultiPeriodDosage;
+    }
+
+    public static dosagePeriodSorter(s1: StructureWrapper, s2: StructureWrapper): number {
+        
+        let i = s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
+        if (i !== 0)
+            return i;
+        if (s1.containsAccordingToNeedDosesOnly())
+            return 1;
+
+        else
+            return -1;
     }
 
     public getUnitOrUnits() {

@@ -224,13 +224,13 @@ describe('generateXMLSnippet Multiperiode', () => {
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 31. jan. 2010:\n" +
             "1 tablet morgen, 2 tabletter middag, 3 tabletter aften og 4 tabletter nat - hver dag\nBemærk: tages med rigeligt vand\n\n" +
 
-            "Dosering fra d. 1. mar. 2010 til d. 31. mar. 2010:\n" +
-            "2 tabletter hver dag\nBemærk: tages med rigeligt vand\n\n" +
-
             "Dosering fra d. 1. feb. 2010 til d. 28. feb. 2010 - gentages hver 2. dag:\n" +
             "Dag 1: 2 tabletter efter behov højst 1 gang dagligt\n" +
-            "Dag 2: 3 tabletter efter behov højst 1 gang dagligt\nBemærk: tages med rigeligt vand" 
-            
+            "Dag 2: 3 tabletter efter behov højst 1 gang dagligt\nBemærk: tages med rigeligt vand\n\n"  +
+
+            "Dosering fra d. 1. mar. 2010 til d. 31. mar. 2010:\n" +
+            "2 tabletter hver dag\nBemærk: tages med rigeligt vand"
+
         );
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
