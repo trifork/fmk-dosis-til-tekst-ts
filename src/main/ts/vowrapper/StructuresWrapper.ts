@@ -27,7 +27,7 @@ export class StructuresWrapper {
     }
 
     public static dosagePeriodSorter(s1: StructureWrapper, s2: StructureWrapper): number {
-        
+
         let i = s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
         if (i !== 0)
             return i;
