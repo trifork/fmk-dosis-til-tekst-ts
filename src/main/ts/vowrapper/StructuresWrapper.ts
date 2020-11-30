@@ -10,10 +10,13 @@ export class StructuresWrapper {
     private isPartOfMultiPeriodDosage: boolean;
 
     public static fromJsonObject(jsonObject: any) {
-        const structures: StructureWrapper[] = jsonObject.structures.map(s => StructureWrapper.fromJsonObject(s));
-        return jsonObject ?
-            new StructuresWrapper(UnitOrUnitsWrapper.fromJsonObject(jsonObject.unitOrUnits), DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime), structures, structures.length > 1)
-            : undefined;
+
+        if (jsonObject) {
+            const structures: StructureWrapper[] = jsonObject.structures.map(s => StructureWrapper.fromJsonObject(s));
+            return new StructuresWrapper(UnitOrUnitsWrapper.fromJsonObject(jsonObject.unitOrUnits), DateOrDateTimeWrapper.fromJsonObject(jsonObject.startDateOrDateTime), DateOrDateTimeWrapper.fromJsonObject(jsonObject.endDateOrDateTime), structures, structures.length > 1);
+        }
+
+        return undefined;
     }
 
     constructor(unitOrUnits: UnitOrUnitsWrapper, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, structures: StructureWrapper[], isPartOfMultiPeriodDosage: boolean) {
