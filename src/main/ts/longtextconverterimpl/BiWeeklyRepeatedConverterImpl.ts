@@ -38,7 +38,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             s += this.getDosageEndText(structure);
         }
 
-        if(!structure.containsAccordingToNeedDose()) {
+        if (!structure.containsAccordingToNeedDose()) {
             s += " - gentages hver " + structure.getIterationInterval() + ". dag";
         }
 

@@ -45,7 +45,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             s += this.getDosageEndText(structure);
         }
 
-        if(!structure.containsAccordingToNeedDose()) {
+        if (!structure.containsAccordingToNeedDose()) {
             s += " - gentages hver uge";
         }
         s += ":\n";
@@ -63,7 +63,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
         let s = "";
 
-        if(includeWeekName) {
+        if (includeWeekName) {
             s += TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ": ";
         }
 

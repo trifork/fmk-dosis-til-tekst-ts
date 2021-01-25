@@ -157,7 +157,7 @@ export abstract class LongTextConverterImpl {
         else {
             // 2 tabletter morgen, 1 tablet middag, 2 tabletter aften og 1 tablet nat
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d == 0);
+                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d === 0);
                 if (d < day.getNumberOfDoses() - 2) {
                     s += ", ";
                 }
@@ -166,7 +166,7 @@ export abstract class LongTextConverterImpl {
                 }
             }
         }
-        
+
         if (day.containsAccordingToNeedDosesOnly() && day.getNumberOfDoses() > 0 && day.containsPlainDose()) {
             if ((day.getDayNumber() > 0 || (day.getDayNumber() === 0 && structure.getIterationInterval() === 1))) {
                 if (day.getNumberOfDoses() === 1) {
@@ -179,7 +179,7 @@ export abstract class LongTextConverterImpl {
                     }                   // else...ex.: 1 tablet 2 gange hver dag
                 }
             }
-            else if(day.containsPlainDose()) {
+            else if (day.containsPlainDose()) {
                 if (structure.getIterationInterval() === 7) {
                     s += ", højst 1 gang om ugen";
                 }
@@ -194,7 +194,7 @@ export abstract class LongTextConverterImpl {
             }                   // else...ex.: 1 tablet 2 gange hver dag
             s += daglig;
         }
-    
+
         let dosagePeriodPostfix = structure.getDosagePeriodPostfix();
         if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
