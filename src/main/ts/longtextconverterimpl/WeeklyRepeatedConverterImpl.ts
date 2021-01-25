@@ -45,7 +45,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             s += this.getDosageEndText(structure);
         }
 
-        s += " - gentages hver uge:\n";
+        if(!structure.containsAccordingToNeedDose()) {
+            s += " - gentages hver uge";
+        }
+        s += ":\n";
         s += this.getDayNamesText(unitOrUnits, structure, options);
         s = this.appendSupplText(structure, s);
 
@@ -53,12 +56,16 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper): string {
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean): string {
 
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
-        let s = TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ": ";
+        let s = "";
+
+        if(includeWeekName) {
+            s += TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ": ";
+        }
 
         s += dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);

@@ -62,7 +62,7 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
         let s = "";
         let daglig = "";
 
-        s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime());
+        s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
         s += " hver " + structure.getIterationInterval() + ". dag";
 
         let dosagePeriodPostfix = structure.getDosagePeriodPostfix();

@@ -20,6 +20,23 @@ describe('WeeklyRepeatedConverterImpl', () => {
             "Torsdag: 1 tablet morgen");
     });
 
+    it('should only write weekday once', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
+                new DayWrapper(2, 
+                    [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
+                    new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)
+                    ]),
+                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 22. jan. 2020 - gentages hver uge:\n" +
+            "Mandag: 2 tabletter morgen\n" +
+            "Torsdag: 1 tablet morgen og 2 tabletter aften");
+    });
+
     it('should return mandag og torsdag', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
@@ -34,8 +51,22 @@ describe('WeeklyRepeatedConverterImpl', () => {
             "Torsdag: 1 tablet");
     });
 
+    it('should return  mandag and torsdag without "gentages hver uge"', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, true)])
+            ], undefined)], false));
 
-    it('should return hver mandag and torsdag morgen efter behov', () => {
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 22. jan. 2020:\n" +
+            "Mandag: 2 tabletter efter behov, højst 1 gang dagligt\n" +
+            "Torsdag: 1 tablet efter behov, højst 1 gang dagligt");
+    });
+
+
+    it('should return hver mandag and torsdag morgen efter behov, wihtout "højst.."', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
@@ -44,9 +75,9 @@ describe('WeeklyRepeatedConverterImpl', () => {
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering fra d. 22. jan. 2020 - gentages hver uge:\n" +
-            "Mandag: 2 tabletter morgen efter behov højst 1 gang dagligt\n" +
-            "Torsdag: 1 tablet morgen efter behov højst 1 gang dagligt");
+            "Dosering fra d. 22. jan. 2020:\n" +
+            "Mandag: 2 tabletter morgen efter behov\n" +
+            "Torsdag: 1 tablet morgen efter behov");
     });
 
     it('should return all days for VKA', () => {

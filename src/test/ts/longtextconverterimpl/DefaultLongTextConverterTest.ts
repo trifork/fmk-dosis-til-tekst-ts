@@ -99,7 +99,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering kun d. 19. apr. 2019:\n" +
-            "1 tablet aften efter behov højst 1 gang dagligt");
+            "1 tablet aften efter behov");
     });
 
     it('should return Dosering kun for day=0 and iter=1', () => {
@@ -112,7 +112,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
-            "1 tablet aften efter behov højst 1 gang dagligt");
+            "1 tablet aften efter behov");
     });
 
     it('should return 0-dosages for empty days with option VKA', () => {

@@ -38,7 +38,9 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             s += this.getDosageEndText(structure);
         }
 
-        s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+        if(!structure.containsAccordingToNeedDose()) {
+            s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+        }
 
         s += ":\nHver " + Math.floor(structure.getIterationInterval() / 7) + ". " + this.getDayNamesText(unitOrUnits, structure);
 
@@ -48,7 +50,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
     }
 
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper): string {
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean): string {
 
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);

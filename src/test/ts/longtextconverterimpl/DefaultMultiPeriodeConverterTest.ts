@@ -49,8 +49,8 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
             "Dag 2: 2 tabletter morgen\n" +
             "\n" +
             "Dosering fra d. 23. jan. 2020 - gentages hver 2. dag:\n" +
-            "Dag 1: 1 tablet morgen efter behov højst 1 gang dagligt\n" +
-            "Dag 2: 2 tabletter morgen efter behov højst 1 gang dagligt");
+            "Dag 1: 1 tablet morgen efter behov\n" +
+            "Dag 2: 2 tabletter morgen efter behov");
     });
 
     it('should use "hver 3. dag" and "hver 4. dag"', () => {

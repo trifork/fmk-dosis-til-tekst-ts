@@ -132,13 +132,13 @@ export abstract class LongTextConverterImpl {
             daglig = " hver dag";
 
         if (day.getNumberOfDoses() === 1) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime());
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
 
         }
         else if (day.getNumberOfDoses() > 1 && day.allDosesAreTheSame()) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime());
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
             if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0) {
-                s += " højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + " dagligt";
+                s += ", højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + " dagligt";
             }
             else {
                 s += " " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses());
@@ -147,7 +147,7 @@ export abstract class LongTextConverterImpl {
         else if (day.getNumberOfDoses() > 2 && day.allDosesButTheFirstAreTheSame()) {
             // Eks.: 1 stk. kl. 08:00 og 2 stk. 4 gange daglig
 
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime());
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
             if (0 < day.getNumberOfDoses() - 1) {
                 s += " og ";
             }
@@ -157,7 +157,7 @@ export abstract class LongTextConverterImpl {
         else {
             // 2 tabletter morgen, 1 tablet middag, 2 tabletter aften og 1 tablet nat
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime());
+                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d == 0);
                 if (d < day.getNumberOfDoses() - 2) {
                     s += ", ";
                 }
@@ -166,11 +166,11 @@ export abstract class LongTextConverterImpl {
                 }
             }
         }
-
-        if (day.containsAccordingToNeedDosesOnly() && day.getNumberOfDoses() > 0) {
-            if (day.getDayNumber() > 0 || (day.getDayNumber() === 0 && structure.getIterationInterval() === 1)) {
+        
+        if (day.containsAccordingToNeedDosesOnly() && day.getNumberOfDoses() > 0 && day.containsPlainDose()) {
+            if ((day.getDayNumber() > 0 || (day.getDayNumber() === 0 && structure.getIterationInterval() === 1))) {
                 if (day.getNumberOfDoses() === 1) {
-                    s += " højst 1 gang dagligt";
+                    s += ", højst 1 gang dagligt";
                 }
                 else if (!hasDaysLabel && structure.getIterationInterval() === 1) {    // Ex. 12 ml 1 gang daglig
                     if (day.getNumberOfDoses() === 1 || !day.allDosesAreTheSame()) {
@@ -179,22 +179,22 @@ export abstract class LongTextConverterImpl {
                     }                   // else...ex.: 1 tablet 2 gange hver dag
                 }
             }
-            else {
+            else if(day.containsPlainDose()) {
                 if (structure.getIterationInterval() === 7) {
-                    s += " højst 1 gang om ugen";
+                    s += ", højst 1 gang om ugen";
                 }
                 else if (structure.getIterationInterval() > 1) {
-                    s += " højst 1 gang hver " + structure.getIterationInterval() + ". dag";
+                    s += ", højst 1 gang hver " + structure.getIterationInterval() + ". dag";
                 }
             }
         }
-        else if (!hasDaysLabel && structure.getIterationInterval() === 1) {    // Ex. 12 ml 1 gang daglig
+        else if (!hasDaysLabel && structure.getIterationInterval() === 1 && !day.containsAccordingToNeedDosesOnly()) {    // Ex. 12 ml 1 gang daglig
             if (day.containsMorningNoonEveningNightDoses() || day.containsTimedDose()) {
                 s += " -";      // Ex. 1 tablet nat - hver dag
             }                   // else...ex.: 1 tablet 2 gange hver dag
             s += daglig;
         }
-
+    
         let dosagePeriodPostfix = structure.getDosagePeriodPostfix();
         if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
@@ -203,7 +203,7 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper): string {
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean): string {
 
         let s = dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);

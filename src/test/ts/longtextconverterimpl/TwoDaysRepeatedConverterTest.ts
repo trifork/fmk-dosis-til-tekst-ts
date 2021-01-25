@@ -38,7 +38,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
-            "1 tablet efter behov højst 1 gang dagligt hver 2. dag");
+            "1 tablet efter behov, højst 1 gang dagligt hver 2. dag");
     });
 
     it('should not use hver 2. dag', () => {
@@ -63,8 +63,8 @@ describe('TwoDaysRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 22. jan. 2020 til d. 26. jan. 2020 - gentages hver 2. dag:\n" +
-            "Dag 1: 1 tablet morgen efter behov højst 1 gang dagligt\n" +
-            "Dag 2: 2 tabletter morgen efter behov højst 1 gang dagligt");
+            "Dag 1: 1 tablet morgen efter behov\n" +
+            "Dag 2: 2 tabletter morgen efter behov");
     });
 
 });

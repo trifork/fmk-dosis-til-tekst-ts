@@ -66,7 +66,7 @@ describe('DailyRepeatedConverterImpl', () => {
             ], undefined)], false));
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
-            "2 tabletter efter behov højst 4 gange dagligt");
+            "2 tabletter efter behov, højst 4 gange dagligt");
     });
 
     it('should return "hver morgen"', () => {
