@@ -23,9 +23,6 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
             if (structure.getDays().length === 1)
                 if (structure.getDays()[0].getDayNumber() !== 1 && structure.getDays()[0].getDayNumber() !== 2)
                     return false;
-            if (structure.getDays().length === 2)
-                if (structure.getDays()[0].getDayNumber() !== 1 || structure.getDays()[1].getDayNumber() !== 2)
-                    return false;
 
             return true;
         }
@@ -42,12 +39,12 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += this.getDosageEndText(structure);
         }
-        if (structure.getDays().length > 1) {
-            s += " - gentages hver 2. dag";
-        }
+
         s += ":\n" + this.getDaysText(unitOrUnits, structure);
-        if (structure.getDays().length === 1) {
-            s += " hver 2. dag";
+        if (structure.containsAccordingToNeedDosesOnly() && !structure.containsPlainDose()) {
+            s += ", hver 2. dag";     // In case of MMAN/Time, "højst x gang dagligt" is already in s
+        } else {
+            s += " - hver 2. dag";
         }
 
         s = this.appendSupplText(structure, s);
@@ -80,5 +77,4 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 
         return s;
     }
-
 }
