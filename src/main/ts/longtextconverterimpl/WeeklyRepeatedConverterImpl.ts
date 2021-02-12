@@ -46,8 +46,19 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         }
 
         if (!structure.containsAccordingToNeedDose()) {
-            s += " - gentages hver uge";
+            if (structure.getStartDateOrDateTime() && structure.getStartDateOrDateTime().getDate()
+                && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDate()) {
+                let diffMsec = Math.abs(structure.getEndDateOrDateTime().getDate().getTime() - structure.getStartDateOrDateTime().getDate().getTime());
+                let diffDays = Math.ceil(diffMsec / (1000 * 3600 * 24));
+                if (diffDays > 7) {
+                    // Don't write repeat text if dosage period equals or less than a week...not that it would make sense
+                    s += " - gentages hver uge";
+                }
+            } else {
+                s += " - gentages hver uge";
+            }
         }
+
         s += ":\n";
         s += this.getDayNamesText(unitOrUnits, structure, options);
         s = this.appendSupplText(structure, s);

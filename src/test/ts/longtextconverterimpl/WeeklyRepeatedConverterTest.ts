@@ -20,11 +20,25 @@ describe('WeeklyRepeatedConverterImpl', () => {
             "Torsdag: 1 tablet morgen");
     });
 
+    it('should not write "gentages hver uge" when dosageperiod <= 7 days', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), [
+                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 22. jan. 2020 til d. 25. jan. 2020:\n" +
+            "Mandag: 2 tabletter morgen\n" +
+            "Torsdag: 1 tablet morgen");
+    });
+
     it('should only write weekday once', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
-                new DayWrapper(2, 
+                new DayWrapper(2,
                     [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
                     new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)
                     ]),
@@ -108,7 +122,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
-            "Dosering fra d. 22. jan. 2020 til d. 25. jan. 2020 - gentages hver uge:\n" +
+            "Dosering fra d. 22. jan. 2020 til d. 25. jan. 2020:\n" +
             "Mandag: 2 tabletter\n" +
             "Tirsdag: 0 tabletter\n" +
             "Onsdag: 0 tabletter\n" +

@@ -85,7 +85,7 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
                 new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
             ], undefined),
 
-            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 10, 2), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 9), undefined), [
+            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 10, 2), undefined), new DateOrDateTimeWrapper(new Date(2020, 11, 9), undefined), [
                 new DayWrapper(2, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
                 new DayWrapper(5, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)]),
             ], undefined),
@@ -99,7 +99,7 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
             "Fredag d. 30. okt. 2020: 0 tabletter\n" +
             "Lørdag d. 31. okt. 2020: 3 tabletter\n" +
             "Søndag d. 1. nov. 2020: 0 tabletter\n\n" +
-            "Dosering fra d. 2. nov. 2020 til d. 9. nov. 2020 - gentages hver uge:\n" +
+            "Dosering fra d. 2. nov. 2020 til d. 9. dec. 2020 - gentages hver uge:\n" +
             "Mandag: 0 tabletter\n" +
             "Tirsdag: 2 tabletter\n" +
             "Onsdag: 0 tabletter\n" +
