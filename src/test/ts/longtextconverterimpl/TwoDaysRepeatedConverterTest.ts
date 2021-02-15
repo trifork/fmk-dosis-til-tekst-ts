@@ -14,7 +14,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
-            "1 tablet morgen - hver 2. dag");
+            "1 tablet morgen hver 2. dag");
     });
 
     it('should return gentages hver 2. dag with dagligt', () => {
@@ -26,20 +26,10 @@ describe('TwoDaysRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
-            "1 tablet - hver 2. dag");
+            "1 tablet hver 2. dag");
     });
 
-    it('should return hver 2. dag with dagligt and efter behov', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
-            null, null,
-            [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)])
-            ], undefined)], false));
-
-        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering fra d. 4. dec. 2018:\n" +
-            "1 tablet efter behov, højst 1 gang dagligt - hver 2. dag");
-    });
+  
 
     it('should return højst hver 2. dag efter behov', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

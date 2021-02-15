@@ -32,7 +32,7 @@ describe('EmptyStructureConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 15. nov. 2019 til d. 27. maj 2020:\n" +
-            "1 tablet morgen - hver 2. dag\n\n" +
+            "1 tablet morgen hver 2. dag\n\n" +
 
             "Dosering fra d. 28. maj 2020 til d. 31. maj 2020:\n" +
             "Bemærk: skal ikke anvendes i denne periode!\n\n" +

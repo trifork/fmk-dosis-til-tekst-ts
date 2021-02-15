@@ -43,8 +43,10 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
         s += ":\n" + this.getDaysText(unitOrUnits, structure);
         if (structure.containsAccordingToNeedDosesOnly() && !structure.containsPlainDose()) {
             s += ", hver 2. dag";     // In case of MMAN/Time, "højst x gang dagligt" is already in s
-        } else {
+        } else if (structure.getDays()[0].getNumberOfDoses() > 1) {
             s += " - hver 2. dag";
+        } else {
+            s += " hver 2. dag";
         }
 
         s = this.appendSupplText(structure, s);
