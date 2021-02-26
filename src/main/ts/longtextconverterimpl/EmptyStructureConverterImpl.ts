@@ -14,7 +14,7 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
             && dosageStructure.structures.getStructures()[0].getDays().length === 0;
     }
 
-    public doConvert(dosageStructure: DosageWrapper, options: TextOptions): string {
+    public doConvert(dosageStructure: DosageWrapper): string {
         return this.convert(dosageStructure.structures.getUnitOrUnits(), dosageStructure.structures.getStructures()[0]);
     }
 

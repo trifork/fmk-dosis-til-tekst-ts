@@ -32,10 +32,10 @@ export class RepeatedPNConverterImpl extends LongTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper, options: TextOptions): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
 
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
@@ -52,17 +52,17 @@ export class RepeatedPNConverterImpl extends LongTextConverterImpl {
             }
         }
         s += ":\n";
-        s += this.makeDaysDosage(unitOrUnits, structure, structure.getDays()[0]);
+        s += this.makeDaysDosage(unitOrUnits, structure, structure.getDays()[0], true, options);
         s = this.appendSupplText(structure, s);
 
         return s;
     }
 
-    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper): string {
+    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean, options: TextOptions): string {
         let s = "";
         let daglig = "";
 
-        s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
+        s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true, options);
 
         if (day.getNumberOfDoses() === 1) {
             s += ", højst 1 gang dagligt hver " + structure.getIterationInterval() + ". dag";

@@ -93,16 +93,24 @@ export abstract class LongTextConverterImpl {
             let daysLabel = "";
 
             if ((structure.getDays().length > 1) || (structure.getDays().length < structure.getIterationInterval())) {
-                daysLabel = this.makeDaysLabel(structure, day, options); // Add fx "Dag 1:" if more than one day, or only a number of days less than the iteration interval
+                daysLabel = this.makeDaysLabel(structure, day); // Add fx "Dag 1:" if more than one day, or only a number of days less than the iteration interval
+                if (options === TextOptions.VKA_WITH_MARKUP) {
+                    daysLabel = "<dt>" + daysLabel.trim() + "</dt>";
+                }
             }
 
             s += daysLabel;
-            s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
+
+            let daysDosage = this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0, options);
+            if (options === TextOptions.VKA_WITH_MARKUP) {
+                daysDosage = "<dd>" + daysDosage + "</dd>";
+            }
+            s += daysDosage;
         }
         return s;
     }
 
-    protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper, options: TextOptions): string {
+    protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper): string {
         if (day.getDayNumber() === 0) {
             if (day.containsAccordingToNeedDosesOnly())
                 return "";
@@ -125,18 +133,18 @@ export abstract class LongTextConverterImpl {
         }
     }
 
-    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean, options: TextOptions = TextOptions.STANDARD): string {
+    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean, options: TextOptions): string {
         let s = "";
         let daglig = "";
         if (!hasDaysLabel)
             daglig = " hver dag";
 
         if (day.getNumberOfDoses() === 1) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true, options);
 
         }
         else if (day.getNumberOfDoses() > 1 && day.allDosesAreTheSame()) {
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true, options);
             if (day.containsAccordingToNeedDosesOnly() && day.getDayNumber() > 0) {
                 s += ", højst " + day.getNumberOfDoses() + " " + TextHelper.gange(day.getNumberOfDoses()) + " dagligt";
             }
@@ -147,17 +155,17 @@ export abstract class LongTextConverterImpl {
         else if (day.getNumberOfDoses() > 2 && day.allDosesButTheFirstAreTheSame()) {
             // Eks.: 1 stk. kl. 08:00 og 2 stk. 4 gange daglig
 
-            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true);
+            s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true, options);
             if (0 < day.getNumberOfDoses() - 1) {
                 s += " og ";
             }
             let dayWithoutFirstDose: DayWrapper = new DayWrapper(day.getDayNumber(), day.getAllDoses().slice(1, day.getAllDoses().length));
-            s += this.makeDaysDosage(unitOrUnits, structure, dayWithoutFirstDose, false);
+            s += this.makeDaysDosage(unitOrUnits, structure, dayWithoutFirstDose, false, options);
         }
         else {
             // 2 tabletter morgen, 1 tablet middag, 2 tabletter aften og 1 tablet nat
             for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d === 0);
+                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d === 0, options);
                 if (d < day.getNumberOfDoses() - 2) {
                     s += ", ";
                 }
@@ -203,7 +211,7 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean): string {
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean, options: TextOptions): string {
 
         let s = dose.getAnyDoseQuantityString();
         s += " " + TextHelper.getUnit(dose, unitOrUnits);

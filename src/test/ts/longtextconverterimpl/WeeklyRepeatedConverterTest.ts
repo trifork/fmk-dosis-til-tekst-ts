@@ -163,5 +163,63 @@ describe('WeeklyRepeatedConverterImpl', () => {
             "Søndag: 1 tablet");
     });
 
+    it('should return all days for VKA with markup', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 2, 1), undefined), [
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
+            '<div class="d2t-vkadosagetext">\n' + 
+            '<div class="d2t-period">Dosering fra d. 22. jan. 2020 til d. 1. mar. 2020 - gentages hver uge:</div>\n' +
+            '<dl class="d2t-weekly-schema">\n' +
+            '<dt>Mandag:</dt><dd>2 tabletter</dd>\n' +
+            '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Onsdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Torsdag:</dt><dd>1 tablet</dd>\n' +
+            '<dt>Fredag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Lørdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Søndag:</dt><dd>0 tabletter</dd>\n' +
+            '</dl>\n</div>');
+    });
+
+    it('should return all days for both periods (VKA_WITH_MARKUP)  - no warnings', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined),
+            new DateOrDateTimeWrapper(new Date(2020, 3, 1), undefined),
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 24), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined),
+
+            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), null, [
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)
+
+            ], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
+            '<div class="d2t-vkadosagetext">\n' + 
+            '<div class="d2t-period">Dosering fra d. 22. jan. 2020 til d. 24. jan. 2020:</div>\n' +
+            '<dl class="d2t-adjustmentperiod">\n' +
+            '<dt>Onsdag d. 22. jan. 2020:</dt><dd>1 tablet</dd>\n' +
+            '<dt>Torsdag d. 23. jan. 2020:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Fredag d. 24. jan. 2020:</dt><dd>2 tabletter</dd>\n' +
+            '</dl>\n' +
+            '<div class="d2t-period">Dosering fra d. 25. jan. 2020 - gentages hver uge:</div>\n' +
+            '<dl class="d2t-weekly-schema">\n' +
+            '<dt>Mandag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Onsdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Torsdag:</dt><dd>2 tabletter</dd>\n' +
+            '<dt>Fredag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Lørdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Søndag:</dt><dd>1 tablet</dd>\n' +
+            '</dl>\n\n</div>');
+    });
+
 });
 

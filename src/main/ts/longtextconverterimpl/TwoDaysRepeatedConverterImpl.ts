@@ -31,16 +31,16 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper, options: TextOptions): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0]);
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = this.getDosageStartText(structure.getStartDateOrDateTime(), 2);
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += this.getDosageEndText(structure);
         }
 
-        s += ":\n" + this.getDaysText(unitOrUnits, structure);
+        s += ":\n" + this.getDaysText(unitOrUnits, structure, options);
         if (structure.containsAccordingToNeedDosesOnly() && !structure.containsPlainDose()) {
             s += ", hver 2. dag";     // In case of MMAN/Time, "højst x gang dagligt" is already in s
         } else if (structure.getDays()[0].getNumberOfDoses() > 1) {
@@ -58,7 +58,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
         return "Dag " + day.getDayNumber() + ": ";
     }
 
-    protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
         let appendedLines = 0;
         for (let day of structure.getDays()) {
@@ -74,7 +74,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
             }
 
             s += daysLabel;
-            s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0);
+            s += this.makeDaysDosage(unitOrUnits, structure, day, daysLabel.length > 0, options);
         }
 
         return s;

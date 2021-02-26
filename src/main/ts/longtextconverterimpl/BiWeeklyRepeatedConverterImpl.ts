@@ -7,6 +7,7 @@ import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { TextHelper } from "../TextHelper";
 import { DoseWrapper } from "../vowrapper/DoseWrapper";
 import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
+import { TextOptions } from "../TextOptions";
 
 export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
@@ -31,7 +32,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
         return false;
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
         s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
@@ -42,7 +43,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             s += " - gentages hver " + structure.getIterationInterval() + ". dag";
         }
 
-        s += ":\nHver " + Math.floor(structure.getIterationInterval() / 7) + ". " + this.getDayNamesText(unitOrUnits, structure);
+        s += ":\nHver " + Math.floor(structure.getIterationInterval() / 7) + ". " + this.getDayNamesText(unitOrUnits, structure, options);
 
         s = this.appendSupplText(structure, s);
 
@@ -50,7 +51,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
     }
 
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean): string {
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean, options: TextOptions): string {
 
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
@@ -72,7 +73,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
         return s;
     }
 
-    protected getDayNamesText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    protected getDayNamesText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         // Make a sorted list of weekdays
         let s = "";
         let daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
@@ -82,15 +83,9 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;
-            s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true);
+            s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true, options);
 
         }
         return s;
     }
-
-    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number) {
-
-        return "Dosering fra d. " + this.datesToLongText(startDateOrDateTime);
-    }
-
 }

@@ -28,6 +28,10 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         let s: string = "";
         let sortedStructures = dosage.structures.getStructures().sort(StructuresWrapper.dosagePeriodSorter);
 
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s = "<div class=\"d2t-vkadosagetext\">\n";
+        }
+
         sortedStructures.forEach(structure => {
             let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
                 new StructuresWrapper(dosage.structures.getUnitOrUnits(),
@@ -35,8 +39,15 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
                     dosage.structures.getEndDateOrDateTime(),
                     [structure],
                     sortedStructures.length > 1));
-            s += (this.longTextConverter.convertWrapper(w, options) + "\n\n");
+            s += (this.longTextConverter.convertWrapper(w, options) + "\n");
+            if (options !== TextOptions.VKA_WITH_MARKUP) {
+                s += "\n";
+            }
         });
+
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "</div>";
+        }
 
         return s.trim();
     }

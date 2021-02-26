@@ -35,11 +35,19 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     public doConvert(dosage: DosageWrapper, options: TextOptions): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage());
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
         let s = "";
+
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            if (!isPartOfMultiPeriodDosage) {
+                s = "<div class=\"d2t-vkadosagetext\">\n";
+            }
+            s += "<div class=\"d2t-period\">";
+        }
+
         s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
             s += this.getDosageEndText(structure);
@@ -59,23 +67,43 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             }
         }
 
-        s += ":\n";
+        s += ":";
+
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "</div>";
+        }
+
+        s += "\n";
+
         s += this.getDayNamesText(unitOrUnits, structure, options);
         s = this.appendSupplText(structure, s);
+
+        if (options === TextOptions.VKA_WITH_MARKUP && !isPartOfMultiPeriodDosage) {
+            s += "</div>";
+        }
 
         return s;
     }
 
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean): string {
+    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean, options: TextOptions): string {
 
         let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
         let s = "";
 
+
         if (includeWeekName) {
-            s += TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ": ";
+            if (options === TextOptions.VKA_WITH_MARKUP) {
+                s += "<dt>";
+            }
+            s += TextHelper.getWeekdayUppercase(dateOnly.getDay()) + ":";
+            if (options === TextOptions.VKA_WITH_MARKUP) {
+                s += "</dt><dd>";
+            } else {
+                s += " ";
+            }
         }
 
         s += dose.getAnyDoseQuantityString();
@@ -90,6 +118,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         if (dose.getIsAccordingToNeed()) {
             s += " efter behov";
         }
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "</dd>";
+        }
+
         return s;
     }
 
@@ -102,6 +134,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             structure = WeeklyRepeatedConverterImpl.fillWithEmptyWeekdays(structure, unitOrUnits);
         }
 
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s = "<dl class=\"d2t-weekly-schema\">\n";
+        }
+
         let daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
 
         let appendedLines = 0;
@@ -111,6 +147,11 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             appendedLines++;
             s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true, options);
         }
+
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "\n</dl>\n";
+        }
+
         return s;
     }
 
@@ -143,9 +184,6 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         return sortDay1 - sortDay2;
     }
 
-    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number) {
 
-        return "Dosering fra d. " + this.datesToLongText(startDateOrDateTime);
-    }
 
 }

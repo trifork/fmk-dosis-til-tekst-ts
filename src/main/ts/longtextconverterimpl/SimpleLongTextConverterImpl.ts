@@ -1,9 +1,10 @@
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
+import { TextOptions } from "../TextOptions";
 
 export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl {
 
-    public convert(text: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper): string {
+    public convert(text: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, options: TextOptions): string {
 
         let s = "";
 

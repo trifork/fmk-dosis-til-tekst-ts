@@ -45,6 +45,10 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
         let s = "";
 
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s = "<div class=\"d2t-period\">";
+        }
+
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
             // Same day dosage
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
@@ -81,12 +85,24 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             }
             s += " - gentages hver " + structure.getIterationInterval() + ". dag";
         }
-        s += ":\n";
+
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += ":</div>\n<dl class=\"d2t-adjustmentperiod\">\n";
+        } else {
+            s += ":\n";
+        }
+
+
+
         s += this.getDaysText(unitOrUnits, structure, options);
 
         s = this.appendSupplText(structure, s);
 
-        if (DefaultLongTextConverterImpl.convertAsVKA(options)
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "\n</dl>";
+        }
+
+        if (options === TextOptions.VKA // On purpose NOT for VKA_WITH_MARKUP! Is presented otherwise in FMK-O
             && structure.getIterationInterval() === 0
             && structure.getEndDateOrDateTime()
             && treatmentEndDateTime
@@ -95,6 +111,8 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         ) {
             s += "\nBemærk: Dosering herefter er ikke angivet";
         }
+
+
 
         return s;
     }
