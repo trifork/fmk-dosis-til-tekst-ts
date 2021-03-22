@@ -34,11 +34,11 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage());
+    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
+        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage(), currentTime);
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
+    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean, currentTime: Date): string {
         let s = "";
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
@@ -56,10 +56,17 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         if (!structure.containsAccordingToNeedDose()) {
             if (structure.getStartDateOrDateTime() && structure.getStartDateOrDateTime().getDate()
                 && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDate()) {
+                // Calculate length of dosage period
                 let diffMsec = Math.abs(structure.getEndDateOrDateTime().getDate().getTime() - structure.getStartDateOrDateTime().getDate().getTime());
                 let diffDays = Math.ceil(diffMsec / (1000 * 3600 * 24));
-                if (diffDays > 7) {
+                // Calculate length of remaining dosage period (from currentTime to dosage end)
+                let diffMsecRemaining = structure.getEndDateOrDateTime().getDate().getTime() - currentTime.getTime();
+                let diffDaysRemaining = Math.ceil(diffMsecRemaining / (1000 * 3600 * 24));
+
+                if (diffDays > 7 && !(
+                    (options === TextOptions.VKA || options === TextOptions.VKA_WITH_MARKUP) && diffDaysRemaining < 7 && diffDaysRemaining > 0)) {
                     // Don't write repeat text if dosage period equals or less than a week...not that it would make sense
+                    // ..and in case of VKA, only write "gentages" if period  expired or remaining time until dosageend is more than 7 days
                     s += " - gentages hver uge";
                 }
             } else {

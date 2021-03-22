@@ -23,7 +23,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
+    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
 
         let s: string = "";
         let sortedStructures = dosage.structures.getStructures().sort(StructuresWrapper.dosagePeriodSorter);

@@ -176,6 +176,14 @@ longtext = longTextConverter.convertWrapper(dosagestructures, 500);
 Det sidste argument i kaldene til convertWrapper metoderne angiver max-længden af de genererede strenge.
 Alternativt kan den kombinerede converter kaldes, jvf. ovenstående eksempel.
 
+VKA doseringer
+==============
+Der er mulighed for at få genereret en særlig formatteret lang doseringstekst specielt for VKA doseringer. VKA doseringer består typisk af et justeringsforløb og et ugeskema. Særligt for VKA ugeskemaer er bl.a., at alle dage er inkluderet i doseringsteksten, også 0-doseringer, som ellers normalt udelades fra de lange doseringstekster. VKA doseringsteksten kan genereres i 2 udgaver, en med indlejret markup, og en med den sædvanlige formattering vha. mellemrum/newlines. VKA doseringsteksten kan fås vha. en parameter på longTextConverter.convertWrapper():
+```javascript
+longtext = longTextConverter.convertWrapper(dosagestructures, 500, );
+```
+
+
 
 Doserings-XML generering ud fra doseringsforslag
 ==============

@@ -53,10 +53,15 @@ export class LongTextConverter {
         return this.convertWrapper(dosage, options);
     }
 
-    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD): string {
+    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
+
+        if (!currentTime) {
+            currentTime = new Date();
+        }
+
         for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage)) {
-                return converter.doConvert(dosage, options);
+                return converter.doConvert(dosage, options, currentTime);
             }
         }
         return null;

@@ -17,7 +17,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         return dosageStructure.structures.getStructures().length === 1;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions): string {
+    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
         return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getEndDateOrDateTime(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage());
     }
 
