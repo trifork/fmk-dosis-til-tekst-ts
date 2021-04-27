@@ -12,6 +12,18 @@ describe('version check', () => {
     });
 });
 
+describe('generateXMLSnippet', () => {
+    it('should handle notiterated with empty end dates', () => {
+        let snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '0', '1', 'kapsel', 'kapsler', 'som engangsdosis', [new Date(2021,3,27)], [ null ], "FMK144E4", 1);
+        expect(snippet.getLongDosageTranslation()).to.equal("Doseringsforløbet starter tirsdag den 27. april 2021 og ophører efter det angivne forløb:\n"+
+        "   Doseringsforløb:\n"+
+        "   Tirsdag den 27. april 2021: 1 kapsel.\n" +
+        "   Bemærk: som engangsdosis");
+    });
+    
+
+
+});
 describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
 
     let dosageProposalXMLGeneratorVersion = 1;

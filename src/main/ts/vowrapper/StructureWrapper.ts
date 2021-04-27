@@ -82,7 +82,7 @@ export class StructureWrapper {
             let startDate = this.startDateOrDateTime.getDateOrDateTime();
             let endDate = this.getEndDateOrDateTime().getDateOrDateTime();
 
-            return startDate.getFullYear() === endDate.getFullYear()
+            return startDate && endDate && startDate.getFullYear() === endDate.getFullYear()
                 && startDate.getMonth() === endDate.getMonth()
                 && startDate.getDate() === endDate.getDate();
         }
