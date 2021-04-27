@@ -55,6 +55,7 @@ export { Validator } from "./Validator";
 export { DosageTypeCalculator } from "./DosageTypeCalculator";
 export { DosageTypeCalculator144 } from "./DosageTypeCalculator144";
 export { DailyDosisCalculator } from "./DailyDosisCalculator";
+export { TextOptions } from "./TextOptions";
 
 // ./DosageProposalXMLGenerator
 export { DosageProposalXMLGenerator } from "./DosageProposalXMLGenerator/DosageProposalXMLGenerator";
