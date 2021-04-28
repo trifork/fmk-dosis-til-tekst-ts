@@ -17,9 +17,13 @@ export abstract class LongTextConverterImpl {
         return textOptions === TextOptions.VKA || textOptions === TextOptions.VKA_WITH_MARKUP;
     }
 
-    protected appendSupplText(structure: StructureWrapper, s: string) {
+    protected appendSupplText(structure: StructureWrapper, s: string, textOptions: TextOptions) {
         if (structure.getSupplText()) {
-            s += "\n" + TextHelper.INDENT + "Bemærk: " + structure.getSupplText();
+            if (textOptions === TextOptions.VKA_WITH_MARKUP) {
+                s += "\n<div class=\"d2t-suppltext\">Bemærk: " + structure.getSupplText() + "</div>";
+            } else {
+                s += "\n" + TextHelper.INDENT + "Bemærk: " + structure.getSupplText();
+            }
         }
         return s;
     }

@@ -49,7 +49,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
             s += " hver 2. dag";
         }
 
-        s = this.appendSupplText(structure, s);
+        s = this.appendSupplText(structure, s, options);
 
         return s;
     }

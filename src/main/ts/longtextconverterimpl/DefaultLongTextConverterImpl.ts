@@ -46,7 +46,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         let s = "";
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
-            s = "<div class=\"d2t-period\">";
+            s = "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">";
         }
 
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
@@ -83,7 +83,11 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                 s += this.getDosageEndText(structure);
             }
-            s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+            if (options === TextOptions.VKA_WITH_MARKUP) {
+                s += "<span class=\"d2t-iterationtext\">gentages hver " + structure.getIterationInterval() + ". dag</span>";
+            } else {
+                s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+            }
         }
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
@@ -96,7 +100,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
         s += this.getDaysText(unitOrUnits, structure, options);
 
-        s = this.appendSupplText(structure, s);
+        s = this.appendSupplText(structure, s, options);
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
             s += "\n</dl>";
@@ -112,7 +116,9 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             s += "\nBemærk: Dosering herefter er ikke angivet";
         }
 
-
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "\n</div>";    // closes <div class="d2t-period">
+        }
 
         return s;
     }

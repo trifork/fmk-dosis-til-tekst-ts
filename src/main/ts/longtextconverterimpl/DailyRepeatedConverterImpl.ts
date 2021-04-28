@@ -48,7 +48,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         }
 
 
-        s = this.appendSupplText(structure, s);
+        s = this.appendSupplText(structure, s, options);
         return s;
     }
 

@@ -45,7 +45,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             if (!isPartOfMultiPeriodDosage) {
                 s = "<div class=\"d2t-vkadosagetext\">\n";
             }
-            s += "<div class=\"d2t-period\">";
+            s += "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">";
         }
 
         s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
@@ -67,10 +67,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
                     (options === TextOptions.VKA || options === TextOptions.VKA_WITH_MARKUP) && diffDaysRemaining < 7 && diffDaysRemaining > 0)) {
                     // Don't write repeat text if dosage period equals or less than a week...not that it would make sense
                     // ..and in case of VKA, only write "gentages" if period  expired or remaining time until dosageend is more than 7 days
-                    s += " - gentages hver uge";
+                    s += (options === TextOptions.VKA_WITH_MARKUP ? "<span class=\"d2t-iterationtext\">gentages hver uge</span>" : " - gentages hver uge");
                 }
             } else {
-                s += " - gentages hver uge";
+                s += (options === TextOptions.VKA_WITH_MARKUP ? "<span class=\"d2t-iterationtext\">gentages hver uge</span>" : " - gentages hver uge");
             }
         }
 
@@ -83,7 +83,11 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         s += "\n";
 
         s += this.getDayNamesText(unitOrUnits, structure, options);
-        s = this.appendSupplText(structure, s);
+        s = this.appendSupplText(structure, s, options);
+
+        if (options === TextOptions.VKA_WITH_MARKUP) {
+            s += "\n</div>";    // closes <div class="d2t-period">
+        }
 
         if (options === TextOptions.VKA_WITH_MARKUP && !isPartOfMultiPeriodDosage) {
             s += "</div>";

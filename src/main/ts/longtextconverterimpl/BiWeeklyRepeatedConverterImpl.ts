@@ -45,7 +45,7 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
         s += ":\nHver " + Math.floor(structure.getIterationInterval() / 7) + ". " + this.getDayNamesText(unitOrUnits, structure, options);
 
-        s = this.appendSupplText(structure, s);
+        s = this.appendSupplText(structure, s, options);
 
         return s;
     }

@@ -213,7 +213,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
             '<div class="d2t-vkadosagetext">\n' + 
-            '<div class="d2t-period">Dosering fra d. 22. jan. 2020 til d. 1. mar. 2020 - gentages hver uge:</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 22. jan. 2020 til d. 1. mar. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
             '<dl class="d2t-weekly-schema">\n' +
             '<dt>Mandag:</dt><dd>2 tabletter</dd>\n' +
             '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
@@ -222,7 +222,29 @@ describe('WeeklyRepeatedConverterImpl', () => {
             '<dt>Fredag:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Lørdag:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Søndag:</dt><dd>0 tabletter</dd>\n' +
-            '</dl>\n</div>');
+            '</dl>\n\n</div></div>');
+    });
+
+    it('should return all days for VKA with markup including suppl.text div', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "Bemærkninger til ugeskema", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 2, 1), undefined), [
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
+            '<div class="d2t-vkadosagetext">\n' + 
+            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 22. jan. 2020 til d. 1. mar. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
+            '<dl class="d2t-weekly-schema">\n' +
+            '<dt>Mandag:</dt><dd>2 tabletter</dd>\n' +
+            '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Onsdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Torsdag:</dt><dd>1 tablet</dd>\n' +
+            '<dt>Fredag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Lørdag:</dt><dd>0 tabletter</dd>\n' +
+            '<dt>Søndag:</dt><dd>0 tabletter</dd>\n' +
+            '</dl>\n\n<div class="d2t-suppltext">Bemærk: Bemærkninger til ugeskema</div>\n</div></div>');
     });
 
     it('should return all days for both periods (VKA_WITH_MARKUP)  - no warnings', () => {
@@ -243,13 +265,13 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
             '<div class="d2t-vkadosagetext">\n' + 
-            '<div class="d2t-period">Dosering fra d. 22. jan. 2020 til d. 24. jan. 2020:</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 22. jan. 2020 til d. 24. jan. 2020:</div>\n' +
             '<dl class="d2t-adjustmentperiod">\n' +
             '<dt>Onsdag d. 22. jan. 2020:</dt><dd>1 tablet</dd>\n' +
             '<dt>Torsdag d. 23. jan. 2020:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Fredag d. 24. jan. 2020:</dt><dd>2 tabletter</dd>\n' +
-            '</dl>\n' +
-            '<div class="d2t-period">Dosering fra d. 25. jan. 2020 - gentages hver uge:</div>\n' +
+            '</dl>\n</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 25. jan. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
             '<dl class="d2t-weekly-schema">\n' +
             '<dt>Mandag:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
@@ -258,7 +280,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
             '<dt>Fredag:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Lørdag:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Søndag:</dt><dd>1 tablet</dd>\n' +
-            '</dl>\n\n</div>');
+            '</dl>\n\n</div>\n</div>');
     });
 
 });

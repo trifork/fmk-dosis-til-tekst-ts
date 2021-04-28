@@ -53,7 +53,7 @@ export class RepeatedPNConverterImpl extends LongTextConverterImpl {
         }
         s += ":\n";
         s += this.makeDaysDosage(unitOrUnits, structure, structure.getDays()[0], true, options);
-        s = this.appendSupplText(structure, s);
+        s = this.appendSupplText(structure, s, options);
 
         return s;
     }
