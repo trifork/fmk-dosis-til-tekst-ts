@@ -35,9 +35,9 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
-        let s = this.getDosageStartText(structure.getStartDateOrDateTime(), 2);
+        let s = this.getDosageStartText(structure.getStartDateOrDateTime(), 2, options);
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-            s += this.getDosageEndText(structure);
+            s += this.getDosageEndText(structure, options);
         }
 
         s += ":\n" + this.getDaysText(unitOrUnits, structure, options);

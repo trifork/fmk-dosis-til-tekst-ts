@@ -213,7 +213,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
             '<div class="d2t-vkadosagetext">\n' + 
-            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 22. jan. 2020 til d. 1. mar. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Fra 22. jan. 2020 til 1. mar. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
             '<dl class="d2t-weekly-schema">\n' +
             '<dt>Mandag:</dt><dd>2 tabletter</dd>\n' +
             '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
@@ -235,7 +235,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
             '<div class="d2t-vkadosagetext">\n' + 
-            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 22. jan. 2020 til d. 1. mar. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Fra 22. jan. 2020 til 1. mar. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
             '<dl class="d2t-weekly-schema">\n' +
             '<dt>Mandag:</dt><dd>2 tabletter</dd>\n' +
             '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +
@@ -265,13 +265,13 @@ describe('WeeklyRepeatedConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
             '<div class="d2t-vkadosagetext">\n' + 
-            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 22. jan. 2020 til d. 24. jan. 2020:</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Fra 22. jan. 2020 til 24. jan. 2020:</div>\n' +
             '<dl class="d2t-adjustmentperiod">\n' +
             '<dt>Onsdag d. 22. jan. 2020:</dt><dd>1 tablet</dd>\n' +
             '<dt>Torsdag d. 23. jan. 2020:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Fredag d. 24. jan. 2020:</dt><dd>2 tabletter</dd>\n' +
             '</dl>\n</div>\n' +
-            '<div class="d2t-period"><div class="d2t-periodtext">Dosering fra d. 25. jan. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
+            '<div class="d2t-period"><div class="d2t-periodtext">Fra 25. jan. 2020<span class="d2t-iterationtext">gentages hver uge</span>:</div>\n' +
             '<dl class="d2t-weekly-schema">\n' +
             '<dt>Mandag:</dt><dd>0 tabletter</dd>\n' +
             '<dt>Tirsdag:</dt><dd>0 tabletter</dd>\n' +

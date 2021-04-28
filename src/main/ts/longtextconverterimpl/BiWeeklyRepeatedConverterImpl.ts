@@ -34,9 +34,9 @@ export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
-        s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+        s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
         if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-            s += this.getDosageEndText(structure);
+            s += this.getDosageEndText(structure, options);
         }
 
         if (!structure.containsAccordingToNeedDose()) {

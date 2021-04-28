@@ -13,7 +13,7 @@ export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl 
             s += "Dosering kun d. " + this.datesToLongText(startDateOrDateTime) + ":\n";
         }
         else if (startDateOrDateTime) {
-            s += this.getDosageStartText(startDateOrDateTime, 0);
+            s += this.getDosageStartText(startDateOrDateTime, 0, options);
             if (endDateOrDateTime) {
                 s += " til d. " + this.datesToLongText(endDateOrDateTime) + ":\n";
             }

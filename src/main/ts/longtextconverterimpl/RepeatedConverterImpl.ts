@@ -45,10 +45,10 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
 
         else {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
 
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                s += this.getDosageEndText(structure);
+                s += this.getDosageEndText(structure, options);
             }
         }
         s += ":\n";

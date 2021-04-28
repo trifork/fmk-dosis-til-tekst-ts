@@ -28,9 +28,9 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number) {
+    protected getDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, iterationInterval: number, textOptions: TextOptions) {
 
-        return "Dosering fra d. " + this.datesToLongText(startDateOrDateTime);
+        return (textOptions === TextOptions.VKA_WITH_MARKUP ? "Fra " : "Dosering fra d. ") + this.datesToLongText(startDateOrDateTime);
     }
 
     protected getSingleDayDosageStartText(startDateOrDateTime: DateOrDateTimeWrapper, singleDayNo: number) {
@@ -55,9 +55,9 @@ export abstract class LongTextConverterImpl {
     }
 
 
-    protected getDosageEndText(structure: StructureWrapper) {
+    protected getDosageEndText(structure: StructureWrapper, options: TextOptions) {
 
-        return " til d. " + this.datesToLongText(structure.getEndDateOrDateTime());
+        return (options === TextOptions.VKA_WITH_MARKUP ? " til " : " til d. ") + this.datesToLongText(structure.getEndDateOrDateTime());
     }
 
     protected datesToLongText(startDateOrDateTime: DateOrDateTimeWrapper): string {

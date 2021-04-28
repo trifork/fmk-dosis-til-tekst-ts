@@ -59,29 +59,29 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
                 s += this.getSingleDayDosageStartText(structure.getStartDateOrDateTime(), structure.getDays()[0].getDayNumber());
             }
             else {
-                s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+                s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
             }
 
             // If there is just one day with according to need dosages we don't want say when to stop
             if (structure.getDays().length !== 1) {
                 if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                    s += this.getDosageEndText(structure);
+                    s += this.getDosageEndText(structure, options);
                 }
             }
         }
         else if (structure.getIterationInterval() === 1) {
             // Daily dosage
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                s += this.getDosageEndText(structure);
+                s += this.getDosageEndText(structure, options);
             }
         }
         else if (structure.getIterationInterval() > 1) {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
 
             if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-                s += this.getDosageEndText(structure);
+                s += this.getDosageEndText(structure, options);
             }
             if (options === TextOptions.VKA_WITH_MARKUP) {
                 s += "<span class=\"d2t-iterationtext\">gentages hver " + structure.getIterationInterval() + ". dag</span>";

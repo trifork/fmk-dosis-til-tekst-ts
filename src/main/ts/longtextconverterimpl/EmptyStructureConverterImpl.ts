@@ -14,11 +14,11 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
             && dosageStructure.structures.getStructures()[0].getDays().length === 0;
     }
 
-    public doConvert(dosageStructure: DosageWrapper): string {
-        return this.convert(dosageStructure.structures.getUnitOrUnits(), dosageStructure.structures.getStructures()[0]);
+    public doConvert(dosageStructure: DosageWrapper, options: TextOptions, currentTime: Date): string {
+        return this.convert(dosageStructure.structures.getUnitOrUnits(), dosageStructure.structures.getStructures()[0], options);
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper): string {
+    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
         let s = "";
 
 
@@ -27,9 +27,9 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
         else {
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval());
+            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
             if (structure.getEndDateOrDateTime()) {
-                s += this.getDosageEndText(structure);
+                s += this.getDosageEndText(structure, options);
             }
         }
 
