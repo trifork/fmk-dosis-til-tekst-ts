@@ -114,8 +114,7 @@ describe('generateXMLSnippet PN', () => {
     it('should handle 1', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 1. jan. 2110:\n1 tablet efter behov\nBemærk: tages med rigeligt vand");
-        //expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang daglig\nBemærk: tages med rigeligt vand");
-        expect(snippet.getShortDosageTranslation()).to.be.null;
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov.\nBemærk: tages med rigeligt vand");
     });
 
     it('should handle 1 with long suppl.text', () => {
@@ -127,7 +126,7 @@ describe('generateXMLSnippet PN', () => {
     it('should handle 1 with long suppl.text and longer shorttext', () => {
         let snippet = DosageProposalXMLGenerator.generateXMLSnippet('PN', '1', '1', 'tablet', 'tabletter', 'tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion, 10000);
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 til d. 1. jan. 2110:\n1 tablet efter behov\nBemærk: tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
-        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov, højst 1 gang dagligt.\nBemærk: tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
+        expect(snippet.getShortDosageTranslation()).to.equal("1 tablet efter behov.\nBemærk: tages med rigeligt vand OG EN HEL MASSE MERE DER FÅR DEN KORTE TEKST TIL AT BLIVE LÆNGERE END 70 KARAKTERER");
     });
 
     it('should handle 1.1;2.2', () => {

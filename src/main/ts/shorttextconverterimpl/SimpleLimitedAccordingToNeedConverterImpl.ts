@@ -40,10 +40,9 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAccordingToNeedDoses()[0], dosage.structures.getUnitOrUnits());
         text += " efter behov";
 
-        if (day.getNumberOfAccordingToNeedDoses() === 1)
-            text += ", højst 1 gang dagligt";
-        else
+        if (day.getNumberOfAccordingToNeedDoses() > 1) {
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";
+        }
 
         if (structure.getSupplText())
             text += TextHelper.addShortSupplText(structure.getSupplText());

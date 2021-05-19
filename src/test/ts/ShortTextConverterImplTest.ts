@@ -6,6 +6,17 @@ import { TextOptions } from '../../main/ts/TextOptions';
 
 describe('ShortTextConverter', () => {
 
+    it('should not return højst 1 daglig for PN day=1 and iter=1', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+            ], undefined)], false));
+
+        expect(ShortTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "1 tablet efter behov");
+    });
 
     it('not-iterated should not write daglig', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
