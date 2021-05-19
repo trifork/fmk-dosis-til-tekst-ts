@@ -25,7 +25,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
                 return false;
             if (structure.getDays().length > 7)
                 return false;
-            if (structure.getDays()[0].getDayNumber() === 0)
+            if (structure.getDays()[0].isAnyDay())
                 return false;
             if (structure.getDays()[structure.getDays().length - 1].getDayNumber() > 7)
                 return false;

@@ -115,7 +115,7 @@ export abstract class LongTextConverterImpl {
     }
 
     protected makeDaysLabel(structure: StructureWrapper, day: DayWrapper): string {
-        if (day.getDayNumber() === 0) {
+        if (day.isAnyDay()) {
             if (day.containsAccordingToNeedDosesOnly())
                 return "";
             else
@@ -178,33 +178,41 @@ export abstract class LongTextConverterImpl {
                 }
             }
         }
+        // Skip in case of 1 time PN since this can mean both 1 time per day or 1 <unit> an unlimited no of times per day
+        if (!(structure.getDays().length === 1
+            && day.getDayNumber() <= 1
+            && day.getNumberOfDoses() === 1
+            && structure.getIterationInterval() === 1
+            && day.containsAccordingToNeedDosesOnly()
+            && day.containsPlainDose())) {
 
-        if (day.containsAccordingToNeedDosesOnly() && day.getNumberOfDoses() > 0 && day.containsPlainDose()) {
-            if ((day.getDayNumber() > 0 || (day.getDayNumber() === 0 && structure.getIterationInterval() === 1))) {
-                if (day.getNumberOfDoses() === 1) {
-                    s += ", højst 1 gang dagligt";
+            if (day.containsAccordingToNeedDosesOnly() && day.getNumberOfDoses() > 0 && day.containsPlainDose()) {
+                if ((day.getDayNumber() > 0 || (day.isAnyDay() && structure.getIterationInterval() === 1))) {
+                    if (day.getNumberOfDoses() === 1) {
+                        s += ", højst 1 gang dagligt";
+                    }
+                    else if (!hasDaysLabel && structure.getIterationInterval() === 1) {    // Ex. 12 ml 1 gang daglig
+                        if (day.getNumberOfDoses() === 1 || !day.allDosesAreTheSame()) {
+                            // Exclude day.getNumberOfDoses() > 1 && day.allDosesAreTheSame() since they already have "højst X 2 gange daglig" from the code above
+                            s += " -" + daglig;      // Ex. 1 tablet nat efter behov - hver dag
+                        }                   // else...ex.: 1 tablet 2 gange hver dag
+                    }
                 }
-                else if (!hasDaysLabel && structure.getIterationInterval() === 1) {    // Ex. 12 ml 1 gang daglig
-                    if (day.getNumberOfDoses() === 1 || !day.allDosesAreTheSame()) {
-                        // Exclude day.getNumberOfDoses() > 1 && day.allDosesAreTheSame() since they already have "højst X 2 gange daglig" from the code above
-                        s += " -" + daglig;      // Ex. 1 tablet nat efter behov - hver dag
-                    }                   // else...ex.: 1 tablet 2 gange hver dag
+                else if (day.containsPlainDose()) {
+                    if (structure.getIterationInterval() === 7) {
+                        s += ", højst 1 gang om ugen";
+                    }
+                    else if (structure.getIterationInterval() > 1) {
+                        s += ", højst 1 gang hver " + structure.getIterationInterval() + ". dag";
+                    }
                 }
             }
-            else if (day.containsPlainDose()) {
-                if (structure.getIterationInterval() === 7) {
-                    s += ", højst 1 gang om ugen";
-                }
-                else if (structure.getIterationInterval() > 1) {
-                    s += ", højst 1 gang hver " + structure.getIterationInterval() + ". dag";
-                }
+            else if (!hasDaysLabel && structure.getIterationInterval() === 1 && !day.containsAccordingToNeedDosesOnly()) {    // Ex. 12 ml 1 gang daglig
+                if (day.containsMorningNoonEveningNightDoses() || day.containsTimedDose()) {
+                    s += " -";      // Ex. 1 tablet nat - hver dag
+                }                   // else...ex.: 1 tablet 2 gange hver dag
+                s += daglig;
             }
-        }
-        else if (!hasDaysLabel && structure.getIterationInterval() === 1 && !day.containsAccordingToNeedDosesOnly()) {    // Ex. 12 ml 1 gang daglig
-            if (day.containsMorningNoonEveningNightDoses() || day.containsTimedDose()) {
-                s += " -";      // Ex. 1 tablet nat - hver dag
-            }                   // else...ex.: 1 tablet 2 gange hver dag
-            s += daglig;
         }
 
         let dosagePeriodPostfix = structure.getDosagePeriodPostfix();

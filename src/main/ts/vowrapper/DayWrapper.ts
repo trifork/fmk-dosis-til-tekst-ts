@@ -103,6 +103,10 @@ export class DayWrapper {
         return this.dayNumber;
     }
 
+    public isAnyDay() {
+        return this.getDayNumber() === 0;
+    }
+
     public getNumberOfDoses() {
         return this.allDoses.length;
     }

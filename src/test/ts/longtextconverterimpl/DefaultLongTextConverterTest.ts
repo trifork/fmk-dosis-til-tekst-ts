@@ -89,7 +89,7 @@ describe('DefaultLongTextConverterImpl', () => {
             "Tirsdag d. 23. apr. 2019: 1 tablet aften");
     });
 
-    it('should return Dosering kun for day=0 and iter=0', () => {
+    it('should return Dosering kun for day=2 and iter=0', () => {
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
@@ -102,7 +102,7 @@ describe('DefaultLongTextConverterImpl', () => {
             "1 tablet aften efter behov");
     });
 
-    it('should return Dosering kun for day=0 and iter=1', () => {
+    it('should return Dosering kun for day=0 and iter=1 evening', () => {
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
@@ -180,6 +180,71 @@ describe('DefaultLongTextConverterImpl', () => {
             "Fredag d. 30. okt. 2020: 0 tabletter\n" +
             "Lørdag d. 31. okt. 2020: 3 tabletter\n" +
             "Søndag d. 1. nov. 2020: 0 tabletter");
+    });
+
+    it('should return Dosering kun for day=0 and iter=0', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null, 
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(0, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
+            "1 tablet efter behov");
+    });
+
+    it('should return Dosering kun for day=0 and iter=1', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null, 
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(0, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
+            "1 tablet efter behov");
+    });
+
+    it('should return Dosering kun for day=1 and iter=0', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering kun d. 18. apr. 2019:\n" +
+            "1 tablet efter behov, højst 1 gang dagligt");
+    });
+
+    it('should return Dosering kun for day=1 and iter=1', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
+            "1 tablet efter behov");
+    });
+
+    it('should return Morning Dosering kun for day=1 and iter=1', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
+            "1 tablet hver morgen efter behov");
     });
 
 });

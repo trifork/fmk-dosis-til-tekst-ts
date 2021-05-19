@@ -22,7 +22,7 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
             return false;
         if (structure.getDays().length > 7 || structure.getDays().length === 0)
             return false;
-        if (structure.getDays()[0].getDayNumber() === 0)
+        if (structure.getDays()[0].isAnyDay())
             return false;
         if (structure.getDays()[structure.getDays().length - 1].getDayNumber() > 7)
             return false;

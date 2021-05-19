@@ -55,15 +55,15 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         }
         else if (structure.getIterationInterval() === 0) {
             // Not repeated dosage
-            if (structure.getDays().length === 1) {
+            if (structure.getDays().length === 1 && structure.getDays()[0].getDayNumber() !== 0) {
                 s += this.getSingleDayDosageStartText(structure.getStartDateOrDateTime(), structure.getDays()[0].getDayNumber());
             }
             else {
                 s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
             }
 
-            // If there is just one day with according to need dosages we don't want say when to stop
-            if (structure.getDays().length !== 1) {
+            // If there is just one day with according to need dosages (which is not AnyDay) we don't want say when to stop
+            if (structure.getDays().length !== 1 || (structure.getDays().length === 1 && structure.getDays()[0].isAnyDay())) {
                 if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                     s += this.getDosageEndText(structure, options);
                 }
