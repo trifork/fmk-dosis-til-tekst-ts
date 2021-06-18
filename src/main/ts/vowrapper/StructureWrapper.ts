@@ -218,4 +218,12 @@ export class StructureWrapper {
         return this.getDays().length === 0;
     }
 
+    // PN dosage without limit: not iterated PN only with one dosage element means take as many as you want per day
+    public isPNWithoutLimit(): boolean {
+        return this.getIterationInterval() === 0 
+            && this.containsAccordingToNeedDosesOnly() 
+            && this.getDays()[0].getDayNumber() <= 1
+            && this.getDays()[0].getNumberOfAccordingToNeedDoses() === 1;
+    }
+
 }

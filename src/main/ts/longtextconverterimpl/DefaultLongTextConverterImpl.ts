@@ -54,8 +54,11 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
         else if (structure.getIterationInterval() === 0) {
-            // Not repeated dosage
-            if (structure.getDays().length === 1 && structure.getDays()[0].getDayNumber() !== 0) {
+
+            let useSingleDayDosageStartText = structure.getDays().length === 1 &&  !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
+
+            // Not repeated dosage - and not an unlimited PN dosage neither
+            if (useSingleDayDosageStartText) {
                 s += this.getSingleDayDosageStartText(structure.getStartDateOrDateTime(), structure.getDays()[0].getDayNumber());
             }
             else {
@@ -63,7 +66,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             }
 
             // If there is just one day with according to need dosages (which is not AnyDay) we don't want say when to stop
-            if (structure.getDays().length !== 1 || (structure.getDays().length === 1 && structure.getDays()[0].isAnyDay())) {
+            if (!useSingleDayDosageStartText) {
                 if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
                     s += this.getDosageEndText(structure, options);
                 }

@@ -182,7 +182,7 @@ export abstract class LongTextConverterImpl {
         if (!(structure.getDays().length === 1
             && day.getDayNumber() <= 1
             && day.getNumberOfDoses() === 1
-            && structure.getIterationInterval() === 1
+            && structure.getIterationInterval() <= 1    // When the 1 PN issue has been solved, this line should be changed to structure.getIterationInterval() === 1, since iter=1 means there is a daily limit, whereas iter=0 means no daily limit
             && day.containsAccordingToNeedDosesOnly()
             && day.containsPlainDose())) {
 
