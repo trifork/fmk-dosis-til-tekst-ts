@@ -223,7 +223,8 @@ export class StructureWrapper {
         return this.getIterationInterval() === 0
             && this.containsAccordingToNeedDosesOnly()
             && this.getDays()[0].getDayNumber() <= 1
-            && this.getDays()[0].getNumberOfAccordingToNeedDoses() === 1;
+            && this.getDays()[0].getNumberOfAccordingToNeedDoses() === 1
+            && this.getDays()[0].getNumberOfDoses() === 1
+            && this.getDays()[0].getNumberOfPlainDoses() === 1;
     }
-
 }
