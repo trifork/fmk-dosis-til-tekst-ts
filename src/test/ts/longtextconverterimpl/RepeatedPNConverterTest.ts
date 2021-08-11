@@ -68,7 +68,7 @@ describe('RepeatedPNConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
-            "1 tablet efter behov");
+            "1 tablet efter behov, højst 1 gang dagligt");
     });
 
     it('should return efter behov med max for day=1 and iter=1', () => {
@@ -81,7 +81,7 @@ describe('RepeatedPNConverterImpl', () => {
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
-            "1 tablet efter behov");
+            "1 tablet efter behov, højst 1 gang dagligt");
     });
 
     it('should return efter behov med dagligt max for day=1 and iter=1 and 2 plain doses', () => {
