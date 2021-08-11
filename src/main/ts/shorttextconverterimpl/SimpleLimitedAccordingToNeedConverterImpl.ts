@@ -43,7 +43,7 @@ export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverte
         if (day.getNumberOfAccordingToNeedDoses() === 1) {
             text += ", højst 1 gang dagligt";
         }
-        else if(day.getNumberOfAccordingToNeedDoses() > 1) {
+        else if (day.getNumberOfAccordingToNeedDoses() > 1) {
             text += ", højst " + day.getNumberOfAccordingToNeedDoses() + " gange daglig";
         }
 
