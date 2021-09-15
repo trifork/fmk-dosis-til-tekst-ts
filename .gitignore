@@ -4,3 +4,4 @@ target/
 src/main/ts/.baseDir.ts
 npm-debug.log
 .npmrc
+.vscode/

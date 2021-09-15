@@ -12,7 +12,7 @@
 			// Automatically stop program after launch.
 			"stopOnEntry": false,
 			// Command line arguments passed to the program.
-			"args": ["-f", "should return hver 3. mandag", "src/test/target/test/ts/**/*.js"],
+			"args": ["-f", "should do something", "src/test/target/test/ts/**/*.js"],
             "env": { "NODE_ENV": "testing"},
             "cwd": "${workspaceRoot}"
 
