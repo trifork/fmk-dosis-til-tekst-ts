@@ -21,4 +21,8 @@ export class PlainDoseWrapper extends DoseWrapper {
         return PlainDoseWrapper.LABEL;
     }
 
+    public isEmptyDosage(): boolean {
+        return this.getDoseQuantity() === 0 && this.getMinimalDoseQuantity() == null && this.getMaximalDoseQuantity() == null;
+    }
+
 }

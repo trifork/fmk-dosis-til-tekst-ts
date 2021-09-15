@@ -37,12 +37,7 @@ export class StructureWrapper {
         this.endDateOrDateTime = endDateOrDateTime;
         this.dosagePeriodPostfix = dosagePeriodPostfix;
 
-        if (days) {
-            this.days = days.sort((d1, d2) => d1.getDayNumber() - d2.getDayNumber());
-        }
-        else {
-            throw new DosisTilTekstException("StructureWrapper: days must be set in StructureWrapper");
-        }
+        this.setDays(days);
     }
 
     getIterationInterval(): number {
@@ -94,6 +89,15 @@ export class StructureWrapper {
 
     public getDays() {
         return this.days;
+    }
+
+    public setDays(days: DayWrapper[]) {
+        if (days) {
+            this.days = days.sort((d1, d2) => d1.getDayNumber() - d2.getDayNumber());
+        }
+        else {
+            throw new DosisTilTekstException("StructureWrapper: days must be set in StructureWrapper");
+        }
     }
 
     public getDay(dayNumber: number): DayWrapper {

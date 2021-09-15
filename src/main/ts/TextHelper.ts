@@ -272,7 +272,7 @@ export class TextHelper {
         let d = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
         d.setDate(d.getDate() + dayNumber - 1);
         let dateString = TextHelper.formatLongDateAbbrevMonth(d);
-        return dateString.charAt(0).toUpperCase() + dateString.substr(1) + ": ";
+        return dateString.charAt(0).toUpperCase() + dateString.substr(1);
     }
 
     public static formatLongDateTime(dateTime: Date): string {

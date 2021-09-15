@@ -7,6 +7,7 @@ import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextOptions } from "../TextOptions";
+import { PlainDoseWrapper } from "..";
 
 export abstract class LongTextConverterImpl {
 
@@ -86,6 +87,26 @@ export abstract class LongTextConverterImpl {
     }
 
     protected getDaysText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+
+        let emptyDays: DayWrapper[] = [];
+
+        // In certain cases, a large number of 0-dosages are generated when a client registers a long VKA adjustment period but with only a few dosage days.
+        // Remove the last part of these 0-dosages and replace them with "Fra xx til xx: 0 tabletter"
+
+        let lastEmptyDosageIndex = structure.getDays().length - 1;
+        while (lastEmptyDosageIndex > 0
+            && structure.getDays()[lastEmptyDosageIndex].getPlainDoses()
+            && structure.getDays()[lastEmptyDosageIndex].getPlainDoses().length === 1
+            && structure.getDays()[lastEmptyDosageIndex].getPlainDoses()[0].isEmptyDosage()) {
+
+            lastEmptyDosageIndex--;
+        }
+
+        if (structure.getDays().length - 1 - lastEmptyDosageIndex > 10) {    // Only active in case of 10 empty dosages
+            emptyDays = structure.getDays().slice(lastEmptyDosageIndex + 1);    // Collect  empty days from days array
+            structure.setDays(structure.getDays().slice(0, lastEmptyDosageIndex + 1)); // Remove empty days from structure
+        }
+
         let s = "";
         let appendedLines = 0;
         for (let day of structure.getDays()) {
@@ -111,6 +132,29 @@ export abstract class LongTextConverterImpl {
             }
             s += daysDosage;
         }
+
+        if (emptyDays.length > 0) {
+
+            let startDateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
+            startDateOnly.setDate(startDateOnly.getDate() + emptyDays[emptyDays.length - 1].getDayNumber() - 1);
+
+            let endDateOnly = TextHelper.makeFromDateOnly(structure.getEndDateOrDateTime().getDateOrDateTime());
+            endDateOnly.setDate(endDateOnly.getDate() + emptyDays[0].getDayNumber() - 1);
+
+                
+            let emptyDosageIntervalString = 
+                "Fra d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), emptyDays[0].getDayNumber())
+                + " til d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), emptyDays[emptyDays.length - 1].getDayNumber());
+            let emptyDosageString = 
+                "0 " + (unitOrUnits.getUnitPlural() ? unitOrUnits.getUnitPlural() : unitOrUnits.getUnit());
+
+            if (options === TextOptions.VKA_WITH_MARKUP) {
+                s += "\n<dt>" + emptyDosageIntervalString + "</dt><dd>" + emptyDosageString + "</dd>";
+            }
+            else {
+                s += "\n" + emptyDosageIntervalString + ": " + emptyDosageString;
+            }
+        }
         return s;
     }
 
@@ -129,7 +173,7 @@ export abstract class LongTextConverterImpl {
             let dateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
             dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
 
-            return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber());
+            return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), day.getDayNumber()) + ": ";
         }
         else {
             // Dag 1: 2 tabletter....
