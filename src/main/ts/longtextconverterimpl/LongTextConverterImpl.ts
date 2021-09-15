@@ -141,11 +141,11 @@ export abstract class LongTextConverterImpl {
             let endDateOnly = TextHelper.makeFromDateOnly(structure.getEndDateOrDateTime().getDateOrDateTime());
             endDateOnly.setDate(endDateOnly.getDate() + emptyDays[0].getDayNumber() - 1);
 
-                
-            let emptyDosageIntervalString = 
+
+            let emptyDosageIntervalString =
                 "Fra d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), emptyDays[0].getDayNumber())
                 + " til d. " + TextHelper.makeDateString(structure.getStartDateOrDateTime(), emptyDays[emptyDays.length - 1].getDayNumber());
-            let emptyDosageString = 
+            let emptyDosageString =
                 "0 " + (unitOrUnits.getUnitPlural() ? unitOrUnits.getUnitPlural() : unitOrUnits.getUnit());
 
             if (options === TextOptions.VKA_WITH_MARKUP) {
