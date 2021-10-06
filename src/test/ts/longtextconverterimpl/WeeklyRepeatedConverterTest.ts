@@ -298,5 +298,31 @@ describe('WeeklyRepeatedConverterImpl', () => {
             '</dl>\n\n</div>\n</div>');
     });
 
+    it('should handle empty days without crash and missing days in vka text', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("mg", undefined, undefined),
+            new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined),
+            new DateOrDateTimeWrapper(new Date(2020, 3, 1), undefined),
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 24), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(15, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(2, [new PlainDoseWrapper(15, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(3, [])
+            ], undefined)
+
+            ], false));
+
+            expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
+                '<div class="d2t-vkadosagetext">\n' + 
+                '<div class="d2t-period"><div class="d2t-periodtext">Fra 22. jan. 2020 til 24. jan. 2020:</div>\n' +
+                '<dl class="d2t-weekly-schema">\n' +
+            '<dt>Mandag:</dt><dd>0 mg</dd>\n' +
+            '<dt>Tirsdag:</dt><dd>0 mg</dd>\n' +
+            '<dt>Onsdag:</dt><dd>15 mg</dd>\n' +
+            '<dt>Torsdag:</dt><dd>15 mg</dd>\n' +
+            '<dt>Fredag:</dt><dd>0 mg</dd>\n' +
+            '<dt>Lørdag:</dt><dd>0 mg</dd>\n' +
+            '<dt>Søndag:</dt><dd>0 mg</dd>\n' +
+            '</dl>\n\n</div></div>');
+        });
+
 });
 

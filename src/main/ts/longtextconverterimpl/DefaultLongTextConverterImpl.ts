@@ -114,7 +114,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             && structure.getEndDateOrDateTime()
             && treatmentEndDateTime
             && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime()
-            && !isPartOfMultiPeriodDosage
+            && !isPartOfMultiPeriodDosage  
         ) {
             s += "\nBemærk: Dosering herefter er ikke angivet";
         }

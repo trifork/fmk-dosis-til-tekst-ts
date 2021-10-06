@@ -67,9 +67,10 @@ export class DayWrapper {
 
         this.allDoses = doses;
 
+        this.dayNumber = dayNumber;
+
         for (let dose of doses) {
 
-            this.dayNumber = dayNumber;
             if (dose) {
                 if (dose instanceof PlainDoseWrapper)
                     this.plainDoses.push(<PlainDoseWrapper>dose);

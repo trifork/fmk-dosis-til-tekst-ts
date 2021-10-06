@@ -41,6 +41,13 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean, currentTime: Date): string {
         let s = "";
 
+        let trimmedStructure = new StructureWrapper(
+            structure.getIterationInterval(), 
+            structure.getSupplText(), 
+            structure.getStartDateOrDateTime(), 
+            structure.getEndDateOrDateTime(), 
+            structure.getDays().filter(d => d.getAllDoses().length > 0), structure.getDosagePeriodPostfix());
+
         if (options === TextOptions.VKA_WITH_MARKUP) {
             if (!isPartOfMultiPeriodDosage) {
                 s = "<div class=\"d2t-vkadosagetext\">\n";
@@ -48,19 +55,19 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             s += "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">";
         }
 
-        s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
-        if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
-            s += this.getDosageEndText(structure, options);
+        s += this.getDosageStartText(trimmedStructure.getStartDateOrDateTime(), trimmedStructure.getIterationInterval(), options);
+        if (trimmedStructure.getEndDateOrDateTime() && trimmedStructure.getEndDateOrDateTime().getDateOrDateTime()) {
+            s += this.getDosageEndText(trimmedStructure, options);
         }
 
-        if (!structure.containsAccordingToNeedDose()) {
-            if (structure.getStartDateOrDateTime() && structure.getStartDateOrDateTime().getDate()
-                && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDate()) {
+        if (!trimmedStructure.containsAccordingToNeedDose()) {
+            if (trimmedStructure.getStartDateOrDateTime() && trimmedStructure.getStartDateOrDateTime().getDate()
+                && trimmedStructure.getEndDateOrDateTime() && trimmedStructure.getEndDateOrDateTime().getDate()) {
                 // Calculate length of dosage period
-                let diffMsec = Math.abs(structure.getEndDateOrDateTime().getDate().getTime() - structure.getStartDateOrDateTime().getDate().getTime());
+                let diffMsec = Math.abs(trimmedStructure.getEndDateOrDateTime().getDate().getTime() - trimmedStructure.getStartDateOrDateTime().getDate().getTime());
                 let diffDays = Math.ceil(diffMsec / (1000 * 3600 * 24));
                 // Calculate length of remaining dosage period (from currentTime to dosage end)
-                let diffMsecRemaining = structure.getEndDateOrDateTime().getDate().getTime() - currentTime.getTime();
+                let diffMsecRemaining = trimmedStructure.getEndDateOrDateTime().getDate().getTime() - currentTime.getTime();
                 let diffDaysRemaining = Math.ceil(diffMsecRemaining / (1000 * 3600 * 24));
 
                 if (diffDays > 7 && !(
@@ -82,8 +89,8 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
         s += "\n";
 
-        s += this.getDayNamesText(unitOrUnits, structure, options);
-        s = this.appendSupplText(structure, s, options);
+        s += this.getDayNamesText(unitOrUnits, trimmedStructure, options);
+        s = this.appendSupplText(trimmedStructure, s, options);
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
             s += "\n</div>";    // closes <div class="d2t-period">
