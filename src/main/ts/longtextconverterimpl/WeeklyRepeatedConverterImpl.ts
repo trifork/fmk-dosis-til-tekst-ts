@@ -42,10 +42,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         let s = "";
 
         let trimmedStructure = new StructureWrapper(
-            structure.getIterationInterval(), 
-            structure.getSupplText(), 
-            structure.getStartDateOrDateTime(), 
-            structure.getEndDateOrDateTime(), 
+            structure.getIterationInterval(),
+            structure.getSupplText(),
+            structure.getStartDateOrDateTime(),
+            structure.getEndDateOrDateTime(),
             structure.getDays().filter(d => d.getAllDoses().length > 0), structure.getDosagePeriodPostfix());
 
         if (options === TextOptions.VKA_WITH_MARKUP) {

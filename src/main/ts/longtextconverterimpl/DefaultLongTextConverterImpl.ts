@@ -55,7 +55,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         }
         else if (structure.getIterationInterval() === 0) {
 
-            let useSingleDayDosageStartText = structure.getDays().length === 1 &&  !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
+            let useSingleDayDosageStartText = structure.getDays().length === 1 && !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
 
             // Not repeated dosage - and not an unlimited PN dosage neither
             if (useSingleDayDosageStartText) {
@@ -114,7 +114,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             && structure.getEndDateOrDateTime()
             && treatmentEndDateTime
             && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime()
-            && !isPartOfMultiPeriodDosage  
+            && !isPartOfMultiPeriodDosage
         ) {
             s += "\nBemærk: Dosering herefter er ikke angivet";
         }
