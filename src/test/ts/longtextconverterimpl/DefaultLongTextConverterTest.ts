@@ -206,13 +206,13 @@ describe('DefaultLongTextConverterImpl', () => {
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
-            "Dosering fra d. 27. okt. 2020 til d. 30. nov. 2020:\n" +
+            "Dosering fra d. 27. okt. 2020 til d. 31. okt. 2020:\n" +
             "Tirsdag d. 27. okt. 2020: 1 tablet\n" +
             "Onsdag d. 28. okt. 2020: 0 tabletter\n" +
             "Torsdag d. 29. okt. 2020: 2 tabletter\n" +
             "Fredag d. 30. okt. 2020: 0 tabletter\n" +
-            "Lørdag d. 31. okt. 2020: 3 tabletter\n" +
-            "Fra d. 1. nov. 2020 til d. 30. nov. 2020: 0 tabletter");
+            "Lørdag d. 31. okt. 2020: 3 tabletter\n\n" +
+            "Dosering fra d. 1. nov. 2020 til d. 30. nov. 2020: 0 tabletter");
     });
 
     it('should return Fra/Til for empty VKA dosages in adjustmentperiods including markup', () => {
@@ -226,14 +226,73 @@ describe('DefaultLongTextConverterImpl', () => {
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
-            "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">Fra 27. okt. 2020 til 30. nov. 2020:</div>\n" +
+            "<div class=\"d2t-vkadosagetext\">\n" + 
+            "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">Fra 27. okt. 2020 til 31. okt. 2020:</div>\n" +
             "<dl class=\"d2t-adjustmentperiod\">\n" +
             "<dt>Tirsdag d. 27. okt. 2020:</dt><dd>1 tablet</dd>\n" +
             "<dt>Onsdag d. 28. okt. 2020:</dt><dd>0 tabletter</dd>\n" +
             "<dt>Torsdag d. 29. okt. 2020:</dt><dd>2 tabletter</dd>\n" +
             "<dt>Fredag d. 30. okt. 2020:</dt><dd>0 tabletter</dd>\n" +
             "<dt>Lørdag d. 31. okt. 2020:</dt><dd>3 tabletter</dd>\n" +
-            "<dt>Fra d. 1. nov. 2020 til d. 30. nov. 2020</dt><dd>0 tabletter</dd>\n</dl>\n</div>");
+            "</dl>\n</div>\n" +
+            "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">Fra 1. nov. 2020 til 30. nov. 2020:</div>\n" +
+            "<dl class=\"d2t-adjustmentperiod\">" +
+            "<dt></dt><dd>0 tabletter</dd></dl></div>\n</div>");
     });
+
+    it('should return 0-period less than 10 days', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
+            "Dosering fra d. 25. okt. 2021 til d. 1. nov. 2021:\n" +
+            "Mandag d. 25. okt. 2021: 1 tablet\n" +
+            "Tirsdag d. 26. okt. 2021: 0 tabletter\n" +
+            "Onsdag d. 27. okt. 2021: 0 tabletter\n" +
+            "Torsdag d. 28. okt. 2021: 0 tabletter\n" +
+            "Fredag d. 29. okt. 2021: 0 tabletter\n" +
+            "Lørdag d. 30. okt. 2021: 0 tabletter\n" +
+            "Søndag d. 31. okt. 2021: 0 tabletter\n" +
+            "Mandag d. 1. nov. 2021: 0 tabletter"
+            );
+    });
+
+
+    it('should not return 0-period double', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 5), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
+            "Dosering kun d. 25. okt. 2021:\n" +
+            "Mandag d. 25. okt. 2021: 1 tablet\n\n" +
+            "Dosering fra d. 26. okt. 2021 til d. 5. nov. 2021: 0 tabletter"
+            );
+    });
+
+    it('should not return 0-period double with 2 days', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 6), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(2, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
+            "Dosering fra d. 25. okt. 2021 til d. 26. okt. 2021:\n" +
+            "Mandag d. 25. okt. 2021: 1 tablet\n" +
+            "Tirsdag d. 26. okt. 2021: 2 tabletter\n\n" + 
+            "Dosering fra d. 27. okt. 2021 til d. 6. nov. 2021: 0 tabletter"
+            );
+    });
+
 
 });

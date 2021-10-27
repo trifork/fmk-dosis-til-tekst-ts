@@ -4,11 +4,20 @@ import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
-import { TextHelper } from "../TextHelper";
+import { StructuresWrapper } from "../vowrapper/StructuresWrapper";
+import { LongTextConverter } from "../LongTextConverter";
 import { TextOptions } from "../TextOptions";
 import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
+
+
+    longTextConverter: LongTextConverter;
+
+    public constructor(longTextConverter: LongTextConverter) {
+        super();
+        this.longTextConverter = longTextConverter;
+    }
 
     public canConvert(dosageStructure: DosageWrapper): boolean {
         // The default converter must handle all cases with a single periode, to ensure that we always create a long
@@ -39,8 +48,18 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
     private convert(unitOrUnits: UnitOrUnitsWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
 
+
         if (DefaultLongTextConverterImpl.convertAsVKA(options) && structure.getIterationInterval() === 0) {
-            this.fillInEmptyVKADosages(unitOrUnits, structure);
+
+            // If more than 10 zero dosages are added, split in two periods: one with 0 dosages only, and one with none-zero only
+
+            if (DefaultLongTextConverterImpl.shouldSplitInNonzeroAndZeroDosagePart(structure)) {
+                let splittedDosage = DefaultLongTextConverterImpl.splitInNonzeroAndZeroDosagePart(structure, unitOrUnits);
+                return this.longTextConverter.convertWrapper(splittedDosage, options);
+            }
+            else {
+                this.fillInEmptyVKADosages(unitOrUnits, structure);
+            }
         }
 
         let s = "";
@@ -124,5 +143,63 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         }
 
         return s;
+    }
+
+    private static getFirstDaynoWithNoDaysAfter(structure: StructureWrapper): number {
+
+        let dayno: number = 1;
+        let firstDaynoWithNoDaysAfter = -1; // First dayno where no dosageday is defined, and neither no dosagedays comes after
+        for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
+            if (!structure.getDay(dayno)) {
+                if (firstDaynoWithNoDaysAfter === -1) {
+                    firstDaynoWithNoDaysAfter = dayno;
+                }
+            } else {
+                firstDaynoWithNoDaysAfter = -1;
+            }
+            dayno++;
+        }
+
+        return firstDaynoWithNoDaysAfter;
+    }
+
+    private static splitInNonzeroAndZeroDosagePart(structure: StructureWrapper, unitOrUnits: UnitOrUnitsWrapper): DosageWrapper {
+
+        let firstDaynoWithNoDaysAfter = DefaultLongTextConverterImpl.getFirstDaynoWithNoDaysAfter(structure);
+
+        let nonezeroDosageDays: DayWrapper[] = structure.getDays();
+        let zeroDosageDays: DayWrapper[] = [];
+        let nonzeroPeriod: StructureWrapper = new StructureWrapper(structure.getIterationInterval(), structure.getSupplText(), structure.getStartDateOrDateTime(), structure.getStartDateOrDateTime().plusDays(firstDaynoWithNoDaysAfter - 2), nonezeroDosageDays, undefined);
+        let zeroPeriod: StructureWrapper = new StructureWrapper(structure.getIterationInterval(), structure.getSupplText(), structure.getStartDateOrDateTime().plusDays(firstDaynoWithNoDaysAfter - 1), structure.getEndDateOrDateTime(), zeroDosageDays, undefined);
+
+        let splittedStructures: StructuresWrapper = new StructuresWrapper(
+            unitOrUnits,
+            structure.getStartDateOrDateTime(),
+            structure.getEndDateOrDateTime(), [nonzeroPeriod, zeroPeriod], false);
+
+        return new DosageWrapper(undefined, undefined, splittedStructures);
+    }
+
+    // In case the dosage ends with more than 10 empty dosagedays, then yes: it should be splitted
+    private static shouldSplitInNonzeroAndZeroDosagePart(structure: StructureWrapper): boolean {
+
+        if (!structure.getStartDateOrDateTime().getDateOrDateTime() || !structure.getEndDateOrDateTime().getDateOrDateTime()) {
+            return false;
+        }
+
+        let dayno: number = 1;
+        let firstDaynoWithNoDaysAfter = -1; // First dayno where no dosageday is defined, and neither no dosagedays comes after
+        for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
+            if (!structure.getDay(dayno)) {
+                if (firstDaynoWithNoDaysAfter === -1) {
+                    firstDaynoWithNoDaysAfter = dayno;
+                }
+            } else {
+                firstDaynoWithNoDaysAfter = -1;
+            }
+            dayno++;
+        }
+
+        return firstDaynoWithNoDaysAfter !== -1 && dayno - firstDaynoWithNoDaysAfter > 10;
     }
 }

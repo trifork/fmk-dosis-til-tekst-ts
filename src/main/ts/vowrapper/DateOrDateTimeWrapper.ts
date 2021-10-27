@@ -33,6 +33,21 @@ export class DateOrDateTimeWrapper {
             return this.dateTime;
     }
 
+    public plusDays(days: number): DateOrDateTimeWrapper {
+
+        if (this.date) {
+            let d = new Date(this.date.getTime());
+            d.setDate(this.date.getDate() + days);
+
+            return new DateOrDateTimeWrapper(d, null);
+        } else {
+            let d = new Date(this.dateTime.getTime());
+            d.setDate(this.dateTime.getDate() + days);
+
+            return new DateOrDateTimeWrapper(null, d);
+        }
+    }
+
     public isEqualTo(dt: DateOrDateTimeWrapper): boolean {
         if (dt) {
             if (this.getDate() && dt.getDate())

@@ -31,7 +31,7 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new BiWeeklyRepeatedConverterImpl());
         LongTextConverter._converters.push(new RepeatedConverterImpl());
         LongTextConverter._converters.push(new RepeatedPNConverterImpl());
-        LongTextConverter._converters.push(new DefaultLongTextConverterImpl());
+        LongTextConverter._converters.push(new DefaultLongTextConverterImpl(this));
         LongTextConverter._converters.push(new DefaultMultiPeriodeLongTextConverterImpl(this));
     }
 

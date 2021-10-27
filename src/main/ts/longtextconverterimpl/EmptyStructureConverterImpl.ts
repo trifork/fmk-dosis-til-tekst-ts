@@ -33,8 +33,23 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
             }
         }
 
-        s += ":\nBemærk: skal ikke anvendes i denne periode!";
+        if (LongTextConverterImpl.convertAsVKA(options)) {
 
+            let emptyDosageString =
+                "0 " + (unitOrUnits.getUnitPlural() ? unitOrUnits.getUnitPlural() : unitOrUnits.getUnit());
+
+            if (options === TextOptions.VKA_WITH_MARKUP) {
+                s = "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">"
+                    + s
+                    + ":</div>\n<dl class=\"d2t-adjustmentperiod\">"
+                    + "<dt></dt><dd>" + emptyDosageString + "</dd></dl></div>";
+            }
+            else {
+                s = s + ": " + emptyDosageString;
+            }
+        } else {
+            s += ":\nBemærk: skal ikke anvendes i denne periode!";
+        }
         return s;
     }
 
