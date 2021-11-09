@@ -55,7 +55,9 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
             if (DefaultLongTextConverterImpl.shouldSplitInNonzeroAndZeroDosagePart(structure)) {
                 let splittedDosage = DefaultLongTextConverterImpl.splitInNonzeroAndZeroDosagePart(structure, unitOrUnits);
-                return this.longTextConverter.convertWrapper(splittedDosage, options);
+                let s = this.longTextConverter.convertWrapper(splittedDosage, options);
+                s += this.getNoDosageWarningIfNeeded(options, structure, treatmentEndDateTime, isPartOfMultiPeriodDosage);
+                return s;
             }
             else {
                 this.fillInEmptyVKADosages(unitOrUnits, structure);
@@ -128,21 +130,26 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             s += "\n</dl>";
         }
 
-        if (options === TextOptions.VKA // On purpose NOT for VKA_WITH_MARKUP! Is presented otherwise in FMK-O
-            && structure.getIterationInterval() === 0
-            && structure.getEndDateOrDateTime()
-            && treatmentEndDateTime
-            && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime()
-            && !isPartOfMultiPeriodDosage
-        ) {
-            s += "\nBemærk: Dosering herefter er ikke angivet";
-        }
+        s += this.getNoDosageWarningIfNeeded(options, structure, treatmentEndDateTime, isPartOfMultiPeriodDosage);
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
             s += "\n</div>";    // closes <div class="d2t-period">
         }
 
         return s;
+    }
+
+    private getNoDosageWarningIfNeeded(options: TextOptions, structure: StructureWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, isPartOfMultiPeriodDosage: boolean): string {
+        if (options === TextOptions.VKA // On purpose NOT for VKA_WITH_MARKUP! Is presented otherwise in FMK-O
+            && structure.getIterationInterval() === 0
+            && structure.getEndDateOrDateTime()
+            && ((treatmentEndDateTime && treatmentEndDateTime.getDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime())
+                || ((!treatmentEndDateTime || !treatmentEndDateTime.getDateOrDateTime()) && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()))
+            && !isPartOfMultiPeriodDosage) {
+            return "\nBemærk: Dosering herefter er ikke angivet";
+        }
+
+        return "";
     }
 
     private static getFirstDaynoWithNoDaysAfter(structure: StructureWrapper): number {
