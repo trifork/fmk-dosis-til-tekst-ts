@@ -141,15 +141,15 @@ export abstract class LongTextConverterImpl {
     }
 
     private static getDoseSortKey(d1: DoseWrapper): number {
-        if(d1 instanceof MorningDoseWrapper) {
+        if (d1 instanceof MorningDoseWrapper) {
             return 300.5;
-        } else if(d1 instanceof NoonDoseWrapper) {
+        } else if (d1 instanceof NoonDoseWrapper) {
             return 900.5;
-        } else if(d1 instanceof EveningDoseWrapper) {
+        } else if (d1 instanceof EveningDoseWrapper) {
             return 1500.5;
-        }else if(d1 instanceof NightDoseWrapper) {
+        } else if (d1 instanceof NightDoseWrapper) {
             return 2100.5;
-        } else if(d1 instanceof TimedDoseWrapper) {
+        } else if (d1 instanceof TimedDoseWrapper) {
             let timedDose: TimedDoseWrapper = d1 as TimedDoseWrapper;
             return d1.getLocalTime().getHour() * 100 + d1.getLocalTime().getMinute();
         }
