@@ -1,7 +1,8 @@
 var path = require('path');
+const { CheckerPlugin } = require('awesome-typescript-loader')
 
 module.exports = {
-
+    mode: 'production',
     entry: "./src/main/ts/index.ts",
 
     output: {
@@ -22,12 +23,22 @@ module.exports = {
     bail: true,
     devtool: "source-map",
     module: {
-        loaders: [
+        rules: [
 			{
 				test: /\.ts$/,
 				exclude: /\.d\.ts$|publish-internal|publish-public/,
-				loader: 'awesome-typescript-loader?tsconfig=tsconfig.unittest.json'
+                use: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: {
+                            tsconfig: 'tsconfig.unittest.json'
+                        }
+                    }
+                ]
 			}
 		]
     },
+    plugins: [
+        new CheckerPlugin()
+    ]
 };
