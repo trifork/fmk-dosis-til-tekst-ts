@@ -7,7 +7,7 @@ import { TextHelper } from "../TextHelper";
 import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextOptions } from "../TextOptions";
-import { PlainDoseWrapper } from "..";
+import { MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, TimedDoseWrapper } from "..";
 
 export abstract class LongTextConverterImpl {
 
@@ -140,6 +140,24 @@ export abstract class LongTextConverterImpl {
         }
     }
 
+    private static getDoseSortKey(d1: DoseWrapper): number {
+        if(d1 instanceof MorningDoseWrapper) {
+            return 300.5;
+        } else if(d1 instanceof NoonDoseWrapper) {
+            return 900.5;
+        } else if(d1 instanceof EveningDoseWrapper) {
+            return 1500.5;
+        }else if(d1 instanceof NightDoseWrapper) {
+            return 2100.5;
+        } else if(d1 instanceof TimedDoseWrapper) {
+            let timedDose: TimedDoseWrapper = d1 as TimedDoseWrapper;
+            return d1.getLocalTime().getHour() * 100 + d1.getLocalTime().getMinute();
+        }
+
+        return -1;
+    }
+
+
     protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean, options: TextOptions): string {
         let s = "";
         let daglig = "";
@@ -170,9 +188,12 @@ export abstract class LongTextConverterImpl {
             s += this.makeDaysDosage(unitOrUnits, structure, dayWithoutFirstDose, false, options);
         }
         else {
+
+            let sortedDoses = day.getAllDoses().sort((d1, d2) => LongTextConverterImpl.getDoseSortKey(d1) - LongTextConverterImpl.getDoseSortKey(d2));
+
             // 2 tabletter morgen, 1 tablet middag, 2 tabletter aften og 1 tablet nat
-            for (let d = 0; d < day.getNumberOfDoses(); d++) {
-                s += this.makeOneDose(day.getDose(d), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d === 0, options);
+            for (let d = 0; d < sortedDoses.length; d++) {
+                s += this.makeOneDose(sortedDoses[d], unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), d === 0, options);
                 if (d < day.getNumberOfDoses() - 2) {
                     s += ", ";
                 }

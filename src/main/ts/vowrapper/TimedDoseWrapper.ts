@@ -34,6 +34,10 @@ export class TimedDoseWrapper extends DoseWrapper {
         return this.time.toString();
     }
 
+    public getLocalTime(): LocalTime {
+        return this.time;
+    }
+
     public theSameAs(other: DoseWrapper): boolean {
         if (!(other instanceof TimedDoseWrapper))
             return false;

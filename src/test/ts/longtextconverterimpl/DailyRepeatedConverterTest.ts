@@ -53,6 +53,51 @@ describe('DailyRepeatedConverterImpl', () => {
             "1 tablet kl. 8:00 og 2 tabletter kl. 12:30 - hver dag");
     });
 
+    it('should return morgen before kl. 12:30', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(12, 30, 0), 2, undefined, undefined, undefined, undefined, undefined, false), new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 4. dec. 2018:\n" +
+            "1 tablet morgen og 2 tabletter kl. 12:30 - hver dag");
+    });
+
+    it('should return morgen before kl. 03:01', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(3, 1, 0), 2, undefined, undefined, undefined, undefined, undefined, false), new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 4. dec. 2018:\n" +
+            "1 tablet morgen og 2 tabletter kl. 3:01 - hver dag");
+    });
+
+    it('should return doses correctly sorted', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
+                new DayWrapper(1, [
+                    new TimedDoseWrapper(new LocalTime(21, 1, 0), 4, undefined, undefined, undefined, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTime(3, 1, 0), 1, undefined, undefined, undefined, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTime(15, 1, 0), 3, undefined, undefined, undefined, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTime(9, 1, 0), 2, undefined, undefined, undefined, undefined, undefined, false),
+                    new NightDoseWrapper(5, undefined, undefined, undefined, undefined, undefined, false),
+                    new NoonDoseWrapper(6, undefined, undefined, undefined, undefined, undefined, false),
+                    new EveningDoseWrapper(7, undefined, undefined, undefined, undefined, undefined, false),
+                    new MorningDoseWrapper(8, undefined, undefined, undefined, undefined, undefined, false)
+                ])
+            ], undefined)], false));
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 4. dec. 2018:\n" +
+            "8 tabletter morgen, 1 tablet kl. 3:01, 6 tabletter middag, 2 tabletter kl. 9:01, 7 tabletter aften, 3 tabletter kl. 15:01, 5 tabletter nat og 4 tabletter kl. 21:01 - hver dag");
+    });
+
+
+
+
     it('should return efter behov without enddate', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
