@@ -18,11 +18,9 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
         if (dosage.structures.getStructures().length !== 1)
             return false;
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() !== 0)
+        if (structure.getIterationInterval() !== 0 && !structure.startsAndEndsSameDay())
             return false;
-        if (structure.getDays().length < 2)
-            return false;
-        if (structure.startsAndEndsSameDay())
+        if (structure.getDays().length < 2 && !structure.startsAndEndsSameDay())
             return false;
         if (structure.containsPlainDose())
             return false;
@@ -43,7 +41,13 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
         text += MorningNoonEveningNightConverterImpl.getNoonText(day, dosage.structures.getUnitOrUnits());
         text += MorningNoonEveningNightConverterImpl.getEveningText(day, dosage.structures.getUnitOrUnits());
         text += MorningNoonEveningNightConverterImpl.getNightText(day, dosage.structures.getUnitOrUnits());
-        text += (" i " + dosage.structures.getStructures()[0].getDays()[dosage.structures.getStructures()[0].getDays().length - 1].getDayNumber() + " dage");
+        let noOfDays = dosage.structures.getStructures()[0].getDays()[dosage.structures.getStructures()[0].getDays().length - 1].getDayNumber();
+        text += " i " + noOfDays;
+        if (noOfDays === 1) {
+            text += " dag";
+        } else {
+            text += " dage";
+        }
 
         text += MorningNoonEveningNightConverterImpl.getSupplText(structure.getSupplText());
 

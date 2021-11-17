@@ -238,5 +238,20 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
         expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA, 200)).to.be.null;
     });
 
+    // FMK-7010
+    it('should return 1 day dosage for iteration 7 with same start and end date', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), [
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
+                    new EveningDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)
+                    ])
+            ], undefined)], false));
+
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.STANDARD)).to.equal(
+            "1 tablet morgen og 3 tabletter aften i 1 dag");
+    });
+
 });
 
