@@ -3,11 +3,14 @@ var path = require('path');
 module.exports ={
     mode: 'production',
     entry: "./src/main/ts/index.ts",
-
+    target: "web",
     output: {
-        filename: "target/dosistiltekst-commonjs.js",
-        libraryTarget: "commonjs2",
-        library: "dosistiltekst-commonjs"
+        filename: "dosistiltekst-commonjs.js",
+        library: {
+            name: "dosistiltekst-commonjs",
+            type: "commonjs"
+        },
+        chunkFormat: "module"
     },
 
     resolve: {

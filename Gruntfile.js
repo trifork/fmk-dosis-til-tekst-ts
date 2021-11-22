@@ -31,22 +31,22 @@ module.exports = function (grunt) {
          copy: {
             dosisTilTekstCommonJS: {
                 files: [
-                    { src: 'target/dosistiltekst-commonjs.js*', dest: 'publish-internal/' },
-                    { src: 'target/lib/*.d.ts', dest: 'publish-internal/' },
-                    { src: 'target/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
-                    { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
-                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' },
-                    { src: 'target/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-internal/' }
+                    { src: 'dist/dosistiltekst-commonjs.js*', dest: 'publish-internal/' },
+                    { src: 'dist/lib/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-internal/' }
                 ]
             },
             copyForDosisTilTekst: {
                 files: [
-                    { src: 'target/dosistiltekst.js*', dest: 'publish-public/' },
-                    { src: 'target/lib/*.d.ts', dest: 'publish-public/' },
-                    { src: 'target/lib/vowrapper/*.d.ts', dest: 'publish-public/' },
-                    { src: 'target/lib/longtextconverterimpl/*.d.ts', dest: 'publish-public/' },
-                    { src: 'target/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' },
-                    { src: 'target/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-public/' }
+                    { src: 'dist/dosistiltekst.js*', dest: 'publish-public/' },
+                    { src: 'dist/lib/*.d.ts', dest: 'publish-public/' },
+                    { src: 'dist/lib/vowrapper/*.d.ts', dest: 'publish-public/' },
+                    { src: 'dist/lib/longtextconverterimpl/*.d.ts', dest: 'publish-public/' },
+                    { src: 'dist/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' },
+                    { src: 'dist/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-public/' }
                 ]
             },
             copyForPrepareTestSchemas: {

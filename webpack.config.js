@@ -4,15 +4,18 @@ const { CheckerPlugin } = require('awesome-typescript-loader')
 module.exports = {
     mode: 'production',
     entry: "./src/main/ts/index.ts",
-
+    target: "es5",
     output: {
 
-        filename: "target/dosistiltekst.js",
+        filename: "dosistiltekst.js",
+        library: {
+            // export itself to a global var
+            type: "var",
 
-        // export itself to a global var
-        libraryTarget: "var",
-        // name of the global var
-        library: "dosistiltekst"
+            // name of the global var
+            name: "dosistiltekst"
+        },
+        chunkFormat: "module"
     },
     // FOR THE SERVER VERSION, USE externals: [ list of node modules ]
     // externals: [ 'fs'],

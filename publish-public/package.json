@@ -1,18 +1,18 @@
 {
     "name": "fmk-dosis-til-tekst-ts",
     "author": "Sundhedsdatastyrelsen",
-    "version": "1.2.12",
+    "version": "1.2.15",
     "license": "MPL-1.1",
     "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
-	"main": "target/dosistiltekst.js",
-    "typings": "target/lib/index.d.ts",
+	"main": "dist/dosistiltekst.js",
+    "typings": "dist/lib/index.d.ts",
     "files": [
-        "target/dosistiltekst.js",
-        "target/lib/*.d.ts",
-        "target/lib/vowrapper/*.d.ts",
-        "target/lib/longtextconverterimpl/*.d.ts",
-        "target/lib/shorttextconverterimpl/*.d.ts",
-        "target/lib/DosageProposalXMLGenerator/*.d.ts"
+        "dist/dosistiltekst.js",
+        "dist/lib/*.d.ts",
+        "dist/lib/vowrapper/*.d.ts",
+        "dist/lib/longtextconverterimpl/*.d.ts",
+        "dist/lib/shorttextconverterimpl/*.d.ts",
+        "dist/lib/DosageProposalXMLGenerator/*.d.ts"
     ],
     
     "publishConfig": {
