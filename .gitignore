@@ -6,3 +6,4 @@ npm-debug.log
 .npmrc
 .vscode/
 dist/
+publish-internal/src/

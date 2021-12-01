@@ -2,7 +2,6 @@
 
 module.exports = function (grunt) {
 	var webpackConfig = require("./webpack.config.js");
-	var webpackCommonJSConfig = require("./webpack.commonjs.config");
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -20,18 +19,17 @@ module.exports = function (grunt) {
 				configuration: "tslint.json"
 			},
 			files: [
-				"src/main/ts/**/*.ts"
+				"./src/main/ts/**/*.ts"
 			]
 		},
 		webpack: {
       		dosistiltekst: webpackConfig,
-			dosistiltekstCommonJS: webpackCommonJSConfig
     	},
 
          copy: {
             dosisTilTekstCommonJS: {
                 files: [
-                    { src: 'dist/dosistiltekst-commonjs.js*', dest: 'publish-internal/' },
+                    { src: './src/main/ts/*.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
@@ -73,7 +71,6 @@ module.exports = function (grunt) {
 	// Load all grunt tasks
 	require('load-grunt-tasks')(grunt);
 
-	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack-var', 'webpack-commonjs']);
+	grunt.registerTask('default', ['clean', 'tslint', 'ts', 'webpack-var', 'copy:dosisTilTekstCommonJS']);
 	grunt.registerTask('webpack-var', ['webpack:dosistiltekst', 'copy:copyForDosisTilTekst']);
-	grunt.registerTask('webpack-commonjs', ['webpack:dosistiltekstCommonJS','copy:dosisTilTekstCommonJS']);
 };
