@@ -6,18 +6,31 @@ import { TextOptions } from '../../../main/ts/TextOptions';
 
 describe('DefaultLongTextConverterImpl', () => {
 
-    it('should return 1-time dosage', () => {
+    it('should return 1-time dosage (with enddate)', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
-            null, null, [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
+            null, null, [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), [
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering kun d. 4. dec. 2018:\n" +
+            "2 tabletter morgen");
+    });
+
+    // FMK-7072
+    it('should return 1-time dosage without hver dag', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null, [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), [
                 new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
                 new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
                 new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
-            "Dosering kun d. 5. dec. 2018:\n" +
-            "2 tabletter morgen, 2 tabletter aften og 2 tabletter nat");
+            "Dosering kun d. 4. dec. 2018:\n" +
+            "2 tabletter morgen, 2 tabletter aften og 2 tabletter nat");    // before fix: ..og 2 tabletter nat - hver dag
     });
+
 
     it('not-iterated should not write daglig', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

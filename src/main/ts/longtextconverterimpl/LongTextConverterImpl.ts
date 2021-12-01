@@ -231,7 +231,10 @@ export abstract class LongTextConverterImpl {
                     }
                 }
             }
-            else if (!hasDaysLabel && structure.getIterationInterval() === 1 && !day.containsAccordingToNeedDosesOnly()) {    // Ex. 12 ml 1 gang daglig
+            else if (!hasDaysLabel
+                && structure.getIterationInterval() === 1
+                && !day.containsAccordingToNeedDosesOnly()
+                && !structure.startsAndEndsSameDay()) {    // Ex. 12 ml 1 gang daglig
                 if (day.containsMorningNoonEveningNightDoses() || day.containsTimedDose()) {
                     s += " -";      // Ex. 1 tablet nat - hver dag
                 }                   // else...ex.: 1 tablet 2 gange hver dag
