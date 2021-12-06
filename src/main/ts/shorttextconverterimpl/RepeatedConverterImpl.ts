@@ -59,7 +59,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
             return " " + numberOfDoses + " " + TextHelper.gange(numberOfDoses) + " daglig";
 
         let useIterationText = !structure.startsAndEndsSameDay();
-        let timesString = numberOfDoses == 1 ? "gang" : "gange";
+        let timesString = numberOfDoses === 1 ? "gang" : "gange";
 
 
         // Repeated monthly
