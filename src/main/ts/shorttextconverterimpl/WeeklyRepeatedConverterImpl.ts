@@ -1,8 +1,6 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
 import { WeeklyRepeatedConverterImpl as LongTextWeeklyRepeatedConverterImpl } from "../longtextconverterimpl/WeeklyRepeatedConverterImpl";
 import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { DayWrapper } from "../vowrapper/DayWrapper";
 import { DayOfWeek } from "../vowrapper/DayOfWeek";
 import { StructureWrapper } from "../vowrapper/StructureWrapper";

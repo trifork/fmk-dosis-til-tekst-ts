@@ -58,30 +58,34 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
         if (iterationInterval === 1 && numberOfDoses > 1)
             return " " + numberOfDoses + " " + TextHelper.gange(numberOfDoses) + " daglig";
 
+        let useIterationText = !structure.startsAndEndsSameDay();
+        let timesString = numberOfDoses == 1 ? "gang" : "gange";
+
+
         // Repeated monthly
         let numberOfWholeMonths = this.calculateNumberOfWholeMonths(iterationInterval);
-        if (numberOfWholeMonths === 1 && numberOfDoses === 1)
+        if (useIterationText && numberOfWholeMonths === 1 && numberOfDoses === 1)
             return " 1 gang om måneden";
         if (numberOfWholeMonths === 1 && numberOfDoses >= 1)
-            return " " + numberOfDoses + " " + "gange samme dag 1 gang om måneden";
-        if (numberOfWholeMonths > 1 && numberOfDoses === 1)
+            return " " + numberOfDoses + " " + (useIterationText ? timesString + " samme dag 1 gang om måneden" : timesString + (numberOfDoses > 1 ? " samme dag" : ""));
+        if (useIterationText && numberOfWholeMonths > 1 && numberOfDoses === 1)
             return " hver " + numberOfWholeMonths + ". måned";
 
         // Repeated weekly
         let numberOfWholeWeeks = this.calculateNumberOfWholeWeeks(structure.getIterationInterval());
         let name: string = TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, false).getName();
         if (numberOfWholeWeeks === 1 && day.getNumberOfDoses() === 1)
-            return " " + name + " hver uge";
+            return " " + name + (useIterationText ? " hver uge" : "");
         else if (numberOfWholeWeeks === 1 && numberOfDoses > 1)
-            return " " + numberOfDoses + " " + "gange " + name + " hver uge";
+            return " " + numberOfDoses + " " + timesString + " " + name + (useIterationText ? " hver uge" : "");
         if (numberOfWholeWeeks > 1 && numberOfDoses === 1)
-            return " " + name + " hver " + numberOfWholeWeeks + ". uge";
+            return " " + name +  (useIterationText ? " hver " + numberOfWholeWeeks + ". uge" : "");
 
         // Every Nth day
-        if (iterationInterval > 1 && numberOfDoses === 1)
+        if (useIterationText && iterationInterval > 1 && numberOfDoses === 1)
             return " hver " + iterationInterval + ". dag";
         if (iterationInterval > 1 && numberOfDoses >= 1)
-            return " " + numberOfDoses + " " + "gange samme dag hver " + iterationInterval + ". dag";
+            return " " + numberOfDoses + " " + timesString +  (useIterationText ? " samme dag hver " + iterationInterval + ". dag" : "");
 
         // Above is exhaustive if both iterationInterval>1 and numberOfDoses>1, return null to make compiler happy
         return null;

@@ -109,6 +109,142 @@ describe('LimitedNumberOfDaysConverterImpl', () => {
 
 });
 
+describe('WeeklyRepeatedConverterImpl', () => {
+    it('should æøå', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), undefined, [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ]),
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ]),
+                new DayWrapper(4, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ]),
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet onsdag, torsdag og lørdag hver uge");
+    });
+
+    it('one dosage day only should not write hver uge ', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet onsdag");
+    });
+
+    it('one dosage day two doses only should not write hver uge ', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false), new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet 2 gange onsdag");
+    });
+    
+});
+
+
+describe('RepeatedConverterImpl', () => {
+
+    it('1 gang om måneden', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(30, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2022, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet 1 gang om måneden");
+    });
+
+    it('one dosage day only should not write hver måned', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(30, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet 1 gang");
+    });
+
+    
+    it('two dosage days monthly', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(30, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2022, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false), new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet 2 gange samme dag 1 gang om måneden");
+    });
+
+    it('two dosage days monthly only one day  should not write hver måned', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(30, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false), new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet 2 gange samme dag");
+    });
+
+    
+    it('biweekly should write hver 2. uge ', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2022, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet onsdag hver 2. uge");
+    });
+    
+    it('one dosage day only biweekly should not write hver uge ', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet onsdag");
+    });
+
+    it('should  write hver 10. dag', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(10, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2022, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet hver 10. dag");
+    });
+
+
+    it('one dosage day only should not write hver 10. dag', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(10, "", new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), new DateOrDateTimeWrapper(new Date(2021, 11, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, "stk", "stk", undefined, false)
+                ])
+            ], undefined)
+            ], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 500)).to.equal("1 tablet 1 gang");
+    });
+
+});
+
 
 
 describe('CombinedTwoPeriodesConverterImpl', () => {
