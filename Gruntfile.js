@@ -30,11 +30,17 @@ module.exports = function (grunt) {
             dosisTilTekstCommonJS: {
                 files: [
                     { src: './src/main/ts/*.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/*.js*', dest: 'publish-internal/' },
                     { src: 'dist/lib/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' },
-                    { src: 'dist/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-internal/' }
+                    { src: 'dist/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/vowrapper/*.js', dest: 'publish-internal/' },
+                    { src: 'dist/lib/longtextconverterimpl/*.js', dest: 'publish-internal/' },
+                    { src: 'dist/lib/shorttextconverterimpl/*.js', dest: 'publish-internal/' },
+                    { src: 'dist/lib/DosageProposalXMLGenerator/*.js', dest: 'publish-internal/' }
+
                 ]
             },
             copyForDosisTilTekst: {
