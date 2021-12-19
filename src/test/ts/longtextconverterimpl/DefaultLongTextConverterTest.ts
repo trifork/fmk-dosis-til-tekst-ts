@@ -333,6 +333,4 @@ describe('DefaultLongTextConverterImpl', () => {
             "Bemærk: Dosering herefter er ikke angivet"
             );
     });
-
-
 });

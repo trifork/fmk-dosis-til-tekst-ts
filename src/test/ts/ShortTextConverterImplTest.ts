@@ -389,5 +389,28 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             "1 tablet morgen og 3 tabletter aften i 1 dag");
     });
 
+    it('should return null for empty dosage period', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), [
+                
+            ], undefined)], false));
+
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.STANDARD)).to.be.null;
+    });
+
+    it('should return something for one day dosage period', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), [
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
+                    new EveningDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)
+                    ])
+            ], undefined)], false));
+
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.STANDARD)).to.equal("1 tablet morgen og 3 tabletter aften i 1 dag");
+    });
 });
 

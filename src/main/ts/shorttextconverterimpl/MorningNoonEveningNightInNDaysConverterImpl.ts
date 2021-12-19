@@ -20,7 +20,7 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
         if (structure.getIterationInterval() !== 0 && !structure.startsAndEndsSameDay())
             return false;
-        if (structure.getDays().length < 2 && !structure.startsAndEndsSameDay())
+        if (structure.getDays().length === 0 || (structure.getDays().length === 1 && !structure.startsAndEndsSameDay()))
             return false;
         if (structure.containsPlainDose())
             return false;
