@@ -15,7 +15,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         this.longTextConverter = longTextConverter;
     }
 
-    public canConvert(dosageStructure: DosageWrapper): boolean {
+    public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
         if (dosageStructure.structures) {
             return dosageStructure.structures.getStructures().length > 1;
         }

@@ -13,7 +13,7 @@ import { DefaultLongTextConverterImpl } from "./DefaultLongTextConverterImpl";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: DosageWrapper, options: TextOptions, ): boolean {
         if (dosage.structures) {
 
             if (dosage.structures.getStructures().length !== 1)
@@ -21,7 +21,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             let structure: StructureWrapper = dosage.structures.getStructures()[0];
             if (structure.getIterationInterval() !== 7)
                 return false;
-            if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
+            if (options !== TextOptions.VKA && options !== TextOptions.VKA_WITH_MARKUP  && structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
                 return false;
             if (structure.getDays().length > 7)
                 return false;

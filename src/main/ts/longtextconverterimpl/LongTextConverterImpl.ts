@@ -11,7 +11,7 @@ import { MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapp
 
 export abstract class LongTextConverterImpl {
 
-    public abstract canConvert(dosageStructure: DosageWrapper): boolean;
+    public abstract canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean;
     public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions, currentTime: Date): string;
 
     public static convertAsVKA(textOptions: TextOptions): boolean {

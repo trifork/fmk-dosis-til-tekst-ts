@@ -60,7 +60,7 @@ export class LongTextConverter {
         }
 
         for (let converter of LongTextConverter._converters) {
-            if (converter.canConvert(dosage)) {
+            if (converter.canConvert(dosage, options)) {
                 return converter.doConvert(dosage, options, currentTime);
             }
         }
@@ -81,7 +81,7 @@ export class LongTextConverter {
 
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter._converters) {
-            if (converter.canConvert(dosage)) {
+            if (converter.canConvert(dosage, TextOptions.STANDARD)) {
                 return converter.constructor["name"];
             }
         }

@@ -7,7 +7,7 @@ import { TextOptions } from "../TextOptions";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
-    public canConvert(dosageStructure: DosageWrapper): boolean {
+    public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
         return dosageStructure.isStructured()
             && dosageStructure.structures.getStructures()
             && dosageStructure.structures.getStructures().length === 1

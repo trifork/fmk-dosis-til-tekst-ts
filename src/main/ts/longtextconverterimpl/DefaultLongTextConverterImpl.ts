@@ -19,7 +19,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         this.longTextConverter = longTextConverter;
     }
 
-    public canConvert(dosageStructure: DosageWrapper): boolean {
+    public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
         // The default converter must handle all cases with a single periode, to ensure that we always create a long
         // dosage text. This converter is added last in the LongTextConverters list of possible
         // converters.

@@ -146,7 +146,27 @@ describe('WeeklyRepeatedConverterImpl', () => {
             "Lørdag: 1 tablet\n" +
             "Søndag: 0 tabletter");
     });
- 
+
+    it('should return all days for VKA without "gentages" with dosagestart=dosageend', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), [
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
+            "Dosering fra d. 22. jan. 2021 til d. 22. jan. 2021:\n" +
+            "Mandag: 0 tabletter\n" +
+            "Tirsdag: 0 tabletter\n" +
+            "Onsdag: 2 tabletter\n" +
+            "Torsdag: 0 tabletter\n" +
+            "Fredag: 0 tabletter\n" +
+            "Lørdag: 1 tablet\n" +
+            "Søndag: 0 tabletter");
+    });
+
+
 
     it('should not return gentages with less than 7 remaining days', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

@@ -11,7 +11,7 @@ import { TextOptions } from "../TextOptions";
 
 export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         if (dosage.structures) {
 
             if (dosage.structures.getStructures().length !== 1)
