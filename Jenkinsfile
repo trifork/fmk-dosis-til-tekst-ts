@@ -27,6 +27,7 @@ pipeline {
                                 sh "cd fmk-dosis-til-tekst-ts/publish-internal && npm publish"                        
                             }                        
                         }
+                        sh "sleep 10000"
                     }
                 }
             }
