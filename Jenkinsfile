@@ -21,13 +21,12 @@ pipeline {
                         sh "cd fmk-dosis-til-tekst-ts && npm test"
                         if(env.Publish.toBoolean()) {
                             configFileProvider([configFile(fileId: 'npm-npmjsorg', targetLocation: 'fmk-dosis-til-tekst-ts/publish-public/.npmrc')]) {
-                                sh "cd fmk-dosis-til-tekst-ts/publish-public && npm -verbose publish"
+                                sh "cd fmk-dosis-til-tekst-ts/publish-public && npm -verbose publish && sleep 10000"
                             }
                             configFileProvider([configFile(fileId: 'npm-internal', targetLocation: 'fmk-dosis-til-tekst-ts/publish-internal/.npmrc')]) {
                                 sh "cd fmk-dosis-til-tekst-ts/publish-internal && npm publish"                        
                             }                        
                         }
-                        sh "sleep 10000"
                     }
                 }
             }
