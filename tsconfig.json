@@ -3,11 +3,12 @@
 	"compileOnSave": false,
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
 		"target": "es5",
-		"module": "es2015",
+		"module": "CommonJS",
+		"moduleResolution": "node",
 		"declaration": true,
 		"sourceMap": true,
-		"moduleResolution": "node",
 		"rootDir": "./src/main/ts",
 		"noLib": false,
 		"outDir": "dist/lib"
