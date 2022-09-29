@@ -15,6 +15,10 @@ import { TextHelper } from "../TextHelper";
  */
 export class SimpleNonRepeatedConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "SimpleNonRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

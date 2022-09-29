@@ -15,6 +15,10 @@ import { TextHelper } from "../TextHelper";
  */
 export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "LimitedNumberOfDaysConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

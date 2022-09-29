@@ -12,6 +12,10 @@ import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightC
  */
 export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "MorningNoonEveningNightInNDaysConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

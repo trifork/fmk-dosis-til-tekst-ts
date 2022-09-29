@@ -77,7 +77,7 @@ export class ShortTextConverter {
     public getConverterClassNameWrapper(dosage: DosageWrapper, maxLength: number = ShortTextConverter.MAX_LENGTH): string {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage) && converter.doConvert(dosage, TextOptions.STANDARD).length <= maxLength) {
-                return converter.constructor["name"];
+                return converter.getConverterClassName();
             }
         }
         return null;

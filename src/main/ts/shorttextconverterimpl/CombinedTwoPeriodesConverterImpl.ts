@@ -9,6 +9,10 @@ import { TextHelper } from "../TextHelper";
 
 export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "CombinedTwoPeriodesConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
 
         if (dosage.structures === undefined)

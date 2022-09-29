@@ -7,6 +7,10 @@ import { TextHelper } from "../TextHelper";
 
 export class RepeatedEyeOrEarConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "RepeatedEyeOrEarConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

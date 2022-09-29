@@ -13,6 +13,10 @@ import { TextHelper } from "../TextHelper";
  */
 export class SimpleLimitedAccordingToNeedConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "SimpleLimitedAccordingToNeedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

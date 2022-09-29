@@ -10,6 +10,10 @@ import { TextHelper } from "../TextHelper";
 
 export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "WeeklyMorningNoonEveningNightConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
