@@ -7,6 +7,10 @@ import { TextOptions } from "../TextOptions";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "EmptyStructureConverterImpl";
+    }
+
     public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
         return dosageStructure.isStructured()
             && dosageStructure.structures.getStructures()

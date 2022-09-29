@@ -11,6 +11,10 @@ import { TextOptions } from "../TextOptions";
 
 export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
+    public getConverterClassName(): string {
+        return "BiWeeklyRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         if (dosage.structures) {
 

@@ -9,6 +9,10 @@ import { TextOptions } from "../TextOptions";
 
 export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "DailyRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         if (!dosage.structures)
             return false;

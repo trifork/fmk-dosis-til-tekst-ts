@@ -8,6 +8,10 @@ import { TextOptions } from "../TextOptions";
 
 export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "TwoDaysRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         if (dosage.structures) {
             if (dosage.structures.getStructures().length !== 1)

@@ -11,6 +11,7 @@ import { MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapp
 
 export abstract class LongTextConverterImpl {
 
+    public abstract getConverterClassName(): string;
     public abstract canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean;
     public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions, currentTime: Date): string;
 

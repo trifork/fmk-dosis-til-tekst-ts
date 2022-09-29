@@ -82,7 +82,7 @@ export class LongTextConverter {
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage, TextOptions.STANDARD)) {
-                return converter.constructor["name"];
+                return converter.getConverterClassName();
             }
         }
         return null;
