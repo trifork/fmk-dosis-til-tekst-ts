@@ -12,6 +12,10 @@ import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
 
+    public getConverterClassName(): string {
+        return "DefaultLongTextConverterImpl";
+    }
+
     longTextConverter: LongTextConverter;
 
     public constructor(longTextConverter: LongTextConverter) {

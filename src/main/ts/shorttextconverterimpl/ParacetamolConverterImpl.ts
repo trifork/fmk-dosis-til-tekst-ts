@@ -7,6 +7,10 @@ import { TextHelper } from "../TextHelper";
 
 export class ParacetamolConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "ParacetamolConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

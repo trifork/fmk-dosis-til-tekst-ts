@@ -7,6 +7,10 @@ import { TextOptions } from "../TextOptions";
 
 export class RepeatedConverterImpl extends LongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "RepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         // Single period, single dosagedays, iterated
 

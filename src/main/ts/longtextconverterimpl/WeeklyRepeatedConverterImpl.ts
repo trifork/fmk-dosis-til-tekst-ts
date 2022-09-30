@@ -13,6 +13,10 @@ import { DefaultLongTextConverterImpl } from "./DefaultLongTextConverterImpl";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "WeeklyRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions, ): boolean {
         if (dosage.structures) {
 

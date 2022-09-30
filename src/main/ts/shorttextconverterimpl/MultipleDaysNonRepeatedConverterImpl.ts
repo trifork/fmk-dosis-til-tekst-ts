@@ -8,6 +8,10 @@ import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightC
 
 export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "MultipleDaysNonRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
