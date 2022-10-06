@@ -3,7 +3,7 @@
 import { expect, assert } from 'chai';
 import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, LocalTime } from "../../../main/ts/index";
 
-describe('BiWeeklyRepeatedConverterImpl', () => {
+describe('NWeeklyRepeatedConverterImpl', () => {
 
     it('should return hver 2. mandag', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

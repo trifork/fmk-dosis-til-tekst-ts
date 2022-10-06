@@ -9,10 +9,10 @@ import { DoseWrapper } from "../vowrapper/DoseWrapper";
 import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 import { TextOptions } from "../TextOptions";
 
-export class BiWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
+export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
     public getConverterClassName(): string {
-        return "BiWeeklyRepeatedConverterImpl";
+        return "NWeeklyRepeatedConverterImpl";
     }
 
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
