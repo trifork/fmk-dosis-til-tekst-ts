@@ -40,7 +40,7 @@ export class DosageWrapper {
      * @return Returns true if the dosage is "according to schema..."
      */
     public isAdministrationAccordingToSchema(): boolean {
-        return this.administrationAccordingToSchema !== null && this.administrationAccordingToSchema !== undefined;
+        return !(this.administrationAccordingToSchema == null);
     }
 
     /**

@@ -183,7 +183,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         for (let dayno: number = 1; dayno < 8; dayno++) {
             let existingDay = structure.getDay(dayno);
             if (!existingDay) {
-                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, unitOrUnits.getUnitPlural(), undefined, undefined, false);
+                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, false);
                 let emptyDay = new DayWrapper(dayno, [emptyDose]);
                 structure.getDays().push(emptyDay);
             }
