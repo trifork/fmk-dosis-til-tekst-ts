@@ -412,5 +412,20 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
 
         expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.STANDARD)).to.equal("1 tablet morgen og 3 tabletter aften i 1 dag");
     });
+
+    it('should not look iterated', () => {
+        // {"structures":{"unitOrUnits":{"unitSingular":"ml","unitPlural":"ml"},"structures":[{"iterationInterval":0,"startDateOrDateTime":{"date":1552431600000},"endDateOrDateTime":{"date":1552604400000},"days":[{"dayNumber":1,"allDoses":[{"doseQuantity":0.025000000000000001387778780781445675529539585113525390625,"doseQuantityString":"0,025000000000000001387778780781445675529539585113525390625","isAccordingToNeed":false,"type":"NoonDoseWrapper"}],"plainDoses":[],"noonDose":{"doseQuantity":0.025000000000000001387778780781445675529539585113525390625,"doseQuantityString":"0,025000000000000001387778780781445675529539585113525390625","isAccordingToNeed":false,"type":"NoonDoseWrapper"},"accordingToNeedDoses":[],"numberOfAccordingToNeedDoses":0,"numberOfPlainDoses":0,"numberOfDoses":1},{"dayNumber":3,"allDoses":[{"doseQuantity":0.025000000000000001387778780781445675529539585113525390625,"doseQuantityString":"0,025000000000000001387778780781445675529539585113525390625","isAccordingToNeed":false,"type":"NoonDoseWrapper"}],"plainDoses":[],"noonDose":{"doseQuantity":0.025000000000000001387778780781445675529539585113525390625,"doseQuantityString":"0,025000000000000001387778780781445675529539585113525390625","isAccordingToNeed":false,"type":"NoonDoseWrapper"},"accordingToNeedDoses":[],"numberOfAccordingToNeedDoses":0,"numberOfPlainDoses":0,"numberOfDoses":1}]}]},"structured":true}
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, 'ml', 'ml'),
+            null, null,
+            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2019, 3, 13), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 15), undefined), [
+                new DayWrapper(1, [new NoonDoseWrapper(2.5, undefined, undefined, false)]),
+                new DayWrapper(3, [new NoonDoseWrapper(2.5, undefined, undefined, false)])
+            ], undefined)], false));
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, 100)).to.equal('2,5 ml middag dag 1 og 3');
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal('Dosering fra d. 13. apr. 2019 til d. 15. apr. 2019:\n' +
+            'Lørdag d. 13. apr. 2019: 2,5 ml middag\n' +
+            'Mandag d. 15. apr. 2019: 2,5 ml middag');
+
+    });
 });
 

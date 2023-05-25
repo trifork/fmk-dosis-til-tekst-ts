@@ -26,27 +26,9 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
             return false;
         if (!day.allDosesAreTheSame())
             return false;
-        if (this.isIterationToLong(structure))
+        if (structure.isIterationToLong())
             return false;
         return true;
-    }
-
-    private isIterationToLong(structure: StructureWrapper): boolean {
-        if (!structure.getEndDateOrDateTime())
-            return false;
-        if (!structure.getEndDateOrDateTime().getDateOrDateTime())
-            return false;
-        if (!structure.getEndDateOrDateTime().getDateOrDateTime().getDate())
-            return false;
-        if (!structure.getStartDateOrDateTime())
-            return false;
-        if (!structure.getStartDateOrDateTime().getDateOrDateTime())
-            return false;
-        if (!structure.getStartDateOrDateTime().getDateOrDateTime().getDate())
-            return false;
-        let totalDays = Math.round((structure.getEndDateOrDateTime().getDateOrDateTime().getDate() - structure.getStartDateOrDateTime().getDateOrDateTime().getDate()) / (24 * 60 * 60 * 1000));
-        let iterationInterval = structure.getIterationInterval();
-        return totalDays > iterationInterval;
     }
 
     public doConvert(dosage: DosageWrapper): string {
