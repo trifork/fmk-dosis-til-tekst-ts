@@ -26,7 +26,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
             return false;
         if (!day.allDosesAreTheSame())
             return false;
-        if (structure.isIterationToLong())
+        if (structure.isIterationToLong() && !structure.startsAndEndsSameDay())
             return false;
         return true;
     }
