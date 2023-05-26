@@ -43,19 +43,19 @@ export class ShortTextConverter {
             new WeeklyMorningNoonEveningNightConverterImpl(),
             new RepeatedEyeOrEarConverterImpl(),
             new RepeatedConverterImpl(),
+            new WeeklyRepeatedConverterImpl(),
+            new SimpleNonRepeatedConverterImpl(),
             new MorningNoonEveningNightInNDaysConverterImpl(),
             new SimpleAccordingToNeedConverterImpl(),
             new LimitedNumberOfDaysConverterImpl(),
 
             new SimpleLimitedAccordingToNeedConverterImpl(),
-            new WeeklyRepeatedConverterImpl(),
             new ParacetamolConverterImpl(),
             new MorningNoonEveningNightAndAccordingToNeedConverterImpl(),
             new MultipleDaysNonRepeatedConverterImpl(),
             new NumberOfWholeWeeksConverterImpl(),
             new DayInWeekConverterImpl(),
-            new CombinedTwoPeriodesConverterImpl(),
-            new SimpleNonRepeatedConverterImpl()
+            new CombinedTwoPeriodesConverterImpl()
         ];
     }
 
