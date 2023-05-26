@@ -423,6 +423,7 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
             ], undefined)], false));
 
         expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.STANDARD)).to.equal("1 tablet morgen og 3 tabletter aften i 1 dag");
+
     });
 });
 
