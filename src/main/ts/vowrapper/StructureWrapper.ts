@@ -233,7 +233,7 @@ export class StructureWrapper {
             return false;
         let totalDays = (this.getEndDateOrDateTime().getDateOrDateTime().getDate() - this.getStartDateOrDateTime().getDateOrDateTime().getDate()) + 1;
         let iterationInterval = this.getIterationInterval();
-        return totalDays > iterationInterval;
+        return totalDays < iterationInterval;
     }
 
     public isEmpty(): boolean {
