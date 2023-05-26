@@ -219,17 +219,17 @@ export class StructureWrapper {
     }
 
     public isIterationToLong(): boolean {
-        if (!this.getEndDateOrDateTime())
+        if (this.getEndDateOrDateTime() === null || this.getEndDateOrDateTime() === undefined)
             return false;
-        if (!this.getEndDateOrDateTime().getDateOrDateTime())
+        if (this.getEndDateOrDateTime().getDateOrDateTime() === null || this.getEndDateOrDateTime().getDateOrDateTime() === undefined)
             return false;
-        if (!this.getEndDateOrDateTime().getDateOrDateTime().getDate())
+        if (this.getEndDateOrDateTime().getDateOrDateTime().getDate() === null || this.getEndDateOrDateTime().getDateOrDateTime().getDate() === undefined)
             return false;
-        if (!this.getStartDateOrDateTime())
+        if (this.getStartDateOrDateTime() === null || this.getStartDateOrDateTime() === undefined)
             return false;
-        if (!this.getStartDateOrDateTime().getDateOrDateTime())
+        if (this.getStartDateOrDateTime().getDateOrDateTime() === null || this.getStartDateOrDateTime().getDateOrDateTime() === undefined)
             return false;
-        if (!this.getStartDateOrDateTime().getDateOrDateTime().getDate())
+        if (this.getStartDateOrDateTime().getDateOrDateTime().getDate() === null || this.getStartDateOrDateTime().getDateOrDateTime().getDate() === undefined)
             return false;
         let totalDays = (this.getEndDateOrDateTime().getDateOrDateTime().getDate() - this.getStartDateOrDateTime().getDateOrDateTime().getDate()) + 1;
         console.log("Total days in dosage: " + totalDays);
