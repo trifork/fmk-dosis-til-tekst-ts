@@ -23,7 +23,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             if (dosage.structures.getStructures().length !== 1)
                 return false;
             let structure: StructureWrapper = dosage.structures.getStructures()[0];
-            if (structure.getIterationInterval() !== 7)
+            if (structure.getIterationInterval() !== 7 || structure.isIterationToLong())
                 return false;
             if (options !== TextOptions.VKA && options !== TextOptions.VKA_WITH_MARKUP  && structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
                 return false;

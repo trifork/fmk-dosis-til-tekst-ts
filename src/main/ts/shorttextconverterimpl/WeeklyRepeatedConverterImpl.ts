@@ -18,7 +18,7 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
         if (dosage.structures.getStructures().length !== 1)
             return false;
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() !== 7)
+        if (structure.getIterationInterval() !== 7 || structure.isIterationToLong())
             return false;
         if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
             return false;
