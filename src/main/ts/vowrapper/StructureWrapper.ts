@@ -231,7 +231,7 @@ export class StructureWrapper {
             return false;
         if (this.getStartDateOrDateTime().getDateOrDateTime().getDate() === null || this.getStartDateOrDateTime().getDateOrDateTime().getDate() === undefined)
             return false;
-        let totalDays = (this.getEndDateOrDateTime().getDateOrDateTime().getDate() - this.getStartDateOrDateTime().getDateOrDateTime().getDate()) + 1;
+        let totalDays = Math.round((this.getEndDateOrDateTime().getDateOrDateTime().getTime() - this.getStartDateOrDateTime().getDateOrDateTime().getTime()) / (24 * 60 * 60 * 1000)) + 1;
         console.log("Total days in dosage: " + totalDays);
         let iterationInterval = this.getIterationInterval();
         return totalDays < iterationInterval;
