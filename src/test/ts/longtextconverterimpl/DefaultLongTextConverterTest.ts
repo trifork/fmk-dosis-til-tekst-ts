@@ -333,4 +333,26 @@ describe('DefaultLongTextConverterImpl', () => {
             "Bemærk: Dosering herefter er ikke angivet"
             );
     });
+
+    it('should treat iterationInterval > treatmentDuration as non-iterated', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(2, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(3, [new MorningDoseWrapper(1, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(4, [new MorningDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(5, [new MorningDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new EveningDoseWrapper(1, undefined, undefined, false)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
+            "Torsdag d. 18. apr. 2019: 2 tabletter morgen, 2 tabletter middag og 2 tabletter aften\n" +
+            "Fredag d. 19. apr. 2019: 2 tabletter morgen, 1 tablet middag og 2 tabletter aften\n" +
+            "Lørdag d. 20. apr. 2019: 1 tablet morgen, 1 tablet middag og 2 tabletter aften\n" +
+            "Søndag d. 21. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
+            "Mandag d. 22. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
+            "Tirsdag d. 23. apr. 2019: 1 tablet aften");
+    });
 });

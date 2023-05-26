@@ -218,6 +218,24 @@ export class StructureWrapper {
         return allSum;
     }
 
+    public isIterationToLong(): boolean {
+        if (!this.getEndDateOrDateTime())
+            return false;
+        if (!this.getEndDateOrDateTime().getDateOrDateTime())
+            return false;
+        if (!this.getEndDateOrDateTime().getDateOrDateTime().getDate())
+            return false;
+        if (!this.getStartDateOrDateTime())
+            return false;
+        if (!this.getStartDateOrDateTime().getDateOrDateTime())
+            return false;
+        if (!this.getStartDateOrDateTime().getDateOrDateTime().getDate())
+            return false;
+        let totalDays = Math.round((this.getEndDateOrDateTime().getDateOrDateTime().getDate() - this.getStartDateOrDateTime().getDateOrDateTime().getDate()) / (24 * 60 * 60 * 1000));
+        let iterationInterval = this.getIterationInterval();
+        return totalDays > iterationInterval;
+    }
+
     public isEmpty(): boolean {
         return this.getDays().length === 0;
     }

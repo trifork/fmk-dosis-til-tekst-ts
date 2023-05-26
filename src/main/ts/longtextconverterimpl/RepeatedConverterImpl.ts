@@ -29,6 +29,8 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
                 return false;
             if (structure.containsAccordingToNeedDosesOnly())
                 return false;
+            if (structure.isIterationToLong())
+                return false;
 
             return true;
         }
