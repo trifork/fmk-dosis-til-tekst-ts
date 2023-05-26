@@ -128,7 +128,7 @@ export abstract class LongTextConverterImpl {
         else if (structure.getIterationInterval() === 1) {
             return "";
         }
-        else if (structure.getIterationInterval() === 0) {
+        else if (structure.getIterationInterval() === 0 || structure.isIterationToLong()) {
             // Tirsdag d. 27. okt. 2020: 2 tabletter....
             let dateOnly = TextHelper.makeFromDateOnly(structure.getStartDateOrDateTime().getDateOrDateTime());
             dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
@@ -207,7 +207,7 @@ export abstract class LongTextConverterImpl {
         if (!(structure.getDays().length === 1
             && day.getDayNumber() <= 1
             && day.getNumberOfDoses() === 1
-            && structure.getIterationInterval() === 0
+            && (structure.getIterationInterval() === 0 || structure.isIterationToLong())
             && day.containsAccordingToNeedDosesOnly()
             && day.containsPlainDose())) {
 

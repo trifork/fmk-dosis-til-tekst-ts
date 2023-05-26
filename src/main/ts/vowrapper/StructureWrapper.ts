@@ -232,6 +232,7 @@ export class StructureWrapper {
         if (!this.getStartDateOrDateTime().getDateOrDateTime().getDate())
             return false;
         let totalDays = (this.getEndDateOrDateTime().getDateOrDateTime().getDate() - this.getStartDateOrDateTime().getDateOrDateTime().getDate()) + 1;
+        console.log("Total days in dosage: " + totalDays);
         let iterationInterval = this.getIterationInterval();
         return totalDays < iterationInterval;
     }
@@ -242,7 +243,7 @@ export class StructureWrapper {
 
     // PN dosage without limit: not iterated PN only with one dosage element means take as many as you want per day
     public isPNWithoutLimit(): boolean {
-        return this.getIterationInterval() === 0
+        return (this.getIterationInterval() === 0 || this.isIterationToLong())
             && this.containsAccordingToNeedDosesOnly()
             && this.getDays()[0].getDayNumber() <= 1
             && this.getDays()[0].getNumberOfAccordingToNeedDoses() === 1
