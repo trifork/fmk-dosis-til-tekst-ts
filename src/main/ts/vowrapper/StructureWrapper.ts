@@ -232,7 +232,9 @@ export class StructureWrapper {
         if (!this.getStartDateOrDateTime().getDateOrDateTime().getDate())
             return false;
         let totalDays = Math.round((this.getEndDateOrDateTime().getDateOrDateTime().getDate() - this.getStartDateOrDateTime().getDateOrDateTime().getDate()) / (24 * 60 * 60 * 1000));
+        console.log("Total days in dosage: " + totalDays);
         let iterationInterval = this.getIterationInterval();
+        console.log("Iteration interval in dosage: " + iterationInterval);
         return totalDays > iterationInterval;
     }
 
