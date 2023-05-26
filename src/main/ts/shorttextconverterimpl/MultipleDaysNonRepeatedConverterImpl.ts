@@ -18,7 +18,7 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         if (dosage.structures.getStructures().length !== 1)
             return false;
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() !== 0)
+        if (structure.getIterationInterval() !== 0 && structure.isIterationToLong())
             return false;
         if (structure.getDays().length <= 1)
             return false;
