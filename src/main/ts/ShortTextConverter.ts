@@ -43,7 +43,6 @@ export class ShortTextConverter {
             new WeeklyMorningNoonEveningNightConverterImpl(),
             new RepeatedEyeOrEarConverterImpl(),
             new RepeatedConverterImpl(),
-            new SimpleNonRepeatedConverterImpl(),
             new MorningNoonEveningNightInNDaysConverterImpl(),
             new SimpleAccordingToNeedConverterImpl(),
             new LimitedNumberOfDaysConverterImpl(),
@@ -55,7 +54,8 @@ export class ShortTextConverter {
             new MultipleDaysNonRepeatedConverterImpl(),
             new NumberOfWholeWeeksConverterImpl(),
             new DayInWeekConverterImpl(),
-            new CombinedTwoPeriodesConverterImpl()
+            new CombinedTwoPeriodesConverterImpl(),
+            new SimpleNonRepeatedConverterImpl()
         ];
     }
 
