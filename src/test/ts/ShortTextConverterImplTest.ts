@@ -414,17 +414,15 @@ describe('CombinedTwoPeriodesConverterImpl', () => {
     });
 
     it('should not look iterated', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, 'ml', 'ml'),
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
-            [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2019, 3, 13), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 15), undefined), [
-                new DayWrapper(1, [new NoonDoseWrapper(2.5, undefined, undefined, false)]),
-                new DayWrapper(3, [new NoonDoseWrapper(2.5, undefined, undefined, false)])
+            [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), [
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false),
+                    new EveningDoseWrapper(3, undefined, undefined, false)
+                ])
             ], undefined)], false));
-        expect(ShortTextConverter.getInstance().convertWrapper(dose, 100)).to.equal('2,5 ml middag dag 1 og 3');
-        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal('Dosering fra d. 13. apr. 2019 til d. 15. apr. 2019:\n' +
-            'Lørdag d. 13. apr. 2019: 2,5 ml middag\n' +
-            'Mandag d. 15. apr. 2019: 2,5 ml middag');
 
+        expect(ShortTextConverter.getInstance().convertWrapper(dose, TextOptions.STANDARD)).to.equal("1 tablet morgen og 3 tabletter aften i 1 dag");
     });
 });
 
