@@ -78,7 +78,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // Same day dosage
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
-        else if (structure.getIterationInterval() === 0) {
+        else if (structure.getIterationInterval() === 0 || structure.isIterationToLong()) {
 
             let useSingleDayDosageStartText = structure.getDays().length === 1 && !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
 
