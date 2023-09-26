@@ -8,6 +8,10 @@ import { TextOptions } from "../TextOptions";
 
 export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "DefaultMultiPeriodeLongTextConverterImpl";
+    }
+
     longTextConverter: LongTextConverter;
 
     public constructor(longTextConverter: LongTextConverter) {

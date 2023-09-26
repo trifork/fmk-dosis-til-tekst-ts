@@ -7,6 +7,10 @@ import { TextHelper } from "../TextHelper";
 
 export class RepeatedConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "RepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;
@@ -21,6 +25,8 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
         if (day.containsAccordingToNeedDose())
             return false;
         if (!day.allDosesAreTheSame())
+            return false;
+        if (structure.isIterationToLong() && !structure.startsAndEndsSameDay())
             return false;
         return true;
     }

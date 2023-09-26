@@ -6,8 +6,8 @@ import { TextOptions } from "../TextOptions";
 
 export abstract class ShortTextConverterImpl {
 
+    public abstract getConverterClassName(): string;
     public abstract canConvert(dosageStructure: DosageWrapper): boolean;
-
     public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions ): string;
 
     protected static toValue(dose: DoseWrapper): string {

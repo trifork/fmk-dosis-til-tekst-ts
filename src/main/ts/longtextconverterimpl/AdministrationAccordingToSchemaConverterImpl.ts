@@ -4,6 +4,10 @@ import { SimpleLongTextConverterImpl } from "./SimpleLongTextConverterImpl";
 
 export class AdministrationAccordingToSchemaConverterImpl extends SimpleLongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "AdministrationAccordingToSchemaConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         return dosage.isAdministrationAccordingToSchema();
     }

@@ -109,16 +109,16 @@ export class DosageProposalXMLGenerator {
         let doses: DoseWrapper[] = [];
         let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
         if (mmanMapping.getMorning()) {
-            doses.push(new MorningDoseWrapper(mmanMapping.getMorning(), undefined, undefined, undefined, undefined, undefined, false));
+            doses.push(new MorningDoseWrapper(mmanMapping.getMorning(), undefined, undefined, false));
         }
         if (mmanMapping.getNoon()) {
-            doses.push(new NoonDoseWrapper(mmanMapping.getNoon(), undefined, undefined, undefined, undefined, undefined, false));
+            doses.push(new NoonDoseWrapper(mmanMapping.getNoon(), undefined, undefined, false));
         }
         if (mmanMapping.getEvening()) {
-            doses.push(new EveningDoseWrapper(mmanMapping.getEvening(), undefined, undefined, undefined, undefined, undefined, false));
+            doses.push(new EveningDoseWrapper(mmanMapping.getEvening(), undefined, undefined, false));
         }
         if (mmanMapping.getNight()) {
-            doses.push(new NightDoseWrapper(mmanMapping.getNight(), undefined, undefined, undefined, undefined, undefined, false));
+            doses.push(new NightDoseWrapper(mmanMapping.getNight(), undefined, undefined, false));
         }
 
         return doses;
@@ -164,7 +164,7 @@ export class DosageProposalXMLGenerator {
         let splittedQuantity = quantity.split(";");
         let doses: DoseWrapper[] = [];
         for (let quantity of splittedQuantity) {
-            doses.push(new PlainDoseWrapper(parseFloat(quantity), undefined, undefined, undefined, undefined, undefined, type === "PN"));
+            doses.push(new PlainDoseWrapper(parseFloat(quantity), undefined, undefined, type === "PN"));
         }
 
         return doses;

@@ -6,6 +6,10 @@ import {TextHelper } from "../TextHelper";
 
 export class DayInWeekConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "DayInWeekConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

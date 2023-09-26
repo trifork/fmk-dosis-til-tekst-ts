@@ -9,7 +9,7 @@ describe('DefaultLongTextConverterImpl', () => {
     it('should return 1-time dosage (with enddate)', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), [
-                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -21,9 +21,9 @@ describe('DefaultLongTextConverterImpl', () => {
     it('should return 1-time dosage without hver dag', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), [
-                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
-                new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
-                new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false),
+                new EveningDoseWrapper(2, undefined, undefined, false),
+                new NightDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -36,7 +36,7 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(Date.parse("2020-08-27")), undefined), new DateOrDateTimeWrapper(new Date(Date.parse("2020-09-02")), undefined), [
-                new DayWrapper(1, [new MorningDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new MorningDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)
 
 
@@ -51,9 +51,9 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "tages med rigeligt vand", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
-                new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false),
-                new NightDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false),
+                new EveningDoseWrapper(2, undefined, undefined, false),
+                new NightDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -66,10 +66,10 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(4, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(2, [new MorningDoseWrapper(0.5, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(4, [new MorningDoseWrapper(1.5, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(2, [new MorningDoseWrapper(0.5, undefined, undefined, false)]),
+                new DayWrapper(3, [new MorningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(4, [new MorningDoseWrapper(1.5, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -84,12 +84,12 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
-                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false), new NoonDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(4, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new EveningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(2, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(3, [new MorningDoseWrapper(1, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(4, [new MorningDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(5, [new MorningDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new EveningDoseWrapper(1, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -107,7 +107,7 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
-                new DayWrapper(2, [new EveningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+                new DayWrapper(2, [new EveningDoseWrapper(1, undefined, undefined, true)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -120,7 +120,7 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
-                new DayWrapper(0, [new EveningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+                new DayWrapper(0, [new EveningDoseWrapper(1, undefined, undefined, true)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -133,9 +133,9 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -156,9 +156,9 @@ describe('DefaultLongTextConverterImpl', () => {
             [new StructureWrapper(0, "",
                 new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined),
                 new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -180,9 +180,9 @@ describe('DefaultLongTextConverterImpl', () => {
             [new StructureWrapper(0, "",
                 new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined),
                 new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -205,9 +205,9 @@ describe('DefaultLongTextConverterImpl', () => {
             [new StructureWrapper(0, "",
                 new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined),
                 new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -225,7 +225,7 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
-                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
+                new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, true)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -238,9 +238,9 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2020, 10, 30), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 30), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -258,9 +258,9 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 30), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
@@ -283,7 +283,7 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2021, 10, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 1), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -305,7 +305,7 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
         new DateOrDateTimeWrapper(new Date(2021, 9, 18), undefined), null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 5), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -321,8 +321,8 @@ describe('DefaultLongTextConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 6), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(2, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(2, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -332,5 +332,27 @@ describe('DefaultLongTextConverterImpl', () => {
             "Dosering fra d. 27. okt. 2021 til d. 6. nov. 2021: 0 tabletter\n" + 
             "Bemærk: Dosering herefter er ikke angivet"
             );
+    });
+
+    it('should treat iterationInterval > treatmentDuration as non-iterated', () => {
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, null,
+            [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
+                new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(2, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(3, [new MorningDoseWrapper(1, undefined, undefined, false), new NoonDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(4, [new MorningDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(5, [new MorningDoseWrapper(1, undefined, undefined, false), new EveningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new EveningDoseWrapper(1, undefined, undefined, false)]),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
+            "Dosering fra d. 18. apr. 2019 til d. 23. apr. 2019:\n" +
+            "Torsdag d. 18. apr. 2019: 2 tabletter morgen, 2 tabletter middag og 2 tabletter aften\n" +
+            "Fredag d. 19. apr. 2019: 2 tabletter morgen, 1 tablet middag og 2 tabletter aften\n" +
+            "Lørdag d. 20. apr. 2019: 1 tablet morgen, 1 tablet middag og 2 tabletter aften\n" +
+            "Søndag d. 21. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
+            "Mandag d. 22. apr. 2019: 1 tablet morgen og 1 tablet aften\n" +
+            "Tirsdag d. 23. apr. 2019: 1 tablet aften");
     });
 });

@@ -18,12 +18,12 @@ describe('EmptyStructureConverterImpl', () => {
     it('should return in correct sort-order', () => {
 
         let periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2019, 10, 15), undefined), new DateOrDateTimeWrapper(new Date(2020, 4, 27), undefined), [
-            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])], undefined);
+            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)])], undefined);
 
         let emptyperiod = new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2020, 4, 28), undefined), new DateOrDateTimeWrapper(new Date(2020, 4, 31), undefined), [], undefined);
 
         let periode2 = new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2020, 5, 1), undefined), new DateOrDateTimeWrapper(new Date(2020, 6, 22), undefined), [
-            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])], undefined);
+            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)])], undefined);
 
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

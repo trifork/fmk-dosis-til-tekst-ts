@@ -3,6 +3,10 @@ import { DosageWrapper } from "../vowrapper/DosageWrapper";
 
 export class AdministrationAccordingToSchemaConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "AdministrationAccordingToSchemaConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         return dosage.isAdministrationAccordingToSchema();
     }

@@ -20,8 +20,10 @@ Mac:
 The typescript code is compiled and webpack'ed into target/dosistiltekst.js, accesible as a var, and as commonjs module into target/dosistiltekst-commonjs.js
 
 Run unit-tests:
+```sh
 npm run pretest
 mocha "src/test/target/test/ts/**/*.js" (with --debug-brk in case you want to attach VS Code debugger)
+```
 
 Jenkins:
 Due to xml-schema validation done during unittests, the fmk xsd's has to be present in a ../schemas folder. The xml-validation has no way of changing working dir meaning we unfortunately
