@@ -1,7 +1,51 @@
 /// <reference path="../../../node_modules/@types/mocha/index.d.ts" />
 
 import { expect, assert } from 'chai';
-import { DosageTypeCalculator144, MorningDoseWrapper, StructuresWrapper, StructureWrapper, DayWrapper, UnitOrUnitsWrapper, DateOrDateTimeWrapper, PlainDoseWrapper } from "../../main/ts/index";
+import { DosageTypeCalculator144, DosageTypeCalculator, DosageType, StructuresWrapper, StructureWrapper, DayWrapper, NoonDoseWrapper, UnitOrUnitsWrapper, DateOrDateTimeWrapper, PlainDoseWrapper, DosageWrapper } from "../../main/ts/index";
+
+describe('calculate function', () => {
+    it('should return combined with fixed and empty periods', () => {
+
+        let dw =  new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+        null, null, [
+            new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 6), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 6), undefined),
+                [], undefined),
+            new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 8), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 10), undefined),
+                [], undefined),
+            new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined),
+                [new DayWrapper(1, [new NoonDoseWrapper(0.4, undefined, undefined, true)])], undefined),
+
+        ], false));
+
+        expect(DosageTypeCalculator144.calculateWrapper(dw)).to.equal(DosageType.Combined);
+        expect(DosageTypeCalculator.calculateWrapper(dw)).to.equal(DosageType.Combined);
+    });
+});
+
+describe('dosageType for empty dosages', () => {
+    it('should return fast for EmptyStructures', () => {
+
+        let dw =  new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+        null, null, [
+            new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined),
+                [], undefined)], false));
+
+
+                expect(DosageTypeCalculator144.calculateWrapper(dw)).to.equal(DosageType.Fixed);
+    });
+
+    it('should return fast for empty dosages', () => {
+
+        let dw =  new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+        null, null, [
+            new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined),
+            [new DayWrapper(1, [new NoonDoseWrapper(0, undefined, undefined, true)])], undefined)], false));
+
+
+                expect(DosageTypeCalculator144.calculateWrapper(dw)).to.equal(DosageType.Fixed);
+    });
+});
+
 
 describe('dateAbuts function', () => {
     it('should check if dates are abuts', () => {

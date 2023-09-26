@@ -148,6 +148,26 @@ describe('DefaultLongTextConverterImpl', () => {
             "Søndag d. 1. nov. 2020: 0 tabletter");
     });
 
+    it('should return 0-dosages for empty dosages with option VKA', () => {
+
+        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+            null, new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined),
+            [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
+                new DayWrapper(1, [new PlainDoseWrapper(0, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(0, undefined, undefined, false)]),
+                new DayWrapper(5, []),
+            ], undefined)], false));
+
+        expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
+            "Dosering fra d. 27. okt. 2020 til d. 1. nov. 2020:\n" +
+            "Tirsdag d. 27. okt. 2020: 0 tabletter\n" +
+            "Onsdag d. 28. okt. 2020: 0 tabletter\n" +
+            "Torsdag d. 29. okt. 2020: 0 tabletter\n" +
+            "Fredag d. 30. okt. 2020: 0 tabletter\n" +
+            "Lørdag d. 31. okt. 2020: 0 tabletter\n" +
+            "Søndag d. 1. nov. 2020: 0 tabletter");
+    });
+
     it('should return warning text when weekly VKA period is missing and dosageend before treatmentend', () => {
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),

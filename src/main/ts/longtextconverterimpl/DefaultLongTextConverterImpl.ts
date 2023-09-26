@@ -39,10 +39,15 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         let dayno: number = 1;
 
         for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
+            
+            let emptyDose = new PlainDoseWrapper(0, undefined, undefined, false);
+
             if (!structure.getDay(dayno)) {
-                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, false);
                 let emptyDay = new DayWrapper(dayno, [emptyDose]);
                 structure.getDays().push(emptyDay);
+            }
+            else if(structure.getDay(dayno).getNumberOfDoses() === 0) {
+                structure.getDay(dayno).getAllDoses().push(emptyDose);
             }
             dayno++;
         }
