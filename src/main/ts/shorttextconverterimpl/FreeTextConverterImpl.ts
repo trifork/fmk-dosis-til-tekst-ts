@@ -3,6 +3,10 @@ import { DosageWrapper } from "../vowrapper/DosageWrapper";
 
 export class FreeTextConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "FreeTextConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         return dosage.freeText !== undefined;
     }

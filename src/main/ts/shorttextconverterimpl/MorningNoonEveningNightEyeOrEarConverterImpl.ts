@@ -7,6 +7,10 @@ import { TextHelper } from "../TextHelper";
 
 export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "MorningNoonEveningNightEyeOrEarConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

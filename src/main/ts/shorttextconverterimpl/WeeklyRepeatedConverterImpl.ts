@@ -8,6 +8,10 @@ import { TextHelper } from "../TextHelper";
 
 export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "WeeklyRepeatedConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

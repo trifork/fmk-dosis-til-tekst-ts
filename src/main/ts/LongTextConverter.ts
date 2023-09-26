@@ -7,7 +7,7 @@ import { DefaultLongTextConverterImpl } from "./longtextconverterimpl/DefaultLon
 import { EmptyStructureConverterImpl } from "./longtextconverterimpl/EmptyStructureConverterImpl";
 import { TwoDaysRepeatedConverterImpl } from "./longtextconverterimpl/TwoDaysRepeatedConverterImpl";
 import { WeeklyRepeatedConverterImpl } from "./longtextconverterimpl/WeeklyRepeatedConverterImpl";
-import { BiWeeklyRepeatedConverterImpl } from "./longtextconverterimpl/BiWeeklyRepeatedConverterImpl";
+import { NWeeklyRepeatedConverterImpl } from "./longtextconverterimpl/NWeeklyRepeatedConverterImpl";
 import { RepeatedConverterImpl } from "./longtextconverterimpl/RepeatedConverterImpl";
 import { RepeatedPNConverterImpl } from "./longtextconverterimpl/RepeatedPNConverterImpl";
 import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
@@ -28,7 +28,7 @@ export class LongTextConverter {
         LongTextConverter._converters.push(new DailyRepeatedConverterImpl());
         LongTextConverter._converters.push(new TwoDaysRepeatedConverterImpl());
         LongTextConverter._converters.push(new WeeklyRepeatedConverterImpl());
-        LongTextConverter._converters.push(new BiWeeklyRepeatedConverterImpl());
+        LongTextConverter._converters.push(new NWeeklyRepeatedConverterImpl());
         LongTextConverter._converters.push(new RepeatedConverterImpl());
         LongTextConverter._converters.push(new RepeatedPNConverterImpl());
         LongTextConverter._converters.push(new DefaultLongTextConverterImpl(this));
@@ -82,7 +82,7 @@ export class LongTextConverter {
     public getConverterClassNameWrapper(dosage: DosageWrapper): string {
         for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage, TextOptions.STANDARD)) {
-                return converter.constructor["name"];
+                return converter.getConverterClassName();
             }
         }
         return null;

@@ -9,12 +9,12 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
     it('should return periods sorted by startdate', () => {
 
         let periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
-            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])], undefined);
+            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
+            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])], undefined);
 
         let periode2 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 27), undefined), undefined, [
-            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])], undefined);
+            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
+            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])], undefined);
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [periode1, periode2], false));
@@ -32,12 +32,12 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
     it('should return periods sorted by fast/pn', () => {
 
         let periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 23), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
-            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])], undefined);
+            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
+            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])], undefined);
 
         let periode2 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 23), undefined), undefined, [
-            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
-            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, true)])], undefined);
+            new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, true)]),
+            new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, true)])], undefined);
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [periode2, periode1], false));
@@ -56,11 +56,11 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
     it('should use "hver 3. dag" and "hver 4. dag"', () => {
 
         let periode1 = new StructureWrapper(3, "", new DateOrDateTimeWrapper(new Date(2020, 5, 30), undefined), new DateOrDateTimeWrapper(new Date(2020, 6, 29), undefined), [
-            new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])
+            new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
         ], undefined);
 
         let periode2 = new StructureWrapper(4, "", new DateOrDateTimeWrapper(new Date(2020, 6, 30), undefined), undefined, [
-            new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)])],
+            new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])],
             undefined);
 
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "plaster", "plastre"),
@@ -80,14 +80,14 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(3, undefined, undefined, false)]),
             ], undefined),
 
             new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 10, 2), undefined), new DateOrDateTimeWrapper(new Date(2020, 11, 9), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(5, [new PlainDoseWrapper(4, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(2, [new PlainDoseWrapper(2, undefined, undefined, false)]),
+                new DayWrapper(5, [new PlainDoseWrapper(4, undefined, undefined, false)]),
             ], undefined),
             ], false));
 

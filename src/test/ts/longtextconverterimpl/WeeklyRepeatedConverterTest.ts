@@ -10,8 +10,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
-                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -24,8 +24,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), [
-                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -39,10 +39,10 @@ describe('WeeklyRepeatedConverterImpl', () => {
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
                 new DayWrapper(2,
-                    [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),
-                    new EveningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)
+                    [new MorningDoseWrapper(1, undefined, undefined, false),
+                    new EveningDoseWrapper(2, undefined, undefined, false)
                     ]),
-                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -55,8 +55,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -69,8 +69,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false),new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false),new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -84,8 +84,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, true)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, true)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, true)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -99,8 +99,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
-                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, true)]),
-                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, true)])
+                new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, true)]),
+                new DayWrapper(6, [new MorningDoseWrapper(2, undefined, undefined, true)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
@@ -113,8 +113,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2021, 2, 1), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -132,8 +132,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2021, 0, 25), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -151,8 +151,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA)).to.equal(
@@ -172,8 +172,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2021, 2, 1), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA, new Date(2021, 1, 27))).to.equal(
@@ -191,8 +191,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2021, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2021, 2, 1), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA, new Date(2021, 1, 30))).to.equal(
@@ -212,13 +212,13 @@ describe('WeeklyRepeatedConverterImpl', () => {
             new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined),
             new DateOrDateTimeWrapper(new Date(2020, 3, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 24), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined),
 
             new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), null, [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)
 
             ], false));
@@ -242,8 +242,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 2, 1), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
@@ -264,8 +264,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(7, "Bemærkninger til ugeskema", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 2, 1), undefined), [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose, TextOptions.VKA_WITH_MARKUP)).to.equal(
@@ -287,13 +287,13 @@ describe('WeeklyRepeatedConverterImpl', () => {
             new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined),
             new DateOrDateTimeWrapper(new Date(2020, 3, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 24), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined),
 
             new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), null, [
-                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, undefined, undefined, undefined, false)])
+                new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
+                new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)
 
             ], false));
@@ -323,8 +323,8 @@ describe('WeeklyRepeatedConverterImpl', () => {
             new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined),
             new DateOrDateTimeWrapper(new Date(2020, 3, 1), undefined),
             [new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 24), undefined), [
-                new DayWrapper(1, [new PlainDoseWrapper(15, undefined, undefined, undefined, undefined, undefined, false)]),
-                new DayWrapper(2, [new PlainDoseWrapper(15, undefined, undefined, undefined, undefined, undefined, false)]),
+                new DayWrapper(1, [new PlainDoseWrapper(15, undefined, undefined, false)]),
+                new DayWrapper(2, [new PlainDoseWrapper(15, undefined, undefined, false)]),
                 new DayWrapper(3, [])
             ], undefined)
 

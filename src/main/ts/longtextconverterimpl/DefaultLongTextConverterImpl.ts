@@ -12,6 +12,10 @@ import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
 
+    public getConverterClassName(): string {
+        return "DefaultLongTextConverterImpl";
+    }
+
     longTextConverter: LongTextConverter;
 
     public constructor(longTextConverter: LongTextConverter) {
@@ -36,7 +40,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
         for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
             if (!structure.getDay(dayno)) {
-                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, unitOrUnits.getUnitPlural(), undefined, undefined, false);
+                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, false);
                 let emptyDay = new DayWrapper(dayno, [emptyDose]);
                 structure.getDays().push(emptyDay);
             }
@@ -74,7 +78,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // Same day dosage
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
-        else if (structure.getIterationInterval() === 0) {
+        else if (structure.getIterationInterval() === 0 || structure.isIterationToLong()) {
 
             let useSingleDayDosageStartText = structure.getDays().length === 1 && !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
 
@@ -141,7 +145,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
     private getNoDosageWarningIfNeeded(options: TextOptions, structure: StructureWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, isPartOfMultiPeriodDosage: boolean): string {
         if (options === TextOptions.VKA // On purpose NOT for VKA_WITH_MARKUP! Is presented otherwise in FMK-O
-            && structure.getIterationInterval() === 0
+            && (structure.getIterationInterval() === 0 || structure.isIterationToLong())
             && structure.getEndDateOrDateTime()
             && ((treatmentEndDateTime && treatmentEndDateTime.getDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime())
                 || ((!treatmentEndDateTime || !treatmentEndDateTime.getDateOrDateTime()) && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()))
