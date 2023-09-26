@@ -218,13 +218,31 @@ export class StructureWrapper {
         return allSum;
     }
 
+    public isIterationToLong(): boolean {
+        if (this.getEndDateOrDateTime() === null || this.getEndDateOrDateTime() === undefined)
+            return false;
+        if (this.getEndDateOrDateTime().getDateOrDateTime() === null || this.getEndDateOrDateTime().getDateOrDateTime() === undefined)
+            return false;
+        if (this.getEndDateOrDateTime().getDateOrDateTime().getDate() === null || this.getEndDateOrDateTime().getDateOrDateTime().getDate() === undefined)
+            return false;
+        if (this.getStartDateOrDateTime() === null || this.getStartDateOrDateTime() === undefined)
+            return false;
+        if (this.getStartDateOrDateTime().getDateOrDateTime() === null || this.getStartDateOrDateTime().getDateOrDateTime() === undefined)
+            return false;
+        if (this.getStartDateOrDateTime().getDateOrDateTime().getDate() === null || this.getStartDateOrDateTime().getDateOrDateTime().getDate() === undefined)
+            return false;
+        let totalDays = Math.round((this.getEndDateOrDateTime().getDateOrDateTime().getTime() - this.getStartDateOrDateTime().getDateOrDateTime().getTime()) / (24 * 60 * 60 * 1000)) + 1;
+        let iterationInterval = this.getIterationInterval();
+        return totalDays < iterationInterval;
+    }
+
     public isEmpty(): boolean {
         return this.getDays().length === 0;
     }
 
     // PN dosage without limit: not iterated PN only with one dosage element means take as many as you want per day
     public isPNWithoutLimit(): boolean {
-        return this.getIterationInterval() === 0
+        return (this.getIterationInterval() === 0 || this.isIterationToLong())
             && this.containsAccordingToNeedDosesOnly()
             && this.getDays()[0].getDayNumber() <= 1
             && this.getDays()[0].getNumberOfAccordingToNeedDoses() === 1

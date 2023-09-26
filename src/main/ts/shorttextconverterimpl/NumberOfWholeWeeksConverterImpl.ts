@@ -7,6 +7,10 @@ import { TextHelper } from "../TextHelper";
 
 export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "NumberOfWholeWeeksConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper): boolean {
         if (dosage.structures === undefined)
             return false;

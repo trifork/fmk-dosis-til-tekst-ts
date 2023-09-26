@@ -4,6 +4,10 @@ import { TextOptions } from "../TextOptions";
 
 export class FreeTextConverterImpl extends SimpleLongTextConverterImpl {
 
+    public getConverterClassName(): string {
+        return "FreeTextConverterImpl";
+    }
+
     public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
         return dosage.freeText !== undefined && dosage.freeText !== null;
     }
