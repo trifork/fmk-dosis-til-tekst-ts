@@ -54,6 +54,7 @@ export { TextHelper } from "./TextHelper";
 export { Validator } from "./Validator";
 export { DosageTypeCalculator } from "./DosageTypeCalculator";
 export { DosageTypeCalculator144 } from "./DosageTypeCalculator144";
+export { DosageType } from "./DosageType";
 export { DailyDosisCalculator } from "./DailyDosisCalculator";
 export { TextOptions } from "./TextOptions";
 

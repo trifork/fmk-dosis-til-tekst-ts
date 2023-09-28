@@ -67,7 +67,7 @@ export class DosageTypeCalculator144 {
         let emptyStructures: StructureWrapper[] = [];
 
         structures.getStructures().forEach(s => {
-            if (s.isEmpty()) {
+            if (s.isEmpty() || s.containsEmptyDosagesOnly()) {
                 emptyStructures.push(s);
             }
             else {

@@ -203,6 +203,10 @@ export class StructureWrapper {
         return this.getDays().some(d => d.containsAccordingToNeedDose());
     }
 
+    public containsEmptyDosagesOnly(): boolean {
+        return this.getDays().every(d => d.getNumberOfDoses() === 0 || (d.allDosesHaveTheSameQuantity() && d.getDose(0).getDoseQuantity() === 0));
+    }
+
     public getSumOfDoses(): Interval<number> {
         let allSum: Interval<number>;
 
