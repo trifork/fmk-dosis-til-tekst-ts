@@ -58,7 +58,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
     private convert(unitOrUnits: UnitOrUnitsWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
 
 
-        if (DefaultLongTextConverterImpl.convertAsVKA(options) && structure.getIterationInterval() === 0) {
+        if (DefaultLongTextConverterImpl.convertAsVKA(options) && structure.getIterationInterval()) {
 
             // If more than 10 zero dosages are added, split in two periods: one with 0 dosages only, and one with none-zero only
 
@@ -83,7 +83,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // Same day dosage
             s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
         }
-        else if (structure.getIterationInterval() === 0 || structure.isIterationToLong()) {
+        else if (structure.getIterationInterval() || structure.isIterationToLong()) {
 
             let useSingleDayDosageStartText = structure.getDays().length === 1 && !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
 
@@ -150,7 +150,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
     private getNoDosageWarningIfNeeded(options: TextOptions, structure: StructureWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, isPartOfMultiPeriodDosage: boolean): string {
         if (options === TextOptions.VKA // On purpose NOT for VKA_WITH_MARKUP! Is presented otherwise in FMK-O
-            && (structure.getIterationInterval() === 0 || structure.isIterationToLong())
+            && (structure.getIterationInterval() || structure.isIterationToLong())
             && structure.getEndDateOrDateTime()
             && ((treatmentEndDateTime && treatmentEndDateTime.getDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime())
                 || ((!treatmentEndDateTime || !treatmentEndDateTime.getDateOrDateTime()) && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()))
