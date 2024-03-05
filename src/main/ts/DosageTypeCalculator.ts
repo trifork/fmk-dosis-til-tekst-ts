@@ -81,7 +81,7 @@ export class DosageTypeCalculator {
         if (structure.getEndDateOrDateTime() !== undefined)
             return false;
         // If the dosage isn't iterated it isn't fixed
-        if (structure.getIterationInterval() || structure.isIterationToLong())
+        if (!structure.getIterationInterval() || structure.isIterationToLong())
             return false;
         // If there is an according to need dose in the dosage it is not a (clean)
         // temporary dosage.
@@ -110,7 +110,7 @@ export class DosageTypeCalculator {
         if (day.containsAccordingToNeedDose())
             return false;
         // If the dosage isn't iterated we are happy now
-        if (structure.getIterationInterval() || structure.isIterationToLong())
+        if (!structure.getIterationInterval() || structure.isIterationToLong())
             return true;
         // If the dosage is iterated the end date must be defined as the same day as the start day
         return isSameDayDateInterval;

@@ -22,7 +22,7 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
         if (dosage.structures.getStructures().length !== 1)
             return false;
         let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (!structure.getIterationInterval() && !structure.startsAndEndsSameDay())
+        if (structure.getIterationInterval() && !structure.startsAndEndsSameDay())
             return false;
         if (structure.getDays().length === 0 || (structure.getDays().length === 1 && !structure.startsAndEndsSameDay()))
             return false;

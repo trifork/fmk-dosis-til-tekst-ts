@@ -44,7 +44,7 @@ export class DailyDosisCalculator {
     private static calculateFromStructure(structure: StructureWrapper, unitOrUnits: UnitOrUnitsWrapper): DailyDosis {
         // If the dosage isn't repeated it doesn't make sense to calculate an average
         // unless all daily doses are equal
-        if (structure.getIterationInterval() || structure.isIterationToLong())
+        if (!structure.getIterationInterval() || structure.isIterationToLong())
             if (!structure.allDaysAreTheSame())
                 return new DailyDosis(undefined, undefined, undefined);
         // If the structured dosage contains any doses according to need
@@ -58,7 +58,7 @@ export class DailyDosisCalculator {
         // Otherwise we will calculate an average dosage.
         // If the iteration interval is zero, the dosage is not repeated. This means
         // that the dosage for each day is given.
-        if (structure.getIterationInterval() || structure.isIterationToLong())
+        if (!structure.getIterationInterval() || structure.isIterationToLong())
             return DailyDosisCalculator.calculateAvg(
                 structure.getSumOfDoses(),
                 structure.getDays()[structure.getDays().length - 1].getDayNumber(),
