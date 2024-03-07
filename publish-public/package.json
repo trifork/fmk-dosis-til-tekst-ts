@@ -1,7 +1,7 @@
 {
     "name": "fmk-dosis-til-tekst-ts",
     "author": "Sundhedsdatastyrelsen",
-    "version": "1.2.24",
+    "version": "2.0.0-snapshot",
     "license": "MPL-1.1",
     "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
 	"main": "dist/dosistiltekst.js",
