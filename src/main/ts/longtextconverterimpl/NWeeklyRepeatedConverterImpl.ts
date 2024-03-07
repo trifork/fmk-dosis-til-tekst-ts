@@ -2,9 +2,9 @@ import { WeeklyRepeatedConverterImpl } from "./WeeklyRepeatedConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { DateOrDateTime, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DoseHelper from "../helpers/DoseHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 import { DayOfWeek } from "../DayOfWeek";
 
 export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {

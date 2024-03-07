@@ -2,7 +2,7 @@ import { TextHelper } from "../TextHelper";
 import { Dose, TimedDose } from "../dto/Dosage";
 import { LocalTimeHelper } from "./LocalTimeHelper";
 
-export default class DoseHelper {
+export class DoseHelper {
     public static getLabel(dose: Dose): string {
         switch (dose.type) {
             case "MorningDoseWrapper":

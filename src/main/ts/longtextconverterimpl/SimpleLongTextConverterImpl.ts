@@ -1,7 +1,7 @@
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { TextOptions } from "../TextOptions";
 import { DateOrDateTime } from "../dto/Dosage";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl {
 

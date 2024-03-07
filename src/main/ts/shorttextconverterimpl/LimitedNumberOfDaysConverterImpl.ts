@@ -1,8 +1,7 @@
-import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { SimpleLimitedAccordingToNeedConverterImpl } from "./SimpleLimitedAccordingToNeedConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 
 /**
  * Conversion of: Dosage limited to N days, the same every day

@@ -1,9 +1,9 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DayHelper from "../helpers/DayHelper";
-import DoseHelper from "../helpers/DoseHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
 
 export class RepeatedConverterImpl extends ShortTextConverterImpl {
 

@@ -2,7 +2,7 @@ import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 

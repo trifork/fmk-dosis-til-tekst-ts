@@ -1,8 +1,8 @@
 import { Structure } from "../dto/Dosage";
-import DateOrDateTimeHelper from "./DateOrDateTimeHelper";
-import StructureHelper from "./StructureHelper";
+import { DateOrDateTimeHelper } from "./DateOrDateTimeHelper";
+import { StructureHelper } from "./StructureHelper";
 
-export default class StructuresHelper {
+export class StructuresHelper {
 
     public static dosagePeriodSorter(s1: Structure, s2: Structure): number {
         const startDate1 = DateOrDateTimeHelper.getDateOrDateTime(s1.startDateOrDateTime);

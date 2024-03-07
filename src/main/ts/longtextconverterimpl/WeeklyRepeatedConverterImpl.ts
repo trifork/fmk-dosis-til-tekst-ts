@@ -3,10 +3,10 @@ import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { DefaultLongTextConverterImpl } from "./DefaultLongTextConverterImpl";
 import { DateOrDateTime, Day, Dosage, Dose, PlainDose, Structure, UnitOrUnits } from "../dto/Dosage";
-import DayHelper from "../helpers/DayHelper";
-import StructureHelper from "../helpers/StructureHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
-import DoseHelper from "../helpers/DoseHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
 import { DayOfWeek } from "../DayOfWeek";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {

@@ -1,5 +1,5 @@
 import { DateOrDateTime, Day, Dose, UnitOrUnits } from "./dto/Dosage";
-import DateOrDateTimeHelper from "./helpers/DateOrDateTimeHelper";
+import { DateOrDateTimeHelper } from "./helpers/DateOrDateTimeHelper";
 import { DayOfWeek } from "./DayOfWeek";
 
 declare function log(msg: string): void;

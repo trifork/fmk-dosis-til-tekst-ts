@@ -1,7 +1,7 @@
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { Dosage, Dose, UnitOrUnits } from "../dto/Dosage";
-import DoseHelper from "../helpers/DoseHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
 
 export abstract class ShortTextConverterImpl {
 

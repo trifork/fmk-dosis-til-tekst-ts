@@ -1,10 +1,10 @@
 import { DosisTilTekstException } from "../DosisTilTekstException";
-import { DateOrDateTime, DateTime, Day, Dose, Structure } from "../dto/Dosage";
-import DateOrDateTimeHelper from "./DateOrDateTimeHelper";
-import DayHelper from "./DayHelper";
-import DoseHelper from "./DoseHelper";
+import { Day, Dose, Structure } from "../dto/Dosage";
+import { DateOrDateTimeHelper } from "./DateOrDateTimeHelper";
+import { DayHelper } from "./DayHelper";
+import { DoseHelper } from "./DoseHelper";
 
-export default class StructureHelper {
+export class StructureHelper {
 
     public static startsAndEndsSameDay(structuredDosage: Structure): boolean {
         if (structuredDosage.startDateOrDateTime && structuredDosage.endDateOrDateTime) {

@@ -1,7 +1,7 @@
 import { LongTextConverter } from "../LongTextConverter";
 import { TextOptions } from "../TextOptions";
 import { Dosage } from "../dto/Dosage";
-import StructuresHelper from "../helpers/StructuresHelper";
+import { StructuresHelper } from "../helpers/StructuresHelper";
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 
 export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterImpl {

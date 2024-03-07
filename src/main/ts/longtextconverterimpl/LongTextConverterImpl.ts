@@ -1,11 +1,11 @@
 import { DosisTilTekstException } from "../DosisTilTekstException";
-import StructureHelper from "../helpers/StructureHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { DateOrDateTime, Day, Dosage, Dose, Structure, TimedDose, UnitOrUnits } from "../dto/Dosage";
-import DayHelper from "../helpers/DayHelper";
-import DoseHelper from "../helpers/DoseHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export abstract class LongTextConverterImpl {
 

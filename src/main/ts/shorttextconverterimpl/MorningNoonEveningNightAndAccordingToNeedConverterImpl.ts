@@ -2,8 +2,8 @@ import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { SimpleLimitedAccordingToNeedConverterImpl } from "./SimpleLimitedAccordingToNeedConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
-import DayHelper from "../helpers/DayHelper";
-import DoseHelper from "../helpers/DoseHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
 
 export class MorningNoonEveningNightAndAccordingToNeedConverterImpl extends ShortTextConverterImpl {
 

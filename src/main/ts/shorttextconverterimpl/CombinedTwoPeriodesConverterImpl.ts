@@ -2,7 +2,7 @@ import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { ShortTextConverter } from "../ShortTextConverter";
 import { TextHelper } from "../TextHelper";
 import { Dosage, Structure } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
 
 export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 

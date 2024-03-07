@@ -2,8 +2,8 @@ import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { Day, Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
 

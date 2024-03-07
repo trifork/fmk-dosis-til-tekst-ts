@@ -1,7 +1,7 @@
 
 import { DailyDosis } from "./DailyDosis";
 import { Interval } from "./Interval";
-import StructureHelper from "./helpers/StructureHelper";
+import { StructureHelper } from "./helpers/StructureHelper";
 import { Dosage, Structure, Structures, UnitOrUnits } from "./dto/Dosage";
 
 /**

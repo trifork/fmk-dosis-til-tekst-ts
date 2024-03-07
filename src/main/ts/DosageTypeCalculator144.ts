@@ -1,8 +1,8 @@
 import { DosageType } from "./DosageType";
 import { DosageTypeCalculator } from "./DosageTypeCalculator";
 import { Dosage, Structure, Structures } from "./dto/Dosage";
-import DateOrDateTimeHelper from "./helpers/DateOrDateTimeHelper";
-import StructureHelper from "./helpers/StructureHelper";
+import { DateOrDateTimeHelper } from "./helpers/DateOrDateTimeHelper";
+import { StructureHelper } from "./helpers/StructureHelper";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
 

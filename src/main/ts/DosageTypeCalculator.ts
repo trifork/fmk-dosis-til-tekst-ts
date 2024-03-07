@@ -1,7 +1,7 @@
 import { DosageType } from "./DosageType";
-import StructureHelper from "./helpers/StructureHelper";
+import { StructureHelper } from "./helpers/StructureHelper";
 import { Day, Dosage, Structure, Structures } from "./dto/Dosage";
-import DayHelper from "./helpers/DayHelper";
+import { DayHelper } from "./helpers/DayHelper";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
 export class DosageTypeCalculator {

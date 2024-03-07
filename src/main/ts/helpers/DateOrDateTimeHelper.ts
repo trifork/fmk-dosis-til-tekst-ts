@@ -1,6 +1,6 @@
 import { DateOrDateTime } from "../dto/Dosage";
 
-export default class DateOrDateTimeHelper {
+export class DateOrDateTimeHelper {
     public static getDateOrDateTime(dateOrDateTime: DateOrDateTime): Date | undefined {
         if (dateOrDateTime) {
             if (dateOrDateTime.date) {

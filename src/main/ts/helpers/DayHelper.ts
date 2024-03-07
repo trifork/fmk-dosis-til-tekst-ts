@@ -1,8 +1,8 @@
 import { Interval } from "../Interval";
 import { Day, Dose } from "../dto/Dosage";
-import DoseHelper from "./DoseHelper";
+import { DoseHelper } from "./DoseHelper";
 
-export default class DayHelper {
+export class DayHelper {
 
     public static isAnyDay(day: Day) {
         return day.dayNumber === 0;

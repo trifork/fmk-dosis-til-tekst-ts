@@ -2,10 +2,10 @@ import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { DateOrDateTime, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DoseHelper from "../helpers/DoseHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
-import DayHelper from "../helpers/DayHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DoseHelper } from "../helpers/DoseHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
+import { DayHelper } from "../helpers/DayHelper";
 
 export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 

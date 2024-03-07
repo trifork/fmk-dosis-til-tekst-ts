@@ -2,9 +2,9 @@ import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { WeeklyRepeatedConverterImpl as LongTextWeeklyRepeatedConverterImpl } from "../longtextconverterimpl/WeeklyRepeatedConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DayHelper from "../helpers/DayHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 import { DayOfWeek } from "../DayOfWeek";
 
 export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {

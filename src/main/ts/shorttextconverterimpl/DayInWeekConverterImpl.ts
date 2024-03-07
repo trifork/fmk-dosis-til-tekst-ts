@@ -1,8 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import {TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export class DayInWeekConverterImpl extends ShortTextConverterImpl {
 

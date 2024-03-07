@@ -2,7 +2,7 @@ import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
 
 export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl {
 

@@ -1,7 +1,7 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import DayHelper from "../helpers/DayHelper";
+import { DayHelper } from "../helpers/DayHelper";
 
 export class ParacetamolConverterImpl extends ShortTextConverterImpl {
 

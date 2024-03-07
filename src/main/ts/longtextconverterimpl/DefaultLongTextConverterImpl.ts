@@ -2,9 +2,9 @@ import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { LongTextConverter } from "../LongTextConverter";
 import { TextOptions } from "../TextOptions";
 import { DateOrDateTime, Day, Dosage, PlainDose, Structure, Structures, UnitOrUnits } from "../dto/Dosage";
-import StructureHelper from "../helpers/StructureHelper";
-import DayHelper from "../helpers/DayHelper";
-import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 

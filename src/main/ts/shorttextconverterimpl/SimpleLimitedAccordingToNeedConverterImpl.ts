@@ -1,7 +1,7 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { Day, Dosage, Structure } from "../dto/Dosage";
-import DayHelper from "../helpers/DayHelper";
+import { DayHelper } from "../helpers/DayHelper";
 
 /**
  * Conversion of simple but limited "according to need" dosage, with or without suppl. dosage free text
