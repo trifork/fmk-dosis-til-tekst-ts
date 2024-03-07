@@ -18,9 +18,10 @@ import { MultipleDaysNonRepeatedConverterImpl } from "./shorttextconverterimpl/M
 import { NumberOfWholeWeeksConverterImpl } from "./shorttextconverterimpl/NumberOfWholeWeeksConverterImpl";
 import { DayInWeekConverterImpl } from "./shorttextconverterimpl/DayInWeekConverterImpl";
 import { CombinedTwoPeriodesConverterImpl } from "./shorttextconverterimpl/CombinedTwoPeriodesConverterImpl";
-import { DosageWrapper } from "./vowrapper/DosageWrapper";
 import { TextOptions } from "./TextOptions";
 import { LongTextConverterImpl } from "./longtextconverterimpl/LongTextConverterImpl";
+import { Dosage } from "./dto/Dosage";
+import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
 export class ShortTextConverter {
 
@@ -62,10 +63,6 @@ export class ShortTextConverter {
 
     public static getInstance(): ShortTextConverter { return ShortTextConverter._instance; }
 
-    public getConverterClassName(dosageJson: any, maxLength = ShortTextConverter.MAX_LENGTH): string {
-        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson), maxLength);
-    }
-
     public getConverterClassNameStr(jsonStr: string): string {
         if (jsonStr === undefined || jsonStr === null) {
             return null;
@@ -74,7 +71,7 @@ export class ShortTextConverter {
         return this.getConverterClassName(JSON.parse(jsonStr));
     }
 
-    public getConverterClassNameWrapper(dosage: DosageWrapper, maxLength: number = ShortTextConverter.MAX_LENGTH): string {
+    public getConverterClassName(dosage: Dosage, maxLength = ShortTextConverter.MAX_LENGTH): string {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage) && converter.doConvert(dosage, TextOptions.STANDARD).length <= maxLength) {
                 return converter.getConverterClassName();
@@ -88,17 +85,12 @@ export class ShortTextConverter {
      * @param dosage
      * @return A short text string describing the dosage
      */
-    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, maxLength = ShortTextConverter.MAX_LENGTH): string {
-        return ShortTextConverter.getInstance().doConvert(dosage, options, maxLength);
-    }
+    public convert(dosage: Dosage, options: TextOptions = TextOptions.STANDARD, maxLength = ShortTextConverter.MAX_LENGTH): string {
 
-    public convert(dosageJson: any, options: TextOptions, maxLength = ShortTextConverter.MAX_LENGTH): string {
-
-        if (dosageJson === undefined || dosageJson === null) {
+        if (dosage === undefined || dosage === null) {
             return null;
         }
 
-        let dosage = DosageWrapper.fromJsonObject(dosageJson);
         return ShortTextConverter.getInstance().doConvert(dosage, options, maxLength);
     }
 
@@ -111,6 +103,12 @@ export class ShortTextConverter {
         return this.convert(JSON.parse(jsonStr), (<any>TextOptions)[options], maxLength);
     }
 
+    /**
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead. 
+    */
+    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, maxLength = ShortTextConverter.MAX_LENGTH): string {
+        return ShortTextConverter.getInstance().doConvert(dosage.value, options, maxLength);
+    }
 
     /**
      * Performs a conversion to a short text with a custom maximum length. Returns translation if possible, otherwise null.
@@ -118,7 +116,7 @@ export class ShortTextConverter {
      * @param maxLength
      * @return A short text string describing the dosage
      */
-    public doConvert(dosage: DosageWrapper, options: TextOptions, maxLength: number): string {
+    public doConvert(dosage: Dosage, options: TextOptions, maxLength: number): string {
 
         if (LongTextConverterImpl.convertAsVKA(options)) {
             return null;
@@ -134,7 +132,7 @@ export class ShortTextConverter {
         return null;
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         for (let converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 return true;

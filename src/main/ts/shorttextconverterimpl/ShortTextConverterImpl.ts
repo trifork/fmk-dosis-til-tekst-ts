@@ -1,22 +1,21 @@
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { DoseWrapper } from "../vowrapper/DoseWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
+import { Dosage, Dose, UnitOrUnits } from "../dto/Dosage";
+import DoseHelper from "../helpers/DoseHelper";
 
 export abstract class ShortTextConverterImpl {
 
     public abstract getConverterClassName(): string;
-    public abstract canConvert(dosageStructure: DosageWrapper): boolean;
-    public abstract doConvert(dosageStructure: DosageWrapper, options: TextOptions ): string;
+    public abstract canConvert(dosageStructure: Dosage): boolean;
+    public abstract doConvert(dosageStructure: Dosage, options: TextOptions ): string;
 
-    protected static toValue(dose: DoseWrapper): string {
-        if (dose.getDoseQuantity() !== undefined) {
-            return TextHelper.formatQuantity(dose.getDoseQuantity());
+    protected static toValue(dose: Dose): string {
+        if (typeof dose.doseQuantity === "number") {
+            return TextHelper.formatQuantity(dose.doseQuantity);
         }
-        else if (dose.getMinimalDoseQuantity() !== undefined && dose.getMaximalDoseQuantity() !== undefined) {
-            return TextHelper.formatQuantity(dose.getMinimalDoseQuantity()) +
-                "-" + TextHelper.formatQuantity(dose.getMaximalDoseQuantity());
+        else if (typeof dose.minimalDoseQuantity === "number" && typeof dose.maximalDoseQuantity === "number") {
+            return TextHelper.formatQuantity(dose.minimalDoseQuantity) +
+                "-" + TextHelper.formatQuantity(dose.maximalDoseQuantity);
         }
         else {
             return undefined;
@@ -36,16 +35,16 @@ export abstract class ShortTextConverterImpl {
         return n % 1 === 0;
     }
 
-    protected static toDoseAndUnitValue(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+    protected static toDoseAndUnitValue(dose: Dose, unitOrUnits: UnitOrUnits): string {
         let s = this.toValue(dose);
         let u = TextHelper.getUnit(dose, unitOrUnits);
-        if (dose.getLabel().length === 0)
+        if (DoseHelper.getLabel(dose).length === 0)
             return s + " " + u;
         else
-            return s + " " + u + " " + dose.getLabel();
+            return s + " " + u + " " + DoseHelper.getLabel(dose);
     }
 
-    protected static toDoseLabelUnitValue(dose: number, label: string, unitOrUnits: UnitOrUnitsWrapper): string {
+    protected static toDoseLabelUnitValue(dose: number, label: string, unitOrUnits: UnitOrUnits): string {
         let s = this.toQuantityValue(dose);
         let u = TextHelper.getUnitFromDoseNumber(dose, unitOrUnits);
         if (label === undefined || label.length === 0)

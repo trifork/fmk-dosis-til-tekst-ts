@@ -1,10 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
+import { Day, Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
 
 export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl {
 
@@ -12,56 +10,56 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         return "MultipleDaysNonRepeatedConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() && !structure.isIterationToLong())
+        let structure: Structure = dosage.structures.structures[0];
+        if (structure.iterationInterval && !StructureHelper.isIterationToLong(structure))
             return false;
-        if (structure.getDays().length <= 1)
+        if (structure.days.length <= 1)
             return false;
-        if (!structure.allDaysAreTheSame())
+        if (!StructureHelper.allDaysAreTheSame(structure))
             return false;
-        if (!structure.allDosesAreTheSame())
+        if (!StructureHelper.allDosesAreTheSame(structure))
             return false;
-        if (structure.containsAccordingToNeedDose())
+        if (StructureHelper.containsAccordingToNeedDose(structure))
             return false;
-        if (structure.containsTimedDose())
+        if (StructureHelper.containsTimedDose(structure))
             return false;
-        if (structure.containsMorningNoonEveningNightDoses() && structure.containsPlainDose())
+        if (StructureHelper.containsMorningNoonEveningNightDoses(structure) && StructureHelper.containsPlainDose(structure))
             return false;
         return true;
     }
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
 
-        let firstDay: DayWrapper = structure.getDays()[0];
-        if (structure.containsMorningNoonEveningNightDoses()) {
-            text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay, dosage.structures.getUnitOrUnits());
-            text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay, dosage.structures.getUnitOrUnits());
-            text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay, dosage.structures.getUnitOrUnits());
-            text += MorningNoonEveningNightConverterImpl.getNightText(firstDay, dosage.structures.getUnitOrUnits());
+        let firstDay: Day = structure.days[0];
+        if (StructureHelper.containsMorningNoonEveningNightDoses(structure)) {
+            text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay, dosage.structures.unitOrUnits);
+            text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay, dosage.structures.unitOrUnits);
+            text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay, dosage.structures.unitOrUnits);
+            text += MorningNoonEveningNightConverterImpl.getNightText(firstDay, dosage.structures.unitOrUnits);
         }
         else {
-            text += ShortTextConverterImpl.toDoseAndUnitValue(firstDay.getDose(0), dosage.structures.getUnitOrUnits());
-            text += " " + firstDay.getAllDoses().length + " " + TextHelper.gange(firstDay.getAllDoses().length) + " daglig";
+            text += ShortTextConverterImpl.toDoseAndUnitValue(firstDay.allDoses[0], dosage.structures.unitOrUnits);
+            text += " " + firstDay.allDoses.length + " " + TextHelper.gange(firstDay.allDoses.length) + " daglig";
         }
 
-        for (let i: number = 0; i < structure.getDays().length; i++) {
+        for (let i: number = 0; i < structure.days.length; i++) {
 
-            let day: DayWrapper = structure.getDays()[i];
+            let day: Day = structure.days[i];
             if (i === 0)
-                text += " dag " + day.getDayNumber();
-            else if (i === structure.getDays().length - 1)
-                text += " og " + day.getDayNumber();
-            else text += ", " + day.getDayNumber();
+                text += " dag " + day.dayNumber;
+            else if (i === structure.days.length - 1)
+                text += " og " + day.dayNumber;
+            else text += ", " + day.dayNumber;
         }
 
-        if (structure.getSupplText())
-            text += TextHelper.addShortSupplText(structure.getSupplText());
+        if (structure.supplText)
+            text += TextHelper.addShortSupplText(structure.supplText);
 
         return text.toString();
     }

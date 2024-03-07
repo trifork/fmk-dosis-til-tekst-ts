@@ -1,5 +1,5 @@
 import { TextOptions } from "../TextOptions";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
+import { Dosage } from "../dto/Dosage";
 import { SimpleLongTextConverterImpl } from "./SimpleLongTextConverterImpl";
 
 export class AdministrationAccordingToSchemaConverterImpl extends SimpleLongTextConverterImpl {
@@ -8,12 +8,12 @@ export class AdministrationAccordingToSchemaConverterImpl extends SimpleLongText
         return "AdministrationAccordingToSchemaConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
-        return dosage.isAdministrationAccordingToSchema();
+    public canConvert(dosage: Dosage, options: TextOptions): boolean {
+        return !!dosage.administrationAccordingToSchema;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
+    public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
         return this.convert("Dosering efter skriftlig anvisning",
-            dosage.administrationAccordingToSchema.getStartDateOrDateTime(), dosage.administrationAccordingToSchema.getEndDateOrDateTime(), options);
+            dosage.administrationAccordingToSchema.startDateOrDateTime, dosage.administrationAccordingToSchema.endDateOrDateTime, options);
     }
 }

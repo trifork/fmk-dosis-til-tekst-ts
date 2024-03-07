@@ -1,10 +1,8 @@
 
-import { DosageWrapper } from "./vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
-import { StructuresWrapper } from "./vowrapper/StructuresWrapper";
-import { StructureWrapper } from "./vowrapper/StructureWrapper";
 import { DailyDosis } from "./DailyDosis";
 import { Interval } from "./Interval";
+import StructureHelper from "./helpers/StructureHelper";
+import { Dosage, Structure, Structures, UnitOrUnits } from "./dto/Dosage";
 
 /**
  * Class for calculating the avg. daily dosis from the dosage structure.
@@ -17,61 +15,57 @@ import { Interval } from "./Interval";
  */
 export class DailyDosisCalculator {
 
-    public static calculate(dosageJson: any) {
-        return DailyDosisCalculator.calculateWrapper(DosageWrapper.fromJsonObject(dosageJson));
-    }
-
     public static calculateStr(jsonStr: string) {
         return DailyDosisCalculator.calculate(JSON.parse(jsonStr));
     }
 
-    public static calculateWrapper(dosage: DosageWrapper): DailyDosis {
-        if (dosage.isAdministrationAccordingToSchema())
+    public static calculate(dosage: Dosage): DailyDosis {
+        if (dosage.administrationAccordingToSchema)
             return new DailyDosis(undefined, undefined, undefined);
-        else if (dosage.isFreeText())
+        else if (dosage.freeText)
             return new DailyDosis(undefined, undefined, undefined);
         else
             return DailyDosisCalculator.calculateFromStructures(dosage.structures);
     }
 
-    private static calculateFromStructures(structures: StructuresWrapper): DailyDosis {
-        if (structures.getStructures().length === 1 && structures.getStructures()[0].getDays() !== undefined && structures.getStructures()[0].getDays().length > 0)
-            return DailyDosisCalculator.calculateFromStructure(structures.getStructures()[0], structures.getUnitOrUnits());
+    private static calculateFromStructures(structures: Structures): DailyDosis {
+        if (structures.structures.length === 1 && structures.structures[0].days !== undefined && structures.structures[0].days.length > 0)
+            return DailyDosisCalculator.calculateFromStructure(structures.structures[0], structures.unitOrUnits);
         else
             return new DailyDosis(undefined, undefined, undefined); // Calculating a daily dosis for more than one dosage periode is not supported
     }
 
-    private static calculateFromStructure(structure: StructureWrapper, unitOrUnits: UnitOrUnitsWrapper): DailyDosis {
+    private static calculateFromStructure(structure: Structure, unitOrUnits: UnitOrUnits): DailyDosis {
         // If the dosage isn't repeated it doesn't make sense to calculate an average
         // unless all daily doses are equal
-        if (!structure.getIterationInterval() || structure.isIterationToLong())
-            if (!structure.allDaysAreTheSame())
+        if (!structure.iterationInterval || StructureHelper.isIterationToLong(structure))
+            if (!StructureHelper.allDaysAreTheSame(structure))
                 return new DailyDosis(undefined, undefined, undefined);
         // If the structured dosage contains any doses according to need
         // we cannot calculate an average dosis
-        if (structure.containsAccordingToNeedDose())
+        if (StructureHelper.containsAccordingToNeedDose(structure))
             return new DailyDosis(undefined, undefined, undefined);
         // If there is a dosage for day zero (meaning not related to a specific day)
         // we cannot calculate an average dosis
-        if (structure.getDay(0) !== undefined)
+        if (StructureHelper.getDay(structure, 0) !== undefined)
             return new DailyDosis(undefined, undefined, undefined);
         // Otherwise we will calculate an average dosage.
         // If the iteration interval is zero, the dosage is not repeated. This means
         // that the dosage for each day is given.
-        if (!structure.getIterationInterval() || structure.isIterationToLong())
+        if (!structure.iterationInterval || StructureHelper.isIterationToLong(structure))
             return DailyDosisCalculator.calculateAvg(
-                structure.getSumOfDoses(),
-                structure.getDays()[structure.getDays().length - 1].getDayNumber(),
+                StructureHelper.getSumOfDoses(structure),
+                structure.days[structure.days.length - 1].dayNumber,
                 unitOrUnits);
         // Else the dosage is repeated, and the iteration interval states after how many days
         else
             return DailyDosisCalculator.calculateAvg(
-                structure.getSumOfDoses(),
-                structure.getIterationInterval(),
+                StructureHelper.getSumOfDoses(structure),
+                structure.iterationInterval,
                 unitOrUnits);
     }
 
-    private static calculateAvg(sum: Interval<number>, divisor: number, unitOrUnits: UnitOrUnitsWrapper): DailyDosis {
+    private static calculateAvg(sum: Interval<number>, divisor: number, unitOrUnits: UnitOrUnits): DailyDosis {
 
         let avg: Interval<number> = {
             minimum: parseFloat((sum.minimum / divisor).toFixed(9)),

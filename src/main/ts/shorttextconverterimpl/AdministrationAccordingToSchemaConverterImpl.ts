@@ -1,5 +1,5 @@
+import { Dosage } from "../dto/Dosage";
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
 
 export class AdministrationAccordingToSchemaConverterImpl extends ShortTextConverterImpl {
 
@@ -7,11 +7,11 @@ export class AdministrationAccordingToSchemaConverterImpl extends ShortTextConve
         return "AdministrationAccordingToSchemaConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
-        return dosage.isAdministrationAccordingToSchema();
+    public canConvert(dosage: Dosage): boolean {
+        return !!dosage.administrationAccordingToSchema;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
+    public doConvert(dosage: Dosage): string {
         return "Dosering efter skriftlig anvisning";
     }
 }

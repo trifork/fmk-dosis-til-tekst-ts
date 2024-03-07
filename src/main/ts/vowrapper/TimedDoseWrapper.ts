@@ -1,47 +1,20 @@
-import {LocalTime} from "../LocalTime";
+import {LocalTimeWrapper} from "./LocalTimeWrapper";
+import { TimedDose } from "../dto/Dosage";
 import {DoseWrapper} from "./DoseWrapper";
 
 export class TimedDoseWrapper extends DoseWrapper {
 
-    private time: LocalTime;
+    readonly value: TimedDose;
 
-    public static fromJsonObject(jsonObject: any) {
-        return jsonObject ?
-            new TimedDoseWrapper(LocalTime.fromJsonObject(jsonObject.time), jsonObject.doseQuantity, jsonObject.minimalDoseQuantity, jsonObject.maximalDoseQuantity, jsonObject.isAccordingToNeed)
-            : undefined;
-    }
-
-    static fromJsonObjectTime(jsonObject: any): Date {
-        return new Date();
-    }
-
-    constructor(
-        time: LocalTime,
-        doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number,
-        isAccordingToNeed: boolean) {
-        super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
-        this.time = time;
-    }
-
-    static LABEL = "kl.";
-
-    public getLabel() {
-        return TimedDoseWrapper.LABEL + " " + this.time.toString();
-    }
-
-    public getTime(): string {
-        return this.time.toString();
-    }
-
-    public getLocalTime(): LocalTime {
-        return this.time;
-    }
-
-    public theSameAs(other: DoseWrapper): boolean {
-        if (!(other instanceof TimedDoseWrapper))
-            return false;
-        if (!super.theSameAs(other))
-            return false;
-        return this.getTime() === (other as TimedDoseWrapper).getTime();
+    constructor(time: LocalTimeWrapper, doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number, isAccordingToNeed: boolean) {
+        super();
+        this.value = {
+            type: "TimedDoseWrapper",
+            time: time.value,
+            doseQuantity,
+            minimalDoseQuantity,
+            maximalDoseQuantity,
+            isAccordingToNeed
+        };
     }
 }

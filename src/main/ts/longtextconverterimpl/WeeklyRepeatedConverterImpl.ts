@@ -1,15 +1,13 @@
-import { DayOfWeek } from "../vowrapper/DayOfWeek";
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { TextHelper } from "../TextHelper";
-import { DoseWrapper } from "../vowrapper/DoseWrapper";
-import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 import { TextOptions } from "../TextOptions";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
 import { DefaultLongTextConverterImpl } from "./DefaultLongTextConverterImpl";
+import { DateOrDateTime, Day, Dosage, Dose, PlainDose, Structure, UnitOrUnits } from "../dto/Dosage";
+import DayHelper from "../helpers/DayHelper";
+import StructureHelper from "../helpers/StructureHelper";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import DoseHelper from "../helpers/DoseHelper";
+import { DayOfWeek } from "../DayOfWeek";
 
 export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -17,41 +15,43 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         return "WeeklyRepeatedConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper, options: TextOptions, ): boolean {
+    public canConvert(dosage: Dosage, options: TextOptions, ): boolean {
         if (dosage.structures) {
 
-            if (dosage.structures.getStructures().length !== 1)
+            if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: StructureWrapper = dosage.structures.getStructures()[0];
-            if (structure.getIterationInterval() !== 7)
+            let structure: Structure = dosage.structures.structures[0];
+            if (structure.iterationInterval !== 7)
                 return false;
-            if (options !== TextOptions.VKA && options !== TextOptions.VKA_WITH_MARKUP  && structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
+            if (options !== TextOptions.VKA && options !== TextOptions.VKA_WITH_MARKUP  && DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
                 return false;
-            if (structure.getDays().length > 7)
+            if (structure.days.length > 7)
                 return false;
-            if (structure.getDays()[0].isAnyDay())
+            if (DayHelper.isAnyDay(structure.days[0]))
                 return false;
-            if (structure.getDays()[structure.getDays().length - 1].getDayNumber() > 7)
+            if (structure.days[structure.days.length - 1].dayNumber > 7)
                 return false;
             return true;
         }
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage(), currentTime);
+    public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
+        return this.convert(dosage.structures.unitOrUnits, dosage.structures.structures[0], options, dosage.structures.isPartOfMultiPeriodDosage, currentTime);
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean, currentTime: Date): string {
+    public convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions, isPartOfMultiPeriodDosage: boolean, currentTime: Date): string {
         let s = "";
 
-        let trimmedStructure = new StructureWrapper(
-            structure.getIterationInterval(),
-            structure.getSupplText(),
-            structure.getStartDateOrDateTime(),
-            structure.getEndDateOrDateTime(),
-            structure.getDays().filter(d => d.getAllDoses().length > 0), structure.getDosagePeriodPostfix());
-
+        const trimmedStructure: Structure = {
+            iterationInterval: structure.iterationInterval,
+            startDateOrDateTime: structure.startDateOrDateTime,
+            endDateOrDateTime: structure.endDateOrDateTime,
+            days: structure.days.filter(d => d.allDoses.length > 0),
+            supplText: structure.supplText,
+            dosagePeriodPostfix: structure.dosagePeriodPostfix
+        };
+        
         if (options === TextOptions.VKA_WITH_MARKUP) {
             if (!isPartOfMultiPeriodDosage) {
                 s = "<div class=\"d2t-vkadosagetext\">\n";
@@ -59,19 +59,21 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             s += "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">";
         }
 
-        s += this.getDosageStartText(trimmedStructure.getStartDateOrDateTime(), trimmedStructure.getIterationInterval(), options);
-        if (trimmedStructure.getEndDateOrDateTime() && trimmedStructure.getEndDateOrDateTime().getDateOrDateTime()) {
+        s += this.getDosageStartText(trimmedStructure.startDateOrDateTime, trimmedStructure.iterationInterval, options);
+        if (trimmedStructure.endDateOrDateTime) {
             s += this.getDosageEndText(trimmedStructure, options);
         }
 
-        if (!trimmedStructure.containsAccordingToNeedDose()) {
-            if (trimmedStructure.getStartDateOrDateTime() && trimmedStructure.getStartDateOrDateTime().getDate()
-                && trimmedStructure.getEndDateOrDateTime() && trimmedStructure.getEndDateOrDateTime().getDate()) {
+        if (!StructureHelper.containsAccordingToNeedDose(trimmedStructure)) {
+            const trimmedStart = DateOrDateTimeHelper.getDateOrDateTime(trimmedStructure.startDateOrDateTime);
+            const trimmedEnd = trimmedStructure.endDateOrDateTime && DateOrDateTimeHelper.getDateOrDateTime(trimmedStructure.endDateOrDateTime);
+            
+            if (trimmedStart && trimmedEnd) {
                 // Calculate length of dosage period
-                let diffMsec = Math.abs(trimmedStructure.getEndDateOrDateTime().getDate().getTime() - trimmedStructure.getStartDateOrDateTime().getDate().getTime());
+                let diffMsec = Math.abs(trimmedEnd.getTime() - trimmedStart.getTime());
                 let diffDays = Math.ceil(diffMsec / (1000 * 3600 * 24));
                 // Calculate length of remaining dosage period (from currentTime to dosage end)
-                let diffMsecRemaining = trimmedStructure.getEndDateOrDateTime().getDate().getTime() - currentTime.getTime();
+                let diffMsecRemaining = trimmedEnd.getTime() - currentTime.getTime();
                 let diffDaysRemaining = Math.ceil(diffMsecRemaining / (1000 * 3600 * 24));
 
                 if (diffDays > 7 && !(
@@ -108,9 +110,9 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean, options: TextOptions): string {
+    protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime, includeWeekName: boolean, options: TextOptions): string {
 
-        let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
+        let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
         let s = "";
@@ -128,16 +130,16 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             }
         }
 
-        s += dose.getAnyDoseQuantityString();
+        s += DoseHelper.getAnyDoseQuantityString(dose);
         s += " " + TextHelper.getUnit(dose, unitOrUnits);
 
 
 
 
-        if (dose.getLabel().length > 0) {
-            s += " " + dose.getLabel();
+        if (DoseHelper.getLabel(dose).length > 0) {
+            s += " " + DoseHelper.getLabel(dose);
         }
-        if (dose.getIsAccordingToNeed()) {
+        if (dose.isAccordingToNeed) {
             s += " efter behov";
         }
         if (options === TextOptions.VKA_WITH_MARKUP) {
@@ -147,7 +149,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         return s;
     }
 
-    protected getDayNamesText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    protected getDayNamesText(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         // Make a sorted list of weekdays
         let s = "";
 
@@ -167,7 +169,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;
-            s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true, options);
+            s += this.makeDaysDosage(unitOrUnits, structure, e.day, true, options);
         }
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
@@ -177,31 +179,38 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         return s;
     }
 
-    protected static fillWithEmptyWeekdays(structure: StructureWrapper, unitOrUnits: UnitOrUnitsWrapper): StructureWrapper {
-        let allWeekDays: DayWrapper[] = [];
+    protected static fillWithEmptyWeekdays(structure: Structure, unitOrUnits: UnitOrUnits): Structure {
+        let allWeekDays: Day[] = [];
 
         for (let dayno: number = 1; dayno < 8; dayno++) {
-            let existingDay = structure.getDay(dayno);
+            let existingDay = StructureHelper.getDay(structure, dayno);
             if (!existingDay) {
-                let emptyDose = new PlainDoseWrapper(0, undefined, undefined, false);
-                let emptyDay = new DayWrapper(dayno, [emptyDose]);
-                structure.getDays().push(emptyDay);
+                let emptyDose: PlainDose = {
+                    doseQuantity: 0,
+                    type: "PlainDoseWrapper",
+                    isAccordingToNeed: false
+                };
+                let emptyDay: Day = {
+                    dayNumber: dayno,
+                    allDoses: [emptyDose]
+                };
+                structure.days.push(emptyDay);
             }
         }
         return structure;
     }
 
-    public static sortDaysOfWeek(structure: StructureWrapper): Array<DayOfWeek> {
+    public static sortDaysOfWeek(structure: Structure): Array<DayOfWeek> {
         // Convert all days (up to 7) to day of week and DK name ((1, Mandag) etc).
         // Sort according to day of week (Monday always first) using DayOfWeek's compareTo in SortedSet
-        let daysOfWeekSet = structure.getDays().map(day => TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, true));
+        let daysOfWeekSet = structure.days.map(day => TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, true));
         return daysOfWeekSet.sort(WeeklyRepeatedConverterImpl.daySort);
     }
 
     // Javascript day 0 = Sunday meaning special sorting of days
     static daySort(day1: DayOfWeek, day2: DayOfWeek): number {
-        let sortDay1 = day1.getDayOfWeek() === 0 ? 8 : day1.getDayOfWeek();
-        let sortDay2 = day2.getDayOfWeek() === 0 ? 8 : day2.getDayOfWeek();
+        let sortDay1 = day1.dayOfWeek === 0 ? 8 : day1.dayOfWeek;
+        let sortDay2 = day2.dayOfWeek === 0 ? 8 : day2.dayOfWeek;
 
         return sortDay1 - sortDay2;
     }

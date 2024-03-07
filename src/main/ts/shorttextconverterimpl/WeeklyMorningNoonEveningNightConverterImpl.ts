@@ -1,12 +1,12 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
 import { WeeklyRepeatedConverterImpl as LongTextWeeklyRepeatedConverterImpl } from "../longtextconverterimpl/WeeklyRepeatedConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { DayOfWeek } from "../vowrapper/DayOfWeek";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DayHelper from "../helpers/DayHelper";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { DayOfWeek } from "../DayOfWeek";
 
 export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConverterImpl {
 
@@ -14,54 +14,54 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
         return "WeeklyMorningNoonEveningNightConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() !== 7)
+        let structure: Structure = dosage.structures.structures[0];
+        if (structure.iterationInterval !== 7)
             return false;
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
             return false;
-        if (structure.getDays().length > 7 || structure.getDays().length === 0)
+        if (structure.days.length > 7 || structure.days.length === 0)
             return false;
-        if (structure.getDays()[0].isAnyDay())
+        if (DayHelper.isAnyDay(structure.days[0]))
             return false;
-        if (structure.getDays()[structure.getDays().length - 1].getDayNumber() > 7)
+        if (structure.days[structure.days.length - 1].dayNumber > 7)
             return false;
-        if (structure.containsAccordingToNeedDose() || structure.containsPlainDose() || structure.containsTimedDose())
+        if (StructureHelper.containsAccordingToNeedDose(structure) || StructureHelper.containsPlainDose(structure) || StructureHelper.containsTimedDose(structure))
             return false;
-        if (!structure.allDaysAreTheSame()) // Otherwise the text is too long, and cannot fit into a short text
+        if (!StructureHelper.allDaysAreTheSame(structure)) // Otherwise the text is too long, and cannot fit into a short text
             return false;
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
+    public doConvert(dosage: Dosage): string {
 
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        let structure: Structure = dosage.structures.structures[0];
 
         let daysOfWeek: DayOfWeek[] =
             LongTextWeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
         let text = "";
 
         let firstDay: DayOfWeek = daysOfWeek[0];
-        text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay.getDay(), dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay.getDay(), dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay.getDay(), dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getNightText(firstDay.getDay(), dosage.structures.getUnitOrUnits());
+        text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay.day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay.day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay.day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightConverterImpl.getNightText(firstDay.day, dosage.structures.unitOrUnits);
         let i = 0;
         for (let d of daysOfWeek) {
             if (i === daysOfWeek.length - 1 && daysOfWeek.length > 1)
-                text += " og " + d.getName().toLowerCase();
+                text += " og " + d.name.toLowerCase();
             else if (i === 0)
-                text += " " + d.getName().toLowerCase();
+                text += " " + d.name.toLowerCase();
             else if (i > 0)
-                text += ", " + d.getName().toLowerCase();
+                text += ", " + d.name.toLowerCase();
             i++;
         }
         text += " hver uge";
-        text += MorningNoonEveningNightConverterImpl.getSupplText(structure.getSupplText());
+        text += MorningNoonEveningNightConverterImpl.getSupplText(structure.supplText);
 
         return text;
     }

@@ -8,20 +8,10 @@ import { XML146E2Generator } from "./XML146E2Generator";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { ShortTextConverter } from "../ShortTextConverter";
 import { LongTextConverter } from "../LongTextConverter";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { StructuresWrapper } from "../vowrapper/StructuresWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { DoseWrapper } from "../vowrapper/DoseWrapper";
-import { MorningDoseWrapper } from "../vowrapper/MorningDoseWrapper";
-import { NoonDoseWrapper } from "../vowrapper/NoonDoseWrapper";
-import { EveningDoseWrapper } from "../vowrapper/EveningDoseWrapper";
-import { NightDoseWrapper } from "../vowrapper/NightDoseWrapper";
-import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
 import { DosagePeriod } from "./DosagePeriod";
 import { TextOptions } from "../TextOptions";
+import { Day, Dosage, Dose, EveningDose, MorningDose, NightDose, NoonDose, PlainDose, Structure } from "../dto/Dosage";
+import { formatDateOnly } from "../DateUtil";
 
 export class DosageProposalXMLGenerator {
 
@@ -85,86 +75,136 @@ export class DosageProposalXMLGenerator {
         }
 
 
-        let periodWrappers: StructureWrapper[] = [];
+        let periods: Structure[] = [];
         let dosagePeriods: DosagePeriod[] = [];
 
         for (let periodNo = 0; periodNo < periodTypes.length; periodNo++) {
-            periodWrappers.push(new StructureWrapper(periodIterations[periodNo], supplementaryText, new DateOrDateTimeWrapper(beginDates[periodNo], undefined), new DateOrDateTimeWrapper(endDates[periodNo], undefined), DosageProposalXMLGenerator.getDayWrappers(periodTypes[periodNo], periodMappings[periodNo]), undefined));
+            const structure: Structure = {
+                iterationInterval: periodIterations[periodNo],
+                startDateOrDateTime: {
+                    date: formatDateOnly(beginDates[periodNo]),
+                },
+                supplText: supplementaryText,
+                days: DosageProposalXMLGenerator.getDays(periodTypes[periodNo], periodMappings[periodNo])
+            }
+            if (endDates[periodNo]) {
+                structure.endDateOrDateTime = {
+                    date: formatDateOnly(endDates[periodNo])
+                }
+            }
+            periods.push(structure);
+
             dosagePeriods.push(new DosagePeriod(periodTypes[periodNo], periodMappings[periodNo], periodIterations[periodNo], beginDates[periodNo], endDates[periodNo]));
         }
 
         let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
 
-
-        let dosageWrapper: DosageWrapper = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, unitTextSingular, unitTextPlural), null, null, periodWrappers, false));
-
-        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convertWrapper(dosageWrapper, TextOptions.STANDARD, shortTextMaxLength), LongTextConverter.getInstance().convertWrapper(dosageWrapper, TextOptions.STANDARD));
+        let dosage: Dosage = {
+            structures: {
+                startDateOrDateTime: undefined,
+                endDateOrDateTime: undefined,
+                unitOrUnits: {
+                    unit: undefined,
+                    unitSingular: unitTextSingular,
+                    unitPlural: unitTextPlural
+                },
+                structures: periods,
+                isPartOfMultiPeriodDosage: false
+            }
+        };
+        
+        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convert(dosage, TextOptions.STANDARD, shortTextMaxLength), LongTextConverter.getInstance().convert(dosage, TextOptions.STANDARD));
     }
 
     static isMMAN(type: string): boolean {
         return type === "M+M+A+N";
     }
 
-    static getMMANDoses(mapping: string): DoseWrapper[] {
-        let doses: DoseWrapper[] = [];
+    static getMMANDoses(mapping: string): Dose[] {
+        let doses: Dose[] = [];
         let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
         if (mmanMapping.getMorning()) {
-            doses.push(new MorningDoseWrapper(mmanMapping.getMorning(), undefined, undefined, false));
+            const morningDose: MorningDose = {
+                type: "MorningDoseWrapper",
+                doseQuantity: mmanMapping.getMorning(),
+                isAccordingToNeed: false
+            }
+            doses.push(morningDose);
         }
         if (mmanMapping.getNoon()) {
-            doses.push(new NoonDoseWrapper(mmanMapping.getNoon(), undefined, undefined, false));
+            const noonDose: NoonDose = {
+                type: "NoonDoseWrapper",
+                doseQuantity: mmanMapping.getNoon(),
+                isAccordingToNeed: false
+            }
+            doses.push(noonDose);
         }
         if (mmanMapping.getEvening()) {
-            doses.push(new EveningDoseWrapper(mmanMapping.getEvening(), undefined, undefined, false));
+            const eveningDose: EveningDose = {
+                type: "EveningDoseWrapper",
+                doseQuantity: mmanMapping.getEvening(),
+                isAccordingToNeed: false
+            }
+            doses.push(eveningDose);
         }
         if (mmanMapping.getNight()) {
-            doses.push(new NightDoseWrapper(mmanMapping.getNight(), undefined, undefined, false));
+            const nightDose: NightDose = {
+                type: "NightDoseWrapper",
+                doseQuantity: mmanMapping.getNight(),
+                isAccordingToNeed: false
+            }
+            doses.push(nightDose);
         }
 
         return doses;
     }
 
-    static getDayWrappers(type: string, mapping: string): DayWrapper[] {
+    static getDays(type: string, mapping: string): Day[] {
 
-        let dayWrappers: DayWrapper[];
+        let days: Day[];
         if (DosageProposalXMLGenerator.isMMAN(type) && (mapping.indexOf("dag ") < 0)) {
-            let doses: DoseWrapper[] = DosageProposalXMLGenerator.getMMANDoses(mapping);
-            dayWrappers = [new DayWrapper(1, doses)];
+            let doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(mapping);
+            days = [{ dayNumber: 1, allDoses: doses }];
         }
         else {
             if (mapping.indexOf("dag ") >= 0) {
                 let result: string[];
-                dayWrappers = [];
+                days = [];
 
                 while ((result = this.xml146Generator.daysMappingRegExp.exec(mapping)) != null) {
                     let dayno = parseInt(result[1]);
 
                     if (DosageProposalXMLGenerator.isMMAN(type)) {
-                        let doses: DoseWrapper[] = DosageProposalXMLGenerator.getMMANDoses(result[2]);
-                        let day: DayWrapper = new DayWrapper(dayno, doses);
-                        dayWrappers.push(day);
+                        let doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(result[2]);
+                        let day: Day = { dayNumber: dayno, allDoses: doses};
+                        days.push(day);
                     }
                     else {
 
-                        let day: DayWrapper = new DayWrapper(dayno, DosageProposalXMLGenerator.getDoses(result[2], type));
-                        dayWrappers.push(day);
+                        let day: Day = { dayNumber: dayno, allDoses: DosageProposalXMLGenerator.getDoses(result[2], type) };
+                        days.push(day);
                     }
                 }
             }
             else {
-                let day: DayWrapper = new DayWrapper(1, DosageProposalXMLGenerator.getDoses(mapping, type));
-                dayWrappers = [day];
+                let day: Day = { dayNumber: 1, allDoses: DosageProposalXMLGenerator.getDoses(mapping, type)};
+                days = [day];
             }
         }
 
-        return dayWrappers;
+        return days;
     }
 
-    private static getDoses(quantity: string, type: string): DoseWrapper[] {
+    private static getDoses(quantity: string, type: string): Dose[] {
         let splittedQuantity = quantity.split(";");
-        let doses: DoseWrapper[] = [];
+        let doses: Dose[] = [];
         for (let quantity of splittedQuantity) {
-            doses.push(new PlainDoseWrapper(parseFloat(quantity), undefined, undefined, type === "PN"));
+            const plainDose: PlainDose = {
+                type: "PlainDoseWrapper",
+                doseQuantity: parseFloat(quantity),
+                isAccordingToNeed: type === "PN"
+            };
+            doses.push(plainDose);
         }
 
         return doses;

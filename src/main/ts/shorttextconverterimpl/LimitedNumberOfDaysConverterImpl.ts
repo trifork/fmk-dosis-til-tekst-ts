@@ -1,10 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 import { SimpleLimitedAccordingToNeedConverterImpl } from "./SimpleLimitedAccordingToNeedConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { Day, Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
 
 /**
  * Conversion of: Dosage limited to N days, the same every day
@@ -19,38 +17,38 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
         return "LimitedNumberOfDaysConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() && !structure.isIterationToLong())
+        let structure: Structure = dosage.structures.structures[0];
+        if (structure.iterationInterval && !StructureHelper.isIterationToLong(structure))
             return false;
-        if (structure.getDays().length === 0)
+        if (structure.days.length === 0)
             return false;
-        if (!structure.daysAreInUninteruptedSequenceFromOne())
+        if (!StructureHelper.daysAreInUninteruptedSequenceFromOne(structure))
             return false;
-        if (structure.containsMorningNoonEveningNightDoses())
+        if (StructureHelper.containsMorningNoonEveningNightDoses(structure))
             return false;
-        if (!structure.allDaysAreTheSame())
+        if (!StructureHelper.allDaysAreTheSame(structure))
             return false;
-        if (!structure.allDosesAreTheSame())
+        if (!StructureHelper.allDosesAreTheSame(structure))
             return false;
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: DayWrapper = structure.getDays()[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
-        if (day.getAllDoses()[0].getIsAccordingToNeed()) { text += " efter behov"; }
-        if (structure.getDays().length === 1 && structure.getDays()[0].getDayNumber() === 1)
-            text += " " + day.getAllDoses().length + " " + TextHelper.gange(day.getAllDoses().length);
+        let day: Day = structure.days[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
+        if (day.allDoses[0].isAccordingToNeed) { text += " efter behov"; }
+        if (structure.days.length === 1 && structure.days[0].dayNumber === 1)
+            text += " " + day.allDoses.length + " " + TextHelper.gange(day.allDoses.length);
         else {
-            text += " " + day.getAllDoses().length + " " + TextHelper.gange(day.getAllDoses().length) + " daglig";
-            let days: number = structure.getDays()[structure.getDays().length - 1].getDayNumber();
+            text += " " + day.allDoses.length + " " + TextHelper.gange(day.allDoses.length) + " daglig";
+            let days: number = structure.days[structure.days.length - 1].dayNumber;
             if (days === 7)
                 text += " i 1 uge";
             else if (days % 7 === 0)
@@ -58,8 +56,8 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
             else
                 text += " i " + days + " dage";
         }
-        if (structure.getSupplText())
-            text += TextHelper.addShortSupplText(structure.getSupplText());
+        if (structure.supplText)
+            text += TextHelper.addShortSupplText(structure.supplText);
         return text.toString();
     }
 }

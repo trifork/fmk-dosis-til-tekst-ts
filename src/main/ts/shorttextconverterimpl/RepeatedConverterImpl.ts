@@ -1,9 +1,9 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { Day, Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DayHelper from "../helpers/DayHelper";
+import DoseHelper from "../helpers/DoseHelper";
 
 export class RepeatedConverterImpl extends ShortTextConverterImpl {
 
@@ -11,52 +11,52 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
         return "RepeatedConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (!structure.getIterationInterval())
+        let structure: Structure = dosage.structures.structures[0];
+        if (!structure.iterationInterval)
             return false;
-        if (structure.getDays().length !== 1)
+        if (structure.days.length !== 1)
             return false;
-        let day: DayWrapper = structure.getDays()[0];
-        if (day.containsAccordingToNeedDose())
+        let day: Day = structure.days[0];
+        if (DayHelper.containsAccordingToNeedDose(day))
             return false;
-        if (!day.allDosesAreTheSame())
+        if (!DayHelper.allDosesAreTheSame(day))
             return false;
-        if (structure.isIterationToLong() && !structure.startsAndEndsSameDay())
+        if (StructureHelper.isIterationToLong(structure) && !StructureHelper.startsAndEndsSameDay(structure))
             return false;
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
 
         // Append dosage
-        let day: DayWrapper = structure.getDays()[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
+        let day: Day = structure.days[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
 
         // Append iteration:
         text += this.makeIteration(structure, day);
 
         // Append suppl. text
-        if (structure.getSupplText())
-            text += TextHelper.addShortSupplText(structure.getSupplText());
+        if (structure.supplText)
+            text += TextHelper.addShortSupplText(structure.supplText);
 
         return text;
     }
 
-    private makeIteration(structure: StructureWrapper, day: DayWrapper): string {
+    private makeIteration(structure: Structure, day: Day): string {
 
-        let iterationInterval = structure.getIterationInterval();
-        let numberOfDoses = day.getNumberOfDoses();
+        let iterationInterval = structure.iterationInterval;
+        let numberOfDoses = day.allDoses.length;
 
         // Repeated daily
         if (iterationInterval === 1 && numberOfDoses === 1) {
-            if (day.getDose(0).getLabel() === "" && day.getDose(0).getDoseQuantity() && day.getDose(0).getDoseQuantity() > 1.000000001)
+            if (DoseHelper.getLabel(day.allDoses[0]) === "" && day.allDoses[0].doseQuantity && day.allDoses[0].doseQuantity > 1.000000001)
                 return " 1 gang daglig";
             else
                 return " daglig";
@@ -64,7 +64,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
         if (iterationInterval === 1 && numberOfDoses > 1)
             return " " + numberOfDoses + " " + TextHelper.gange(numberOfDoses) + " daglig";
 
-        let useIterationText = !structure.startsAndEndsSameDay();
+        let useIterationText = !StructureHelper.startsAndEndsSameDay(structure);
         let timesString = numberOfDoses === 1 ? "gang" : "gange";
 
 
@@ -78,9 +78,9 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
             return " hver " + numberOfWholeMonths + ". måned";
 
         // Repeated weekly
-        let numberOfWholeWeeks = this.calculateNumberOfWholeWeeks(structure.getIterationInterval());
-        let name: string = TextHelper.makeDayOfWeekAndName(structure.getStartDateOrDateTime(), day, false).getName();
-        if (numberOfWholeWeeks === 1 && day.getNumberOfDoses() === 1)
+        let numberOfWholeWeeks = this.calculateNumberOfWholeWeeks(structure.iterationInterval);
+        let name: string = TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, false).name;
+        if (numberOfWholeWeeks === 1 && day.allDoses.length === 1)
             return " " + name + (useIterationText ? " hver uge" : "");
         else if (numberOfWholeWeeks === 1 && numberOfDoses > 1)
             return " " + numberOfDoses + " " + timesString + " " + name + (useIterationText ? " hver uge" : "");

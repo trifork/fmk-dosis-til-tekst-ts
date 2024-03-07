@@ -1,15 +1,15 @@
 
-import { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
 import { Interval } from "./Interval";
+import { UnitOrUnits } from "./dto/Dosage";
 
 export class DailyDosis {
 
     private value: number;
     private interval: Interval<number>;
-    private unitOrUnits: UnitOrUnitsWrapper;
+    private unitOrUnits: UnitOrUnits;
 
 
-    public constructor(value: number, interval: Interval<number>, unitOrUnits: UnitOrUnitsWrapper) {
+    public constructor(value: number, interval: Interval<number>, unitOrUnits: UnitOrUnits) {
         this.value = value;
         this.interval = interval;
         this.unitOrUnits = unitOrUnits;
@@ -23,7 +23,7 @@ export class DailyDosis {
         return this.interval;
     }
 
-    public getUnitOrUnits(): UnitOrUnitsWrapper {
+    public getUnitOrUnits(): UnitOrUnits {
         return this.unitOrUnits;
     }
 

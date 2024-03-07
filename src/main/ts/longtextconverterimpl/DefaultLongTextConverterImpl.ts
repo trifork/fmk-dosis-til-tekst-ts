@@ -1,13 +1,10 @@
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { PlainDoseWrapper } from "../vowrapper/PlainDoseWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
-import { StructuresWrapper } from "../vowrapper/StructuresWrapper";
 import { LongTextConverter } from "../LongTextConverter";
 import { TextOptions } from "../TextOptions";
-import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
+import { DateOrDateTime, Day, Dosage, PlainDose, Structure, Structures, UnitOrUnits } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DayHelper from "../helpers/DayHelper";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
 
 export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -23,48 +20,58 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         this.longTextConverter = longTextConverter;
     }
 
-    public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
+    public canConvert(dosageStructure: Dosage, options: TextOptions): boolean {
         // The default converter must handle all cases with a single periode, to ensure that we always create a long
         // dosage text. This converter is added last in the LongTextConverters list of possible
         // converters.
-        return dosageStructure.structures.getStructures().length === 1;
+        return dosageStructure.structures.structures.length === 1;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getEndDateOrDateTime(), dosage.structures.getStructures()[0], options, dosage.structures.getIsPartOfMultiPeriodDosage());
+    public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
+        return this.convert(dosage.structures.unitOrUnits, dosage.structures.endDateOrDateTime, dosage.structures.structures[0], options, dosage.structures.isPartOfMultiPeriodDosage);
     }
 
-    private fillInEmptyVKADosages(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper) {
+    private fillInEmptyVKADosages(unitOrUnits: UnitOrUnits, structure: Structure) {
 
         let dayno: number = 1;
 
-        for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
+        const startDate = DateOrDateTimeHelper.getDateOrDateTime(structure.startDateOrDateTime);
+        const endDate = DateOrDateTimeHelper.getDateOrDateTime(structure.endDateOrDateTime);
 
-            let emptyDose = new PlainDoseWrapper(0, undefined, undefined, false);
+        for (let dosagedate1 = startDate; dosagedate1 <= endDate; dosagedate1.setDate(dosagedate1.getDate() + 1)) {
 
-            if (!structure.getDay(dayno)) {
-                let emptyDay = new DayWrapper(dayno, [emptyDose]);
-                structure.getDays().push(emptyDay);
+            let emptyDose: PlainDose = {
+                type: "PlainDoseWrapper",
+                doseQuantity: 0,
+                isAccordingToNeed: false
+            }; 
+
+            if (!StructureHelper.getDay(structure, dayno)) {
+                let emptyDay: Day = {
+                    dayNumber: dayno,
+                    allDoses: [emptyDose]
+                }; 
+                structure.days.push(emptyDay);
             }
-            else if (structure.getDay(dayno).getNumberOfDoses() === 0) {
-                structure.getDay(dayno).getAllDoses().push(emptyDose);
+            else if (StructureHelper.getDay(structure, dayno).allDoses.length === 0) {
+                StructureHelper.getDay(structure, dayno).allDoses.push(emptyDose);
             }
             dayno++;
         }
 
-        structure.getDays().sort((day1, day2) => day1.getDayNumber() - day2.getDayNumber());
+        structure.days.sort((day1, day2) => day1.dayNumber - day2.dayNumber);
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, structure: StructureWrapper, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
+    private convert(unitOrUnits: UnitOrUnits, treatmentEndDateTime: DateOrDateTime, structure: Structure, options: TextOptions, isPartOfMultiPeriodDosage: boolean): string {
 
 
-        if (DefaultLongTextConverterImpl.convertAsVKA(options) && structure.getIterationInterval() === 0) {
+        if (DefaultLongTextConverterImpl.convertAsVKA(options) && structure.iterationInterval === 0) {
 
             // If more than 10 zero dosages are added, split in two periods: one with 0 dosages only, and one with none-zero only
 
             if (DefaultLongTextConverterImpl.shouldSplitInNonzeroAndZeroDosagePart(structure)) {
                 let splittedDosage = DefaultLongTextConverterImpl.splitInNonzeroAndZeroDosagePart(structure, unitOrUnits);
-                let s = this.longTextConverter.convertWrapper(splittedDosage, options);
+                let s = this.longTextConverter.convert(splittedDosage, options);
                 s += this.getNoDosageWarningIfNeeded(options, structure, treatmentEndDateTime, isPartOfMultiPeriodDosage);
                 return s;
             }
@@ -79,47 +86,47 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             s = "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">";
         }
 
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime)) {
             // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
+            s += "Dosering kun d. " + this.datesToLongText(structure.startDateOrDateTime);
         }
-        else if (structure.getIterationInterval() === 0 || structure.isIterationToLong()) {
+        else if (structure.iterationInterval === 0 || StructureHelper.isIterationToLong(structure)) {
 
-            let useSingleDayDosageStartText = structure.getDays().length === 1 && !structure.getDays()[0].isAnyDay() && !structure.isPNWithoutLimit();
+            let useSingleDayDosageStartText = structure.days.length === 1 && !DayHelper.isAnyDay(structure.days[0]) && !StructureHelper.isPNWithoutLimit(structure);
 
             // Not repeated dosage - and not an unlimited PN dosage neither
             if (useSingleDayDosageStartText) {
-                s += this.getSingleDayDosageStartText(structure.getStartDateOrDateTime(), structure.getDays()[0].getDayNumber());
+                s += this.getSingleDayDosageStartText(structure.startDateOrDateTime, structure.days[0].dayNumber);
             }
             else {
-                s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
+                s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
             }
 
             // If there is just one day with according to need dosages (which is not AnyDay) we don't want say when to stop
             if (!useSingleDayDosageStartText) {
-                if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
+                if (structure.endDateOrDateTime) {
                     s += this.getDosageEndText(structure, options);
                 }
             }
         }
-        else if (structure.getIterationInterval() === 1) {
+        else if (structure.iterationInterval === 1) {
             // Daily dosage
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
-            if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
+            s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
+            if (structure.endDateOrDateTime) {
                 s += this.getDosageEndText(structure, options);
             }
         }
-        else if (structure.getIterationInterval() > 1) {
+        else if (structure.iterationInterval > 1) {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
+            s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
 
-            if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
+            if (structure.endDateOrDateTime) {
                 s += this.getDosageEndText(structure, options);
             }
             if (options === TextOptions.VKA_WITH_MARKUP) {
-                s += "<span class=\"d2t-iterationtext\">gentages hver " + structure.getIterationInterval() + ". dag</span>";
+                s += "<span class=\"d2t-iterationtext\">gentages hver " + structure.iterationInterval + ". dag</span>";
             } else {
-                s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+                s += " - gentages hver " + structure.iterationInterval + ". dag";
             }
         }
 
@@ -148,12 +155,14 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         return s;
     }
 
-    private getNoDosageWarningIfNeeded(options: TextOptions, structure: StructureWrapper, treatmentEndDateTime: DateOrDateTimeWrapper, isPartOfMultiPeriodDosage: boolean): string {
+    private getNoDosageWarningIfNeeded(options: TextOptions, structure: Structure, treatmentEndDateTime: DateOrDateTime, isPartOfMultiPeriodDosage: boolean): string {
+        const treatmentEndDate = treatmentEndDateTime && DateOrDateTimeHelper.getDateOrDateTime(treatmentEndDateTime);
+        const dosageEndDate = structure.endDateOrDateTime && DateOrDateTimeHelper.getDateOrDateTime(structure.endDateOrDateTime);
+
         if (options === TextOptions.VKA // On purpose NOT for VKA_WITH_MARKUP! Is presented otherwise in FMK-O
-            && (structure.getIterationInterval() === 0 || structure.isIterationToLong())
-            && structure.getEndDateOrDateTime()
-            && ((treatmentEndDateTime && treatmentEndDateTime.getDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime() < treatmentEndDateTime.getDateOrDateTime())
-                || ((!treatmentEndDateTime || !treatmentEndDateTime.getDateOrDateTime()) && structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()))
+            && (structure.iterationInterval === 0 || StructureHelper.isIterationToLong(structure))
+            && dosageEndDate
+            && (!treatmentEndDate || dosageEndDate < treatmentEndDate)
             && !isPartOfMultiPeriodDosage) {
             return "\nBemærk: Dosering herefter er ikke angivet";
         }
@@ -161,12 +170,14 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         return "";
     }
 
-    private static getFirstDaynoWithNoDaysAfter(structure: StructureWrapper): number {
+    private static getFirstDaynoWithNoDaysAfter(structure: Structure): number {
 
         let dayno: number = 1;
         let firstDaynoWithNoDaysAfter = -1; // First dayno where no dosageday is defined, and neither no dosagedays comes after
-        for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
-            if (!structure.getDay(dayno)) {
+        const startDate = DateOrDateTimeHelper.getDateOrDateTime(structure.startDateOrDateTime);
+        const endDate = DateOrDateTimeHelper.getDateOrDateTime(structure.endDateOrDateTime);
+        for (let dosagedate = startDate; dosagedate <= endDate; dosagedate.setDate(dosagedate.getDate() + 1)) {
+            if (!StructureHelper.getDay(structure, dayno)) {
                 if (firstDaynoWithNoDaysAfter === -1) {
                     firstDaynoWithNoDaysAfter = dayno;
                 }
@@ -179,34 +190,53 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         return firstDaynoWithNoDaysAfter;
     }
 
-    private static splitInNonzeroAndZeroDosagePart(structure: StructureWrapper, unitOrUnits: UnitOrUnitsWrapper): DosageWrapper {
+    private static splitInNonzeroAndZeroDosagePart(structure: Structure, unitOrUnits: UnitOrUnits): Dosage {
 
         let firstDaynoWithNoDaysAfter = DefaultLongTextConverterImpl.getFirstDaynoWithNoDaysAfter(structure);
 
-        let nonezeroDosageDays: DayWrapper[] = structure.getDays();
-        let zeroDosageDays: DayWrapper[] = [];
-        let nonzeroPeriod: StructureWrapper = new StructureWrapper(structure.getIterationInterval(), structure.getSupplText(), structure.getStartDateOrDateTime(), structure.getStartDateOrDateTime().plusDays(firstDaynoWithNoDaysAfter - 2), nonezeroDosageDays, undefined);
-        let zeroPeriod: StructureWrapper = new StructureWrapper(structure.getIterationInterval(), structure.getSupplText(), structure.getStartDateOrDateTime().plusDays(firstDaynoWithNoDaysAfter - 1), structure.getEndDateOrDateTime(), zeroDosageDays, undefined);
+        let nonezeroDosageDays: Day[] = structure.days;
+        let zeroDosageDays: Day[] = [];
+        let nonzeroPeriod: Structure = {
+            iterationInterval: structure.iterationInterval,
+            supplText: structure.supplText,
+            startDateOrDateTime: structure.startDateOrDateTime,
+            endDateOrDateTime: DateOrDateTimeHelper.plusDays(structure.startDateOrDateTime, firstDaynoWithNoDaysAfter - 2),
+            days: nonezeroDosageDays,
+        };
+        let zeroPeriod: Structure = {
+            iterationInterval: structure.iterationInterval,
+            supplText: structure.supplText,
+            startDateOrDateTime: DateOrDateTimeHelper.plusDays(structure.startDateOrDateTime, firstDaynoWithNoDaysAfter - 1),
+            endDateOrDateTime: structure.endDateOrDateTime,
+            days: zeroDosageDays,
+        };
 
-        let splittedStructures: StructuresWrapper = new StructuresWrapper(
-            unitOrUnits,
-            structure.getStartDateOrDateTime(),
-            structure.getEndDateOrDateTime(), [nonzeroPeriod, zeroPeriod], false);
+        let splittedStructures: Structures = {
+            startDateOrDateTime: structure.startDateOrDateTime,
+            endDateOrDateTime: structure.endDateOrDateTime,
+            unitOrUnits: unitOrUnits,
+            structures: [nonzeroPeriod, zeroPeriod],
+            isPartOfMultiPeriodDosage: false
+        };
 
-        return new DosageWrapper(undefined, undefined, splittedStructures);
+        return {
+            structures: splittedStructures
+        };
     }
 
-    // In case the dosage ends with more than 10 empty dosagedays, then yes: it should be splitted
-    private static shouldSplitInNonzeroAndZeroDosagePart(structure: StructureWrapper): boolean {
+    // In case the dosage ends with more than 10 empty dosagedays, then yes: it should be split
+    private static shouldSplitInNonzeroAndZeroDosagePart(structure: Structure): boolean {
 
-        if (!structure.getStartDateOrDateTime().getDateOrDateTime() || !structure.getEndDateOrDateTime().getDateOrDateTime()) {
+        if (!structure.startDateOrDateTime || !structure.endDateOrDateTime) {
             return false;
         }
 
         let dayno: number = 1;
         let firstDaynoWithNoDaysAfter = -1; // First dayno where no dosageday is defined, and neither no dosagedays comes after
-        for (let dosagedate: Date = new Date(structure.getStartDateOrDateTime().getDateOrDateTime().getTime()); dosagedate <= structure.getEndDateOrDateTime().getDateOrDateTime(); dosagedate.setDate(dosagedate.getDate() + 1)) {
-            if (!structure.getDay(dayno)) {
+        const startDate = DateOrDateTimeHelper.getDateOrDateTime(structure.startDateOrDateTime);
+        const endDate = DateOrDateTimeHelper.getDateOrDateTime(structure.endDateOrDateTime);
+        for (let dosagedate = startDate; dosagedate <= endDate; dosagedate.setDate(dosagedate.getDate() + 1)) {
+            if (!StructureHelper.getDay(structure, dayno)) {
                 if (firstDaynoWithNoDaysAfter === -1) {
                     firstDaynoWithNoDaysAfter = dayno;
                 }

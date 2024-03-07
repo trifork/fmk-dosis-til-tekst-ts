@@ -1,22 +1,18 @@
+import { NoonDose } from "../dto/Dosage";
 import { DoseWrapper } from "./DoseWrapper";
 
 export class NoonDoseWrapper extends DoseWrapper {
 
-    constructor(
-        doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number,
-        isAccordingToNeed: boolean) {
-        super(doseQuantity, minimalDoseQuantity, maximalDoseQuantity, isAccordingToNeed);
-    }
+    readonly value: NoonDose;
 
-    public static fromJsonObject(jsonObject: any) {
-        return jsonObject ?
-            new NoonDoseWrapper(jsonObject.doseQuantity, jsonObject.minimalDoseQuantity, jsonObject.maximalDoseQuantity, jsonObject.isAccordingToNeed)
-            : undefined;
-    }
-
-    static LABEL = "middag";
-
-    public getLabel() {
-        return NoonDoseWrapper.LABEL;
+    constructor(doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number, isAccordingToNeed: boolean) {
+        super();
+        this.value = {
+            type: "NoonDoseWrapper",
+            doseQuantity,
+            minimalDoseQuantity,
+            maximalDoseQuantity,
+            isAccordingToNeed
+        };
     }
 }

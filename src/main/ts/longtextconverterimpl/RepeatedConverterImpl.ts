@@ -1,9 +1,8 @@
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextOptions } from "../TextOptions";
+import { Day, Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
 
 export class RepeatedConverterImpl extends LongTextConverterImpl {
 
@@ -11,25 +10,25 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
         return "RepeatedConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
+    public canConvert(dosage: Dosage, options: TextOptions): boolean {
         // Single period, single dosagedays, iterated
 
         if (dosage.structures) {
 
-            if (dosage.structures.getStructures().length !== 1)
+            if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: StructureWrapper = dosage.structures.getStructures()[0];
-            if (structure.getIterationInterval() <= 2 || structure.getIterationInterval() === 7)
+            let structure: Structure = dosage.structures.structures[0];
+            if (structure.iterationInterval <= 2 || structure.iterationInterval === 7)
                 return false; // DailyRepeated/TwoDaysRepeated/Weekly repeated already handles iteration=1, 2 and 7
-            if (structure.getDays().length > 1)
+            if (structure.days.length > 1)
                 return false;
-            if (structure.getDays()[0].getDayNumber() !== 1)
+            if (structure.days[0].dayNumber !== 1)
                 return false;
-            if (structure.getDays()[0].getNumberOfDoses() !== 1)
+            if (structure.days[0].allDoses.length !== 1)
                 return false;
-            if (structure.containsAccordingToNeedDosesOnly())
+            if (StructureHelper.containsAccordingToNeedDosesOnly(structure))
                 return false;
-            if (structure.isIterationToLong())
+            if (StructureHelper.isIterationToLong(structure))
                 return false;
 
             return true;
@@ -37,41 +36,41 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
-        return this.convert(dosage.structures.getUnitOrUnits(), dosage.structures.getStructures()[0], options);
+    public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
+        return this.convert(dosage.structures.unitOrUnits, dosage.structures.structures[0], options);
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    private convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
 
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime)) {
             // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
+            s += "Dosering kun d. " + this.datesToLongText(structure.startDateOrDateTime);
         }
 
         else {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
+            s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
 
-            if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
+            if (structure.endDateOrDateTime) {
                 s += this.getDosageEndText(structure, options);
             }
         }
         s += ":\n";
-        s += this.makeDaysDosage(unitOrUnits, structure, structure.getDays()[0], false, options);
+        s += this.makeDaysDosage(unitOrUnits, structure, structure.days[0], false, options);
         s = this.appendSupplText(structure, s, options);
 
         return s;
     }
 
-    protected makeDaysDosage(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, day: DayWrapper, hasDaysLabel: boolean, options: TextOptions): string {
+    protected makeDaysDosage(unitOrUnits: UnitOrUnits, structure: Structure, day: Day, hasDaysLabel: boolean, options: TextOptions): string {
         let s = "";
         let daglig = "";
 
-        s += this.makeOneDose(day.getDose(0), unitOrUnits, day.getDayNumber(), structure.getStartDateOrDateTime(), true, options);
-        s += " hver " + structure.getIterationInterval() + ". dag";
+        s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, true, options);
+        s += " hver " + structure.iterationInterval + ". dag";
 
-        let dosagePeriodPostfix = structure.getDosagePeriodPostfix();
+        let dosagePeriodPostfix = structure.dosagePeriodPostfix;
         if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
         }

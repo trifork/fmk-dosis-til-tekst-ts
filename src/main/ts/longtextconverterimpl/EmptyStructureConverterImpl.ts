@@ -1,9 +1,8 @@
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
 import { TextHelper } from "../TextHelper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextOptions } from "../TextOptions";
+import { Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
@@ -11,28 +10,26 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
         return "EmptyStructureConverterImpl";
     }
 
-    public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
-        return dosageStructure.isStructured()
-            && dosageStructure.structures.getStructures()
-            && dosageStructure.structures.getStructures().length === 1
-            && dosageStructure.structures.getStructures()[0].getDays().length === 0;
+    public canConvert(dosageStructure: Dosage, options: TextOptions): boolean {
+        return dosageStructure.structures?.structures?.length === 1
+            && dosageStructure.structures.structures[0].days.length === 0;
     }
 
-    public doConvert(dosageStructure: DosageWrapper, options: TextOptions, currentTime: Date): string {
-        return this.convert(dosageStructure.structures.getUnitOrUnits(), dosageStructure.structures.getStructures()[0], options);
+    public doConvert(dosageStructure: Dosage, options: TextOptions, currentTime: Date): string {
+        return this.convert(dosageStructure.structures.unitOrUnits, dosageStructure.structures.structures[0], options);
     }
 
-    private convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    private convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
 
 
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime())) {
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime)) {
             // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(structure.getStartDateOrDateTime());
+            s += "Dosering kun d. " + this.datesToLongText(structure.startDateOrDateTime);
         }
         else {
-            s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
-            if (structure.getEndDateOrDateTime()) {
+            s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
+            if (structure.endDateOrDateTime) {
                 s += this.getDosageEndText(structure, options);
             }
         }
@@ -40,7 +37,7 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
         if (LongTextConverterImpl.convertAsVKA(options)) {
 
             let emptyDosageString =
-                "0 " + (unitOrUnits.getUnitPlural() ? unitOrUnits.getUnitPlural() : unitOrUnits.getUnit());
+                "0 " + (unitOrUnits.unitPlural ? unitOrUnits.unitPlural : unitOrUnits.unit);
 
             if (options === TextOptions.VKA_WITH_MARKUP) {
                 s = "<div class=\"d2t-period\"><div class=\"d2t-periodtext\">"

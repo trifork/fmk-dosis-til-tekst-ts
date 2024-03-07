@@ -23,10 +23,34 @@ export { SimpleLimitedAccordingToNeedConverterImpl } from "./shorttextconverteri
 export { WeeklyMorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/WeeklyMorningNoonEveningNightConverterImpl";
 export { WeeklyRepeatedConverterImpl as ShortWeeklyRepeatedConverterImpl } from "./shorttextconverterimpl/WeeklyRepeatedConverterImpl";
 
+// ./dto
+export { 
+    Dosage, 
+    AdministrationAccordingToSchema, 
+    FreeText, 
+    Structures, 
+    UnitOrUnits, 
+    Units, 
+    Unit, 
+    Structure, 
+    DateOrDateTime, 
+    DateTime, 
+    DateOnly, 
+    Day, 
+    Dose, 
+    MorningDose, 
+    NoonDose, 
+    EveningDose, 
+    NightDose, 
+    PlainDose, 
+    TimedDose, 
+    LocalTime 
+} from "./dto/Dosage";
+
 // ./vowrapper
 export { AdministrationAccordingToSchemaWrapper } from "./vowrapper/AdministrationAccordingToSchemaWrapper";
 export { DateOrDateTimeWrapper } from "./vowrapper/DateOrDateTimeWrapper";
-export { DayOfWeek } from "./vowrapper/DayOfWeek";
+// export { DayOfWeek } from "./vowrapper/DayOfWeek";
 export { DayWrapper } from "./vowrapper/DayWrapper";
 export { DosageWrapper } from "./vowrapper/DosageWrapper";
 export { DoseWrapper } from "./vowrapper/DoseWrapper";
@@ -40,12 +64,15 @@ export { StructuresWrapper } from "./vowrapper/StructuresWrapper";
 export { StructureWrapper } from "./vowrapper/StructureWrapper";
 export { TimedDoseWrapper } from "./vowrapper/TimedDoseWrapper";
 export { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
+export { LocalTimeWrapper } from "./vowrapper/LocalTimeWrapper";
+
+// ./helpers
+export { LocalTimeHelper } from "./helpers/LocalTimeHelper";
 
 // ./
 export { DosisTilTekstException } from "./DosisTilTekstException";
 export { Factory } from "./Factory";
 export { Interval } from "./Interval";
-export { LocalTime } from "./LocalTime";
 export { LoggerService } from "./LoggerService";
 export { LongTextConverter } from "./LongTextConverter";
 export { ShortTextConverter } from "./ShortTextConverter";

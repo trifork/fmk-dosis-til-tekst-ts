@@ -1,5 +1,4 @@
 import { LongTextConverterImpl } from "./longtextconverterimpl/LongTextConverterImpl";
-import { DosageWrapper } from "./vowrapper/DosageWrapper";
 import { DailyRepeatedConverterImpl } from "./longtextconverterimpl/DailyRepeatedConverterImpl";
 import { FreeTextConverterImpl } from "./longtextconverterimpl/FreeTextConverterImpl";
 import { AdministrationAccordingToSchemaConverterImpl } from "./longtextconverterimpl/AdministrationAccordingToSchemaConverterImpl";
@@ -12,6 +11,8 @@ import { RepeatedConverterImpl } from "./longtextconverterimpl/RepeatedConverter
 import { RepeatedPNConverterImpl } from "./longtextconverterimpl/RepeatedPNConverterImpl";
 import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
 import { TextOptions } from "./TextOptions";
+import { Dosage } from "./dto/Dosage";
+import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
 export class LongTextConverter {
 
@@ -44,16 +45,11 @@ export class LongTextConverter {
         return this.convert(JSON.parse(jsonStr), (<any>TextOptions)[options]);
     }
 
-    public convert(dosageJson: any, options: TextOptions): string {
+    public convert(dosage: Dosage, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
 
-        if (dosageJson === undefined || dosageJson === null) {
+        if (!dosage) {
             return null;
         }
-        let dosage = DosageWrapper.fromJsonObject(dosageJson);
-        return this.convertWrapper(dosage, options);
-    }
-
-    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
 
         if (!currentTime) {
             currentTime = new Date();
@@ -67,19 +63,22 @@ export class LongTextConverter {
         return null;
     }
 
-    public getConverterClassName(dosageJson: any): string {
-        return this.getConverterClassNameWrapper(DosageWrapper.fromJsonObject(dosageJson));
+    /**
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead. 
+    */
+    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
+        return this.convert(dosage.value, options, currentTime);
     }
 
     public getConverterClassNameStr(jsonStr: string): string {
-        if (jsonStr === undefined || jsonStr === null) {
+        if (!jsonStr) {
             return null;
         }
 
         return this.getConverterClassName(JSON.parse(jsonStr));
     }
 
-    public getConverterClassNameWrapper(dosage: DosageWrapper): string {
+    public getConverterClassName(dosage: Dosage): string {
         for (let converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage, TextOptions.STANDARD)) {
                 return converter.getConverterClassName();

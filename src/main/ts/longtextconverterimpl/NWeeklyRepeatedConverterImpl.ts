@@ -1,13 +1,11 @@
-import { DayOfWeek } from "../vowrapper/DayOfWeek";
-import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { WeeklyRepeatedConverterImpl } from "./WeeklyRepeatedConverterImpl";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
 import { TextHelper } from "../TextHelper";
-import { DoseWrapper } from "../vowrapper/DoseWrapper";
-import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 import { TextOptions } from "../TextOptions";
+import { DateOrDateTime, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DoseHelper from "../helpers/DoseHelper";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
+import { DayOfWeek } from "../DayOfWeek";
 
 export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
@@ -15,39 +13,39 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
         return "NWeeklyRepeatedConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper, options: TextOptions): boolean {
+    public canConvert(dosage: Dosage, options: TextOptions): boolean {
         if (dosage.structures) {
 
-            if (dosage.structures.getStructures().length !== 1)
+            if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: StructureWrapper = dosage.structures.getStructures()[0];
-            if (structure.getIterationInterval() <= 7 || structure.getIterationInterval() % 7 !== 0)
+            let structure: Structure = dosage.structures.structures[0];
+            if (structure.iterationInterval <= 7 || structure.iterationInterval % 7 !== 0)
                 return false;
-            if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
+            if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
                 return false;
-            if (structure.getDays().length !== 1)
+            if (structure.days.length !== 1)
                 return false;
-            if (structure.getDays()[0].getNumberOfDoses() !== 1)
+            if (structure.days[0].allDoses.length !== 1)
                 return false;
-            if (structure.getDays()[0].getDayNumber() > 7)
+            if (structure.days[0].dayNumber > 7)
                 return false;
             return true;
         }
         return false;
     }
 
-    public convert(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    public convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
-        s += this.getDosageStartText(structure.getStartDateOrDateTime(), structure.getIterationInterval(), options);
-        if (structure.getEndDateOrDateTime() && structure.getEndDateOrDateTime().getDateOrDateTime()) {
+        s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
+        if (structure.endDateOrDateTime) {
             s += this.getDosageEndText(structure, options);
         }
 
-        if (!structure.containsAccordingToNeedDose()) {
-            s += " - gentages hver " + structure.getIterationInterval() + ". dag";
+        if (!StructureHelper.containsAccordingToNeedDose(structure)) {
+            s += " - gentages hver " + structure.iterationInterval + ". dag";
         }
 
-        s += ":\nHver " + Math.floor(structure.getIterationInterval() / 7) + ". " + this.getDayNamesText(unitOrUnits, structure, options);
+        s += ":\nHver " + Math.floor(structure.iterationInterval / 7) + ". " + this.getDayNamesText(unitOrUnits, structure, options);
 
         s = this.appendSupplText(structure, s, options);
 
@@ -55,29 +53,29 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
     }
 
 
-    protected makeOneDose(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper, dayNumber: number, startDateOrDateTime: DateOrDateTimeWrapper, includeWeekName: boolean, options: TextOptions): string {
+    protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime, includeWeekName: boolean, options: TextOptions): string {
 
-        let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
+        let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
         let s = TextHelper.getWeekday(dateOnly.getDay()) + ": ";
 
-        s += dose.getAnyDoseQuantityString();
+        s += DoseHelper.getAnyDoseQuantityString(dose);
         s += " " + TextHelper.getUnit(dose, unitOrUnits);
 
 
 
 
-        if (dose.getLabel().length > 0) {
-            s += " " + dose.getLabel();
+        if (DoseHelper.getLabel(dose).length > 0) {
+            s += " " + DoseHelper.getLabel(dose);
         }
-        if (dose.getIsAccordingToNeed()) {
+        if (dose.isAccordingToNeed) {
             s += " efter behov";
         }
         return s;
     }
 
-    protected getDayNamesText(unitOrUnits: UnitOrUnitsWrapper, structure: StructureWrapper, options: TextOptions): string {
+    protected getDayNamesText(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         // Make a sorted list of weekdays
         let s = "";
         let daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
@@ -87,7 +85,7 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;
-            s += this.makeDaysDosage(unitOrUnits, structure, e.getDay(), true, options);
+            s += this.makeDaysDosage(unitOrUnits, structure, e.day, true, options);
 
         }
         return s;

@@ -1,7 +1,7 @@
 /// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
 import { expect } from 'chai';
-import { LocalTime, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, TimedDoseWrapper, NoonDoseWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper } from "../../../main/ts/index";
+import { LocalTimeWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, TimedDoseWrapper, NoonDoseWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper } from "../../../main/ts/index";
 
 describe('TwoDaysRepeatedConverterImpl', () => {
 
@@ -47,8 +47,8 @@ describe('TwoDaysRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "ml", "ml"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(8,0,0), 5, undefined, undefined, false),
-                    new TimedDoseWrapper(new LocalTime(12,0,0), 10, undefined, undefined, false)
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTimeWrapper(8,0,0), 5, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTimeWrapper(12,0,0), 10, undefined, undefined, false)
                 ])
             ], undefined),
         

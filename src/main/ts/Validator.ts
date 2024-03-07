@@ -1,8 +1,8 @@
-import { DosageWrapper } from "./vowrapper/DosageWrapper";
+import { Dosage } from "./dto/Dosage";
 
 export class Validator {
 
-    public static validate(dosage: DosageWrapper) {
+    public static validate(dosage: Dosage) {
         return;
     }
 }

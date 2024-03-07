@@ -1,9 +1,9 @@
-import { DosageTypeCalculator } from "./DosageTypeCalculator";
-import { DosageWrapper } from "./vowrapper/DosageWrapper";
-import { DayWrapper } from "./vowrapper/DayWrapper";
-import { StructuresWrapper } from "./vowrapper/StructuresWrapper";
-import { StructureWrapper } from "./vowrapper/StructureWrapper";
 import { DosageType } from "./DosageType";
+import { DosageTypeCalculator } from "./DosageTypeCalculator";
+import { Dosage, Structure, Structures } from "./dto/Dosage";
+import DateOrDateTimeHelper from "./helpers/DateOrDateTimeHelper";
+import StructureHelper from "./helpers/StructureHelper";
+import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
 
 /***
@@ -14,24 +14,27 @@ import { DosageType } from "./DosageType";
  */
 export class DosageTypeCalculator144 {
 
-    public static calculate(dosageJson: any) {
-        return DosageTypeCalculator144.calculateWrapper(DosageWrapper.fromJsonObject(dosageJson));
-    }
-
     public static calculateStr(jsonStr: string) {
         return DosageTypeCalculator144.calculate(JSON.parse(jsonStr));
     }
 
-    public static calculateWrapper(dosage: DosageWrapper): DosageType {
-        if (dosage.isAdministrationAccordingToSchema())
+    public static calculate(dosage: Dosage): DosageType {
+        if (dosage.administrationAccordingToSchema)
             return DosageType.Unspecified;
-        else if (dosage.isFreeText())
+        else if (dosage.freeText)
             return DosageType.Unspecified;
         else
             return DosageTypeCalculator144.calculateFromStructures(dosage.structures);
     }
 
-    private static calculateFromStructures(structures: StructuresWrapper): DosageType {
+    /**
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use calculate(dosage: Dosage, ...) instead. 
+    */
+    public static calculateWrapper(dosage: DosageWrapper): DosageType {
+        return DosageTypeCalculator144.calculate(dosage.value);
+    }
+    
+    private static calculateFromStructures(structures: Structures): DosageType {
         if (DosageTypeCalculator144.hasAtLeastOneCombinedStructure(structures) || DosageTypeCalculator144.hasMixedNotEmptyStructures(structures)) {
             return DosageType.Combined;
         }
@@ -40,8 +43,8 @@ export class DosageTypeCalculator144 {
 			 * The dosagetype is then found by finding the dosagetype of the first not-empty Structure
 			 * If only empty structures are present, return fixed...just because */
 
-            let fixedStructures: StructureWrapper[] = [];
-            let pnStructures: StructureWrapper[] = [];
+            let fixedStructures: Structure[] = [];
+            let pnStructures: Structure[] = [];
 
             DosageTypeCalculator144.splitInFixedAndPN(structures, fixedStructures, pnStructures);
 
@@ -54,24 +57,23 @@ export class DosageTypeCalculator144 {
         }
     }
 
-    public static structureSorter(s1: StructureWrapper, s2: StructureWrapper): number {
-        return s1.getStartDateOrDateTime().getDateOrDateTime().getTime() - s2.getStartDateOrDateTime().getDateOrDateTime().getTime();
+    public static structureSorter(s1: Structure, s2: Structure): number {
+        return DateOrDateTimeHelper.getDateOrDateTime(s1.startDateOrDateTime).getTime() - DateOrDateTimeHelper.getDateOrDateTime(s2.startDateOrDateTime).getTime();
     }
 
     /*
 	 * Precondition: all structures contains only fixed or pn doses
 	 * In case some contained mixed, this method would never have been called, since we then know that the DosageType would be combined
 	 */
-    public static splitInFixedAndPN(structures: StructuresWrapper, fixedStructures: StructureWrapper[], pnStructures: StructureWrapper[]) {
+    public static splitInFixedAndPN(structures: Structures, fixedStructures: Structure[], pnStructures: Structure[]) {
 
-        let emptyStructures: StructureWrapper[] = [];
+        let emptyStructures: Structure[] = [];
 
-        structures.getStructures().forEach(s => {
-            if (s.isEmpty() || s.containsEmptyDosagesOnly()) {
+        structures.structures.forEach(s => {
+            if (StructureHelper.isEmpty(s) || StructureHelper.containsEmptyDosagesOnly(s)) {
                 emptyStructures.push(s);
-            }
-            else {
-                if (s.containsAccordingToNeedDosesOnly()) {
+            } else {
+                if (StructureHelper.containsAccordingToNeedDosesOnly(s)) {
                     pnStructures.push(s);
                 }
                 else {
@@ -92,10 +94,10 @@ export class DosageTypeCalculator144 {
 
         /* in case any emptystructures are left, they should be placed either at the beginning or end of either the fixed or the pn structures */
 
-        let unhandledEmptyStructures: StructureWrapper[] = [];
+        let unhandledEmptyStructures: Structure[] = [];
 
         for (let i = 0; i < emptyStructures.length; i++) {
-            let es: StructureWrapper = emptyStructures[i];
+            let es: Structure = emptyStructures[i];
             let handled: boolean = false;
 
             if (fixedStructures.length > 0) {
@@ -140,16 +142,16 @@ export class DosageTypeCalculator144 {
     }
 
     /* Check if second wrapper comes just after the first, without gaps or overlaps */
-    public static abuts(first: StructureWrapper, second: StructureWrapper): boolean {
-        if (first.getEndDateOrDateTime() != null) {
-            if (first.getEndDateOrDateTime().getDate() != null
-                && second.getStartDateOrDateTime().getDate() != null
-                && DosageTypeCalculator144.dateAbuts(first.getEndDateOrDateTime().getDate(), second.getStartDateOrDateTime().getDate())) {
+    public static abuts(first: Structure, second: Structure): boolean {
+        if (first.endDateOrDateTime != null) {
+            if (first.endDateOrDateTime.date
+                && second.startDateOrDateTime.date
+                && DosageTypeCalculator144.dateAbuts(new Date(first.endDateOrDateTime.date), new Date(second.startDateOrDateTime.date))) {
                 return true;
             }
-            else if (first.getEndDateOrDateTime().getDateTime() != null
-                && second.getStartDateOrDateTime().getDateTime() != null
-                && DosageTypeCalculator144.dateTimeAbuts(first.getEndDateOrDateTime().getDateTime(), second.getStartDateOrDateTime().getDateTime())) {
+            else if (first.endDateOrDateTime.dateTime
+                && second.startDateOrDateTime.dateTime
+                && DosageTypeCalculator144.dateTimeAbuts(new Date(first.endDateOrDateTime.dateTime), new Date(second.startDateOrDateTime.dateTime))) {
                 return true;
             }
             // If an interval ends with a date and the next ends with a datetime we cannot determine if they abut
@@ -188,13 +190,13 @@ export class DosageTypeCalculator144 {
         return DosageTypeCalculator144.daysBetween(d1, d2) === 1;
     }
 
-    private static fillGapsWithEmptyPeriods(structures: StructureWrapper[], emptyStructures: StructureWrapper[]): void {
+    private static fillGapsWithEmptyPeriods(structures: Structure[], emptyStructures: Structure[]): void {
         let structuresSize: number = structures.length;
         for (let i = 0; i < structuresSize - 1; i++) {
             if (DosageTypeCalculator144.hasGap(structures[i], structures[i + 1])) {
                 let indexOfemptyStructureFittingGap = DosageTypeCalculator144.findIndexOfEmptyStructuresThatFitsGap(emptyStructures, structures[i], structures[i + 1]);
                 if (indexOfemptyStructureFittingGap > -1) {
-                    let emptyStructureFittingGap: StructureWrapper = emptyStructures.splice(indexOfemptyStructureFittingGap, 1)[0];
+                    let emptyStructureFittingGap: Structure = emptyStructures.splice(indexOfemptyStructureFittingGap, 1)[0];
                     structures.splice(i + 1, 0, emptyStructureFittingGap);
                     structuresSize++;
                 }
@@ -202,7 +204,7 @@ export class DosageTypeCalculator144 {
         }
     }
 
-    private static findIndexOfEmptyStructuresThatFitsGap(emptyStructures: StructureWrapper[], structureWrapper1: StructureWrapper, structureWrapper2: StructureWrapper): number {
+    private static findIndexOfEmptyStructuresThatFitsGap(emptyStructures: Structure[], structureWrapper1: Structure, structureWrapper2: Structure): number {
         for (let i = 0; i < emptyStructures.length; i++) {
             if (DosageTypeCalculator144.abuts(structureWrapper1, emptyStructures[i]) && DosageTypeCalculator144.abuts(emptyStructures[i], structureWrapper2)) {
                 return i;
@@ -212,34 +214,34 @@ export class DosageTypeCalculator144 {
         return -1;
     }
 
-    protected static hasGap(structureWrapper1: StructureWrapper, structureWrapper2: StructureWrapper): boolean {
+    protected static hasGap(structureWrapper1: Structure, structureWrapper2: Structure): boolean {
         return !DosageTypeCalculator144.abuts(structureWrapper1, structureWrapper2);
     }
 
-    private static firstNotEmptyStructure(structures: StructuresWrapper): StructureWrapper {
-        return structures.getStructures().filter(s => s.getDays().length > 0)[0];
+    private static firstNotEmptyStructure(structures: Structures): Structure {
+        return structures.structures.filter(s => s.days.length > 0)[0];
     }
 
     /* Check if at least one not-empty Structure containing both fixed and PN Dose's exists */
-    private static hasAtLeastOneCombinedStructure(structures: StructuresWrapper): boolean {
-        return structures.getStructures().some((structure, index, array) => structure.containsAccordingToNeedDose() && !structure.containsAccordingToNeedDosesOnly());
+    private static hasAtLeastOneCombinedStructure(structures: Structures): boolean {
+        return structures.structures.some((structure, index, array) => StructureHelper.containsAccordingToNeedDose(structure) && !StructureHelper.containsAccordingToNeedDosesOnly(structure));
     }
 
     /* Check if at least one structure with fixed dose's only AND at least one structure with PN only doses exists
 	 * Precondition: since this method is called after hasAtLeastOneCombinedStructure(),
 	 * then we suggest that all Structures contains either fixed or PN doses, not combined inside one Structure
 	 */
-    private static hasMixedNotEmptyStructures(structures: StructuresWrapper): boolean {
-        if (structures && structures.getStructures()) {
+    private static hasMixedNotEmptyStructures(structures: Structures): boolean {
+        if (structures && structures.structures) {
 
             let i = 0;
 
-            let firstNotEmptyStructure: StructureWrapper;
+            let firstNotEmptyStructure: Structure;
 
             // Find first none-empty structure
-            while (firstNotEmptyStructure === undefined && i < structures.getStructures().length) {
-                let firstNotEmptyStructureCandidate: StructureWrapper = structures.getStructures()[i];
-                if (firstNotEmptyStructureCandidate.getDays().length > 0) {
+            while (firstNotEmptyStructure === undefined && i < structures.structures.length) {
+                let firstNotEmptyStructureCandidate: Structure = structures.structures[i];
+                if (firstNotEmptyStructureCandidate.days.length > 0) {
                     firstNotEmptyStructure = firstNotEmptyStructureCandidate;
                 }
                 else {
@@ -249,9 +251,9 @@ export class DosageTypeCalculator144 {
 
             if (firstNotEmptyStructure != null) {
                 let firstType: DosageType = DosageTypeCalculator144.calculateFromStructure(firstNotEmptyStructure);
-                for (let j = i; j < structures.getStructures().length; j++) {
-                    let structure: StructureWrapper = structures.getStructures()[j];
-                    if (structure.getDays().length > 0 && firstType !== DosageTypeCalculator144.calculateFromStructure(structure)) {
+                for (let j = i; j < structures.structures.length; j++) {
+                    let structure: Structure = structures.structures[j];
+                    if (structure.days.length > 0 && firstType !== DosageTypeCalculator144.calculateFromStructure(structure)) {
                         return true;
                     }
                 }
@@ -261,11 +263,11 @@ export class DosageTypeCalculator144 {
         return false;
     }
 
-    private static calculateFromStructure(structure: StructureWrapper): DosageType {
+    private static calculateFromStructure(structure: Structure): DosageType {
         if (DosageTypeCalculator.isAccordingToNeed(structure)) {
             return DosageType.AccordingToNeed;
         }
-        else if (structure.containsAccordingToNeedDose()) {
+        else if (StructureHelper.containsAccordingToNeedDose(structure)) {
             return DosageType.Combined;
         }
         else {

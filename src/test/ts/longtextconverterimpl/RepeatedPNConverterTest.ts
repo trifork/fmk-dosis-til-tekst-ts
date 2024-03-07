@@ -1,7 +1,7 @@
 /// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
 import { expect } from 'chai';
-import { LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, NoonDoseWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper, TimedDoseWrapper, LocalTime } from "../../../main/ts/index";
+import { LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, NoonDoseWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper, TimedDoseWrapper, LocalTimeWrapper } from "../../../main/ts/index";
 
 describe('RepeatedPNConverterImpl', () => {
 
@@ -103,7 +103,7 @@ describe('RepeatedPNConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), undefined, [
-                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(10, 0, 0), 1, undefined, undefined, true)]),
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTimeWrapper(10, 0, 0), 1, undefined, undefined, true)]),
             ], undefined)], false));
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(

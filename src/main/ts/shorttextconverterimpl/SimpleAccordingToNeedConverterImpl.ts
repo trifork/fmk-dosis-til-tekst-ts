@@ -1,9 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { Day, Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DayHelper from "../helpers/DayHelper";
 
 /**
  * Conversion of simple "according to need" dosage, with or without supplementary dosage free text
@@ -18,32 +17,32 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
         return "SimpleAccordingToNeedConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() && !structure.isIterationToLong())
+        let structure: Structure = dosage.structures.structures[0];
+        if (structure.iterationInterval && !StructureHelper.isIterationToLong(structure))
             return false;
-        if (structure.getDays().length !== 1)
+        if (structure.days.length !== 1)
             return false;
-        let day: DayWrapper = structure.getDays()[0];
-        if (!day.containsAccordingToNeedDosesOnly())
+        let day: Day = structure.days[0];
+        if (!DayHelper.containsAccordingToNeedDosesOnly(day))
             return false;
-        if (day.getAccordingToNeedDoses().length > 1)
+        if (DayHelper.getAccordingToNeedDoses(day).length > 1)
             return false;
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: DayWrapper = structure.getDays()[0];
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
+        let day: Day = structure.days[0];
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
         text += " efter behov";
-        if (structure.getSupplText())
-            text += TextHelper.addShortSupplText(structure.getSupplText());
+        if (structure.supplText)
+            text += TextHelper.addShortSupplText(structure.supplText);
         return text.toString();
     }
 }

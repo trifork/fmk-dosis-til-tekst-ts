@@ -1,9 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { Day, Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
 
 export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
 
@@ -11,52 +10,52 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
         return "NumberOfWholeWeeksConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+        let structure: Structure = dosage.structures.structures[0];
 
-        if (structure.getIterationInterval() % 7 > 0)
+        if (structure.iterationInterval % 7 > 0)
             return false;
-        if (structure.getStartDateOrDateTime().isEqualTo(structure.getEndDateOrDateTime()))
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
             return false;
-        if (structure.getDays().length === 0)
+        if (structure.days.length === 0)
             return false;
-        if (structure.getDays()[0].getDayNumber() > 7)
+        if (structure.days[0].dayNumber > 7)
             return false;
-        if (!structure.daysAreInUninteruptedSequenceFromOne())
+        if (!StructureHelper.daysAreInUninteruptedSequenceFromOne(structure))
             return false;
-        if (!structure.allDaysAreTheSame())
+        if (!StructureHelper.allDaysAreTheSame(structure))
             return false;
-        if (!structure.allDosesAreTheSame())
+        if (!StructureHelper.allDosesAreTheSame(structure))
             return false;
-        if (structure.containsAccordingToNeedDose() || structure.containsTimedDose())
+        if (StructureHelper.containsAccordingToNeedDose(structure) || StructureHelper.containsTimedDose(structure))
             return false;
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
 
-        let day: DayWrapper = structure.getDays()[0];
+        let day: Day = structure.days[0];
 
         // Append dosage
-        text += ShortTextConverterImpl.toDoseAndUnitValue(day.getAllDoses()[0], dosage.structures.getUnitOrUnits());
+        text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
 
         // Add times daily
-        if (day.getNumberOfDoses() > 1)
-            text += " " + day.getNumberOfDoses() + " gange daglig";
-        else if (structure.getIterationInterval() > 0)
+        if (day.allDoses.length > 1)
+            text += " " + day.allDoses.length + " gange daglig";
+        else if (structure.iterationInterval > 0)
             text += " daglig";
         else
             text += " 1 gang";
 
 
-        let days: number = structure.getDays().length;
-        let pauseDays: number = structure.getIterationInterval() - days;
+        let days: number = structure.days.length;
+        let pauseDays: number = structure.iterationInterval - days;
 
         // If pause == 0 then this structure is equivalent to a structure with just one day and iteration=1
         if (pauseDays > 0) {
@@ -83,8 +82,8 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
             }
         }
 
-        if (structure.getSupplText()) {
-            text += TextHelper.addShortSupplText(structure.getSupplText());
+        if (structure.supplText) {
+            text += TextHelper.addShortSupplText(structure.supplText);
         }
 
         return text;

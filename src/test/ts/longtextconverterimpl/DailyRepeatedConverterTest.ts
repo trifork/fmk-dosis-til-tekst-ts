@@ -1,7 +1,7 @@
 /// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
 import { expect, assert } from 'chai';
-import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, LocalTime } from "../../../main/ts/index";
+import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, LocalTimeWrapper } from "../../../main/ts/index";
 
 describe('DailyRepeatedConverterImpl', () => {
 
@@ -46,7 +46,7 @@ describe('DailyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(8, 0, 0), 1, undefined, undefined, false), new TimedDoseWrapper(new LocalTime(12, 30, 0), 2, undefined, undefined, false)])
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTimeWrapper(8, 0, 0), 1, undefined, undefined, false), new TimedDoseWrapper(new LocalTimeWrapper(12, 30, 0), 2, undefined, undefined, false)])
             ], undefined)], false));
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
@@ -57,7 +57,7 @@ describe('DailyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(12, 30, 0), 2, undefined, undefined, false), new MorningDoseWrapper(1, undefined, undefined, false)])
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTimeWrapper(12, 30, 0), 2, undefined, undefined, false), new MorningDoseWrapper(1, undefined, undefined, false)])
             ], undefined)], false));
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
@@ -68,7 +68,7 @@ describe('DailyRepeatedConverterImpl', () => {
         let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
-                new DayWrapper(1, [new TimedDoseWrapper(new LocalTime(3, 1, 0), 2, undefined, undefined, false), new MorningDoseWrapper(1, undefined, undefined, false)])
+                new DayWrapper(1, [new TimedDoseWrapper(new LocalTimeWrapper(3, 1, 0), 2, undefined, undefined, false), new MorningDoseWrapper(1, undefined, undefined, false)])
             ], undefined)], false));
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +
@@ -80,10 +80,10 @@ describe('DailyRepeatedConverterImpl', () => {
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [
-                    new TimedDoseWrapper(new LocalTime(21, 1, 0), 4, undefined, undefined, false),
-                    new TimedDoseWrapper(new LocalTime(3, 1, 0), 1, undefined, undefined, false),
-                    new TimedDoseWrapper(new LocalTime(15, 1, 0), 3, undefined, undefined, false),
-                    new TimedDoseWrapper(new LocalTime(9, 1, 0), 2, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTimeWrapper(21, 1, 0), 4, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTimeWrapper(3, 1, 0), 1, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTimeWrapper(15, 1, 0), 3, undefined, undefined, false),
+                    new TimedDoseWrapper(new LocalTimeWrapper(9, 1, 0), 2, undefined, undefined, false),
                     new NightDoseWrapper(5, undefined, undefined, false),
                     new NoonDoseWrapper(6, undefined, undefined, false),
                     new EveningDoseWrapper(7, undefined, undefined, false),

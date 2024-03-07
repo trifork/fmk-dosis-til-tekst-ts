@@ -1,5 +1,5 @@
+import { Dosage } from "../dto/Dosage";
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
 
 export class FreeTextConverterImpl extends ShortTextConverterImpl {
 
@@ -7,11 +7,11 @@ export class FreeTextConverterImpl extends ShortTextConverterImpl {
         return "FreeTextConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         return dosage.freeText !== undefined;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        return dosage.freeText.getText();
+    public doConvert(dosage: Dosage): string {
+        return dosage.freeText.text;
     }
 }

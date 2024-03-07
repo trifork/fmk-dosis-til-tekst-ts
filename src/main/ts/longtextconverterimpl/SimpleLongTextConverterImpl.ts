@@ -1,14 +1,15 @@
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { DateOrDateTimeWrapper } from "../vowrapper/DateOrDateTimeWrapper";
 import { TextOptions } from "../TextOptions";
+import { DateOrDateTime } from "../dto/Dosage";
+import DateOrDateTimeHelper from "../helpers/DateOrDateTimeHelper";
 
 export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl {
 
-    public convert(text: string, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, options: TextOptions): string {
+    public convert(text: string, startDateOrDateTime: DateOrDateTime, endDateOrDateTime: DateOrDateTime, options: TextOptions): string {
 
         let s = "";
 
-        if (startDateOrDateTime && endDateOrDateTime && startDateOrDateTime.isEqualTo(endDateOrDateTime)) {
+        if (startDateOrDateTime && endDateOrDateTime && DateOrDateTimeHelper.isEqualTo(startDateOrDateTime, endDateOrDateTime)) {
             // Same day dosage
             s += "Dosering kun d. " + this.datesToLongText(startDateOrDateTime) + ":\n";
         }

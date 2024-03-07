@@ -1,8 +1,6 @@
-import { DoseWrapper } from "./vowrapper/DoseWrapper";
-import { DateOrDateTimeWrapper } from "./vowrapper/DateOrDateTimeWrapper";
-import { DayWrapper } from "./vowrapper/DayWrapper";
-import { UnitOrUnitsWrapper } from "./vowrapper/UnitOrUnitsWrapper";
-import { DayOfWeek } from "./vowrapper/DayOfWeek";
+import { DateOrDateTime, Day, Dose, UnitOrUnits } from "./dto/Dosage";
+import DateOrDateTimeHelper from "./helpers/DateOrDateTimeHelper";
+import { DayOfWeek } from "./DayOfWeek";
 
 declare function log(msg: string): void;
 
@@ -129,27 +127,27 @@ export class TextHelper {
         return singular;
     }
 
-    public static getUnit(dose: DoseWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+    public static getUnit(dose: Dose, unitOrUnits: UnitOrUnits): string {
         if (!unitOrUnits) return "";
 
-        if (unitOrUnits.getUnit())
-            return TextHelper.correctUnit(dose, unitOrUnits.getUnit());
-        else if (unitOrUnits.getUnitSingular() && unitOrUnits.getUnitPlural())
-            return TextHelper.chooseUnit(dose, unitOrUnits.getUnitSingular(), unitOrUnits.getUnitPlural());
+        if (unitOrUnits.unit)
+            return TextHelper.correctUnit(dose, unitOrUnits.unit);
+        else if (unitOrUnits.unitSingular && unitOrUnits.unitPlural)
+            return TextHelper.chooseUnit(dose, unitOrUnits.unitSingular, unitOrUnits.unitPlural);
         else
             return "";
     }
 
-    public static getUnitFromDoseNumber(dose: number, unitOrUnits: UnitOrUnitsWrapper): string {
-        if (unitOrUnits.getUnit())
-            return TextHelper.correctUnitForDoseNumber(dose, unitOrUnits.getUnit());
-        else if (unitOrUnits.getUnitSingular() && unitOrUnits.getUnitPlural())
-            return TextHelper.chooseUnitForDoseNumber(dose, unitOrUnits.getUnitSingular(), unitOrUnits.getUnitPlural());
+    public static getUnitFromDoseNumber(dose: number, unitOrUnits: UnitOrUnits): string {
+        if (unitOrUnits.unit)
+            return TextHelper.correctUnitForDoseNumber(dose, unitOrUnits.unit);
+        else if (unitOrUnits.unitSingular && unitOrUnits.unitPlural)
+            return TextHelper.chooseUnitForDoseNumber(dose, unitOrUnits.unitSingular, unitOrUnits.unitPlural);
         else
             return "";
     }
 
-    private static correctUnit(dose: DoseWrapper, unit: string): string {
+    private static correctUnit(dose: Dose, unit: string): string {
         if (TextHelper.hasPluralUnit(dose))
             return TextHelper.unitToPlural(unit);
         else
@@ -163,7 +161,7 @@ export class TextHelper {
             return TextHelper.unitToSingular(unit);
     }
 
-    private static chooseUnit(dose: DoseWrapper, unitSingular: string, unitPlural: string): string {
+    private static chooseUnit(dose: Dose, unitSingular: string, unitPlural: string): string {
         if (TextHelper.hasPluralUnit(dose))
             return unitPlural;
         else
@@ -177,12 +175,12 @@ export class TextHelper {
             return unitSingular;
     }
 
-    private static hasPluralUnit(dose: DoseWrapper): boolean {
-        if (dose.getDoseQuantity() !== undefined) {
-            return dose.getDoseQuantity() > 1.0 || dose.getDoseQuantity() < 0.000000001;
+    private static hasPluralUnit(dose: Dose): boolean {
+        if (typeof dose.doseQuantity === "number") {
+            return dose.doseQuantity > 1.0 || dose.doseQuantity < 0.000000001;
         }
-        else if (dose.getMaximalDoseQuantity() !== undefined) {
-            return dose.getMaximalDoseQuantity() > 1.0 || dose.getMaximalDoseQuantity() < 0.000000001;
+        else if (typeof dose.maximalDoseQuantity === "number") {
+            return dose.maximalDoseQuantity > 1.0 || dose.maximalDoseQuantity < 0.000000001;
         }
         else {
             return false;
@@ -268,8 +266,8 @@ export class TextHelper {
         return date.getDate() + ". " + TextHelper.abbrevMonths[date.getMonth()] + " " + date.getFullYear();
     }
 
-    public static makeDateString(startDateOrDateTime: DateOrDateTimeWrapper, dayNumber: number): string {
-        let d = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
+    public static makeDateString(startDateOrDateTime: DateOrDateTime, dayNumber: number): string {
+        let d = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         d.setDate(d.getDate() + dayNumber - 1);
         let dateString = TextHelper.formatLongDateAbbrevMonth(d);
         return dateString.charAt(0).toUpperCase() + dateString.substr(1);
@@ -295,9 +293,9 @@ export class TextHelper {
         return TextHelper.pad(d.getFullYear(), 4) + "-" + TextHelper.pad(d.getMonth() + 1, 2) + "-" + TextHelper.pad(d.getDate(), 2);
     }
 
-    public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTimeWrapper, day: DayWrapper, initialUpperCase: boolean): DayOfWeek {
-        let dateOnly = TextHelper.makeFromDateOnly(startDateOrDateTime.getDateOrDateTime());
-        dateOnly.setDate(dateOnly.getDate() + day.getDayNumber() - 1);
+    public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTime, day: Day, initialUpperCase: boolean): DayOfWeek {
+        let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+        dateOnly.setDate(dateOnly.getDate() + day.dayNumber - 1);
 
         let dayString = TextHelper.weekdays[dateOnly.getDay()];
         let name: string;
@@ -305,7 +303,7 @@ export class TextHelper {
             name = dayString.charAt(0).toUpperCase() + dayString.substring(1);
         else
             name = dayString;
-        return new DayOfWeek(dateOnly.getDay(), name, day);
+        return { dayOfWeek: dateOnly.getDay(), name, day };
 
     }
 

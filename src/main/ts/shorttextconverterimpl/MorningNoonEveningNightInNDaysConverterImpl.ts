@@ -1,10 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
 import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
+import { Day, Dosage, Structure } from "../dto/Dosage";
+import StructureHelper from "../helpers/StructureHelper";
 
 
 /**
@@ -16,36 +14,36 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
         return "MorningNoonEveningNightInNDaysConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() && !structure.startsAndEndsSameDay())
+        let structure: Structure = dosage.structures.structures[0];
+        if (structure.iterationInterval && !StructureHelper.startsAndEndsSameDay(structure))
             return false;
-        if (structure.getDays().length === 0 || (structure.getDays().length === 1 && !structure.startsAndEndsSameDay()))
+        if (structure.days.length === 0 || (structure.days.length === 1 && !StructureHelper.startsAndEndsSameDay(structure)))
             return false;
-        if (structure.containsPlainDose())
+        if (StructureHelper.containsPlainDose(structure))
             return false;
-        if (structure.containsTimedDose())
+        if (StructureHelper.containsTimedDose(structure))
             return false;
-        if (!structure.allDaysAreTheSame())
+        if (!StructureHelper.allDaysAreTheSame(structure))
             return false;
-        if (!structure.daysAreInUninteruptedSequenceFromOne())
+        if (!StructureHelper.daysAreInUninteruptedSequenceFromOne(structure))
             return false;
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: DayWrapper = structure.getDays()[0];
-        text += MorningNoonEveningNightConverterImpl.getMorningText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getNoonText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getEveningText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightConverterImpl.getNightText(day, dosage.structures.getUnitOrUnits());
-        let noOfDays = dosage.structures.getStructures()[0].getDays()[dosage.structures.getStructures()[0].getDays().length - 1].getDayNumber();
+        let day: Day = structure.days[0];
+        text += MorningNoonEveningNightConverterImpl.getMorningText(day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightConverterImpl.getNoonText(day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightConverterImpl.getEveningText(day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightConverterImpl.getNightText(day, dosage.structures.unitOrUnits);
+        let noOfDays = dosage.structures.structures[0].days[dosage.structures.structures[0].days.length - 1].dayNumber;
         text += " i " + noOfDays;
         if (noOfDays === 1) {
             text += " dag";
@@ -53,7 +51,7 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
             text += " dage";
         }
 
-        text += MorningNoonEveningNightConverterImpl.getSupplText(structure.getSupplText());
+        text += MorningNoonEveningNightConverterImpl.getSupplText(structure.supplText);
 
         return text;
     }

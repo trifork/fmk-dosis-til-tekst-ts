@@ -1,10 +1,8 @@
 import { LongTextConverter } from "../LongTextConverter";
-import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { Factory } from "../Factory";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
-import { StructuresWrapper } from "../vowrapper/StructuresWrapper";
 import { TextOptions } from "../TextOptions";
+import { Dosage } from "../dto/Dosage";
+import StructuresHelper from "../helpers/StructuresHelper";
+import { LongTextConverterImpl } from "./LongTextConverterImpl";
 
 export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterImpl {
 
@@ -19,31 +17,35 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         this.longTextConverter = longTextConverter;
     }
 
-    public canConvert(dosageStructure: DosageWrapper, options: TextOptions): boolean {
+    public canConvert(dosageStructure: Dosage, options: TextOptions): boolean {
         if (dosageStructure.structures) {
-            return dosageStructure.structures.getStructures().length > 1;
+            return dosageStructure.structures.structures.length > 1;
         }
 
         return false;
     }
 
-    public doConvert(dosage: DosageWrapper, options: TextOptions, currentTime: Date): string {
+    public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
 
         let s: string = "";
-        let sortedStructures = dosage.structures.getStructures().sort(StructuresWrapper.dosagePeriodSorter);
+        let sortedStructures = dosage.structures.structures.sort(StructuresHelper.dosagePeriodSorter);
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
             s = "<div class=\"d2t-vkadosagetext\">\n";
         }
 
         sortedStructures.forEach(structure => {
-            let w: DosageWrapper = DosageWrapper.makeStructuredDosage(
-                new StructuresWrapper(dosage.structures.getUnitOrUnits(),
-                    dosage.structures.getStartDateOrDateTime(),
-                    dosage.structures.getEndDateOrDateTime(),
-                    [structure],
-                    sortedStructures.length > 1));
-            s += (this.longTextConverter.convertWrapper(w, options) + "\n");
+            const w: Dosage = {
+                structures: {
+                    startDateOrDateTime: dosage.structures.startDateOrDateTime,
+                    endDateOrDateTime: dosage.structures.endDateOrDateTime,
+                    unitOrUnits: dosage.structures.unitOrUnits,
+                    structures: [structure],
+                    isPartOfMultiPeriodDosage: sortedStructures.length > 1
+                }
+            };
+            
+            s += (this.longTextConverter.convert(w, options) + "\n");
             if (options !== TextOptions.VKA_WITH_MARKUP) {
                 s += "\n";
             }

@@ -1,9 +1,8 @@
 import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { DosageWrapper } from "../vowrapper/DosageWrapper";
-import { UnitOrUnitsWrapper } from "../vowrapper/UnitOrUnitsWrapper";
-import { DayWrapper } from "../vowrapper/DayWrapper";
-import { StructureWrapper } from "../vowrapper/StructureWrapper";
 import { TextHelper } from "../TextHelper";
+import { Day, Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
+import DayHelper from "../helpers/DayHelper";
+import DoseHelper from "../helpers/DoseHelper";
 
 export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConverterImpl {
 
@@ -11,69 +10,69 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         return "MorningNoonEveningNightEyeOrEarConverterImpl";
     }
 
-    public canConvert(dosage: DosageWrapper): boolean {
+    public canConvert(dosage: Dosage): boolean {
         if (dosage.structures === undefined)
             return false;
-        if (dosage.structures.getStructures().length !== 1)
+        if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
-        if (structure.getIterationInterval() !== 1)
+        let structure: Structure = dosage.structures.structures[0];
+        if (structure.iterationInterval !== 1)
             return false;
-        if (structure.getDays().length !== 1)
-            return false;
-
-        let day: DayWrapper = structure.getDays()[0];
-        if (day.getDayNumber() !== 1)
-            return false;
-        if (day.containsPlainDose() || day.containsTimedDose())
-            return false;
-        if (day.containsAccordingToNeedDose())
-            return false;
-        if (!day.allDosesHaveTheSameQuantity())
-            return false;
-        if (day.getAllDoses()[0].getDoseQuantity() === undefined)
-            return false;
-        if (!ShortTextConverterImpl.hasIntegerValue(day.getAllDoses()[0].getDoseQuantity()))
+        if (structure.days.length !== 1)
             return false;
 
-        let quantity: number = day.getAllDoses()[0].getDoseQuantity();
+        let day: Day = structure.days[0];
+        if (day.dayNumber !== 1)
+            return false;
+        if (DayHelper.containsPlainDose(day) || DayHelper.containsTimedDose(day))
+            return false;
+        if (DayHelper.containsAccordingToNeedDose(day))
+            return false;
+        if (!DayHelper.allDosesHaveTheSameQuantity(day))
+            return false;
+        if (typeof day.allDoses[0].doseQuantity !== "number")
+            return false;
+        if (!ShortTextConverterImpl.hasIntegerValue(day.allDoses[0].doseQuantity))
+            return false;
+
+        let quantity: number = day.allDoses[0].doseQuantity;
         if (!(quantity % 2 === 0))
             return false;
-        if (!structure.getSupplText())
+        if (!structure.supplText)
             return false;
 
-        if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {
-            if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
-                if (structure.getSupplText() !== ", " + (quantity / 2) + " i hvert øje") {
+        if (TextHelper.strEndsWith(structure.supplText, "i hvert øje")) {
+            if (TextHelper.strStartsWith(structure.supplText, ",")) {
+                if (structure.supplText !== ", " + (quantity / 2) + " i hvert øje") {
                     return false;
                 }
             }
             else {
-                if (structure.getSupplText() !== (quantity / 2) + " i hvert øje") {
+                if (structure.supplText !== (quantity / 2) + " i hvert øje") {
                     return false;
                 }
             }
         }
-        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øre")) {
-            if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
-                if (structure.getSupplText() !== ", " + (quantity / 2) + " i hvert øre") {
+        else if (TextHelper.strEndsWith(structure.supplText, "i hvert øre")) {
+            if (TextHelper.strStartsWith(structure.supplText, ",")) {
+                if (structure.supplText !== ", " + (quantity / 2) + " i hvert øre") {
                     return false;
                 }
             }
             else {
-                if (structure.getSupplText() !== (quantity / 2) + " i hvert øre") {
+                if (structure.supplText !== (quantity / 2) + " i hvert øre") {
                     return false;
                 }
             }
         }
-        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert næsebor")) {
-            if (TextHelper.strStartsWith(structure.getSupplText(), ",")) {
-                if (structure.getSupplText() !== ", " + (quantity / 2) + " i hvert næsebor") {
+        else if (TextHelper.strEndsWith(structure.supplText, "i hvert næsebor")) {
+            if (TextHelper.strStartsWith(structure.supplText, ",")) {
+                if (structure.supplText !== ", " + (quantity / 2) + " i hvert næsebor") {
                     return false;
                 }
             }
             else {
-                if (structure.getSupplText() !== (quantity / 2) + " i hvert næsebor") {
+                if (structure.supplText !== (quantity / 2) + " i hvert næsebor") {
                     return false;
                 }
             }
@@ -85,23 +84,23 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         return true;
     }
 
-    public doConvert(dosage: DosageWrapper): string {
-        let structure: StructureWrapper = dosage.structures.getStructures()[0];
+    public doConvert(dosage: Dosage): string {
+        let structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: DayWrapper = structure.getDays()[0];
-        text += MorningNoonEveningNightEyeOrEarConverterImpl.getMorningText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightEyeOrEarConverterImpl.getNoonText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightEyeOrEarConverterImpl.getEveningText(day, dosage.structures.getUnitOrUnits());
-        text += MorningNoonEveningNightEyeOrEarConverterImpl.getNightText(day, dosage.structures.getUnitOrUnits());
+        let day: Day = structure.days[0];
+        text += MorningNoonEveningNightEyeOrEarConverterImpl.getMorningText(day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightEyeOrEarConverterImpl.getNoonText(day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightEyeOrEarConverterImpl.getEveningText(day, dosage.structures.unitOrUnits);
+        text += MorningNoonEveningNightEyeOrEarConverterImpl.getNightText(day, dosage.structures.unitOrUnits);
 
         let supplText = "";
-        if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øje")) {
+        if (TextHelper.strEndsWith(structure.supplText, "i hvert øje")) {
             supplText = " i begge øjne";
         }
-        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert øre")) {
+        else if (TextHelper.strEndsWith(structure.supplText, "i hvert øre")) {
             supplText = " i begge ører";
         }
-        else if (TextHelper.strEndsWith(structure.getSupplText(), "i hvert næsebor")) {
+        else if (TextHelper.strEndsWith(structure.supplText, "i hvert næsebor")) {
             supplText = " i begge næsebor";
         }
 
@@ -109,11 +108,11 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         return text;
     }
 
-    public static getMorningText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+    public static getMorningText(day: Day, unitOrUnits: UnitOrUnits): string {
         let text = "";
-        if (day.getMorningDose()) {
-            text += this.toDoseLabelUnitValue(day.getMorningDose().getDoseQuantity() / 2, day.getMorningDose().getLabel(), unitOrUnits);
-            if (day.getMorningDose().getIsAccordingToNeed()) {
+        if (DayHelper.getMorningDose(day)) {
+            text += this.toDoseLabelUnitValue(DayHelper.getMorningDose(day).doseQuantity / 2, DoseHelper.getLabel(DayHelper.getMorningDose(day)), unitOrUnits);
+            if (DayHelper.getMorningDose(day).isAccordingToNeed) {
                 text += " efter behov";
             }
         }
@@ -121,52 +120,52 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         return text;
     }
 
-    public static getNoonText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+    public static getNoonText(day: Day, unitOrUnits: UnitOrUnits): string {
         let text = "";
-        if (day.getNoonDose()) {
-            if (day.getMorningDose() && (day.getEveningDose() || day.getNightDose()))
+        if (DayHelper.getNoonDose(day)) {
+            if (DayHelper.getMorningDose(day) && (DayHelper.getEveningDose(day) || DayHelper.getNightDose(day)))
                 text += ", ";
-            else if (day.getMorningDose())
+            else if (DayHelper.getMorningDose(day))
                 text += " og ";
-            if (day.getMorningDose())
-                text += day.getNoonDose().getLabel();
+            if (DayHelper.getMorningDose(day))
+                text += DoseHelper.getLabel(DayHelper.getNoonDose(day));
             else
-                text += this.toDoseLabelUnitValue(day.getNoonDose().getDoseQuantity() / 2, day.getNoonDose().getLabel(), unitOrUnits);
-            if (day.getNoonDose().getIsAccordingToNeed())
+                text += this.toDoseLabelUnitValue(DayHelper.getNoonDose(day).doseQuantity / 2, DoseHelper.getLabel(DayHelper.getNoonDose(day)), unitOrUnits);
+            if (DayHelper.getNoonDose(day).isAccordingToNeed)
                 text += " efter behov";
         }
 
         return text;
     }
 
-    public static getEveningText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+    public static getEveningText(day: Day, unitOrUnits: UnitOrUnits): string {
         let text = "";
-        if (day.getEveningDose()) {
-            if ((day.getMorningDose() || day.getNoonDose()) && day.getNightDose())
+        if (DayHelper.getEveningDose(day)) {
+            if ((DayHelper.getMorningDose(day) || DayHelper.getNoonDose(day)) && DayHelper.getNightDose(day))
                 text += ", ";
-            else if (day.getMorningDose() || day.getNoonDose())
+            else if (DayHelper.getMorningDose(day) || DayHelper.getNoonDose(day))
                 text += " og ";
-            if (day.getMorningDose() || day.getNoonDose() )
-                text += day.getEveningDose().getLabel();
+            if (DayHelper.getMorningDose(day) || DayHelper.getNoonDose(day) )
+                text += DoseHelper.getLabel(DayHelper.getEveningDose(day));
             else
-                text += this.toDoseLabelUnitValue(day.getEveningDose().getDoseQuantity() / 2, day.getEveningDose().getLabel(), unitOrUnits);
-            if (day.getEveningDose().getIsAccordingToNeed())
+                text += this.toDoseLabelUnitValue(DayHelper.getEveningDose(day).doseQuantity / 2, DoseHelper.getLabel(DayHelper.getEveningDose(day)), unitOrUnits);
+            if (DayHelper.getEveningDose(day).isAccordingToNeed)
                 text += " efter behov";
         }
 
         return text;
     }
 
-    public static getNightText(day: DayWrapper, unitOrUnits: UnitOrUnitsWrapper): string {
+    public static getNightText(day: Day, unitOrUnits: UnitOrUnits): string {
         let text = "";
-        if (day.getNightDose()) {
-            if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose() )
+        if (DayHelper.getNightDose(day)) {
+            if (DayHelper.getMorningDose(day) || DayHelper.getNoonDose(day) || DayHelper.getEveningDose(day) )
                 text += " og ";
-            if (day.getMorningDose() || day.getNoonDose() || day.getEveningDose())
-                text += day.getNightDose().getLabel();
+            if (DayHelper.getMorningDose(day) || DayHelper.getNoonDose(day) || DayHelper.getEveningDose(day))
+                text += DoseHelper.getLabel(DayHelper.getNightDose(day));
             else
-                text += this.toDoseLabelUnitValue(day.getNightDose().getDoseQuantity() / 2, day.getNightDose().getLabel(), unitOrUnits);
-            if (day.getNightDose().getIsAccordingToNeed())
+                text += this.toDoseLabelUnitValue(DayHelper.getNightDose(day).doseQuantity / 2, DoseHelper.getLabel(DayHelper.getNightDose(day)), unitOrUnits);
+            if (DayHelper.getNightDose(day).isAccordingToNeed)
                 text += " efter behov";
         }
 
