@@ -33,10 +33,14 @@ module.exports = function (grunt) {
                     { src: 'dist/lib/*.js*', dest: 'publish-internal/' },
                     { src: 'dist/lib/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/vowrapper/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/helpers/*.d.ts', dest: 'publish-internal/' },
+                    { src: 'dist/lib/dto/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/longtextconverterimpl/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-internal/' },
                     { src: 'dist/lib/vowrapper/*.js', dest: 'publish-internal/' },
+                    { src: 'dist/lib/helpers/*.js', dest: 'publish-internal/' },
+                    { src: 'dist/lib/dto/*.js', dest: 'publish-internal/' },
                     { src: 'dist/lib/longtextconverterimpl/*.js', dest: 'publish-internal/' },
                     { src: 'dist/lib/shorttextconverterimpl/*.js', dest: 'publish-internal/' },
                     { src: 'dist/lib/DosageProposalXMLGenerator/*.js', dest: 'publish-internal/' }
@@ -48,6 +52,8 @@ module.exports = function (grunt) {
                     { src: 'dist/dosistiltekst.js*', dest: 'publish-public/' },
                     { src: 'dist/lib/*.d.ts', dest: 'publish-public/' },
                     { src: 'dist/lib/vowrapper/*.d.ts', dest: 'publish-public/' },
+                    { src: 'dist/lib/helpers/*.d.ts', dest: 'publish-public/' },
+                    { src: 'dist/lib/dto/*.d.ts', dest: 'publish-public/' },
                     { src: 'dist/lib/longtextconverterimpl/*.d.ts', dest: 'publish-public/' },
                     { src: 'dist/lib/shorttextconverterimpl/*.d.ts', dest: 'publish-public/' },
                     { src: 'dist/lib/DosageProposalXMLGenerator/*.d.ts', dest: 'publish-public/' }
