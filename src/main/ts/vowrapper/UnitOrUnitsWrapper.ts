@@ -9,6 +9,6 @@ export class UnitOrUnitsWrapper {
             unit,
             unitSingular,
             unitPlural
-        }
+        };
     }
 }

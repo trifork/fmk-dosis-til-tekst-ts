@@ -159,7 +159,7 @@ export default class StructureHelper {
     public static isIterationToLong(structuredDosage: Structure): boolean {
         const start = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.startDateOrDateTime);
         const end = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.endDateOrDateTime);
-        
+
         if (!end || !start) {
             return false;
         }

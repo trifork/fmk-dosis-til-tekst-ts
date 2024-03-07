@@ -51,7 +51,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             supplText: structure.supplText,
             dosagePeriodPostfix: structure.dosagePeriodPostfix
         };
-        
+
         if (options === TextOptions.VKA_WITH_MARKUP) {
             if (!isPartOfMultiPeriodDosage) {
                 s = "<div class=\"d2t-vkadosagetext\">\n";
@@ -67,7 +67,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
         if (!StructureHelper.containsAccordingToNeedDose(trimmedStructure)) {
             const trimmedStart = DateOrDateTimeHelper.getDateOrDateTime(trimmedStructure.startDateOrDateTime);
             const trimmedEnd = trimmedStructure.endDateOrDateTime && DateOrDateTimeHelper.getDateOrDateTime(trimmedStructure.endDateOrDateTime);
-            
+
             if (trimmedStart && trimmedEnd) {
                 // Calculate length of dosage period
                 let diffMsec = Math.abs(trimmedEnd.getTime() - trimmedStart.getTime());

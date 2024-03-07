@@ -21,12 +21,12 @@ export class DosageTypeCalculator {
     }
 
     /**
-    * @deprecated This method and the corresponding wrapper classes will be removed. Use calculate(dosage: Dosage, ...) instead. 
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use calculate(dosage: Dosage, ...) instead.
     */
     public static calculateWrapper(dosage: DosageWrapper): DosageType {
         return DosageTypeCalculator.calculate(dosage.value);
     }
-    
+
     private static calculateFromStructures(structures: Structures): DosageType {
         if (structures.structures.length === 1 || DosageTypeCalculator.allStructuresHasSameDosageType(structures)) {
             return DosageTypeCalculator.calculateFromStructure(structures.structures[0]);

@@ -28,12 +28,12 @@ export class DosageTypeCalculator144 {
     }
 
     /**
-    * @deprecated This method and the corresponding wrapper classes will be removed. Use calculate(dosage: Dosage, ...) instead. 
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use calculate(dosage: Dosage, ...) instead.
     */
     public static calculateWrapper(dosage: DosageWrapper): DosageType {
         return DosageTypeCalculator144.calculate(dosage.value);
     }
-    
+
     private static calculateFromStructures(structures: Structures): DosageType {
         if (DosageTypeCalculator144.hasAtLeastOneCombinedStructure(structures) || DosageTypeCalculator144.hasMixedNotEmptyStructures(structures)) {
             return DosageType.Combined;

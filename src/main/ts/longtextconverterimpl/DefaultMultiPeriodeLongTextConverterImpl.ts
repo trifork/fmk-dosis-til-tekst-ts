@@ -44,7 +44,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
                     isPartOfMultiPeriodDosage: sortedStructures.length > 1
                 }
             };
-            
+
             s += (this.longTextConverter.convert(w, options) + "\n");
             if (options !== TextOptions.VKA_WITH_MARKUP) {
                 s += "\n";

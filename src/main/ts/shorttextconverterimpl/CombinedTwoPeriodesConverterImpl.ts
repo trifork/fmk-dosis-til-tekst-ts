@@ -45,7 +45,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
                 isPartOfMultiPeriodDosage: false
             }
         };
-        
+
         if (!ShortTextConverter.getInstance().canConvert(tempDosage))
             return false;
 
@@ -63,7 +63,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
                 isPartOfMultiPeriodDosage: true
             }
         };
-        
+
         if (!ShortTextConverter.getInstance().canConvert(fixedDosage))
             return false;
 

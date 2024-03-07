@@ -86,11 +86,11 @@ export class DosageProposalXMLGenerator {
                 },
                 supplText: supplementaryText,
                 days: DosageProposalXMLGenerator.getDays(periodTypes[periodNo], periodMappings[periodNo])
-            }
+            };
             if (endDates[periodNo]) {
                 structure.endDateOrDateTime = {
                     date: formatDateOnly(endDates[periodNo])
-                }
+                };
             }
             periods.push(structure);
 
@@ -112,7 +112,7 @@ export class DosageProposalXMLGenerator {
                 isPartOfMultiPeriodDosage: false
             }
         };
-        
+
         return new DosageProposalXML(xml, ShortTextConverter.getInstance().convert(dosage, TextOptions.STANDARD, shortTextMaxLength), LongTextConverter.getInstance().convert(dosage, TextOptions.STANDARD));
     }
 
@@ -128,7 +128,7 @@ export class DosageProposalXMLGenerator {
                 type: "MorningDoseWrapper",
                 doseQuantity: mmanMapping.getMorning(),
                 isAccordingToNeed: false
-            }
+            };
             doses.push(morningDose);
         }
         if (mmanMapping.getNoon()) {
@@ -136,7 +136,7 @@ export class DosageProposalXMLGenerator {
                 type: "NoonDoseWrapper",
                 doseQuantity: mmanMapping.getNoon(),
                 isAccordingToNeed: false
-            }
+            };
             doses.push(noonDose);
         }
         if (mmanMapping.getEvening()) {
@@ -144,7 +144,7 @@ export class DosageProposalXMLGenerator {
                 type: "EveningDoseWrapper",
                 doseQuantity: mmanMapping.getEvening(),
                 isAccordingToNeed: false
-            }
+            };
             doses.push(eveningDose);
         }
         if (mmanMapping.getNight()) {
@@ -152,7 +152,7 @@ export class DosageProposalXMLGenerator {
                 type: "NightDoseWrapper",
                 doseQuantity: mmanMapping.getNight(),
                 isAccordingToNeed: false
-            }
+            };
             doses.push(nightDose);
         }
 

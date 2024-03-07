@@ -104,7 +104,7 @@ export class ShortTextConverter {
     }
 
     /**
-    * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead. 
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead.
     */
     public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, maxLength = ShortTextConverter.MAX_LENGTH): string {
         return ShortTextConverter.getInstance().doConvert(dosage.value, options, maxLength);

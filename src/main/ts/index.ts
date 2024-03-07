@@ -24,27 +24,27 @@ export { WeeklyMorningNoonEveningNightConverterImpl } from "./shorttextconverter
 export { WeeklyRepeatedConverterImpl as ShortWeeklyRepeatedConverterImpl } from "./shorttextconverterimpl/WeeklyRepeatedConverterImpl";
 
 // ./dto
-export { 
-    Dosage, 
-    AdministrationAccordingToSchema, 
-    FreeText, 
-    Structures, 
-    UnitOrUnits, 
-    Units, 
-    Unit, 
-    Structure, 
-    DateOrDateTime, 
-    DateTime, 
-    DateOnly, 
-    Day, 
-    Dose, 
-    MorningDose, 
-    NoonDose, 
-    EveningDose, 
-    NightDose, 
-    PlainDose, 
-    TimedDose, 
-    LocalTime 
+export {
+    Dosage,
+    AdministrationAccordingToSchema,
+    FreeText,
+    Structures,
+    UnitOrUnits,
+    Units,
+    Unit,
+    Structure,
+    DateOrDateTime,
+    DateTime,
+    DateOnly,
+    Day,
+    Dose,
+    MorningDose,
+    NoonDose,
+    EveningDose,
+    NightDose,
+    PlainDose,
+    TimedDose,
+    LocalTime
 } from "./dto/Dosage";
 
 // ./vowrapper

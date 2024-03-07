@@ -44,13 +44,13 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
                 type: "PlainDoseWrapper",
                 doseQuantity: 0,
                 isAccordingToNeed: false
-            }; 
+            };
 
             if (!StructureHelper.getDay(structure, dayno)) {
                 let emptyDay: Day = {
                     dayNumber: dayno,
                     allDoses: [emptyDose]
-                }; 
+                };
                 structure.days.push(emptyDay);
             }
             else if (StructureHelper.getDay(structure, dayno).allDoses.length === 0) {

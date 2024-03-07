@@ -64,7 +64,7 @@ export class LongTextConverter {
     }
 
     /**
-    * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead. 
+    * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead.
     */
     public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
         return this.convert(dosage.value, options, currentTime);

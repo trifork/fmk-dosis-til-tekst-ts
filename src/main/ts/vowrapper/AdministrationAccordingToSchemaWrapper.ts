@@ -4,7 +4,7 @@ import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 export class AdministrationAccordingToSchemaWrapper {
 
     readonly value: AdministrationAccordingToSchema;
-    
+
     public static makeAdministrationAccordingToSchema(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper): AdministrationAccordingToSchemaWrapper {
         return new AdministrationAccordingToSchemaWrapper(startDateOrDateTime, endDateOrDateTime);
     }

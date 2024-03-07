@@ -10,11 +10,11 @@ export class DateOrDateTimeWrapper {
         if (date) {
             this.value = {
                 date: formatDateOnly(date)
-            }
+            };
         } else if (dateTime) {
             this.value = {
                 dateTime: formatDateTime(dateTime)
-            }
+            };
         }
     }
 }

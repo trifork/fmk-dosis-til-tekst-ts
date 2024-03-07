@@ -8,7 +8,7 @@ export default class DateOrDateTimeHelper {
                 if (typeof date === "string" && date.length === 10) {
                     // yyyy-mm-dd format - make it at noon to avoid timezone issues
                     return new Date(date + "T12:00:00");
-                } 
+                }
                 return new Date(dateOrDateTime.date);
             }
             if (dateOrDateTime.dateTime) {

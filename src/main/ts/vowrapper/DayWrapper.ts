@@ -17,6 +17,6 @@ export class DayWrapper {
         this.value = {
             dayNumber: dayNumber,
             allDoses: doses.map(doseWrapper => doseWrapper.value)
-        }
+        };
     }
 }
