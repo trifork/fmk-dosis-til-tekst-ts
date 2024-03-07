@@ -68,6 +68,11 @@ export { LocalTimeWrapper } from "./vowrapper/LocalTimeWrapper";
 
 // ./helpers
 export { LocalTimeHelper } from "./helpers/LocalTimeHelper";
+export { default as DateOrDateTimeHelper } from "./helpers/DateOrDateTimeHelper";
+export { default as DayHelper } from "./helpers/DayHelper";
+export { default as DoseHelper } from "./helpers/DoseHelper";
+export { default as StructureHelper } from "./helpers/StructureHelper";
+export { default as StructuresHelper} from "./helpers/StructuresHelper";
 
 // ./
 export { DosisTilTekstException } from "./DosisTilTekstException";
