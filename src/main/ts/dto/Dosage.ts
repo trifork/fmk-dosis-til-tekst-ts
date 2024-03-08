@@ -9,18 +9,18 @@ export interface Dosage {
 
 export interface AdministrationAccordingToSchema {
     startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime: DateOrDateTime;
+    endDateOrDateTime?: DateOrDateTime;
 }
 
 export interface FreeText {
     startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime: DateOrDateTime;
+    endDateOrDateTime?: DateOrDateTime;
     text: string;
 }
 
 export interface Structures {
     startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime: DateOrDateTime;
+    endDateOrDateTime?: DateOrDateTime;
     unitOrUnits: UnitOrUnits;
     structures: Structure[];
     isPartOfMultiPeriodDosage: boolean;
