@@ -4,7 +4,6 @@ export interface Dosage {
     administrationAccordingToSchema?: AdministrationAccordingToSchema;
     freeText?: FreeText;
     structures?: Structures;
-    // structured: boolean;
 }
 
 export interface AdministrationAccordingToSchema {
@@ -23,7 +22,7 @@ export interface Structures {
     endDateOrDateTime?: DateOrDateTime;
     unitOrUnits: UnitOrUnits;
     structures: Structure[];
-    isPartOfMultiPeriodDosage: boolean;
+    isPartOfMultiPeriodDosage?: boolean;
 }
 
 export interface UnitOrUnits extends Unit, Units {
@@ -40,6 +39,10 @@ export interface Units {
 }
 
 export interface Structure {
+    /**
+      * @isInt iterationInterval must be specified in whole days
+      * @minimum 1
+      */
     iterationInterval: number;
     startDateOrDateTime: DateOrDateTime;
     endDateOrDateTime?: DateOrDateTime;
@@ -64,6 +67,10 @@ export interface DateTime {
 }
 
 export interface Day {
+    /**
+     * @isInt dayNumber must be an integer value
+     * @minimum 0
+     */
     dayNumber: number;
     allDoses: Dose[];
 
@@ -103,7 +110,22 @@ export interface TimedDose extends Dose {
 }
 
 export interface LocalTime {
+    /**
+     * @isInt hour must be an integer value
+     * @minimum 0
+     * @maximum 23
+     */
     hour: number;
+    /**
+     * @isInt minute must be an integer value
+     * @minimum 0
+     * @maximum 59
+     */
     minute: number;
+    /**
+     * @isInt second must be an integer value
+     * @minimum 0
+     * @maximum 59
+     */
     second: number;
 }

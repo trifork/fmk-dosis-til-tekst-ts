@@ -16,7 +16,7 @@ export class CombinedTextConverter {
         return CombinedTextConverter.convert(JSON.parse(jsonStr), (<any>TextOptions)[options]);
     }
 
-    public static convert(dosage: Dosage, options: TextOptions): CombinedConversion {
+    public static convert(dosage: Dosage, options?: TextOptions): CombinedConversion {
         if (!dosage) {
             return null;
         }
