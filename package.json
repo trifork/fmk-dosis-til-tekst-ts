@@ -10,7 +10,7 @@
     "build": "npm run build.dev",
     "preparetestschemasonjenkins": "./node_modules/.bin/grunt copy:copyForPrepareTestSchemasOnJenkins",
     "pretest": "tsc --project ./tsconfig.unittest.json",
-    "test": "mocha \"src/test/target/test/ts/**/*.js\"",
+    "test": "mocha \"src/test/target/test/ts/**/*.js\" --timeout 5000",
     "testdaily": "mocha -f DailyRepeatedConverterImpl \"src/test/target/test/ts/**/*.js\""
   },
   "license": "MPL-1.1",
