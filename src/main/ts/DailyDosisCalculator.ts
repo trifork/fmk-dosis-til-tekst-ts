@@ -21,9 +21,17 @@ export class DailyDosisCalculator {
 
     public static calculate(dosage: Dosage): DailyDosis {
         if (dosage.administrationAccordingToSchema)
-            return new DailyDosis(undefined, undefined, undefined);
+            return {
+                value: undefined,
+                interval: undefined,
+                unitOrUnits: undefined
+            };
         else if (dosage.freeText)
-            return new DailyDosis(undefined, undefined, undefined);
+            return {
+                value: undefined,
+                interval: undefined,
+                unitOrUnits: undefined
+            };
         else
             return DailyDosisCalculator.calculateFromStructures(dosage.structures);
     }
@@ -32,7 +40,11 @@ export class DailyDosisCalculator {
         if (structures.structures.length === 1 && structures.structures[0].days !== undefined && structures.structures[0].days.length > 0)
             return DailyDosisCalculator.calculateFromStructure(structures.structures[0], structures.unitOrUnits);
         else
-            return new DailyDosis(undefined, undefined, undefined); // Calculating a daily dosis for more than one dosage periode is not supported
+            return {
+                value: undefined,
+                interval: undefined,
+                unitOrUnits: undefined
+            }; // Calculating a daily dosis for more than one dosage periode is not supported
     }
 
     private static calculateFromStructure(structure: Structure, unitOrUnits: UnitOrUnits): DailyDosis {
@@ -40,15 +52,27 @@ export class DailyDosisCalculator {
         // unless all daily doses are equal
         if (!structure.iterationInterval || StructureHelper.isIterationToLong(structure))
             if (!StructureHelper.allDaysAreTheSame(structure))
-                return new DailyDosis(undefined, undefined, undefined);
+                return {
+                    value: undefined,
+                    interval: undefined,
+                    unitOrUnits: undefined
+                };
         // If the structured dosage contains any doses according to need
         // we cannot calculate an average dosis
         if (StructureHelper.containsAccordingToNeedDose(structure))
-            return new DailyDosis(undefined, undefined, undefined);
+            return {
+                value: undefined,
+                interval: undefined,
+                unitOrUnits: undefined
+            };
         // If there is a dosage for day zero (meaning not related to a specific day)
         // we cannot calculate an average dosis
         if (StructureHelper.getDay(structure, 0) !== undefined)
-            return new DailyDosis(undefined, undefined, undefined);
+            return {
+                value: undefined,
+                interval: undefined,
+                unitOrUnits: undefined
+            };
         // Otherwise we will calculate an average dosage.
         // If the iteration interval is zero, the dosage is not repeated. This means
         // that the dosage for each day is given.
@@ -73,8 +97,19 @@ export class DailyDosisCalculator {
         };
 
         if (avg.maximum - avg.minimum < 0.000000001)
-            return new DailyDosis(avg.minimum, undefined, unitOrUnits);
+            return {
+                value: avg.minimum,
+                interval: undefined,
+                unitOrUnits: unitOrUnits
+            };
         else
-            return new DailyDosis(undefined, { minimum: avg.minimum, maximum: avg.maximum }, unitOrUnits);
+            return {
+                value: undefined,
+                interval: {
+                    minimum: avg.minimum,
+                    maximum: avg.maximum
+                },
+                unitOrUnits: unitOrUnits
+            };
     }
 }
