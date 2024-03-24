@@ -11,6 +11,6 @@ describe('DailyDosisCalculator', () => {
         + '"days": [ { "dayNumber": 1, "allDoses": [ { "doseQuantity": 1, "doseQuantityString": "1", "isAccordingToNeed": false, "type": "MorningDoseWrapper" } ] '
                             +'}]}]}, "structured": true }';
 
-        expect(DailyDosisCalculator.calculateStr(dosageStr).getValue()).to.equal(1);
+        expect(DailyDosisCalculator.calculateStr(dosageStr).value).to.equal(1);
     });
 });
