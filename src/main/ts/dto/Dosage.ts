@@ -56,11 +56,15 @@ export interface DateOrDateTime extends DateOnly,  DateTime {
 }
 
 export interface DateOnly {
+    /**
+     * @isDate
+     */
     date?: string;
 }
 
 export interface DateTime {
     /**
+    * @isDateTime
     * @deprecated datetimes are no longer used
     */
     dateTime?: string;
