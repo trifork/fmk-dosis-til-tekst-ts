@@ -51,22 +51,24 @@ export interface Structure {
     supplText?: string;
 }
 
-export interface DateOrDateTime extends DateOnly,  DateTime {
+export interface DateOrDateTime extends DateOnly, DateTime {
 
 }
 
 export interface DateOnly {
     /**
-     * @isDate
+     * @format date
+     * @isDate must be a valid date
      */
     date?: string;
 }
 
 export interface DateTime {
     /**
-    * @isDateTime
-    * @deprecated datetimes are no longer used
-    */
+     * @format date-time
+     * @isDateTime must be a valid datetime
+     * @deprecated datetimes are no longer used
+     */
     dateTime?: string;
 }
 
