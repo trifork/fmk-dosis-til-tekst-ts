@@ -89,8 +89,8 @@ export interface Dose {
     isAccordingToNeed: boolean;
     type: "MorningDoseWrapper" | "NoonDoseWrapper" | "EveningDoseWrapper" | "NightDoseWrapper" | "PlainDoseWrapper" | "TimedDoseWrapper";
     // The time property logically belongs only in TimedDose, but insisting on that means we have to declare Day.allDoses as a type union
-    // of all Dose interfaces => AnyOf in the openapi spec => complicated client side mappings + we break compatibility with earlier 
-    // versions of the d2t service. 
+    // of all Dose interfaces => AnyOf in the openapi spec => complicated client side mappings + we break compatibility with earlier
+    // versions of the d2t service.
     // As a pragmatic workaround, we declare time as an optional property here..
     time?: LocalTime;
 }
