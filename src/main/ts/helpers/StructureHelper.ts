@@ -146,7 +146,7 @@ export class StructureHelper {
                     maximum += dose.doseQuantity;
                 } else if (typeof dose.minimalDoseQuantity === "number" && typeof dose.maximalDoseQuantity === "number") {
                     minimum += dose.minimalDoseQuantity;
-                    maximum = dose.maximalDoseQuantity;
+                    maximum += dose.maximalDoseQuantity;
                 } else {
                     throw new DosisTilTekstException("DoseQuantity eller minimalDoseQuantity+MaximalDoseQuantity skal være sat");
                 }
