@@ -47,7 +47,7 @@ export class DoseHelper {
             return TextHelper.formatQuantity(dose.doseQuantity);
         }
         if (typeof dose.minimalDoseQuantity === "number" && typeof dose.maximalDoseQuantity === "number") {
-            return `${TextHelper.formatQuantity(dose.minimalDoseQuantity)} - ${TextHelper.formatQuantity(dose.maximalDoseQuantity)}`;
+            return `${TextHelper.formatQuantity(dose.minimalDoseQuantity)}-${TextHelper.formatQuantity(dose.maximalDoseQuantity)}`;
         }
     }
 
