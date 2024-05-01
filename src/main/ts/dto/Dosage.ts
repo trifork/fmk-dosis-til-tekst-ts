@@ -41,7 +41,7 @@ export interface Units {
 export interface Structure {
     /**
       * @isInt iterationInterval must be specified in whole days
-      * @minimum 1
+      * @minimum 0
       */
     iterationInterval: number;
     startDateOrDateTime: DateOrDateTime;
