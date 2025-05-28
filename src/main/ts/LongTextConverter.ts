@@ -38,7 +38,7 @@ export class LongTextConverter {
 
     public convertStr(jsonStr: string, options: string) {
 
-        if (jsonStr === undefined || jsonStr === null) {
+        if (!jsonStr) {
             return null;
         }
 

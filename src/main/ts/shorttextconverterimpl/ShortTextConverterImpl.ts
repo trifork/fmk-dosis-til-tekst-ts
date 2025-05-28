@@ -23,7 +23,7 @@ export abstract class ShortTextConverterImpl {
     }
 
     protected static toQuantityValue(dose: number): string {
-        if (dose !== undefined) {
+        if (dose) {
             return TextHelper.formatQuantity(dose);
         }
         else {
@@ -47,7 +47,7 @@ export abstract class ShortTextConverterImpl {
     protected static toDoseLabelUnitValue(dose: number, label: string, unitOrUnits: UnitOrUnits): string {
         let s = this.toQuantityValue(dose);
         let u = TextHelper.getUnitFromDoseNumber(dose, unitOrUnits);
-        if (label === undefined || label.length === 0)
+        if (!label)
             return s + " " + u;
         else
             return s + " " + u + " " + label;

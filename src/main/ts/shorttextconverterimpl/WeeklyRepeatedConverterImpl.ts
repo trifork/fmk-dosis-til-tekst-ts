@@ -14,7 +14,7 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
     }
 
     public canConvert(dosage: Dosage): boolean {
-        if (dosage.structures === undefined)
+        if (!dosage.structures)
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;

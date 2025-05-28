@@ -239,7 +239,7 @@ export class DosageTypeCalculator144 {
             let firstNotEmptyStructure: Structure;
 
             // Find first none-empty structure
-            while (firstNotEmptyStructure === undefined && i < structures.structures.length) {
+            while (!firstNotEmptyStructure && i < structures.structures.length) {
                 let firstNotEmptyStructureCandidate: Structure = structures.structures[i];
                 if (firstNotEmptyStructureCandidate.days.length > 0) {
                     firstNotEmptyStructure = firstNotEmptyStructureCandidate;

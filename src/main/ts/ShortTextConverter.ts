@@ -64,7 +64,7 @@ export class ShortTextConverter {
     public static getInstance(): ShortTextConverter { return ShortTextConverter._instance; }
 
     public getConverterClassNameStr(jsonStr: string): string {
-        if (jsonStr === undefined || jsonStr === null) {
+        if (!jsonStr) {
             return null;
         }
 
@@ -87,7 +87,7 @@ export class ShortTextConverter {
      */
     public convert(dosage: Dosage, options: TextOptions = TextOptions.STANDARD, maxLength = ShortTextConverter.MAX_LENGTH): string {
 
-        if (dosage === undefined || dosage === null) {
+        if (!dosage) {
             return null;
         }
 
@@ -96,7 +96,7 @@ export class ShortTextConverter {
 
     public convertStr(jsonStr: string, options: string = TextOptions.STANDARD.toString(), maxLength = ShortTextConverter.MAX_LENGTH) {
 
-        if (jsonStr === undefined || jsonStr === null) {
+        if (!jsonStr) {
             return null;
         }
 

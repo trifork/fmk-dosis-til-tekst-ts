@@ -9,7 +9,7 @@ export class FreeTextConverterImpl extends SimpleLongTextConverterImpl {
     }
 
     public canConvert(dosage: Dosage, options: TextOptions): boolean {
-        return dosage.freeText !== undefined && dosage.freeText !== null;
+        return !!dosage.freeText;
     }
 
     public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {

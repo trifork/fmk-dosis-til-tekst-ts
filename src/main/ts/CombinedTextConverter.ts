@@ -9,7 +9,7 @@ import { Dosage, Structure, Structures } from "./dto/Dosage";
 export class CombinedTextConverter {
 
     public static convertStr(jsonStr: string, options: string) {
-        if (jsonStr === undefined || jsonStr === null) {
+        if (!jsonStr) {
             return null;
         }
 

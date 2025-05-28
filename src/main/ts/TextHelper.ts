@@ -188,7 +188,7 @@ export class TextHelper {
     }
 
     private static hasPluralUnitForNumber(dose: number): boolean {
-        if (dose !== undefined) {
+        if (dose) {
             return dose > 1.0 || dose < 0.000000001;
         }
         else {

@@ -12,7 +12,7 @@ export class LocalTimeHelper {
 
         let secondString: string;
 
-        if (localTime.second !== undefined && localTime.second !== 0) {
+        if (localTime.second) {
             secondString = localTime.second.toString();
             if (secondString.length === 1) {
                 secondString = "0" + secondString;

@@ -37,7 +37,7 @@ export class DailyDosisCalculator {
     }
 
     private static calculateFromStructures(structures: Structures): DailyDosis {
-        if (structures.structures.length === 1 && structures.structures[0].days !== undefined && structures.structures[0].days.length > 0)
+        if (structures.structures.length === 1 && structures.structures[0].days?.length > 0)
             return DailyDosisCalculator.calculateFromStructure(structures.structures[0], structures.unitOrUnits);
         else
             return {
@@ -67,7 +67,7 @@ export class DailyDosisCalculator {
             };
         // If there is a dosage for day zero (meaning not related to a specific day)
         // we cannot calculate an average dosis
-        if (StructureHelper.getDay(structure, 0) !== undefined)
+        if (StructureHelper.getDay(structure, 0))
             return {
                 value: undefined,
                 interval: undefined,

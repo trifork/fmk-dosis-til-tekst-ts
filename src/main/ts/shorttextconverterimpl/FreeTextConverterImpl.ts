@@ -8,7 +8,7 @@ export class FreeTextConverterImpl extends ShortTextConverterImpl {
     }
 
     public canConvert(dosage: Dosage): boolean {
-        return dosage.freeText !== undefined;
+        return !!dosage.freeText;
     }
 
     public doConvert(dosage: Dosage): string {
