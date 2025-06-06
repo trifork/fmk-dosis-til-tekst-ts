@@ -20,7 +20,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
             if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: Structure = dosage.structures.structures[0];
+            const structure: Structure = dosage.structures.structures[0];
             if (structure.iterationInterval !== 7)
                 return false;
             if (options !== TextOptions.VKA && options !== TextOptions.VKA_WITH_MARKUP  && DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
@@ -70,11 +70,11 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
             if (trimmedStart && trimmedEnd) {
                 // Calculate length of dosage period
-                let diffMsec = Math.abs(trimmedEnd.getTime() - trimmedStart.getTime());
-                let diffDays = Math.ceil(diffMsec / (1000 * 3600 * 24));
+                const diffMsec = Math.abs(trimmedEnd.getTime() - trimmedStart.getTime());
+                const diffDays = Math.ceil(diffMsec / (1000 * 3600 * 24));
                 // Calculate length of remaining dosage period (from currentTime to dosage end)
-                let diffMsecRemaining = trimmedEnd.getTime() - currentTime.getTime();
-                let diffDaysRemaining = Math.ceil(diffMsecRemaining / (1000 * 3600 * 24));
+                const diffMsecRemaining = trimmedEnd.getTime() - currentTime.getTime();
+                const diffDaysRemaining = Math.ceil(diffMsecRemaining / (1000 * 3600 * 24));
 
                 if (diffDays > 7 && !(
                     (options === TextOptions.VKA || options === TextOptions.VKA_WITH_MARKUP) && diffDaysRemaining < 7 && diffDaysRemaining > 0)) {
@@ -112,7 +112,7 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
 
     protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime, includeWeekName: boolean, options: TextOptions): string {
 
-        let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
         let s = "";
@@ -162,10 +162,10 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
             s = "<dl class=\"d2t-weekly-schema\">\n";
         }
 
-        let daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
+        const daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
 
         let appendedLines = 0;
-        for (let e of daysOfWeek) {
+        for (const e of daysOfWeek) {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;
@@ -180,17 +180,15 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     protected static fillWithEmptyWeekdays(structure: Structure, unitOrUnits: UnitOrUnits): Structure {
-        let allWeekDays: Day[] = [];
-
         for (let dayno: number = 1; dayno < 8; dayno++) {
-            let existingDay = StructureHelper.getDay(structure, dayno);
+            const existingDay = StructureHelper.getDay(structure, dayno);
             if (!existingDay) {
-                let emptyDose: PlainDose = {
+                const emptyDose: PlainDose = {
                     doseQuantity: 0,
                     type: "PlainDoseWrapper",
                     isAccordingToNeed: false
                 };
-                let emptyDay: Day = {
+                const emptyDay: Day = {
                     dayNumber: dayno,
                     allDoses: [emptyDose]
                 };
@@ -203,14 +201,14 @@ export class WeeklyRepeatedConverterImpl extends LongTextConverterImpl {
     public static sortDaysOfWeek(structure: Structure): Array<DayOfWeek> {
         // Convert all days (up to 7) to day of week and DK name ((1, Mandag) etc).
         // Sort according to day of week (Monday always first) using DayOfWeek's compareTo in SortedSet
-        let daysOfWeekSet = structure.days.map(day => TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, true));
+        const daysOfWeekSet = structure.days.map(day => TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, true));
         return daysOfWeekSet.sort(WeeklyRepeatedConverterImpl.daySort);
     }
 
     // Javascript day 0 = Sunday meaning special sorting of days
     static daySort(day1: DayOfWeek, day2: DayOfWeek): number {
-        let sortDay1 = day1.dayOfWeek === 0 ? 8 : day1.dayOfWeek;
-        let sortDay2 = day2.dayOfWeek === 0 ? 8 : day2.dayOfWeek;
+        const sortDay1 = day1.dayOfWeek === 0 ? 8 : day1.dayOfWeek;
+        const sortDay2 = day2.dayOfWeek === 0 ? 8 : day2.dayOfWeek;
 
         return sortDay1 - sortDay2;
     }

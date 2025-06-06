@@ -43,8 +43,8 @@ export class DosageTypeCalculator144 {
 			 * The dosagetype is then found by finding the dosagetype of the first not-empty Structure
 			 * If only empty structures are present, return fixed...just because */
 
-            let fixedStructures: Structure[] = [];
-            let pnStructures: Structure[] = [];
+            const fixedStructures: Structure[] = [];
+            const pnStructures: Structure[] = [];
 
             DosageTypeCalculator144.splitInFixedAndPN(structures, fixedStructures, pnStructures);
 
@@ -67,7 +67,7 @@ export class DosageTypeCalculator144 {
 	 */
     public static splitInFixedAndPN(structures: Structures, fixedStructures: Structure[], pnStructures: Structure[]) {
 
-        let emptyStructures: Structure[] = [];
+        const emptyStructures: Structure[] = [];
 
         structures.structures.forEach(s => {
             if (StructureHelper.isEmpty(s) || StructureHelper.containsEmptyDosagesOnly(s)) {
@@ -94,10 +94,10 @@ export class DosageTypeCalculator144 {
 
         /* in case any emptystructures are left, they should be placed either at the beginning or end of either the fixed or the pn structures */
 
-        let unhandledEmptyStructures: Structure[] = [];
+        const unhandledEmptyStructures: Structure[] = [];
 
         for (let i = 0; i < emptyStructures.length; i++) {
-            let es: Structure = emptyStructures[i];
+            const es: Structure = emptyStructures[i];
             let handled: boolean = false;
 
             if (fixedStructures.length > 0) {
@@ -128,8 +128,8 @@ export class DosageTypeCalculator144 {
         }
 
         /* In case there are still unhandled empy structures, and either fixed or pn-structures are completely empty, they should go there */
-        let noFixedStructures: boolean = fixedStructures.length === 0;
-        let noPNStructures: boolean = pnStructures.length === 0;
+        const noFixedStructures: boolean = fixedStructures.length === 0;
+        const noPNStructures: boolean = pnStructures.length === 0;
 
         unhandledEmptyStructures.forEach(es => {
             if (noFixedStructures) {
@@ -162,27 +162,27 @@ export class DosageTypeCalculator144 {
     }
 
     static treatAsUTC(date: Date): Date {
-        let result: Date = new Date(date.valueOf());
+        const result: Date = new Date(date.valueOf());
         result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
         return result;
     }
 
     static daysBetween(startDate: Date, endDate: Date): number {
-        let millisecondsPerDay = 24 * 60 * 60 * 1000;
-        let d1 = DosageTypeCalculator144.treatAsUTC(endDate);
-        let d2 = DosageTypeCalculator144.treatAsUTC(startDate);
+        const millisecondsPerDay = 24 * 60 * 60 * 1000;
+        const d1 = DosageTypeCalculator144.treatAsUTC(endDate);
+        const d2 = DosageTypeCalculator144.treatAsUTC(startDate);
         d1.setUTCHours(0);
         d2.setUTCHours(0);
         return (d1.valueOf() - d2.valueOf()) / millisecondsPerDay;
     }
 
     static secondsBetween(startDate: Date, endDate: Date): number {
-        let millisecondsSecond = 1000;
+        const millisecondsSecond = 1000;
         return (DosageTypeCalculator144.treatAsUTC(endDate).valueOf() - DosageTypeCalculator144.treatAsUTC(startDate).valueOf()) / millisecondsSecond;
     }
 
     public static dateTimeAbuts(dateTime1: Date, dateTime2: Date): boolean {
-        let secondsBetween: number = DosageTypeCalculator144.secondsBetween(dateTime1, dateTime2);
+        const secondsBetween: number = DosageTypeCalculator144.secondsBetween(dateTime1, dateTime2);
         return secondsBetween >= 0 && secondsBetween <= 1;
     }
 
@@ -194,9 +194,9 @@ export class DosageTypeCalculator144 {
         let structuresSize: number = structures.length;
         for (let i = 0; i < structuresSize - 1; i++) {
             if (DosageTypeCalculator144.hasGap(structures[i], structures[i + 1])) {
-                let indexOfemptyStructureFittingGap = DosageTypeCalculator144.findIndexOfEmptyStructuresThatFitsGap(emptyStructures, structures[i], structures[i + 1]);
+                const indexOfemptyStructureFittingGap = DosageTypeCalculator144.findIndexOfEmptyStructuresThatFitsGap(emptyStructures, structures[i], structures[i + 1]);
                 if (indexOfemptyStructureFittingGap > -1) {
-                    let emptyStructureFittingGap: Structure = emptyStructures.splice(indexOfemptyStructureFittingGap, 1)[0];
+                    const emptyStructureFittingGap: Structure = emptyStructures.splice(indexOfemptyStructureFittingGap, 1)[0];
                     structures.splice(i + 1, 0, emptyStructureFittingGap);
                     structuresSize++;
                 }
@@ -204,9 +204,9 @@ export class DosageTypeCalculator144 {
         }
     }
 
-    private static findIndexOfEmptyStructuresThatFitsGap(emptyStructures: Structure[], structureWrapper1: Structure, structureWrapper2: Structure): number {
+    private static findIndexOfEmptyStructuresThatFitsGap(emptyStructures: Structure[], structure1: Structure, structure2: Structure): number {
         for (let i = 0; i < emptyStructures.length; i++) {
-            if (DosageTypeCalculator144.abuts(structureWrapper1, emptyStructures[i]) && DosageTypeCalculator144.abuts(emptyStructures[i], structureWrapper2)) {
+            if (DosageTypeCalculator144.abuts(structure1, emptyStructures[i]) && DosageTypeCalculator144.abuts(emptyStructures[i], structure2)) {
                 return i;
             }
         }
@@ -214,8 +214,8 @@ export class DosageTypeCalculator144 {
         return -1;
     }
 
-    protected static hasGap(structureWrapper1: Structure, structureWrapper2: Structure): boolean {
-        return !DosageTypeCalculator144.abuts(structureWrapper1, structureWrapper2);
+    protected static hasGap(structure1: Structure, structure2: Structure): boolean {
+        return !DosageTypeCalculator144.abuts(structure1, structure2);
     }
 
     private static firstNotEmptyStructure(structures: Structures): Structure {
@@ -240,7 +240,7 @@ export class DosageTypeCalculator144 {
 
             // Find first none-empty structure
             while (!firstNotEmptyStructure && i < structures.structures.length) {
-                let firstNotEmptyStructureCandidate: Structure = structures.structures[i];
+                const firstNotEmptyStructureCandidate: Structure = structures.structures[i];
                 if (firstNotEmptyStructureCandidate.days.length > 0) {
                     firstNotEmptyStructure = firstNotEmptyStructureCandidate;
                 }
@@ -250,9 +250,9 @@ export class DosageTypeCalculator144 {
             }
 
             if (firstNotEmptyStructure != null) {
-                let firstType: DosageType = DosageTypeCalculator144.calculateFromStructure(firstNotEmptyStructure);
+                const firstType: DosageType = DosageTypeCalculator144.calculateFromStructure(firstNotEmptyStructure);
                 for (let j = i; j < structures.structures.length; j++) {
-                    let structure: Structure = structures.structures[j];
+                    const structure: Structure = structures.structures[j];
                     if (structure.days.length > 0 && firstType !== DosageTypeCalculator144.calculateFromStructure(structure)) {
                         return true;
                     }

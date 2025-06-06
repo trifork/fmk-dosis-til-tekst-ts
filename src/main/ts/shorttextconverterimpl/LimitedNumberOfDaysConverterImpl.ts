@@ -21,7 +21,7 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval && !StructureHelper.isIterationToLong(structure))
             return false;
         if (structure.days.length === 0)
@@ -38,16 +38,16 @@ export class LimitedNumberOfDaysConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
         if (day.allDoses[0].isAccordingToNeed) { text += " efter behov"; }
         if (structure.days.length === 1 && structure.days[0].dayNumber === 1)
             text += " " + day.allDoses.length + " " + TextHelper.gange(day.allDoses.length);
         else {
             text += " " + day.allDoses.length + " " + TextHelper.gange(day.allDoses.length) + " daglig";
-            let days: number = structure.days[structure.days.length - 1].dayNumber;
+            const days: number = structure.days[structure.days.length - 1].dayNumber;
             if (days === 7)
                 text += " i 1 uge";
             else if (days % 7 === 0)

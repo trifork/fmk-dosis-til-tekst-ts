@@ -7,3 +7,4 @@ npm-debug.log
 .vscode/
 dist/
 publish-internal/src/
+.flattened-pom.xml

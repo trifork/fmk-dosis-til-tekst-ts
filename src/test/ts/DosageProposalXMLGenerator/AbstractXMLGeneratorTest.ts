@@ -1,11 +1,10 @@
-/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import { AbstractXMLGenerator } from "../../../main/ts/DosageProposalXMLGenerator/AbstractXMLGenerator";
 
 describe('parseMapping', () => {
     it('should handle morning dose', () => {
-        let mapping = AbstractXMLGenerator.parseMapping('1')
+        const mapping = AbstractXMLGenerator.parseMapping('1')
 
         expect(mapping.getMorning()).to.equal(1);
         expect(mapping.getNoon()).to.be.undefined;
@@ -14,7 +13,7 @@ describe('parseMapping', () => {
     });
 
     it('should handle morning+noon dose', () => {
-        let mapping = AbstractXMLGenerator.parseMapping('1+2')
+        const mapping = AbstractXMLGenerator.parseMapping('1+2')
 
         expect(mapping.getMorning()).to.equal(1);
         expect(mapping.getNoon()).to.equal(2);
@@ -23,7 +22,7 @@ describe('parseMapping', () => {
     });
 
     it('should handle morning+noon+evening dose', () => {
-        let mapping = AbstractXMLGenerator.parseMapping('1+2+3')
+        const mapping = AbstractXMLGenerator.parseMapping('1+2+3')
 
         expect(mapping.getMorning()).to.equal(1);
         expect(mapping.getNoon()).to.equal(2);
@@ -33,7 +32,7 @@ describe('parseMapping', () => {
 
 
     it('should handle morning+noon+evening+night dose', () => {
-        let mapping = AbstractXMLGenerator.parseMapping('1+2+3+4')
+        const mapping = AbstractXMLGenerator.parseMapping('1+2+3+4')
 
         expect(mapping.getMorning()).to.equal(1);
         expect(mapping.getNoon()).to.equal(2);

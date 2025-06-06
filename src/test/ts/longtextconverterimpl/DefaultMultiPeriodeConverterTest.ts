@@ -1,25 +1,24 @@
-/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
-import { expect, assert } from 'chai';
-import { LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper } from "../../../main/ts/index";
-import { TextOptions } from "../../../main/ts/TextOptions"
+import { expect } from 'chai';
+import { DateOrDateTimeWrapper, DayWrapper, DosageWrapper, LongTextConverter, MorningDoseWrapper, PlainDoseWrapper, StructuresWrapper, StructureWrapper, UnitOrUnitsWrapper } from "../../../main/ts/index";
+import { TextOptions } from "../../../main/ts/TextOptions";
 
 describe('DefaultMultiPeriodeConverterImpl', () => {
 
     it('should return periods sorted by startdate', () => {
 
-        let periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
+        const periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
             new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
             new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])], undefined);
 
-        let periode2 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 27), undefined), undefined, [
+        const periode2 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 27), undefined), undefined, [
             new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
             new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])], undefined);
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [periode1, periode2], false));
 
-        let longtext: string = LongTextConverter.getInstance().convertWrapper(dose);
+        const longtext: string = LongTextConverter.getInstance().convertWrapper(dose);
         expect(longtext).to.equal("Dosering fra d. 22. jan. 2020 til d. 26. jan. 2020 - gentages hver 2. dag:\n" +
             "Dag 1: 1 tablet morgen\n" +
             "Dag 2: 2 tabletter morgen\n" +
@@ -31,18 +30,18 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
 
     it('should return periods sorted by fast/pn', () => {
 
-        let periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 23), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
+        const periode1 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 23), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
             new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
             new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])], undefined);
 
-        let periode2 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 23), undefined), undefined, [
+        const periode2 = new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 23), undefined), undefined, [
             new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, true)]),
             new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, true)])], undefined);
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [periode2, periode1], false));
 
-        let longtext: string = LongTextConverter.getInstance().convertWrapper(dose);
+        const longtext: string = LongTextConverter.getInstance().convertWrapper(dose);
         expect(longtext).to.equal(
             "Dosering fra d. 23. jan. 2020 til d. 26. jan. 2020 - gentages hver 2. dag:\n" +
             "Dag 1: 1 tablet morgen\n" +
@@ -55,18 +54,18 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
 
     it('should use "hver 3. dag" and "hver 4. dag"', () => {
 
-        let periode1 = new StructureWrapper(3, "", new DateOrDateTimeWrapper(new Date(2020, 5, 30), undefined), new DateOrDateTimeWrapper(new Date(2020, 6, 29), undefined), [
+        const periode1 = new StructureWrapper(3, "", new DateOrDateTimeWrapper(new Date(2020, 5, 30), undefined), new DateOrDateTimeWrapper(new Date(2020, 6, 29), undefined), [
             new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
         ], undefined);
 
-        let periode2 = new StructureWrapper(4, "", new DateOrDateTimeWrapper(new Date(2020, 6, 30), undefined), undefined, [
+        const periode2 = new StructureWrapper(4, "", new DateOrDateTimeWrapper(new Date(2020, 6, 30), undefined), undefined, [
             new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])],
             undefined);
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "plaster", "plastre"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "plaster", "plastre"),
             null, null, [periode1, periode2], false));
 
-        let longtext: string = LongTextConverter.getInstance().convertWrapper(dose);
+        const longtext: string = LongTextConverter.getInstance().convertWrapper(dose);
         expect(longtext).to.equal(
             "Dosering fra d. 30. juni 2020 til d. 29. juli 2020:\n" +
             "1 plaster hver 3. dag\n\n" +
@@ -77,7 +76,7 @@ describe('DefaultMultiPeriodeConverterImpl', () => {
 
     it('should return 0-dosages for empty days with option VKA', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),

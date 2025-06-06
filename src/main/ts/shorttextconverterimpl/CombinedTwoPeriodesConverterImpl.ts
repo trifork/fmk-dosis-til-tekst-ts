@@ -18,19 +18,19 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             return false;
 
         // Structure 0
-        let structure0: Structure = dosage.structures.structures[0];
+        const structure0: Structure = dosage.structures.structures[0];
         if (structure0.iterationInterval !== 0 && !StructureHelper.isIterationToLong(structure0))
             return false;
         if (StructureHelper.containsAccordingToNeedDose(structure0))
             return false;
 
         // If last daynumber is 1, start and end must match
-        let tempStructure: Structure = dosage.structures.structures[0];
+        const tempStructure: Structure = dosage.structures.structures[0];
         if (tempStructure.days.length === 0) {
             return false;
         }
 
-        let dayNo = tempStructure.days[tempStructure.days.length - 1].dayNumber;
+        const dayNo = tempStructure.days[tempStructure.days.length - 1].dayNumber;
 
         if (dayNo === 1 && !StructureHelper.startsAndEndsSameDay(structure0)) {
             return false;
@@ -50,11 +50,11 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             return false;
 
         // Structure 1
-        let structureLast: Structure = dosage.structures.structures[dosage.structures.structures.length - 1];
+        const structureLast: Structure = dosage.structures.structures[dosage.structures.structures.length - 1];
         if (StructureHelper.containsAccordingToNeedDose(structureLast))
             return false;
 
-        let fixedDosage: Dosage = {
+        const fixedDosage: Dosage = {
             structures: {
                 startDateOrDateTime: dosage.structures.startDateOrDateTime,
                 endDateOrDateTime: dosage.structures.endDateOrDateTime,
@@ -72,10 +72,10 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
     public doConvert(dosage: Dosage): string {
 
-        let tempStructure: Structure = dosage.structures.structures[0];
-        let tempSupplText: string = tempStructure.supplText;
+        const tempStructure: Structure = dosage.structures.structures[0];
+        const tempSupplText: string = tempStructure.supplText;
         tempStructure.supplText = null;
-        let tempDosage: Dosage = {
+        const tempDosage: Dosage = {
             structures: {
                 startDateOrDateTime: dosage.structures.startDateOrDateTime,
                 endDateOrDateTime: dosage.structures.endDateOrDateTime,
@@ -84,17 +84,17 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
                 isPartOfMultiPeriodDosage: true
             }
         };
-        let tempText: String = new ShortTextConverter().convert(tempDosage, undefined, 10000); // 10000 to avoid anything longer than 70 chars being cut
+        const tempText: string = new ShortTextConverter().convert(tempDosage, undefined, 10000); // 10000 to avoid anything longer than 70 chars being cut
         tempStructure.supplText = tempSupplText;
 
         if (!tempText) {
             return null;
         }
 
-        let fixedStructure: Structure = dosage.structures.structures[dosage.structures.structures.length - 1];
-        let fixedSupplText: string = fixedStructure.supplText;
+        const fixedStructure: Structure = dosage.structures.structures[dosage.structures.structures.length - 1];
+        const fixedSupplText: string = fixedStructure.supplText;
         fixedStructure.supplText = null;
-        let fixedDosage: Dosage = {
+        const fixedDosage: Dosage = {
             structures: {
                 startDateOrDateTime: dosage.structures.startDateOrDateTime,
                 endDateOrDateTime: dosage.structures.endDateOrDateTime,
@@ -104,7 +104,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
             }
         };
 
-        let fixedText: string = new ShortTextConverter().convert(fixedDosage, undefined, 10000); // 10000 to avoid anything longer than 70 chars being cut
+        const fixedText: string = new ShortTextConverter().convert(fixedDosage, undefined, 10000); // 10000 to avoid anything longer than 70 chars being cut
         fixedStructure.supplText = fixedSupplText;
 
         let supplText: string = "";
@@ -113,7 +113,7 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         if (fixedStructure.supplText && tempStructure.supplText !== fixedStructure.supplText)
             supplText += TextHelper.addShortSupplText(fixedStructure.supplText);
 
-        let days = tempStructure.days[tempStructure.days.length - 1].dayNumber;
+        const days = tempStructure.days[tempStructure.days.length - 1].dayNumber;
         if (days === 1) {
             return "Første dag " + tempText + ", herefter " + fixedText + supplText;
         }

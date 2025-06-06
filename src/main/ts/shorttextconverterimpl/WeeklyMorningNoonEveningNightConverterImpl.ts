@@ -1,12 +1,11 @@
-import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
-import { WeeklyRepeatedConverterImpl as LongTextWeeklyRepeatedConverterImpl } from "../longtextconverterimpl/WeeklyRepeatedConverterImpl";
-import { TextHelper } from "../TextHelper";
-import { Dosage, Structure } from "../dto/Dosage";
-import { StructureHelper } from "../helpers/StructureHelper";
-import { DayHelper } from "../helpers/DayHelper";
-import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 import { DayOfWeek } from "../DayOfWeek";
+import { Dosage, Structure } from "../dto/Dosage";
+import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
+import { DayHelper } from "../helpers/DayHelper";
+import { StructureHelper } from "../helpers/StructureHelper";
+import { WeeklyRepeatedConverterImpl as LongTextWeeklyRepeatedConverterImpl } from "../longtextconverterimpl/WeeklyRepeatedConverterImpl";
+import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
+import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 
 export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConverterImpl {
 
@@ -19,7 +18,7 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval !== 7)
             return false;
         if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
@@ -39,19 +38,19 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
 
     public doConvert(dosage: Dosage): string {
 
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
 
-        let daysOfWeek: DayOfWeek[] =
+        const daysOfWeek: DayOfWeek[] =
             LongTextWeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
         let text = "";
 
-        let firstDay: DayOfWeek = daysOfWeek[0];
+        const firstDay: DayOfWeek = daysOfWeek[0];
         text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay.day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay.day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightConverterImpl.getEveningText(firstDay.day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightConverterImpl.getNightText(firstDay.day, dosage.structures.unitOrUnits);
         let i = 0;
-        for (let d of daysOfWeek) {
+        for (const d of daysOfWeek) {
             if (i === daysOfWeek.length - 1 && daysOfWeek.length > 1)
                 text += " og " + d.name.toLowerCase();
             else if (i === 0)

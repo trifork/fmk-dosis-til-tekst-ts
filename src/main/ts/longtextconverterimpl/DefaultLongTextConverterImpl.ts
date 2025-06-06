@@ -40,14 +40,14 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
         for (let dosagedate1 = startDate; dosagedate1 <= endDate; dosagedate1.setDate(dosagedate1.getDate() + 1)) {
 
-            let emptyDose: PlainDose = {
+            const emptyDose: PlainDose = {
                 type: "PlainDoseWrapper",
                 doseQuantity: 0,
                 isAccordingToNeed: false
             };
 
             if (!StructureHelper.getDay(structure, dayno)) {
-                let emptyDay: Day = {
+                const emptyDay: Day = {
                     dayNumber: dayno,
                     allDoses: [emptyDose]
                 };
@@ -70,7 +70,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             // If more than 10 zero dosages are added, split in two periods: one with 0 dosages only, and one with none-zero only
 
             if (DefaultLongTextConverterImpl.shouldSplitInNonzeroAndZeroDosagePart(structure)) {
-                let splittedDosage = DefaultLongTextConverterImpl.splitInNonzeroAndZeroDosagePart(structure, unitOrUnits);
+                const splittedDosage = DefaultLongTextConverterImpl.splitInNonzeroAndZeroDosagePart(structure, unitOrUnits);
                 let s = this.longTextConverter.convert(splittedDosage, options);
                 s += this.getNoDosageWarningIfNeeded(options, structure, treatmentEndDateTime, isPartOfMultiPeriodDosage);
                 return s;
@@ -92,7 +92,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
         }
         else if (structure.iterationInterval === 0 || StructureHelper.isIterationToLong(structure)) {
 
-            let useSingleDayDosageStartText = structure.days.length === 1 && !DayHelper.isAnyDay(structure.days[0]) && !StructureHelper.isPNWithoutLimit(structure);
+            const useSingleDayDosageStartText = structure.days.length === 1 && !DayHelper.isAnyDay(structure.days[0]) && !StructureHelper.isPNWithoutLimit(structure);
 
             // Not repeated dosage - and not an unlimited PN dosage neither
             if (useSingleDayDosageStartText) {
@@ -192,18 +192,18 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
 
     private static splitInNonzeroAndZeroDosagePart(structure: Structure, unitOrUnits: UnitOrUnits): Dosage {
 
-        let firstDaynoWithNoDaysAfter = DefaultLongTextConverterImpl.getFirstDaynoWithNoDaysAfter(structure);
+        const firstDaynoWithNoDaysAfter = DefaultLongTextConverterImpl.getFirstDaynoWithNoDaysAfter(structure);
 
-        let nonezeroDosageDays: Day[] = structure.days;
-        let zeroDosageDays: Day[] = [];
-        let nonzeroPeriod: Structure = {
+        const nonezeroDosageDays: Day[] = structure.days;
+        const zeroDosageDays: Day[] = [];
+        const nonzeroPeriod: Structure = {
             iterationInterval: structure.iterationInterval,
             supplText: structure.supplText,
             startDateOrDateTime: structure.startDateOrDateTime,
             endDateOrDateTime: DateOrDateTimeHelper.plusDays(structure.startDateOrDateTime, firstDaynoWithNoDaysAfter - 2),
             days: nonezeroDosageDays,
         };
-        let zeroPeriod: Structure = {
+        const zeroPeriod: Structure = {
             iterationInterval: structure.iterationInterval,
             supplText: structure.supplText,
             startDateOrDateTime: DateOrDateTimeHelper.plusDays(structure.startDateOrDateTime, firstDaynoWithNoDaysAfter - 1),
@@ -211,7 +211,7 @@ export class DefaultLongTextConverterImpl extends LongTextConverterImpl {
             days: zeroDosageDays,
         };
 
-        let splittedStructures: Structures = {
+        const splittedStructures: Structures = {
             startDateOrDateTime: structure.startDateOrDateTime,
             endDateOrDateTime: structure.endDateOrDateTime,
             unitOrUnits: unitOrUnits,

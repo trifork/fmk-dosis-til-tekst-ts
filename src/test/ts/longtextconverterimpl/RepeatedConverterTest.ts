@@ -1,4 +1,3 @@
-/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
 import { expect } from 'chai';
 import { LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper } from "../../../main/ts/index";
@@ -6,7 +5,7 @@ import { LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper,
 describe('RepeatedConverterImpl', () => {
 
     it('should return hver 3. dag', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(3, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)])
@@ -18,7 +17,7 @@ describe('RepeatedConverterImpl', () => {
     });
 
     it('should return hver 4. dag with efter behov and dagligt', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(4, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, true)])

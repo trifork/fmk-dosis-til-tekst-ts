@@ -5,7 +5,7 @@ export class DosagePeriod {
     beginDate: Date;
     endDate: Date;
 
-    constructor (type: string, mapping: string, iteration: number, beginDate: Date, endDate: Date) {
+    constructor (type: string, mapping: string, iteration: number, beginDate: Date, endDate?: Date) {
         this.type = type;
         this.mapping = mapping;
         this.iteration = iteration;

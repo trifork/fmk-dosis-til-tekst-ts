@@ -4,7 +4,7 @@ export class LocalTimeHelper {
 
     public static toString(localTime: LocalTime): string {
 
-        let hourString = localTime.hour.toString();
+        const hourString = localTime.hour.toString();
         let minuteString = localTime.minute.toString();
         if (minuteString.length === 1) {
             minuteString = "0" + minuteString;

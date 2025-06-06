@@ -15,7 +15,7 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval && !StructureHelper.isIterationToLong(structure))
             return false;
         if (structure.days.length <= 1)
@@ -33,10 +33,10 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
         return true;
     }
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
 
-        let firstDay: Day = structure.days[0];
+        const firstDay: Day = structure.days[0];
         if (StructureHelper.containsMorningNoonEveningNightDoses(structure)) {
             text += MorningNoonEveningNightConverterImpl.getMorningText(firstDay, dosage.structures.unitOrUnits);
             text += MorningNoonEveningNightConverterImpl.getNoonText(firstDay, dosage.structures.unitOrUnits);
@@ -50,7 +50,7 @@ export class MultipleDaysNonRepeatedConverterImpl extends ShortTextConverterImpl
 
         for (let i: number = 0; i < structure.days.length; i++) {
 
-            let day: Day = structure.days[i];
+            const day: Day = structure.days[i];
             if (i === 0)
                 text += " dag " + day.dayNumber;
             else if (i === structure.days.length - 1)

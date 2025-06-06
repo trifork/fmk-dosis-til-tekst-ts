@@ -1,4 +1,3 @@
-import { Interval } from "../Interval";
 import { Day, Dose } from "../dto/Dosage";
 import { DoseHelper } from "./DoseHelper";
 
@@ -65,7 +64,7 @@ export class DayHelper {
      */
     public static allDosesHaveTheSameQuantity(day: Day): boolean {
         const dose0 = day.allDoses[0];
-        return !day.allDoses.some(dose => dose0.doseQuantity !== dose.doseQuantity || dose0.minimalDoseQuantity !== dose.minimalDoseQuantity || dose0.maximalDoseQuantity !== dose.maximalDoseQuantity);
+        return !day.allDoses.some(dose => dose0.doseQuantity !== dose.doseQuantity || dose0.minimalDoseQuantity !== dose.minimalDoseQuantity || dose0.maximalDoseQuantity !== dose.maximalDoseQuantity);
     }
 
 

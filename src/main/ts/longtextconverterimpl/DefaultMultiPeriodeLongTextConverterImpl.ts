@@ -28,7 +28,7 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
     public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
 
         let s: string = "";
-        let sortedStructures = dosage.structures.structures.sort(StructuresHelper.dosagePeriodSorter);
+        const sortedStructures = dosage.structures.structures.sort(StructuresHelper.dosagePeriodSorter);
 
         if (options === TextOptions.VKA_WITH_MARKUP) {
             s = "<div class=\"d2t-vkadosagetext\">\n";

@@ -1,8 +1,6 @@
-import { DosisTilTekstException } from "../DosisTilTekstException";
-import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
-import { XMLGenerator } from "./XMLGenerator";
-import { XML144Generator } from "./XML144Generator";
 import { DosagePeriod } from "./DosagePeriod";
+import { XML144Generator } from "./XML144Generator";
+import { XMLGenerator } from "./XMLGenerator";
 
 export class XML146Generator extends XML144Generator implements XMLGenerator {
 
@@ -22,8 +20,8 @@ export class XML146Generator extends XML144Generator implements XMLGenerator {
             "<m16:Plural>" + this.escape(unitTextPlural) + "</m16:Plural>" +
             "</m16:UnitTexts>";
 
-        let fixedPeriods = periods.filter(p => p.getType() !== "PN");
-        let pnPeriods = periods.filter(p => p.getType() === "PN");
+        const fixedPeriods = periods.filter(p => p.getType() !== "PN");
+        const pnPeriods = periods.filter(p => p.getType() === "PN");
 
         if (fixedPeriods.length > 0) {
             dosageElement += "<" + this.getNamespace() + ":StructuresFixed>";
@@ -43,7 +41,7 @@ export class XML146Generator extends XML144Generator implements XMLGenerator {
     protected getQuantityString(quantities: string[], isPN: boolean, dosageNS: string): string {
         let xml = "";
 
-        for (let dose of quantities) {
+        for (const dose of quantities) {
             xml += "<" + dosageNS + ":Dose><" + dosageNS + ":Quantity>" + dose + "</" + dosageNS + ":Quantity>" + "</" + dosageNS + ":Dose>";
         }
 

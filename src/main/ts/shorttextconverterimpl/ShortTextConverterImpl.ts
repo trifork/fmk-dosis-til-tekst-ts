@@ -36,8 +36,8 @@ export abstract class ShortTextConverterImpl {
     }
 
     protected static toDoseAndUnitValue(dose: Dose, unitOrUnits: UnitOrUnits): string {
-        let s = this.toValue(dose);
-        let u = TextHelper.getUnit(dose, unitOrUnits);
+        const s = this.toValue(dose);
+        const u = TextHelper.getUnit(dose, unitOrUnits);
         if (DoseHelper.getLabel(dose).length === 0)
             return s + " " + u;
         else
@@ -45,8 +45,8 @@ export abstract class ShortTextConverterImpl {
     }
 
     protected static toDoseLabelUnitValue(dose: number, label: string, unitOrUnits: UnitOrUnits): string {
-        let s = this.toQuantityValue(dose);
-        let u = TextHelper.getUnitFromDoseNumber(dose, unitOrUnits);
+        const s = this.toQuantityValue(dose);
+        const u = TextHelper.getUnitFromDoseNumber(dose, unitOrUnits);
         if (!label)
             return s + " " + u;
         else

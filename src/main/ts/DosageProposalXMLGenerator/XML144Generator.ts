@@ -32,7 +32,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
 
     protected generateMMANXml(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, dosageNS: string, beginDate: Date, endDate: Date): string {
 
-        let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
+        const mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
         let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, beginDate, endDate);
 
         xml += "<" + this.getNamespace() + ":Day>" +
@@ -99,7 +99,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
 
     private generateXmlForSameDay(iteration: number, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, isPN: boolean, dosageNS: string, beginDate: Date, endDate: Date): string {
 
-        let splittedMapping = mapping.split(";");
+        const splittedMapping = mapping.split(";");
         let xml = this.generateCommonXml(iteration, mapping, unitTextSingular, unitTextPlural, supplementaryText, beginDate, endDate);
 
         xml += "<" + this.getNamespace() + ":Day>" +
@@ -113,7 +113,7 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
     protected getQuantityString(quantities: string[], isPN: boolean, dosageNS: string): string {
         let xml = "";
 
-        for (let dose of quantities) {
+        for (const dose of quantities) {
             xml += "<" + dosageNS + ":Dose><" + dosageNS + ":Quantity>" + dose + "</" + dosageNS + ":Quantity>";
             if (isPN) {
                 xml += "<" + dosageNS + ":IsAccordingToNeed/>";
@@ -130,8 +130,8 @@ export class XML144Generator extends AbstractXMLGenerator implements XMLGenerato
         let result: string[];
 
         while ((result = this.daysMappingRegExp.exec(mapping)) != null) {
-            let dayno = result[1];
-            let quantity = result[2];
+            const dayno = result[1];
+            const quantity = result[2];
 
             xml += "<" + this.getNamespace() + ":Day><" + dosageNS + ":Number>" + dayno + "</" + dosageNS + ":Number>"
                 + this.getQuantityString(quantity.split(";"), isPN, dosageNS)

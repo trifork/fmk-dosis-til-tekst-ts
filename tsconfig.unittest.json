@@ -1,22 +1,21 @@
 {
-    
-    "compilerOptions": {
-     	"allowSyntheticDefaultImports": true,
-		"target": "es5",
-		"module": "commonjs",
-		"declaration": true,
-		"sourceMap": true,
-        "outDir": "./src/test/target",
-        "moduleResolution": "node",
-         "diagnostics": true
-    },
-    "include": [
-        "src/test/ts/**/*"
-    ],
-    "exclude": [
-        "./src/main/ts",
-        "node_modules",
-		"build-internal",
-		"build-public"
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "outDir": "target/test",
+    "types": [
+      "mocha",
+      "node"
     ]
+  },
+  "include": [
+    "src/test/**/*.ts"
+  ],
+  "exclude": []
 }

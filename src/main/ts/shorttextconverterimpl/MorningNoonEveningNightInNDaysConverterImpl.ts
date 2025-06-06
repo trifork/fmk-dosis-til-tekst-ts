@@ -1,8 +1,7 @@
-import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
-import { TextHelper } from "../TextHelper";
-import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
 import { Day, Dosage, Structure } from "../dto/Dosage";
 import { StructureHelper } from "../helpers/StructureHelper";
+import { MorningNoonEveningNightConverterImpl } from "./MorningNoonEveningNightConverterImpl";
+import { ShortTextConverterImpl } from "./ShortTextConverterImpl";
 
 
 /**
@@ -19,7 +18,7 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval && !StructureHelper.startsAndEndsSameDay(structure))
             return false;
         if (structure.days.length === 0 || (structure.days.length === 1 && !StructureHelper.startsAndEndsSameDay(structure)))
@@ -36,14 +35,14 @@ export class MorningNoonEveningNightInNDaysConverterImpl extends ShortTextConver
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += MorningNoonEveningNightConverterImpl.getMorningText(day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightConverterImpl.getNoonText(day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightConverterImpl.getEveningText(day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightConverterImpl.getNightText(day, dosage.structures.unitOrUnits);
-        let noOfDays = dosage.structures.structures[0].days[dosage.structures.structures[0].days.length - 1].dayNumber;
+        const noOfDays = dosage.structures.structures[0].days[dosage.structures.structures[0].days.length - 1].dayNumber;
         text += " i " + noOfDays;
         if (noOfDays === 1) {
             text += " dag";

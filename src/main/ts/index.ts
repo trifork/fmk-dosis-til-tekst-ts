@@ -88,6 +88,7 @@ export { DosageTypeCalculator } from "./DosageTypeCalculator";
 export { DosageTypeCalculator144 } from "./DosageTypeCalculator144";
 export { DosageType } from "./DosageType";
 export { DailyDosisCalculator } from "./DailyDosisCalculator";
+export { DailyDosis } from "./DailyDosis";
 export { TextOptions } from "./TextOptions";
 
 // ./DosageProposalXMLGenerator

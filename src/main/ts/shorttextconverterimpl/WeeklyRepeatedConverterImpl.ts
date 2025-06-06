@@ -18,7 +18,7 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval !== 7)
             return false;
         if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
@@ -39,12 +39,12 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure = dosage.structures.structures[0];
+        const structure = dosage.structures.structures[0];
 
         let text = "";
 
         // Append dosage
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
 
         // Add times daily
@@ -65,10 +65,10 @@ export class WeeklyRepeatedConverterImpl extends ShortTextConverterImpl {
     public static makeDays(structure: Structure): string {
         let text = "";
         // Add days
-        let daysOfWeek: DayOfWeek[] =
+        const daysOfWeek: DayOfWeek[] =
             LongTextWeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
         let i = 0;
-        for (let d of daysOfWeek) {
+        for (const d of daysOfWeek) {
             if (i === daysOfWeek.length - 1 && daysOfWeek.length > 1)
                 text += " og " + d.name.toLowerCase();
             else if (i === 0)

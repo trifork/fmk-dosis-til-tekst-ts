@@ -37,14 +37,14 @@ export abstract class LongTextConverterImpl {
         let realStartDateOrDateTime: DateOrDateTime;
 
         if (startDateOrDateTime.date) {
-            let realStartDate = new Date(startDateOrDateTime.date);
+            const realStartDate = new Date(startDateOrDateTime.date);
             if (singleDayNo > 0) {
                 realStartDate.setDate(realStartDate.getDate() + singleDayNo - 1);
             }
             realStartDateOrDateTime = { date: realStartDate.toISOString() };
         }
         else {
-            let realStartDateTime = new Date(startDateOrDateTime.dateTime);
+            const realStartDateTime = new Date(startDateOrDateTime.dateTime);
             if (singleDayNo > 0) {
                 realStartDateTime.setDate(realStartDateTime.getDate() + singleDayNo - 1);
             }
@@ -89,7 +89,7 @@ export abstract class LongTextConverterImpl {
 
         let s = "";
         let appendedLines = 0;
-        for (let day of structure.days) {
+        for (const day of structure.days) {
             appendedLines++;
             if (appendedLines > 1) {
                 s += "\n";
@@ -128,7 +128,7 @@ export abstract class LongTextConverterImpl {
         }
         else if (structure.iterationInterval === 0 || StructureHelper.isIterationToLong(structure)) {
             // Tirsdag d. 27. okt. 2020: 2 tabletter....
-            let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(structure.startDateOrDateTime));
+            const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(structure.startDateOrDateTime));
             dateOnly.setDate(dateOnly.getDate() + day.dayNumber - 1);
 
             return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.startDateOrDateTime, day.dayNumber) + ": ";
@@ -183,7 +183,7 @@ export abstract class LongTextConverterImpl {
             if (0 < day.allDoses.length - 1) {
                 s += " og ";
             }
-            let dayWithoutFirstDose: Day = {
+            const dayWithoutFirstDose: Day = {
                 dayNumber: day.dayNumber,
                 allDoses: day.allDoses.slice(1, day.allDoses.length)
             };
@@ -191,7 +191,7 @@ export abstract class LongTextConverterImpl {
         }
         else {
 
-            let sortedDoses = day.allDoses.sort((d1, d2) => LongTextConverterImpl.getDoseSortKey(d1) - LongTextConverterImpl.getDoseSortKey(d2));
+            const sortedDoses = day.allDoses.sort((d1, d2) => LongTextConverterImpl.getDoseSortKey(d1) - LongTextConverterImpl.getDoseSortKey(d2));
 
             // 2 tabletter morgen, 1 tablet middag, 2 tabletter aften og 1 tablet nat
             for (let d = 0; d < sortedDoses.length; d++) {
@@ -244,7 +244,7 @@ export abstract class LongTextConverterImpl {
             }
         }
 
-        let dosagePeriodPostfix = structure.dosagePeriodPostfix;
+        const dosagePeriodPostfix = structure.dosagePeriodPostfix;
         if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
         }

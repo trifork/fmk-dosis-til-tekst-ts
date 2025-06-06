@@ -1,4 +1,3 @@
-/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
 import { expect } from 'chai';
 import { LocalTimeWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, TimedDoseWrapper, NoonDoseWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, PlainDoseWrapper } from "../../../main/ts/index";
@@ -6,7 +5,7 @@ import { LocalTimeWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWr
 describe('TwoDaysRepeatedConverterImpl', () => {
 
     it('should return hver 2. dag with morning', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)])
@@ -18,7 +17,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
     });
 
     it('should return gentages hver 2. dag with dagligt', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
@@ -32,7 +31,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
   
 
     it('should return højst hver 2. dag efter behov', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new NoonDoseWrapper(1, undefined, undefined, true)])
@@ -44,7 +43,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
     });
 
     it('should return gentages hver 2. dag', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "ml", "ml"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "ml", "ml"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new TimedDoseWrapper(new LocalTimeWrapper(8,0,0), 5, undefined, undefined, false),
@@ -61,7 +60,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
 
 
     it('should not use hver 2. dag', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
                 new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
@@ -74,7 +73,7 @@ describe('TwoDaysRepeatedConverterImpl', () => {
     });
 
     it('should not use hver 2. dag pn', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(2, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), new DateOrDateTimeWrapper(new Date(2020, 0, 26), undefined), [
                 new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, true)]),

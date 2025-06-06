@@ -1,69 +1,53 @@
 {
-  "name": "fmk-dosis-til-tekst-ts",
-  "author": "Sundhedsdatastyrelsen",
-  "version": "2.0.0",
-  "scripts": {
-    "grunt.prod": "./node_modules/.bin/grunt default",
-    "grunt.dev": "./node_modules/.bin/grunt --watch",
-    "build.prod": "npm i && npm run grunt.prod",
-    "build.dev": "npm run grunt.dev",
-    "build": "npm run build.dev",
-    "preparetestschemasonjenkins": "./node_modules/.bin/grunt copy:copyForPrepareTestSchemasOnJenkins",
-    "pretest": "tsc --project ./tsconfig.unittest.json",
-    "test": "mocha \"src/test/target/test/ts/**/*.js\" --timeout 5000",
-    "testdaily": "mocha -f DailyRepeatedConverterImpl \"src/test/target/test/ts/**/*.js\""
-  },
-  "license": "MPL-1.1",
-  "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
-  "devDependencies": {
-    "@types/chai": "^3.5.2",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^7.10.14",
-    "awesome-typescript-loader": "~5.2.1",
-    "chai": "^3.5.0",
-    "grunt": "1.5.3",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-npm": "0.0.2",
-    "grunt-ts": "^6.0.0-beta.22",
-    "grunt-tslint": "^5.0.1",
-    "grunt-webpack": "^5.0.0",
-    "load-grunt-tasks": "^3.5.0",
-    "mocha": "^9.1.3",
-    "ts-node": "^10.4.0",
-    "tslint": "^5.20.1",
-    "typescript": "^3.9.10",
-    "typings": "^2.1.1",
-    "webpack": "^5.76.0",
-    "xsd-schema-validator": "^0.6.0",
-    "hosted-git-info": ">=2.8.9",
-    "y18n": ">=3.2.2",
-    "ini": ">=1.3.6",
-    "glob-parent": ">=5.1.2",
-    "dot-prop": ">=4.2.1",
-    "http-proxy-agent": ">=2.1.0",
-    "https-proxy-agent": ">=2.2.3",
-    "minimist": ">=1.2.6",
-    "kind-of": ">=6.0.3",
-    "set-value": ">=4.0.1",
-    "mixin-deep": ">=1.3.2",
-    "lodash": ">=4.17.21"
-  },
-  "main": "dist/dosistiltekst.js",
-  "typings": "dist/lib/index.d.ts",
-  "files": [
-    "dist/dosistiltekst.js",
-    "dist/lib/*.d.ts",
-    "dist/lib/vowrapper/*.d.ts",
-    "dist/lib/longtextconverterimpl/*.d.ts",
-    "dist/lib/shorttextconverterimpl/*.d.ts",
-    "dist/lib/DosageProposalXMLGenerator/*.d.ts"
-  ],
-  "registry": {
-    "type": "git",
-    "url": "https://github.com/trifork/fmk-dosis-til-tekst-ts/fmk-dosis-til-tekst-ts.git"
-  },
-  "dependencies": {
-    "@types/xsd-schema-validator": "^0.5.4"
-  }
+    "name": "fmk-dosis-til-tekst-ts",
+    "author": "Sundhedsdatastyrelsen",
+    "version": "2.0.1-SNAPSHOT",
+    "license": "MPL-1.1",
+    "description": "Calculate short- and long dosage translations texts for use by FMK and FMK-clients",
+    "scripts": {
+        "lint": "eslint src --ext .ts,.tsx",
+        "lint:fix": "eslint . --ext .ts,.tsx --fix",
+        "build": "npm run lint && tsup",
+        "test": "ts-mocha -p tsconfig.unittest.json 'src/test/**/*.ts' --typecheck --timeout 5000",
+        "pretestX": "tsc --project ./tsconfig.unittest.json",
+        "testX": "TS_NODE_PROJECT=tsconfig.unittest.json mocha -r ts-node/register 'src/test/**/*.ts' --timeout 5000",
+        "pretestZ": "tsc -p tsconfig.unittest.json",
+        "testZ": "mocha --timeout 5000 target/test/**/*.js"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.28.0",
+        "@types/chai": "^5.2.2",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.15.29",
+        "@typescript-eslint/eslint-plugin": "^8.33.0",
+        "@typescript-eslint/parser": "^8.33.0",
+        "chai": "^4.5.0",
+        "eslint": "^9.28.0",
+        "eslint-plugin-chai-friendly": "^1.0.1",
+        "globals": "^16.2.0",
+        "mocha": "^11.5.0",
+        "ts-mocha": "^11.1.0",
+        "ts-node": "^10.9.2",
+        "tsup": "^8.4.0",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.33.0",
+        "xsd-schema-validator": "^0.11.0"
+    },
+    "main": "dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        }
+    },
+    "publishConfig": {
+        "registry": "https://ci.fmk.netic.dk/nexus/content/repositories/npm-fmk-internal/"
+    },
+    "registry": "https://ci.fmk.netic.dk/nexus/content/groups/npm-fmk-all/"
 }

@@ -1,13 +1,12 @@
-/// <reference path="../../../node_modules/@types/mocha/index.d.ts" />
 
-import { expect, assert } from 'chai';
-import { DosageTypeCalculator144, DosageTypeCalculator, DosageType, StructuresWrapper, StructureWrapper, DayWrapper, NoonDoseWrapper, UnitOrUnitsWrapper, DateOrDateTimeWrapper, PlainDoseWrapper, DosageWrapper, Structure, Structures } from "../../main/ts/index";
+import { assert, expect } from 'chai';
 import { formatDateTime } from '../../main/ts/DateUtil';
+import { DateOrDateTimeWrapper, DayWrapper, DosageType, DosageTypeCalculator, DosageTypeCalculator144, DosageWrapper, NoonDoseWrapper, Structure, Structures, StructuresWrapper, StructureWrapper, UnitOrUnitsWrapper } from "../../main/ts/index";
 
 describe('calculate function', () => {
     it('should return combined with fixed and empty periods', () => {
 
-        let dw = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+        const dw = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
             null, null, [
             new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 6), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 6), undefined),
                 [], undefined),
@@ -26,7 +25,7 @@ describe('calculate function', () => {
 describe('dosageType for empty dosages', () => {
     it('should return fast for EmptyStructures', () => {
 
-        let dw = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+        const dw = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
             null, null, [
             new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined),
                 [], undefined)], false));
@@ -37,7 +36,7 @@ describe('dosageType for empty dosages', () => {
 
     it('should return fast for empty dosages', () => {
 
-        let dw = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
+        const dw = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper("stk", undefined, undefined),
             null, null, [
             new StructureWrapper(1, "mod smerter", new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined), new DateOrDateTimeWrapper(new Date(2023, 6, 11), undefined),
                 [new DayWrapper(1, [new NoonDoseWrapper(0, undefined, undefined, true)])], undefined)], false));
@@ -65,7 +64,7 @@ describe('dateTimeAbuts function', () => {
 
 describe('abuts function with dates', () => {
     it('should return that structures with enddates are abuts', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-01"
@@ -76,7 +75,7 @@ describe('abuts function with dates', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-03"
@@ -91,7 +90,7 @@ describe('abuts function with dates', () => {
     });
 
     it('should return false when periods overlaps', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-01"
@@ -102,7 +101,7 @@ describe('abuts function with dates', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-03"
@@ -117,7 +116,7 @@ describe('abuts function with dates', () => {
     });
 
     it('should return false when periods has gaps', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-01"
@@ -128,7 +127,7 @@ describe('abuts function with dates', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-05"
@@ -143,7 +142,7 @@ describe('abuts function with dates', () => {
     });
 
     it('should return false when first period has no enddate', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-01"
@@ -151,7 +150,7 @@ describe('abuts function with dates', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 date: "2017-01-05"
@@ -168,7 +167,7 @@ describe('abuts function with dates', () => {
 
 describe('abuts function with dateTimes', () => {
     it('should return that structures with enddates are abuts', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
@@ -179,7 +178,7 @@ describe('abuts function with dateTimes', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 1))
@@ -195,7 +194,7 @@ describe('abuts function with dateTimes', () => {
 
     // First structure with end date - equals seconds structures start (only possible due to old data in production, validation rejects new dosages of that kind)
     it('should return that structures with enddates are abuts', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
@@ -206,7 +205,7 @@ describe('abuts function with dateTimes', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
@@ -221,7 +220,7 @@ describe('abuts function with dateTimes', () => {
     });
 
     it('should return false when periods overlaps', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
@@ -232,7 +231,7 @@ describe('abuts function with dateTimes', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 1))
@@ -247,7 +246,7 @@ describe('abuts function with dateTimes', () => {
     });
 
     it('should return false when periods has gaps', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
@@ -258,7 +257,7 @@ describe('abuts function with dateTimes', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 2))
@@ -273,7 +272,7 @@ describe('abuts function with dateTimes', () => {
     });
 
     it('should return false when first period has no enddate', () => {
-        let s1: Structure = {
+        const s1: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
@@ -282,7 +281,7 @@ describe('abuts function with dateTimes', () => {
             days: [],
             supplText: "mod smerter"
         };
-        let s2: Structure = {
+        const s2: Structure = {
             iterationInterval: 1,
             startDateOrDateTime: {
                 dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 2))
@@ -300,10 +299,10 @@ describe('abuts function with dateTimes', () => {
 describe('splitInFixedAndPN function', () => {
     it('should split pn-only in fixed: 0 and pn: 1', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -341,10 +340,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split pn-only in fixed: 1 and pn: 0', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -382,10 +381,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split empty + notempty in fixed: 2 and pn: 0', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -434,10 +433,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split notempty + empty in fixed: 2 and pn: 0', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -486,10 +485,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split  empty + pn notempty in fixed: 0 and pn: 2', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -538,10 +537,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split pn notempty + empty in fixed: 0 and pn: 2', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -590,11 +589,11 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split empty + pn notempty + empty in fixed: 0 and pn: 3', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -654,10 +653,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split empty + fixed notempty + empty in fixed: 3 and pn: 0', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {
@@ -717,10 +716,10 @@ describe('splitInFixedAndPN function', () => {
 
     it('should split notempty + fixed empty + notempty and overlapping empty  in fixed: 3 and pn: 1', () => {
 
-        let fixedStructures: Structure[] = [];
-        let pnStructures: Structure[] = [];
+        const fixedStructures: Structure[] = [];
+        const pnStructures: Structure[] = [];
 
-        let sw: Structures = {
+        const sw: Structures = {
             unitOrUnits: { unit: "stk" },
             structures: [
                 {

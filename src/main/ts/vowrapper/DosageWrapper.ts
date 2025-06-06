@@ -1,9 +1,7 @@
+import { Dosage } from "../dto/Dosage";
 import { AdministrationAccordingToSchemaWrapper } from "./AdministrationAccordingToSchemaWrapper";
 import { FreeTextWrapper } from "./FreeTextWrapper";
-import { DayWrapper } from "./DayWrapper";
 import { StructuresWrapper } from "./StructuresWrapper";
-import { Validator } from "../Validator";
-import { Dosage } from "../dto/Dosage";
 
 export class DosageWrapper {
 
@@ -21,7 +19,7 @@ export class DosageWrapper {
         return new DosageWrapper(administrationAccordingToSchema, undefined, undefined);
     }
 
-    constructor(administrationAccordingToSchema: AdministrationAccordingToSchemaWrapper, freeText: FreeTextWrapper, structures: StructuresWrapper) {
+    constructor(administrationAccordingToSchema?: AdministrationAccordingToSchemaWrapper, freeText?: FreeTextWrapper, structures?: StructuresWrapper) {
         this.value = {};
 
         if (administrationAccordingToSchema) {

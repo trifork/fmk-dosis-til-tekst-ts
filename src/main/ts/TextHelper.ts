@@ -2,7 +2,6 @@ import { DateOrDateTime, Day, Dose, UnitOrUnits } from "./dto/Dosage";
 import { DateOrDateTimeHelper } from "./helpers/DateOrDateTimeHelper";
 import { DayOfWeek } from "./DayOfWeek";
 
-declare function log(msg: string): void;
 
 export class TextHelper {
 
@@ -89,7 +88,7 @@ export class TextHelper {
         return TextHelper.trim(quantity.toString().replace(".", ","));
     }
 
-    public static gange(num: number): String {
+    public static gange(num: number): string {
         if (num === undefined || Math.floor(num) > 1)
             return "gange";
         else
@@ -110,7 +109,7 @@ export class TextHelper {
     }
 
     public static unitToSingular(plural: string): string {
-        let singular = TextHelper._unit.filter(u => u[1] === plural).map(u => u[0]);
+        const singular = TextHelper._unit.filter(u => u[1] === plural).map(u => u[0]);
         if (singular && singular.length > 0) {
             return singular[0];
         }
@@ -119,7 +118,7 @@ export class TextHelper {
     }
 
     public static unitToPlural(singular: string): string {
-        let plural = TextHelper._unit.filter(u => u[0] === singular);
+        const plural = TextHelper._unit.filter(u => u[0] === singular);
         if (plural && plural.length > 0) {
             return plural[0][1];
         }
@@ -267,9 +266,9 @@ export class TextHelper {
     }
 
     public static makeDateString(startDateOrDateTime: DateOrDateTime, dayNumber: number): string {
-        let d = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+        const d = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         d.setDate(d.getDate() + dayNumber - 1);
-        let dateString = TextHelper.formatLongDateAbbrevMonth(d);
+        const dateString = TextHelper.formatLongDateAbbrevMonth(d);
         return dateString.charAt(0).toUpperCase() + dateString.substr(1);
     }
 
@@ -279,7 +278,7 @@ export class TextHelper {
     }
 
     public static formatLongDateNoSecs(dateTime: Date): string {
-        let dateTimeString = TextHelper.formatLongDateTime(dateTime);
+        const dateTimeString = TextHelper.formatLongDateTime(dateTime);
         return dateTimeString.substr(0, dateTimeString.length - 3);
     }
 
@@ -294,10 +293,10 @@ export class TextHelper {
     }
 
     public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTime, day: Day, initialUpperCase: boolean): DayOfWeek {
-        let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         dateOnly.setDate(dateOnly.getDate() + day.dayNumber - 1);
 
-        let dayString = TextHelper.weekdays[dateOnly.getDay()];
+        const dayString = TextHelper.weekdays[dateOnly.getDay()];
         let name: string;
         if (initialUpperCase)
             name = dayString.charAt(0).toUpperCase() + dayString.substring(1);

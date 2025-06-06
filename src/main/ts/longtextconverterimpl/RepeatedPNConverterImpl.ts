@@ -17,7 +17,7 @@ export class RepeatedPNConverterImpl extends LongTextConverterImpl {
 
             if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: Structure = dosage.structures.structures[0];
+            const structure: Structure = dosage.structures.structures[0];
             if (structure.iterationInterval <= 2 || structure.iterationInterval === 7)
                 return false; // DailyRepeated/TwoDaysRepeated/Weekly repeated already handles iteration=1, 2 and 7
             if (structure.days.length > 1)
@@ -63,7 +63,6 @@ export class RepeatedPNConverterImpl extends LongTextConverterImpl {
 
     protected makeDaysDosage(unitOrUnits: UnitOrUnits, structure: Structure, day: Day, hasDaysLabel: boolean, options: TextOptions): string {
         let s = "";
-        let daglig = "";
 
         s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, true, options);
 
@@ -74,7 +73,7 @@ export class RepeatedPNConverterImpl extends LongTextConverterImpl {
             s += ", hver " + structure.iterationInterval + ". dag";
         }
 
-        let dosagePeriodPostfix = structure.dosagePeriodPostfix;
+        const dosagePeriodPostfix = structure.dosagePeriodPostfix;
         if (dosagePeriodPostfix && dosagePeriodPostfix.length > 0) {
             s += " " + dosagePeriodPostfix;
         }

@@ -14,13 +14,13 @@ export class ParacetamolConverterImpl extends ShortTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
 
         if (structure.iterationInterval !== 1)
             return false;
         if (structure.days.length !== 1)
             return false;
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         if (!DayHelper.containsAccordingToNeedDose(day))
             return false;
         if (DayHelper.containsAccordingToNeedDosesOnly(day))
@@ -39,10 +39,10 @@ export class ParacetamolConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
 
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
         text += " " + (DayHelper.getNumberOfPlainDoses(day) - DayHelper.getNumberOfAccordingToNeedDoses(day)) + "-" + (DayHelper.getNumberOfPlainDoses(day));
         text += " gange daglig";

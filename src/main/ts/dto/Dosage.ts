@@ -138,5 +138,5 @@ export interface LocalTime {
      * @minimum 0
      * @maximum 59
      */
-    second: number;
+    second?: number;
 }

@@ -8,8 +8,8 @@ export class StructureHelper {
 
     public static startsAndEndsSameDay(structuredDosage: Structure): boolean {
         if (structuredDosage.startDateOrDateTime && structuredDosage.endDateOrDateTime) {
-            let startDate = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.startDateOrDateTime);
-            let endDate = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.endDateOrDateTime);
+            const startDate = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.startDateOrDateTime);
+            const endDate = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.endDateOrDateTime);
 
             return startDate && endDate
                 && startDate.getFullYear() === endDate.getFullYear()
@@ -35,7 +35,7 @@ export class StructureHelper {
     // }
 
     public static getDay(structuredDosage: Structure, dayNumber: number): Day {
-        for (let day of structuredDosage.days)
+        for (const day of structuredDosage.days)
             if (day.dayNumber === dayNumber)
                 return day;
         return undefined;
@@ -47,8 +47,8 @@ export class StructureHelper {
         }
 
         let remainder = -1;
-        for (let day of structuredDosage.days) {
-            let r = day.dayNumber % 7;
+        for (const day of structuredDosage.days) {
+            const r = day.dayNumber % 7;
             if (remainder >= 0 && remainder !== r)
                 return false;
             remainder = r;
@@ -59,7 +59,7 @@ export class StructureHelper {
     public static allDaysAreTheSame(structuredDosage: Structure): boolean {
         let areAllDaysTheSame = true;
         let day0: Day;
-        for (let day of structuredDosage.days) {
+        for (const day of structuredDosage.days) {
             if (day0) {
                 if (day0.allDoses?.length !== day.allDoses?.length) {
                     areAllDaysTheSame = false;
@@ -82,7 +82,7 @@ export class StructureHelper {
 
     public static daysAreInUninteruptedSequenceFromOne(structuredDosage: Structure): boolean {
         let dayNumber = 1;
-        for (let day of structuredDosage.days) {
+        for (const day of structuredDosage.days) {
             if (day.dayNumber !== dayNumber)
                 return false;
             dayNumber++;
@@ -97,8 +97,8 @@ export class StructureHelper {
     public static allDosesAreTheSame(structuredDosage: Structure): boolean {
         let areAllDosesTheSame = true;
         let dose0: Dose;
-        for (let day of structuredDosage.days) {
-            for (let dose of day.allDoses) {
+        for (const day of structuredDosage.days) {
+            for (const dose of day.allDoses) {
                 if (!dose0) {
                     dose0 = dose;
                 } else if (!DoseHelper.theSameAs(dose0, dose)) {
@@ -139,8 +139,8 @@ export class StructureHelper {
         let minimum = 0;
         let maximum = 0;
 
-        for (let day of structuredDosage.days) {
-            for (let dose of day.allDoses) {
+        for (const day of structuredDosage.days) {
+            for (const dose of day.allDoses) {
                 if (typeof dose.doseQuantity === "number") {
                     minimum += dose.doseQuantity;
                     maximum += dose.doseQuantity;
@@ -160,7 +160,7 @@ export class StructureHelper {
         const start = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.startDateOrDateTime);
         const end = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.endDateOrDateTime);
 
-        if (!end || !start) {
+        if (!end || !start) {
             return false;
         }
         const totalDays = Math.round((end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)) + 1;

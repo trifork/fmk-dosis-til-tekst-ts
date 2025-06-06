@@ -18,7 +18,7 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
             if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: Structure = dosage.structures.structures[0];
+            const structure: Structure = dosage.structures.structures[0];
             if (structure.iterationInterval <= 7 || structure.iterationInterval % 7 !== 0)
                 return false;
             if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
@@ -55,7 +55,7 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
     protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime, includeWeekName: boolean, options: TextOptions): string {
 
-        let dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
         let s = TextHelper.getWeekday(dateOnly.getDay()) + ": ";
@@ -78,10 +78,10 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
     protected getDayNamesText(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         // Make a sorted list of weekdays
         let s = "";
-        let daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
+        const daysOfWeek: DayOfWeek[] = WeeklyRepeatedConverterImpl.sortDaysOfWeek(structure);
 
         let appendedLines = 0;
-        for (let e of daysOfWeek) {
+        for (const e of daysOfWeek) {
             if (appendedLines > 0)
                 s += "\n";
             appendedLines++;

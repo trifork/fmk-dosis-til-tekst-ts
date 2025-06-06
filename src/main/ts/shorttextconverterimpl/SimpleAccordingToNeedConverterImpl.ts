@@ -22,12 +22,12 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval && !StructureHelper.isIterationToLong(structure))
             return false;
         if (structure.days.length !== 1)
             return false;
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         if (!DayHelper.containsAccordingToNeedDosesOnly(day))
             return false;
         if (DayHelper.getAccordingToNeedDoses(day).length > 1)
@@ -36,9 +36,9 @@ export class SimpleAccordingToNeedConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
         text += " efter behov";
         if (structure.supplText)

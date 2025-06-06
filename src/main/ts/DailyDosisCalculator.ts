@@ -91,7 +91,7 @@ export class DailyDosisCalculator {
 
     private static calculateAvg(sum: Interval<number>, divisor: number, unitOrUnits: UnitOrUnits): DailyDosis {
 
-        let avg: Interval<number> = {
+        const avg: Interval<number> = {
             minimum: parseFloat((sum.minimum / divisor).toFixed(9)),
             maximum: parseFloat((sum.maximum / divisor).toFixed(9))
         };

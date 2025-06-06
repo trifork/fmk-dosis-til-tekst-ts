@@ -24,13 +24,13 @@ export class DosageProposalXMLGenerator {
     private static readonly dosageProposalXMLGeneratorVersion = 1;
 
     public static getPeriodStrings(s: string): string[] {
-        let firstBracePos = s.indexOf("{");
+        const firstBracePos = s.indexOf("{");
         if (firstBracePos === -1) {
             // Only one period without braces
             return [s];
         }
 
-        let periods: Array<string> = [];
+        const periods: Array<string> = [];
         let openBracePos: number = 0;
         let closeBracePos: number = 0;
 
@@ -47,15 +47,15 @@ export class DosageProposalXMLGenerator {
     }
 
 
-    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: Date[], fmkversion: string, dosageProposalVersion: number, shortTextMaxLength: number = ShortTextConverter.MAX_LENGTH): DosageProposalXML {
+    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: (Date | null |undefined)[], fmkversion: string, dosageProposalVersion: number, shortTextMaxLength: number = ShortTextConverter.MAX_LENGTH): DosageProposalXML {
 
         if (dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
             throw new Error("Unsupported dosageProposalXMLGeneratorVersion, only version " + DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion + " is supported");
         }
 
-        let periodTypes: string[] = DosageProposalXMLGenerator.getPeriodStrings(type);
-        let periodMappings: string[] = DosageProposalXMLGenerator.getPeriodStrings(mapping);
-        let periodIterations: number[] = DosageProposalXMLGenerator.getPeriodStrings(iteration).map(i => parseInt(i));
+        const periodTypes: string[] = DosageProposalXMLGenerator.getPeriodStrings(type);
+        const periodMappings: string[] = DosageProposalXMLGenerator.getPeriodStrings(mapping);
+        const periodIterations: number[] = DosageProposalXMLGenerator.getPeriodStrings(iteration).map(i => parseInt(i));
 
         if (periodTypes.length !== periodMappings.length) {
             throw new Error("Number of periods in 'type' argument " + periodTypes.length + " differs from number of periods in 'mapping' argument " + periodMappings.length);
@@ -75,8 +75,8 @@ export class DosageProposalXMLGenerator {
         }
 
 
-        let periods: Structure[] = [];
-        let dosagePeriods: DosagePeriod[] = [];
+        const periods: Structure[] = [];
+        const dosagePeriods: DosagePeriod[] = [];
 
         for (let periodNo = 0; periodNo < periodTypes.length; periodNo++) {
             const structure: Structure = {
@@ -97,9 +97,9 @@ export class DosageProposalXMLGenerator {
             dosagePeriods.push(new DosagePeriod(periodTypes[periodNo], periodMappings[periodNo], periodIterations[periodNo], beginDates[periodNo], endDates[periodNo]));
         }
 
-        let xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
+        const xml: string = DosageProposalXMLGenerator.getXMLGenerator(fmkversion).generateXml(dosagePeriods, unitTextSingular, unitTextPlural, supplementaryText);
 
-        let dosage: Dosage = {
+        const dosage: Dosage = {
             structures: {
                 startDateOrDateTime: undefined,
                 endDateOrDateTime: undefined,
@@ -121,8 +121,8 @@ export class DosageProposalXMLGenerator {
     }
 
     static getMMANDoses(mapping: string): Dose[] {
-        let doses: Dose[] = [];
-        let mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
+        const doses: Dose[] = [];
+        const mmanMapping = AbstractXMLGenerator.parseMapping(mapping);
         if (mmanMapping.getMorning()) {
             const morningDose: MorningDose = {
                 type: "MorningDoseWrapper",
@@ -163,7 +163,7 @@ export class DosageProposalXMLGenerator {
 
         let days: Day[];
         if (DosageProposalXMLGenerator.isMMAN(type) && (mapping.indexOf("dag ") < 0)) {
-            let doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(mapping);
+            const doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(mapping);
             days = [{ dayNumber: 1, allDoses: doses }];
         }
         else {
@@ -172,22 +172,22 @@ export class DosageProposalXMLGenerator {
                 days = [];
 
                 while ((result = this.xml146Generator.daysMappingRegExp.exec(mapping)) != null) {
-                    let dayno = parseInt(result[1]);
+                    const dayno = parseInt(result[1]);
 
                     if (DosageProposalXMLGenerator.isMMAN(type)) {
-                        let doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(result[2]);
-                        let day: Day = { dayNumber: dayno, allDoses: doses};
+                        const doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(result[2]);
+                        const day: Day = { dayNumber: dayno, allDoses: doses};
                         days.push(day);
                     }
                     else {
 
-                        let day: Day = { dayNumber: dayno, allDoses: DosageProposalXMLGenerator.getDoses(result[2], type) };
+                        const day: Day = { dayNumber: dayno, allDoses: DosageProposalXMLGenerator.getDoses(result[2], type) };
                         days.push(day);
                     }
                 }
             }
             else {
-                let day: Day = { dayNumber: 1, allDoses: DosageProposalXMLGenerator.getDoses(mapping, type)};
+                const day: Day = { dayNumber: 1, allDoses: DosageProposalXMLGenerator.getDoses(mapping, type)};
                 days = [day];
             }
         }
@@ -196,9 +196,9 @@ export class DosageProposalXMLGenerator {
     }
 
     private static getDoses(quantity: string, type: string): Dose[] {
-        let splittedQuantity = quantity.split(";");
-        let doses: Dose[] = [];
-        for (let quantity of splittedQuantity) {
+        const splittedQuantity = quantity.split(";");
+        const doses: Dose[] = [];
+        for (const quantity of splittedQuantity) {
             const plainDose: PlainDose = {
                 type: "PlainDoseWrapper",
                 doseQuantity: parseFloat(quantity),

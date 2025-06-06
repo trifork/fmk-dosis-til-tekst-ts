@@ -38,7 +38,7 @@ export class DosageTypeCalculator {
     private static allStructuresHasSameDosageType(structures: Structures): boolean {
         if (structures?.structures) {
             for (let i = 0; i < structures.structures.length; i++) {
-                let firstType: DosageType = DosageTypeCalculator.calculateFromStructure(structures.structures[i]);
+                const firstType: DosageType = DosageTypeCalculator.calculateFromStructure(structures.structures[i]);
                 for (let j = i + 1; j < structures.structures.length; j++) {
                     if (firstType !== DosageTypeCalculator.calculateFromStructure(structures.structures[j])) {
                         return false;
@@ -95,7 +95,7 @@ export class DosageTypeCalculator {
     }
 
     private static isOneTime(structure: Structure): boolean {
-        let isSameDayDateInterval: boolean = StructureHelper.startsAndEndsSameDay(structure);
+        const isSameDayDateInterval: boolean = StructureHelper.startsAndEndsSameDay(structure);
         // If we have and end date it must be the same day as the start date
         if ((structure.endDateOrDateTime?.date || structure.endDateOrDateTime?.dateTime) && !isSameDayDateInterval)
             return false;
@@ -104,7 +104,7 @@ export class DosageTypeCalculator {
         if (structure.days.find(day => day.dayNumber === 0))
             return false;
         // The dose must be defined for day 1
-        let day: Day = structure.days.find(day => day.dayNumber === 1);
+        const day: Day = structure.days.find(day => day.dayNumber === 1);
         if (!day)
             return false;
         // There must be exactly one dose

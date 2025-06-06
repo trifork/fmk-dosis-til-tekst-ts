@@ -8,8 +8,8 @@ export abstract class AbstractXMLGenerator {
     protected abstract getNamespace(): string;
 
     public static parseMapping(mapping: string): MMANMapping {
-        let splittedMapping = mapping.split("+");
-        let mmanMapping = new MMANMapping();
+        const splittedMapping = mapping.split("+");
+        const mmanMapping = new MMANMapping();
 
         if (splittedMapping.length > 0) {
             mmanMapping.setMorning(parseFloat(splittedMapping[0]));

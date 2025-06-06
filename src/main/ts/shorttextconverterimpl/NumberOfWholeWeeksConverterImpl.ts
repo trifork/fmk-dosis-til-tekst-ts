@@ -15,7 +15,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
 
         if (structure.iterationInterval % 7 > 0)
             return false;
@@ -37,10 +37,10 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
 
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
 
         // Append dosage
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
@@ -54,8 +54,8 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
             text += " 1 gang";
 
 
-        let days: number = structure.days.length;
-        let pauseDays: number = structure.iterationInterval - days;
+        const days: number = structure.days.length;
+        const pauseDays: number = structure.iterationInterval - days;
 
         // If pause == 0 then this structure is equivalent to a structure with just one day and iteration=1
         if (pauseDays > 0) {
@@ -63,7 +63,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
             if (days === 7) {
                 text += " i en uge";
             } else if (days % 7 === 0) {
-                let weeks = days / 7;
+                const weeks = days / 7;
                 text += " i " + weeks + " uger";
             } else {
                 text += " i " + days + " dage";
@@ -73,7 +73,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
             if (pauseDays === 7) {
                 text += ", herefter en uges pause";
             } else if (pauseDays % 7 === 0) {
-                let pauseWeeks: number = pauseDays / 7;
+                const pauseWeeks: number = pauseDays / 7;
                 text += ", herefter " + pauseWeeks + " ugers pause";
             } else if (pauseDays === 1) {
                 text += ", herefter 1 dags pause";

@@ -15,13 +15,13 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval !== 1)
             return false;
         if (structure.days.length !== 1)
             return false;
 
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         if (day.dayNumber !== 1)
             return false;
         if (DayHelper.containsPlainDose(day) || DayHelper.containsTimedDose(day))
@@ -35,7 +35,7 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
         if (!ShortTextConverterImpl.hasIntegerValue(day.allDoses[0].doseQuantity))
             return false;
 
-        let quantity: number = day.allDoses[0].doseQuantity;
+        const quantity: number = day.allDoses[0].doseQuantity;
         if (!(quantity % 2 === 0))
             return false;
         if (!structure.supplText)
@@ -85,9 +85,9 @@ export class MorningNoonEveningNightEyeOrEarConverterImpl extends ShortTextConve
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
         let text = "";
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += MorningNoonEveningNightEyeOrEarConverterImpl.getMorningText(day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightEyeOrEarConverterImpl.getNoonText(day, dosage.structures.unitOrUnits);
         text += MorningNoonEveningNightEyeOrEarConverterImpl.getEveningText(day, dosage.structures.unitOrUnits);

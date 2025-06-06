@@ -15,7 +15,7 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
 
         if (structure.iterationInterval % 7 > 0)
             return false;
@@ -24,7 +24,7 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
         if (structure.days.length < 2)
             return false;
         // Check there is only one day in each week
-        let daysAsList: Day[] = structure.days;
+        const daysAsList: Day[] = structure.days;
         for (let week = 0; week < daysAsList.length; week++) {
             if (structure.days[week].dayNumber < (week * 7 + 1))
                 return false;
@@ -43,12 +43,12 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
     }
 
     public doConvert(dosage: Dosage): string {
-        let structure: Structure = dosage.structures.structures[0];
+        const structure: Structure = dosage.structures.structures[0];
 
         let text = "";
 
         // Append dosage
-        let day: Day = structure.days[0];
+        const day: Day = structure.days[0];
         text += ShortTextConverterImpl.toDoseAndUnitValue(day.allDoses[0], dosage.structures.unitOrUnits);
 
         // Add times daily
@@ -63,8 +63,8 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
             text += TextHelper.addShortSupplText(structure.supplText);
         }
 
-        let weeks: number = structure.days.length;
-        let pauseWeeks: number = structure.iterationInterval / 7 - weeks;
+        const weeks: number = structure.days.length;
+        const pauseWeeks: number = structure.iterationInterval / 7 - weeks;
 
         // If pause == 0 then this structure is equivalent to a structure with just one day and iteration=1
         if (pauseWeeks > 0) {

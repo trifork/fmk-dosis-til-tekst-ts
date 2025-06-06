@@ -20,14 +20,14 @@ export class DateOrDateTimeHelper {
     public static plusDays(dateOrDateTime: DateOrDateTime, days: number): DateOrDateTime {
 
         if (dateOrDateTime.date) {
-            let d = new Date(dateOrDateTime.date);
+            const d = new Date(dateOrDateTime.date);
             d.setDate(d.getDate() + days);
 
             return {
                 date: d.toISOString()
             };
         } else {
-            let d = new Date(dateOrDateTime.dateTime);
+            const d = new Date(dateOrDateTime.dateTime);
             d.setDate(d.getDate() + days);
 
             return {

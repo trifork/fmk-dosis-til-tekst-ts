@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dk.fmkonline</groupId>
+    <artifactId>fmk-dosis-til-tekst-ts</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <organization>
+        <name>Trifork</name>
+        <url>https://trifork.com</url>
+    </organization>
+
+    <properties>
+        <revision>2.0.1-SNAPSHOT</revision>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <npm.command>npm</npm.command>
+        <npm.publish.tag>snapshot</npm.publish.tag>
+        <maven.deploy.skip>true</maven.deploy.skip>  <!-- Skip maven repo publish - this artifact is
+        published in npm -->
+        <skipNpmBuild>false</skipNpmBuild>
+    </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>trifork.snapshots</id>
+            <name>Trifork internal snapshot Nexus</name>
+            <url>https://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>trifork.releases</id>
+            <name>Trifork internal releases Nexus</name>
+            <url>https://ci.fmk.netic.dk/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:trifork/fmk-dosis-til-tekst-ts.git</connection>
+        <url>scm:git:git@github.com:trifork/fmk-dosis-til-tekst-ts.git</url>
+        <developerConnection>scm:git:git@github.com:trifork/fmk-dosis-til-tekst-ts.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>trifork-public</id>
+            <name>Trifork public Nexus</name>
+            <url>https://ci.fmk.netic.dk/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>trifork-intranet</id>
+            <name>Trifork internal Nexus</name>
+            <url>https://ci.fmk.netic.dk/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>https://repo1.maven.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>trifork-intranet-plugins</id>
+            <name>Trifork internal Nexus</name>
+            <url>https://nexus3.trifork.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+
+        </pluginRepository>
+
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <id>update-pom-version-in-package-json-files</id>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <phase>none</phase>
+                        <configuration>
+                            <basedir>${basedir}</basedir>
+                            <includes>
+                                <include>package.json</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <token>\"(version)\": \"((?!file:)).*\"</token>
+                                    <value>"$1": "${project.version}"</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>npm-update</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${npm.command}</executable>
+                            <arguments>
+                                <argument>update</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${npm.command}</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                            <skip>${skipNpmBuild}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-build</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${npm.command}</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                            <skip>${skipNpmBuild}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${npm.command}</executable>
+                            <arguments>
+                                <argument>test</argument>
+                            </arguments>
+                            <skip>${skipTests}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-publish</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${npm.command}</executable>
+                            <arguments>
+                                <argument>publish</argument>
+                                <argument>--tag</argument>
+                                <argument>${npm.publish.tag}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Remove Typescript typings folder if present during mvn clean -->
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <followSymLinks>false</followSymLinks>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/typings</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin> -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <argLine>-Xmx1024m</argLine>
+                    <forkCount>1</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <runOrder>alphabetical</runOrder>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.7.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>jenkins-ci-build</id>
+            <activation>
+                <property>
+                    <name>env.USER</name>
+                    <value>jenkins</value>
+                </property>
+            </activation>
+            <build>
+                <defaultGoal>clean deploy</defaultGoal>
+            </build>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                <npm.publish.tag>latest</npm.publish.tag>
+            </properties>
+        </profile>
+        <profile>
+            <id>Windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <npm.command>npm.cmd</npm.command>
+            </properties>
+        </profile>
+    </profiles>
+</project>

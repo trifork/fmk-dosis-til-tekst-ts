@@ -12,6 +12,7 @@ export class AdministrationAccordingToSchemaConverterImpl extends SimpleLongText
         return !!dosage.administrationAccordingToSchema;
     }
 
+    
     public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
         return this.convert("Dosering efter skriftlig anvisning",
             dosage.administrationAccordingToSchema.startDateOrDateTime, dosage.administrationAccordingToSchema.endDateOrDateTime, options);

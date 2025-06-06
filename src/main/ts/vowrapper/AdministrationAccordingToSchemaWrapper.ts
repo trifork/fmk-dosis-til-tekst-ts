@@ -1,4 +1,4 @@
-import { AdministrationAccordingToSchema, DateOrDateTime } from "../dto/Dosage";
+import { AdministrationAccordingToSchema } from "../dto/Dosage";
 import { DateOrDateTimeWrapper } from "./DateOrDateTimeWrapper";
 
 export class AdministrationAccordingToSchemaWrapper {

@@ -18,7 +18,7 @@ import { MultipleDaysNonRepeatedConverterImpl } from "./shorttextconverterimpl/M
 import { NumberOfWholeWeeksConverterImpl } from "./shorttextconverterimpl/NumberOfWholeWeeksConverterImpl";
 import { DayInWeekConverterImpl } from "./shorttextconverterimpl/DayInWeekConverterImpl";
 import { CombinedTwoPeriodesConverterImpl } from "./shorttextconverterimpl/CombinedTwoPeriodesConverterImpl";
-import { TextOptions } from "./TextOptions";
+import { textOptionFromString, TextOptions } from "./TextOptions";
 import { LongTextConverterImpl } from "./longtextconverterimpl/LongTextConverterImpl";
 import { Dosage } from "./dto/Dosage";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
@@ -72,7 +72,7 @@ export class ShortTextConverter {
     }
 
     public getConverterClassName(dosage: Dosage, maxLength = ShortTextConverter.MAX_LENGTH): string {
-        for (let converter of ShortTextConverter._converters) {
+        for (const converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage) && converter.doConvert(dosage, TextOptions.STANDARD).length <= maxLength) {
                 return converter.getConverterClassName();
             }
@@ -100,7 +100,7 @@ export class ShortTextConverter {
             return null;
         }
 
-        return this.convert(JSON.parse(jsonStr), (<any>TextOptions)[options], maxLength);
+        return this.convert(JSON.parse(jsonStr), textOptionFromString(options), maxLength);
     }
 
     /**
@@ -122,9 +122,9 @@ export class ShortTextConverter {
             return null;
         }
 
-        for (let converter of ShortTextConverter._converters) {
+        for (const converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
-                let s = converter.doConvert(dosage, options);
+                const s = converter.doConvert(dosage, options);
                 if (s && s.length <= maxLength)
                     return s;
             }
@@ -133,7 +133,7 @@ export class ShortTextConverter {
     }
 
     public canConvert(dosage: Dosage): boolean {
-        for (let converter of ShortTextConverter._converters) {
+        for (const converter of ShortTextConverter._converters) {
             if (converter.canConvert(dosage)) {
                 return true;
             }

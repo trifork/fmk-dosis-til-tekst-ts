@@ -18,7 +18,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
             return false;
         if (dosage.structures.structures.length !== 1)
             return false;
-        let structure = dosage.structures.structures[0];
+        const structure = dosage.structures.structures[0];
         if (structure.iterationInterval !== 1)
             return false;
         if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))

@@ -15,7 +15,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
         if (dosage.structures) {
             if (dosage.structures.structures.length !== 1)
                 return false;
-            let structure: Structure = dosage.structures.structures[0];
+            const structure: Structure = dosage.structures.structures[0];
             if (structure.iterationInterval !== 2)
                 return false;
             if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
@@ -64,7 +64,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
     protected getDaysText(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
         let appendedLines = 0;
-        for (let day of structure.days) {
+        for (const day of structure.days) {
             appendedLines++;
             if (appendedLines > 1) {
                 s += "\n";

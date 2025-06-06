@@ -1,13 +1,12 @@
-/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
-import { expect, assert } from 'chai';
-import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, LocalTimeWrapper } from "../../../main/ts/index";
+import { expect } from 'chai';
+import { DateOrDateTimeWrapper, DayWrapper, DosageWrapper, EveningDoseWrapper, LongTextConverter, MorningDoseWrapper, NightDoseWrapper, NoonDoseWrapper, PlainDoseWrapper, StructuresWrapper, StructureWrapper, UnitOrUnitsWrapper } from "../../../main/ts/index";
 import { TextOptions } from '../../../main/ts/TextOptions';
 
 describe('DefaultLongTextConverterImpl', () => {
 
     it('should return 1-time dosage (with enddate)', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), [
                 new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false)])
             ], undefined)], false));
@@ -19,7 +18,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     // FMK-7072
     it('should return 1-time dosage without hver dag', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null, [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), [
                 new DayWrapper(2, [new MorningDoseWrapper(2, undefined, undefined, false),
                 new EveningDoseWrapper(2, undefined, undefined, false),
@@ -33,7 +32,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
 
     it('not-iterated should not write daglig', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, undefined, new DateOrDateTimeWrapper(new Date(Date.parse("2020-08-27")), undefined), new DateOrDateTimeWrapper(new Date(Date.parse("2020-09-02")), undefined), [
                 new DayWrapper(1, [new MorningDoseWrapper(3, undefined, undefined, false)]),
@@ -48,7 +47,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
 
     it('should return 1-time dosage with suppl text', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "tages med rigeligt vand", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false),
@@ -63,7 +62,7 @@ describe('DefaultLongTextConverterImpl', () => {
     });
 
     it('should return list of days when iteration != 7', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(4, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), undefined, [
                 new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, false)]),
@@ -81,7 +80,7 @@ describe('DefaultLongTextConverterImpl', () => {
     });
 
     it('should return list of dates when not iterated', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
                 new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(2, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),
@@ -104,7 +103,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return Dosering kun for day=2 and iter=0', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
                 new DayWrapper(2, [new EveningDoseWrapper(1, undefined, undefined, true)]),
@@ -117,7 +116,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return Dosering kun for day=0 and iter=1 evening', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
                 new DayWrapper(0, [new EveningDoseWrapper(1, undefined, undefined, true)]),
@@ -130,7 +129,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return 0-dosages for empty days with option VKA', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
@@ -150,7 +149,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return 0-dosages for empty dosages with option VKA', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(0, undefined, undefined, false)]),
@@ -170,7 +169,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return warning text when weekly VKA period is missing and dosageend before treatmentend', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined),
             new DateOrDateTimeWrapper(new Date(2020, 10, 2), undefined),
             [new StructureWrapper(0, "",
@@ -194,7 +193,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return warning text when weekly VKA period is missing and no treatmentend set', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined),
             new DateOrDateTimeWrapper(undefined, undefined),
             [new StructureWrapper(0, "",
@@ -219,7 +218,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should not return warning text when adjustment period dosagend matches treatmentend for VKA', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined),
             new DateOrDateTimeWrapper(new Date(2020, 10, 1), undefined),
             [new StructureWrapper(0, "",
@@ -242,7 +241,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return Morning Dosering kun for day=1 and iter=1', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
                 new DayWrapper(1, [new MorningDoseWrapper(1, undefined, undefined, true)]),
@@ -255,7 +254,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return Fra/Til for empty VKA dosages in adjustmentperiods', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2020, 10, 30), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 30), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
@@ -275,7 +274,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return Fra/Til for empty VKA dosages in adjustmentperiods including markup', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2020, 9, 27), undefined), new DateOrDateTimeWrapper(new Date(2020, 10, 30), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
@@ -300,7 +299,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should return 0-period less than 10 days', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, new DateOrDateTimeWrapper(new Date(2021, 10, 1), undefined),
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 1), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
@@ -322,7 +321,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should not return 0-period double', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
         new DateOrDateTimeWrapper(new Date(2021, 9, 18), undefined), null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 5), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)])
@@ -338,7 +337,7 @@ describe('DefaultLongTextConverterImpl', () => {
 
     it('should not return 0-period double with 2 days', () => {
 
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(0, "", new DateOrDateTimeWrapper(new Date(2021, 9, 25), undefined), new DateOrDateTimeWrapper(new Date(2021, 10, 6), undefined), [
                 new DayWrapper(1, [new PlainDoseWrapper(1, undefined, undefined, false)]),
@@ -355,7 +354,7 @@ describe('DefaultLongTextConverterImpl', () => {
     });
 
     it('should treat iterationInterval > treatmentDuration as non-iterated', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2019, 3, 18), undefined), new DateOrDateTimeWrapper(new Date(2019, 3, 23), undefined), [
                 new DayWrapper(1, [new MorningDoseWrapper(2, undefined, undefined, false), new NoonDoseWrapper(2, undefined, undefined, false), new EveningDoseWrapper(2, undefined, undefined, false)]),

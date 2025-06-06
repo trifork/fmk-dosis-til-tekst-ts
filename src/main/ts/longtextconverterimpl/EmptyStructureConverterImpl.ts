@@ -1,8 +1,7 @@
-import { LongTextConverterImpl } from "./LongTextConverterImpl";
-import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
 import { Dosage, Structure, UnitOrUnits } from "../dto/Dosage";
 import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
+import { LongTextConverterImpl } from "./LongTextConverterImpl";
 
 export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
@@ -36,7 +35,7 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
 
         if (LongTextConverterImpl.convertAsVKA(options)) {
 
-            let emptyDosageString =
+            const emptyDosageString =
                 "0 " + (unitOrUnits.unitPlural ? unitOrUnits.unitPlural : unitOrUnits.unit);
 
             if (options === TextOptions.VKA_WITH_MARKUP) {

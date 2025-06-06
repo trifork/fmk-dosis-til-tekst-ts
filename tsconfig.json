@@ -1,24 +1,18 @@
 {
-	"version": "2.3.2",
-	"compileOnSave": false,
-	"compilerOptions": {
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"target": "es5",
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"declaration": true,
-		"sourceMap": true,
-		"rootDir": "./src/main/ts",
-		"noLib": false,
-		"outDir": "dist/lib",
-		"removeComments": false
-	},
-	"exclude": [
-		"node_modules",
-		"target",
-		"publish-internal",
-		"publish-public",
-        "src/test"
-	]
+    "include": [
+        "src/main/ts",
+    ],
+    "exclude": [
+        "src/test/**/*.ts"
+    ],
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "ESNext",
+        "declaration": true,
+        "outDir": "target/tsc",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "strict": false
+    }
 }

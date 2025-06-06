@@ -1,12 +1,11 @@
-/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
-import { expect, assert } from 'chai';
-import { TimedDoseWrapper, LongTextConverter, StructureWrapper, DateOrDateTimeWrapper, DayWrapper, DosageWrapper, StructuresWrapper, UnitOrUnitsWrapper, MorningDoseWrapper, NoonDoseWrapper, EveningDoseWrapper, NightDoseWrapper, PlainDoseWrapper, LocalTimeWrapper } from "../../../main/ts/index";
+import { expect } from 'chai';
+import { DateOrDateTimeWrapper, DayWrapper, DosageWrapper, LongTextConverter, MorningDoseWrapper, StructuresWrapper, StructureWrapper, UnitOrUnitsWrapper } from "../../../main/ts/index";
 
 describe('NWeeklyRepeatedConverterImpl', () => {
 
     it('should return hver 2. mandag', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(14, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
                 new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, false)])
@@ -18,7 +17,7 @@ describe('NWeeklyRepeatedConverterImpl', () => {
     });
 
     it('should return hver 3. torsdag', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(21, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
                 new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, false)])
@@ -30,7 +29,7 @@ describe('NWeeklyRepeatedConverterImpl', () => {
     });
 
     it('should return hver 3. torsdag without 21. dag for PN', () => {
-        let dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
+        const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
             null, null,
             [new StructureWrapper(21, "", new DateOrDateTimeWrapper(new Date(2020, 0, 22), undefined), undefined, [
                 new DayWrapper(2, [new MorningDoseWrapper(1, undefined, undefined, true)])

@@ -10,7 +10,7 @@ import { NWeeklyRepeatedConverterImpl } from "./longtextconverterimpl/NWeeklyRep
 import { RepeatedConverterImpl } from "./longtextconverterimpl/RepeatedConverterImpl";
 import { RepeatedPNConverterImpl } from "./longtextconverterimpl/RepeatedPNConverterImpl";
 import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimpl/DefaultMultiPeriodeLongTextConverterImpl";
-import { TextOptions } from "./TextOptions";
+import { textOptionFromString, TextOptions } from "./TextOptions";
 import { Dosage } from "./dto/Dosage";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
 
@@ -42,10 +42,10 @@ export class LongTextConverter {
             return null;
         }
 
-        return this.convert(JSON.parse(jsonStr), (<any>TextOptions)[options]);
+        return this.convert(JSON.parse(jsonStr), textOptionFromString(options));
     }
 
-    public convert(dosage: Dosage, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
+    public convert(dosage: Dosage, options: TextOptions = TextOptions.STANDARD, currentTime?: Date): string {
 
         if (!dosage) {
             return null;
@@ -55,7 +55,7 @@ export class LongTextConverter {
             currentTime = new Date();
         }
 
-        for (let converter of LongTextConverter._converters) {
+        for (const converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage, options)) {
                 return converter.doConvert(dosage, options, currentTime);
             }
@@ -66,7 +66,7 @@ export class LongTextConverter {
     /**
     * @deprecated This method and the corresponding wrapper classes will be removed. Use convert(dosage: Dosage, ...) instead.
     */
-    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, currentTime: Date = undefined): string {
+    public convertWrapper(dosage: DosageWrapper, options: TextOptions = TextOptions.STANDARD, currentTime?: Date): string {
         return this.convert(dosage.value, options, currentTime);
     }
 
@@ -79,7 +79,7 @@ export class LongTextConverter {
     }
 
     public getConverterClassName(dosage: Dosage): string {
-        for (let converter of LongTextConverter._converters) {
+        for (const converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage, TextOptions.STANDARD)) {
                 return converter.getConverterClassName();
             }

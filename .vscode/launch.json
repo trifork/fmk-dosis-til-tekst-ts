@@ -8,11 +8,11 @@
 			"type": "node",
             "request": "launch",
 			// Workspace relative or absolute path to the program.
-			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+			"program": "${workspaceRoot}/node_modules/ts-mocha/bin/ts-mocha",
 			// Automatically stop program after launch.
 			"stopOnEntry": false,
 			// Command line arguments passed to the program.
-			"args": ["src/test/target/test/ts/**/*.js"],
+			"args": ["-p", "tsconfig.unittest.json", "src/test/**/*.ts", "--typecheck", "--timeout", "5000"],
             "env": { "NODE_ENV": "testing"},
             "cwd": "${workspaceRoot}"
 
