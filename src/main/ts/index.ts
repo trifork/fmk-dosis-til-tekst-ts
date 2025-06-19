@@ -33,7 +33,6 @@ export {
     Units,
     Unit,
     Structure,
-    DateOrDateTime,
     DateTime,
     DateOnly,
     Day,

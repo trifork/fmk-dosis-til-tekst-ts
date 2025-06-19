@@ -1,20 +1,15 @@
-import { formatDateOnly, formatDateTime } from "../DateUtil";
-import { DateOrDateTime } from "../dto/Dosage";
+import { formatDateOnly } from "../DateUtil";
+import { DateOnly } from "../dto/Dosage";
 
 export class DateOrDateTimeWrapper {
 
-    readonly value: DateOrDateTime;
+    readonly value: DateOnly;
 
-    public constructor(date: Date, dateTime: Date) {
-        this.value = {};
+    public constructor(date: Date | undefined, dateTime: Date | undefined) {
         if (date) {
-            this.value = {
-                date: formatDateOnly(date)
-            };
+            this.value = formatDateOnly(date);
         } else if (dateTime) {
-            this.value = {
-                dateTime: formatDateTime(dateTime)
-            };
+            this.value = formatDateOnly(dateTime);
         }
     }
 }

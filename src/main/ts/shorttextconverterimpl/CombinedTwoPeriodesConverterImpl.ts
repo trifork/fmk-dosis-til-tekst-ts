@@ -38,8 +38,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
         const tempDosage: Dosage = {
             structures: {
-                startDateOrDateTime: undefined,
-                endDateOrDateTime: undefined,
+                startDate: undefined,
+                endDate: undefined,
                 unitOrUnits: dosage.structures.unitOrUnits,
                 structures: [structure0],
                 isPartOfMultiPeriodDosage: false
@@ -56,8 +56,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
         const fixedDosage: Dosage = {
             structures: {
-                startDateOrDateTime: dosage.structures.startDateOrDateTime,
-                endDateOrDateTime: dosage.structures.endDateOrDateTime,
+                startDate: dosage.structures.startDate,
+                endDate: dosage.structures.endDate,
                 unitOrUnits: dosage.structures.unitOrUnits,
                 structures: [structureLast],
                 isPartOfMultiPeriodDosage: true
@@ -77,8 +77,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         tempStructure.supplText = null;
         const tempDosage: Dosage = {
             structures: {
-                startDateOrDateTime: dosage.structures.startDateOrDateTime,
-                endDateOrDateTime: dosage.structures.endDateOrDateTime,
+                startDate: dosage.structures.startDate,
+                endDate: dosage.structures.endDate,
                 unitOrUnits: dosage.structures.unitOrUnits,
                 structures: [tempStructure],
                 isPartOfMultiPeriodDosage: true
@@ -96,8 +96,8 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
         fixedStructure.supplText = null;
         const fixedDosage: Dosage = {
             structures: {
-                startDateOrDateTime: dosage.structures.startDateOrDateTime,
-                endDateOrDateTime: dosage.structures.endDateOrDateTime,
+                startDate: dosage.structures.startDate,
+                endDate: dosage.structures.endDate,
                 unitOrUnits: dosage.structures.unitOrUnits,
                 structures: [fixedStructure],
                 isPartOfMultiPeriodDosage: true

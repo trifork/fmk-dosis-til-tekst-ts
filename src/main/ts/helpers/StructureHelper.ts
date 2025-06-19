@@ -7,9 +7,9 @@ import { DoseHelper } from "./DoseHelper";
 export class StructureHelper {
 
     public static startsAndEndsSameDay(structuredDosage: Structure): boolean {
-        if (structuredDosage.startDateOrDateTime && structuredDosage.endDateOrDateTime) {
-            const startDate = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.startDateOrDateTime);
-            const endDate = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.endDateOrDateTime);
+        if (structuredDosage.startDate && structuredDosage.endDate) {
+            const startDate = DateOrDateTimeHelper.getDate(structuredDosage.startDate);
+            const endDate = DateOrDateTimeHelper.getDate(structuredDosage.endDate);
 
             return startDate && endDate
                 && startDate.getFullYear() === endDate.getFullYear()
@@ -157,8 +157,8 @@ export class StructureHelper {
     }
 
     public static isIterationToLong(structuredDosage: Structure): boolean {
-        const start = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.startDateOrDateTime);
-        const end = DateOrDateTimeHelper.getDateOrDateTime(structuredDosage.endDateOrDateTime);
+        const start = DateOrDateTimeHelper.getDate(structuredDosage.startDate);
+        const end = DateOrDateTimeHelper.getDate(structuredDosage.endDate);
 
         if (!end || !start) {
             return false;

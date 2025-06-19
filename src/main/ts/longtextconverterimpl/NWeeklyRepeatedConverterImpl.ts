@@ -1,7 +1,7 @@
 import { WeeklyRepeatedConverterImpl } from "./WeeklyRepeatedConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
-import { DateOrDateTime, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
+import { DateOnly, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
 import { StructureHelper } from "../helpers/StructureHelper";
 import { DoseHelper } from "../helpers/DoseHelper";
 import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
@@ -21,7 +21,7 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
             const structure: Structure = dosage.structures.structures[0];
             if (structure.iterationInterval <= 7 || structure.iterationInterval % 7 !== 0)
                 return false;
-            if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
+            if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate))
                 return false;
             if (structure.days.length !== 1)
                 return false;
@@ -36,8 +36,8 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
 
     public convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
-        s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
-        if (structure.endDateOrDateTime) {
+        s += this.getDosageStartText(structure.startDate, structure.iterationInterval, options);
+        if (structure.endDate) {
             s += this.getDosageEndText(structure, options);
         }
 
@@ -53,9 +53,9 @@ export class NWeeklyRepeatedConverterImpl extends WeeklyRepeatedConverterImpl {
     }
 
 
-    protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime, includeWeekName: boolean, options: TextOptions): string {
+    protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDate: DateOnly, includeWeekName: boolean, options: TextOptions): string {
 
-        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDate(startDate));
         dateOnly.setDate(dateOnly.getDate() + dayNumber - 1);
 
         let s = TextHelper.getWeekday(dateOnly.getDay()) + ": ";

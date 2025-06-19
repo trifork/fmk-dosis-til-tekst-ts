@@ -5,7 +5,7 @@ export class NoonDoseWrapper extends DoseWrapper {
 
     readonly value: NoonDose;
 
-    constructor(doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number, isAccordingToNeed: boolean) {
+    constructor(doseQuantity: number, minimalDoseQuantity: number | undefined, maximalDoseQuantity: number | undefined, isAccordingToNeed: boolean) {
         super();
         this.value = {
             type: "NoonDoseWrapper",

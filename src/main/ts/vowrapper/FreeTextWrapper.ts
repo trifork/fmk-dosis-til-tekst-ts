@@ -9,10 +9,10 @@ export class FreeTextWrapper {
         return new FreeTextWrapper(startDateOrDateTime, endDateOrDateTime, text);
     }
 
-    constructor(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, text: string) {
+    constructor(startDateOrDateTime: DateOrDateTimeWrapper | null | undefined, endDateOrDateTime: DateOrDateTimeWrapper | null | undefined, text: string) {
         this.value = {
-            startDateOrDateTime: startDateOrDateTime && startDateOrDateTime.value,
-            endDateOrDateTime: endDateOrDateTime && endDateOrDateTime.value,
+            startDate: startDateOrDateTime?.value,
+            endDate: endDateOrDateTime?.value,
             text
         };
     }

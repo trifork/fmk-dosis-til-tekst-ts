@@ -28,7 +28,7 @@ describe('DailyRepeatedConverterImpl', () => {
 
     it('should return MMAN and hver dag with enddate', () => {
         const dose = new DosageWrapper(undefined, undefined, new StructuresWrapper(new UnitOrUnitsWrapper(undefined, "tablet", "tabletter"),
-            null, null,
+            undefined, undefined,
             [new StructureWrapper(1, "", new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), new DateOrDateTimeWrapper(new Date(2019, 0, 19), undefined), [
                 new DayWrapper(1, [
                     new MorningDoseWrapper(2, undefined, undefined, false),

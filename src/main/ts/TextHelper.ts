@@ -1,4 +1,4 @@
-import { DateOrDateTime, Day, Dose, UnitOrUnits } from "./dto/Dosage";
+import { DateOnly, Day, Dose, UnitOrUnits } from "./dto/Dosage";
 import { DateOrDateTimeHelper } from "./helpers/DateOrDateTimeHelper";
 import { DayOfWeek } from "./DayOfWeek";
 
@@ -265,8 +265,8 @@ export class TextHelper {
         return date.getDate() + ". " + TextHelper.abbrevMonths[date.getMonth()] + " " + date.getFullYear();
     }
 
-    public static makeDateString(startDateOrDateTime: DateOrDateTime, dayNumber: number): string {
-        const d = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+    public static makeDateString(startDate: DateOnly, dayNumber: number): string {
+        const d = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDate(startDate));
         d.setDate(d.getDate() + dayNumber - 1);
         const dateString = TextHelper.formatLongDateAbbrevMonth(d);
         return dateString.charAt(0).toUpperCase() + dateString.substr(1);
@@ -292,8 +292,8 @@ export class TextHelper {
         return TextHelper.pad(d.getFullYear(), 4) + "-" + TextHelper.pad(d.getMonth() + 1, 2) + "-" + TextHelper.pad(d.getDate(), 2);
     }
 
-    public static makeDayOfWeekAndName(startDateOrDateTime: DateOrDateTime, day: Day, initialUpperCase: boolean): DayOfWeek {
-        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(startDateOrDateTime));
+    public static makeDayOfWeekAndName(startDate: DateOnly, day: Day, initialUpperCase: boolean): DayOfWeek {
+        const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDate(startDate));
         dateOnly.setDate(dateOnly.getDate() + day.dayNumber - 1);
 
         const dayString = TextHelper.weekdays[dateOnly.getDay()];

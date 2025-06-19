@@ -22,13 +22,13 @@ export class EmptyStructureConverterImpl extends LongTextConverterImpl {
         let s = "";
 
 
-        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime)) {
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate)) {
             // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(structure.startDateOrDateTime);
+            s += "Dosering kun d. " + this.datesToLongText(structure.startDate);
         }
         else {
-            s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
-            if (structure.endDateOrDateTime) {
+            s += this.getDosageStartText(structure.startDate, structure.iterationInterval, options);
+            if (structure.endDate) {
                 s += this.getDosageEndText(structure, options);
             }
         }

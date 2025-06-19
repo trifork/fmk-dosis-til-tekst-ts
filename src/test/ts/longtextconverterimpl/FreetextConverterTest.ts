@@ -5,7 +5,7 @@ import { DateOrDateTimeWrapper, DosageWrapper, FreeTextWrapper, LongTextConverte
 describe('FreeTextConverterImpl', () => {
 
     it('should return freetext', () => {
-        const dose = new DosageWrapper(undefined, new FreeTextWrapper(new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), null, "1,5 tabl om morgenen"), null);
+        const dose = new DosageWrapper(undefined, new FreeTextWrapper(new DateOrDateTimeWrapper(new Date(2018, 11, 4), undefined), null, "1,5 tabl om morgenen"), undefined);
 
         expect(LongTextConverter.getInstance().convertWrapper(dose)).to.equal(
             "Dosering fra d. 4. dec. 2018:\n" +

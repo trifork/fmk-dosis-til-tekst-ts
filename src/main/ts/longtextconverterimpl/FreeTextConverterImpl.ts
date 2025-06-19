@@ -14,7 +14,7 @@ export class FreeTextConverterImpl extends SimpleLongTextConverterImpl {
 
     public doConvert(dosage: Dosage, options: TextOptions, currentTime: Date): string {
         return this.convert("\"" + dosage.freeText.text + "\"",
-            dosage.freeText.startDateOrDateTime,
-            dosage.freeText.endDateOrDateTime, options);
+            dosage.freeText.startDate,
+            dosage.freeText.endDate, options);
     }
 }

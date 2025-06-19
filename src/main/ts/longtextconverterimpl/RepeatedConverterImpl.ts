@@ -43,16 +43,16 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
     private convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
 
-        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime)) {
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate)) {
             // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(structure.startDateOrDateTime);
+            s += "Dosering kun d. " + this.datesToLongText(structure.startDate);
         }
 
         else {
             // Dosage repeated after more than one day
-            s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
+            s += this.getDosageStartText(structure.startDate, structure.iterationInterval, options);
 
-            if (structure.endDateOrDateTime) {
+            if (structure.endDate) {
                 s += this.getDosageEndText(structure, options);
             }
         }
@@ -66,7 +66,7 @@ export class RepeatedConverterImpl extends LongTextConverterImpl {
     protected makeDaysDosage(unitOrUnits: UnitOrUnits, structure: Structure, day: Day, hasDaysLabel: boolean, options: TextOptions): string {
         let s = "";
 
-        s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, true, options);
+        s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDate, true, options);
         s += " hver " + structure.iterationInterval + ". dag";
 
         const dosagePeriodPostfix = structure.dosagePeriodPostfix;

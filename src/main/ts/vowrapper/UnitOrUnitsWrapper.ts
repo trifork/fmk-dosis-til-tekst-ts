@@ -4,7 +4,7 @@ export class UnitOrUnitsWrapper {
 
     readonly value: UnitOrUnits;
 
-    constructor(unit: string, unitSingular: string, unitPlural: string) {
+    constructor(unit?: string, unitSingular?: string, unitPlural?: string) {
         this.value = {
             unit,
             unitSingular,

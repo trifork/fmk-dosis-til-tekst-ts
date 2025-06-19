@@ -11,8 +11,8 @@ export class AdministrationAccordingToSchemaWrapper {
 
     constructor(startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper) {
         this.value = {
-            startDateOrDateTime: startDateOrDateTime && startDateOrDateTime.value,
-            endDateOrDateTime: endDateOrDateTime && endDateOrDateTime.value
+            startDate: startDateOrDateTime?.value,
+            endDate: endDateOrDateTime?.value
         };
     }
 }

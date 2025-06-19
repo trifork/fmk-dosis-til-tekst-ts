@@ -18,7 +18,7 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
             const structure: Structure = dosage.structures.structures[0];
             if (structure.iterationInterval !== 2)
                 return false;
-            if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
+            if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate))
                 return false;
             if (structure.days.length > 1)
                 return false;
@@ -38,8 +38,8 @@ export class TwoDaysRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     public convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
-        let s = this.getDosageStartText(structure.startDateOrDateTime, 2, options);
-        if (structure.endDateOrDateTime) {
+        let s = this.getDosageStartText(structure.startDate, 2, options);
+        if (structure.endDate) {
             s += this.getDosageEndText(structure, options);
         }
 

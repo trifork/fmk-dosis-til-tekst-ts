@@ -79,7 +79,7 @@ export class RepeatedConverterImpl extends ShortTextConverterImpl {
 
         // Repeated weekly
         const numberOfWholeWeeks = this.calculateNumberOfWholeWeeks(structure.iterationInterval);
-        const name: string = TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, false).name;
+        const name: string = TextHelper.makeDayOfWeekAndName(structure.startDate, day, false).name;
         if (numberOfWholeWeeks === 1 && day.allDoses.length === 1)
             return " " + name + (useIterationText ? " hver uge" : "");
         else if (numberOfWholeWeeks === 1 && numberOfDoses > 1)

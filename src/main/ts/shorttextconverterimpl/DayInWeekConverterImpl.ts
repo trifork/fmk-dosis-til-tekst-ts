@@ -19,7 +19,7 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
 
         if (structure.iterationInterval % 7 > 0)
             return false;
-        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate))
             return false;
         if (structure.days.length < 2)
             return false;
@@ -57,7 +57,7 @@ export class DayInWeekConverterImpl extends ShortTextConverterImpl {
         else
             text += " daglig ";
 
-        text += TextHelper.makeDayOfWeekAndName(structure.startDateOrDateTime, day, false).name;
+        text += TextHelper.makeDayOfWeekAndName(structure.startDate, day, false).name;
 
         if (structure.supplText) {
             text += TextHelper.addShortSupplText(structure.supplText);
