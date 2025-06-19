@@ -1,7 +1,7 @@
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
-import { DateOrDateTime, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
+import { DateOnly, Dosage, Dose, Structure, UnitOrUnits } from "../dto/Dosage";
 import { StructureHelper } from "../helpers/StructureHelper";
 import { DoseHelper } from "../helpers/DoseHelper";
 import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
@@ -21,7 +21,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         const structure = dosage.structures.structures[0];
         if (structure.iterationInterval !== 1)
             return false;
-        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate))
             return false;
         if (structure.days.length !== 1)
             return false;
@@ -37,9 +37,9 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
 
     public convert(unitOrUnits: UnitOrUnits, structure: Structure, options: TextOptions): string {
         let s = "";
-        s += this.getDosageStartText(structure.startDateOrDateTime, structure.iterationInterval, options);
+        s += this.getDosageStartText(structure.startDate, structure.iterationInterval, options);
 
-        if (structure.endDateOrDateTime) {
+        if (structure.endDate) {
             s += this.getDosageEndText(structure, options);
         }
         s += ":\n";
@@ -47,7 +47,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
         const day = StructureHelper.getDay(structure, 1);
 
         if (day.allDoses.length === 1 && DayHelper.containsMorningNoonEveningNightDoses(day)) {
-            s += this.makeOneIteratedDose(day.allDoses[0], unitOrUnits, 1, structure.startDateOrDateTime);
+            s += this.makeOneIteratedDose(day.allDoses[0], unitOrUnits, 1, structure.startDate);
         }
         else {
             s += this.getDaysText(unitOrUnits, structure, options);
@@ -59,7 +59,7 @@ export class DailyRepeatedConverterImpl extends LongTextConverterImpl {
     }
 
     // ex.: 1 tablet hver aften (uden denne metode ville teksten blive: 1 tablet aften - hver dag)
-    protected makeOneIteratedDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime): string {
+    protected makeOneIteratedDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDate: DateOnly): string {
 
         let s = DoseHelper.getAnyDoseQuantityString(dose);
         s += " " + TextHelper.getUnit(dose, unitOrUnits) + " hver";

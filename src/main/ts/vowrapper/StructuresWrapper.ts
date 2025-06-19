@@ -7,11 +7,11 @@ export class StructuresWrapper {
 
     readonly value: Structures;
 
-    constructor(unitOrUnits: UnitOrUnitsWrapper, startDateOrDateTime: DateOrDateTimeWrapper, endDateOrDateTime: DateOrDateTimeWrapper, structures: StructureWrapper[], isPartOfMultiPeriodDosage: boolean) {
+    constructor(unitOrUnits: UnitOrUnitsWrapper, startDateOrDateTime: DateOrDateTimeWrapper | undefined | null, endDateOrDateTime: DateOrDateTimeWrapper | undefined | null, structures: StructureWrapper[], isPartOfMultiPeriodDosage: boolean) {
         this.value = {
             unitOrUnits: unitOrUnits.value,
-            startDateOrDateTime: startDateOrDateTime && startDateOrDateTime.value,
-            endDateOrDateTime: endDateOrDateTime && endDateOrDateTime.value,
+            startDate: startDateOrDateTime?.value,
+            endDate: endDateOrDateTime?.value,
             structures: structures.map(s => s.value),
             isPartOfMultiPeriodDosage
         };

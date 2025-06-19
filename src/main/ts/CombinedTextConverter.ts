@@ -28,12 +28,10 @@ export class CombinedTextConverter {
 
         if (dosage.structures) {
             for (const period of dosage.structures.structures) {
-                // let structuresWithOnePeriod: Structures = new StructuresWrapper(dosage.structures.unitOrUnits, dosage.structures.startDateOrDateTime, dosage.structures.endDateOrDateTime, [period], true);
-                // let dosageWrapperWithOnePeriod = DosageWrapper.makeStructure(structuresWithOnePeriod);
                 const structuresWithOnePeriod: Structures = {
                     unitOrUnits: dosage.structures.unitOrUnits,
-                    startDateOrDateTime: dosage.structures.startDateOrDateTime,
-                    endDateOrDateTime: dosage.structures.endDateOrDateTime,
+                    startDate: dosage.structures.startDate,
+                    endDate: dosage.structures.endDate,
                     structures: [period],
                     isPartOfMultiPeriodDosage: true};
                 const dosageWithOnePeriod: Dosage = { structures: structuresWithOnePeriod };

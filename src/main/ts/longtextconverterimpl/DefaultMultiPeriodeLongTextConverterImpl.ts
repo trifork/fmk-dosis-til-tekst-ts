@@ -37,8 +37,8 @@ export class DefaultMultiPeriodeLongTextConverterImpl extends LongTextConverterI
         sortedStructures.forEach(structure => {
             const w: Dosage = {
                 structures: {
-                    startDateOrDateTime: dosage.structures.startDateOrDateTime,
-                    endDateOrDateTime: dosage.structures.endDateOrDateTime,
+                    startDate: dosage.structures.startDate,
+                    endDate: dosage.structures.endDate,
                     unitOrUnits: dosage.structures.unitOrUnits,
                     structures: [structure],
                     isPartOfMultiPeriodDosage: sortedStructures.length > 1

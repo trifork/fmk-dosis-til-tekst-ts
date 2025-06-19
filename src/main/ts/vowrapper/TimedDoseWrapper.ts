@@ -6,7 +6,7 @@ export class TimedDoseWrapper extends DoseWrapper {
 
     readonly value: TimedDose;
 
-    constructor(time: LocalTimeWrapper, doseQuantity: number, minimalDoseQuantity: number, maximalDoseQuantity: number, isAccordingToNeed: boolean) {
+    constructor(time: LocalTimeWrapper, doseQuantity: number, minimalDoseQuantity: number | undefined, maximalDoseQuantity: number | undefined, isAccordingToNeed: boolean) {
         super();
         this.value = {
             type: "TimedDoseWrapper",

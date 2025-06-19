@@ -71,7 +71,7 @@ export class DosageTypeCalculator {
 
     private static isTemporary(structure: Structure): boolean {
         // If there is no end date defined the dosage must not be iterated
-        if (!structure.endDateOrDateTime && structure.iterationInterval > 0)
+        if (!structure.endDate && structure.iterationInterval > 0)
             return false;
         // If there is an according to need dose in the dosage it is not a (clean)
         // temporary dosage.
@@ -82,7 +82,7 @@ export class DosageTypeCalculator {
 
     protected static isFixed(structure: Structure): boolean {
         // If there is an end date defined the dosage isn't fixed
-        if (structure.endDateOrDateTime)
+        if (structure.endDate)
             return false;
         // If the dosage isn't iterated it isn't fixed
         if (!structure.iterationInterval || StructureHelper.isIterationToLong(structure))
@@ -97,7 +97,7 @@ export class DosageTypeCalculator {
     private static isOneTime(structure: Structure): boolean {
         const isSameDayDateInterval: boolean = StructureHelper.startsAndEndsSameDay(structure);
         // If we have and end date it must be the same day as the start date
-        if ((structure.endDateOrDateTime?.date || structure.endDateOrDateTime?.dateTime) && !isSameDayDateInterval)
+        if ((structure.endDate) && !isSameDayDateInterval)
             return false;
         // We don't want to have a day 0 defined, as it contains only meaningful information
         // if the dosage is given according to need

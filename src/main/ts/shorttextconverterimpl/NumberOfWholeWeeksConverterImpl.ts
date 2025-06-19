@@ -19,7 +19,7 @@ export class NumberOfWholeWeeksConverterImpl extends ShortTextConverterImpl {
 
         if (structure.iterationInterval % 7 > 0)
             return false;
-        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate))
             return false;
         if (structure.days.length === 0)
             return false;

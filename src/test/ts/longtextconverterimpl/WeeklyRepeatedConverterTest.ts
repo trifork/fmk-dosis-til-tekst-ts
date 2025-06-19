@@ -215,7 +215,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
                 new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined),
 
-            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), null, [
+            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), undefined, [
                 new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
                 new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)
@@ -290,7 +290,7 @@ describe('WeeklyRepeatedConverterImpl', () => {
                 new DayWrapper(3, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined),
 
-            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), null, [
+            new StructureWrapper(7, "", new DateOrDateTimeWrapper(new Date(2020, 0, 25), undefined), undefined, [
                 new DayWrapper(2, [new PlainDoseWrapper(1, undefined, undefined, false)]),
                 new DayWrapper(6, [new PlainDoseWrapper(2, undefined, undefined, false)])
             ], undefined)

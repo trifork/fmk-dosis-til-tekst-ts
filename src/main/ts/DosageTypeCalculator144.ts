@@ -58,7 +58,7 @@ export class DosageTypeCalculator144 {
     }
 
     public static structureSorter(s1: Structure, s2: Structure): number {
-        return DateOrDateTimeHelper.getDateOrDateTime(s1.startDateOrDateTime).getTime() - DateOrDateTimeHelper.getDateOrDateTime(s2.startDateOrDateTime).getTime();
+        return DateOrDateTimeHelper.getDate(s1.startDate).getTime() - DateOrDateTimeHelper.getDate(s2.startDate).getTime();
     }
 
     /*
@@ -143,15 +143,10 @@ export class DosageTypeCalculator144 {
 
     /* Check if second wrapper comes just after the first, without gaps or overlaps */
     public static abuts(first: Structure, second: Structure): boolean {
-        if (first.endDateOrDateTime != null) {
-            if (first.endDateOrDateTime.date
-                && second.startDateOrDateTime.date
-                && DosageTypeCalculator144.dateAbuts(new Date(first.endDateOrDateTime.date), new Date(second.startDateOrDateTime.date))) {
-                return true;
-            }
-            else if (first.endDateOrDateTime.dateTime
-                && second.startDateOrDateTime.dateTime
-                && DosageTypeCalculator144.dateTimeAbuts(new Date(first.endDateOrDateTime.dateTime), new Date(second.startDateOrDateTime.dateTime))) {
+        if (first.endDate) {
+            if (first.endDate
+                && second.startDate
+                && DosageTypeCalculator144.dateAbuts(new Date(first.endDate), new Date(second.startDate))) {
                 return true;
             }
             // If an interval ends with a date and the next ends with a datetime we cannot determine if they abut
@@ -174,16 +169,6 @@ export class DosageTypeCalculator144 {
         d1.setUTCHours(0);
         d2.setUTCHours(0);
         return (d1.valueOf() - d2.valueOf()) / millisecondsPerDay;
-    }
-
-    static secondsBetween(startDate: Date, endDate: Date): number {
-        const millisecondsSecond = 1000;
-        return (DosageTypeCalculator144.treatAsUTC(endDate).valueOf() - DosageTypeCalculator144.treatAsUTC(startDate).valueOf()) / millisecondsSecond;
-    }
-
-    public static dateTimeAbuts(dateTime1: Date, dateTime2: Date): boolean {
-        const secondsBetween: number = DosageTypeCalculator144.secondsBetween(dateTime1, dateTime2);
-        return secondsBetween >= 0 && secondsBetween <= 1;
     }
 
     public static dateAbuts(d1: Date, d2: Date): boolean {

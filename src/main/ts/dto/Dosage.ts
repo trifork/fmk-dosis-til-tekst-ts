@@ -7,19 +7,19 @@ export interface Dosage {
 }
 
 export interface AdministrationAccordingToSchema {
-    startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime?: DateOrDateTime;
+    startDate: DateOnly;
+    endDate?: DateOnly;
 }
 
 export interface FreeText {
-    startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime?: DateOrDateTime;
+    startDate: DateOnly;
+    endDate?: DateOnly;
     text: string;
 }
 
 export interface Structures {
-    startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime?: DateOrDateTime;
+    startDate: DateOnly;
+    endDate?: DateOnly;
     unitOrUnits: UnitOrUnits;
     structures: Structure[];
     isPartOfMultiPeriodDosage?: boolean;
@@ -44,24 +44,18 @@ export interface Structure {
       * @minimum 0
       */
     iterationInterval: number;
-    startDateOrDateTime: DateOrDateTime;
-    endDateOrDateTime?: DateOrDateTime;
+    startDate: DateOnly;
+    endDate?: DateOnly;
     days: Day[];
     dosagePeriodPostfix?: string;
     supplText?: string;
 }
 
-export interface DateOrDateTime extends DateOnly, DateTime {
-
-}
-
-export interface DateOnly {
-    /**
-     * @format date
-     * @isDate must be a valid date
-     */
-    date?: string;
-}
+/**
+ * @format date
+ * @isDate must be a valid date
+ */
+export type DateOnly = string;
 
 export interface DateTime {
     /**

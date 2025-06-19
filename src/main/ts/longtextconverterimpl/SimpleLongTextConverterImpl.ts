@@ -1,30 +1,30 @@
 import { LongTextConverterImpl } from "./LongTextConverterImpl";
 import { TextOptions } from "../TextOptions";
-import { DateOrDateTime } from "../dto/Dosage";
+import { DateOnly } from "../dto/Dosage";
 import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
 
 export abstract class SimpleLongTextConverterImpl extends LongTextConverterImpl {
 
-    public convert(text: string, startDateOrDateTime: DateOrDateTime, endDateOrDateTime: DateOrDateTime, options: TextOptions): string {
+    public convert(text: string, startDate: DateOnly, endDate: DateOnly, options: TextOptions): string {
 
         let s = "";
 
-        if (startDateOrDateTime && endDateOrDateTime && DateOrDateTimeHelper.isEqualTo(startDateOrDateTime, endDateOrDateTime)) {
+        if (startDate && endDate && DateOrDateTimeHelper.isEqualTo(startDate, endDate)) {
             // Same day dosage
-            s += "Dosering kun d. " + this.datesToLongText(startDateOrDateTime) + ":\n";
+            s += "Dosering kun d. " + this.datesToLongText(startDate) + ":\n";
         }
-        else if (startDateOrDateTime) {
-            s += this.getDosageStartText(startDateOrDateTime, 0, options);
-            if (endDateOrDateTime) {
-                s += " til d. " + this.datesToLongText(endDateOrDateTime) + ":\n";
+        else if (startDate) {
+            s += this.getDosageStartText(startDate, 0, options);
+            if (endDate) {
+                s += " til d. " + this.datesToLongText(endDate) + ":\n";
             }
             else {
                 s += ":\n";
             }
         }
-        else if (!startDateOrDateTime) {
-            if (endDateOrDateTime) {
-                s += "Dosering til d. " + this.datesToLongText(endDateOrDateTime) + ":\n";
+        else if (!startDate) {
+            if (endDate) {
+                s += "Dosering til d. " + this.datesToLongText(endDate) + ":\n";
             }
         }
 

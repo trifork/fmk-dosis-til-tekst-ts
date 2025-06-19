@@ -2,7 +2,7 @@ import { DosisTilTekstException } from "../DosisTilTekstException";
 import { StructureHelper } from "../helpers/StructureHelper";
 import { TextHelper } from "../TextHelper";
 import { TextOptions } from "../TextOptions";
-import { DateOrDateTime, Day, Dosage, Dose, Structure, TimedDose, UnitOrUnits } from "../dto/Dosage";
+import { DateOnly, Day, Dosage, Dose, Structure, TimedDose, UnitOrUnits } from "../dto/Dosage";
 import { DayHelper } from "../helpers/DayHelper";
 import { DoseHelper } from "../helpers/DoseHelper";
 import { DateOrDateTimeHelper } from "../helpers/DateOrDateTimeHelper";
@@ -28,55 +28,38 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    protected getDosageStartText(startDateOrDateTime: DateOrDateTime, iterationInterval: number, textOptions: TextOptions) {
+    protected getDosageStartText(startDate: DateOnly, iterationInterval: number, textOptions: TextOptions) {
 
-        return (textOptions === TextOptions.VKA_WITH_MARKUP ? "Fra " : "Dosering fra d. ") + this.datesToLongText(startDateOrDateTime);
+        return (textOptions === TextOptions.VKA_WITH_MARKUP ? "Fra " : "Dosering fra d. ") + this.datesToLongText(startDate);
     }
 
-    protected getSingleDayDosageStartText(startDateOrDateTime: DateOrDateTime, singleDayNo: number) {
-        let realStartDateOrDateTime: DateOrDateTime;
+    protected getSingleDayDosageStartText(startDate: DateOnly, singleDayNo: number) {
+        let realStartDateOnly: DateOnly;
 
-        if (startDateOrDateTime.date) {
-            const realStartDate = new Date(startDateOrDateTime.date);
+        if (startDate) {
+            const realStartDate = new Date(startDate);
             if (singleDayNo > 0) {
                 realStartDate.setDate(realStartDate.getDate() + singleDayNo - 1);
             }
-            realStartDateOrDateTime = { date: realStartDate.toISOString() };
-        }
-        else {
-            const realStartDateTime = new Date(startDateOrDateTime.dateTime);
-            if (singleDayNo > 0) {
-                realStartDateTime.setDate(realStartDateTime.getDate() + singleDayNo - 1);
-            }
-            realStartDateOrDateTime = { dateTime: realStartDateTime.toISOString() };
+            realStartDateOnly = realStartDate.toISOString();
         }
 
-        return "Dosering kun d. " + this.datesToLongText(realStartDateOrDateTime);
+        return "Dosering kun d. " + this.datesToLongText(realStartDateOnly);
     }
 
 
     protected getDosageEndText(structure: Structure, options: TextOptions) {
 
-        return (options === TextOptions.VKA_WITH_MARKUP ? " til " : " til d. ") + this.datesToLongText(structure.endDateOrDateTime);
+        return (options === TextOptions.VKA_WITH_MARKUP ? " til " : " til d. ") + this.datesToLongText(structure.endDate);
     }
 
-    protected datesToLongText(startDateOrDateTime: DateOrDateTime): string {
+    protected datesToLongText(startDate: DateOnly): string {
 
-        if (!startDateOrDateTime)
-            throw new DosisTilTekstException("startDateOrDateTime must be set");
+        if (!startDate)
+            throw new DosisTilTekstException("startDate must be set");
 
-        if (startDateOrDateTime.date) {
-            return TextHelper.formatLongDateAbbrevMonth(new Date(startDateOrDateTime.date));
-        }
-        else {
-            const dateTime = new Date(startDateOrDateTime.dateTime);
-            // We do not want to show seconds precision if seconds are not specified or 0
-            if (this.haveSeconds(dateTime)) {
-                return TextHelper.formatLongDateTime(dateTime);
-            }
-            else {
-                return TextHelper.formatLongDateNoSecs(dateTime);
-            }
+        if (startDate) {
+            return TextHelper.formatLongDateAbbrevMonth(new Date(startDate));
         }
     }
 
@@ -128,10 +111,10 @@ export abstract class LongTextConverterImpl {
         }
         else if (structure.iterationInterval === 0 || StructureHelper.isIterationToLong(structure)) {
             // Tirsdag d. 27. okt. 2020: 2 tabletter....
-            const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDateOrDateTime(structure.startDateOrDateTime));
+            const dateOnly = TextHelper.makeFromDateOnly(DateOrDateTimeHelper.getDate(structure.startDate));
             dateOnly.setDate(dateOnly.getDate() + day.dayNumber - 1);
 
-            return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.startDateOrDateTime, day.dayNumber) + ": ";
+            return TextHelper.getWeekdayUppercase(dateOnly.getDay()) + " d. " + TextHelper.makeDateString(structure.startDate, day.dayNumber) + ": ";
         }
         else {
             // Dag 1: 2 tabletter....
@@ -164,11 +147,11 @@ export abstract class LongTextConverterImpl {
             daglig = " hver dag";
 
         if (day.allDoses.length === 1) {
-            s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, true, options);
+            s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDate, true, options);
 
         }
         else if (day.allDoses.length > 1 && DayHelper.allDosesAreTheSame(day)) {
-            s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, true, options);
+            s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDate, true, options);
             if (DayHelper.containsAccordingToNeedDosesOnly(day) && day.dayNumber > 0) {
                 s += ", højst " + day.allDoses.length + " " + TextHelper.gange(day.allDoses.length) + " dagligt";
             }
@@ -179,7 +162,7 @@ export abstract class LongTextConverterImpl {
         else if (day.allDoses.length > 2 && DayHelper.allDosesButTheFirstAreTheSame(day)) {
             // Eks.: 1 stk. kl. 08:00 og 2 stk. 4 gange daglig
 
-            s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, true, options);
+            s += this.makeOneDose(day.allDoses[0], unitOrUnits, day.dayNumber, structure.startDate, true, options);
             if (0 < day.allDoses.length - 1) {
                 s += " og ";
             }
@@ -195,7 +178,7 @@ export abstract class LongTextConverterImpl {
 
             // 2 tabletter morgen, 1 tablet middag, 2 tabletter aften og 1 tablet nat
             for (let d = 0; d < sortedDoses.length; d++) {
-                s += this.makeOneDose(sortedDoses[d], unitOrUnits, day.dayNumber, structure.startDateOrDateTime, d === 0, options);
+                s += this.makeOneDose(sortedDoses[d], unitOrUnits, day.dayNumber, structure.startDate, d === 0, options);
                 if (d < day.allDoses.length - 2) {
                     s += ", ";
                 }
@@ -252,7 +235,7 @@ export abstract class LongTextConverterImpl {
         return s;
     }
 
-    protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDateOrDateTime: DateOrDateTime, includeWeekName: boolean, options: TextOptions): string {
+    protected makeOneDose(dose: Dose, unitOrUnits: UnitOrUnits, dayNumber: number, startDate: DateOnly, includeWeekName: boolean, options: TextOptions): string {
 
         let s = DoseHelper.getAnyDoseQuantityString(dose);
 

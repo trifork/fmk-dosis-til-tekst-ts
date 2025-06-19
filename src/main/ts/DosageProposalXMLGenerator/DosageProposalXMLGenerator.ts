@@ -81,16 +81,12 @@ export class DosageProposalXMLGenerator {
         for (let periodNo = 0; periodNo < periodTypes.length; periodNo++) {
             const structure: Structure = {
                 iterationInterval: periodIterations[periodNo],
-                startDateOrDateTime: {
-                    date: formatDateOnly(beginDates[periodNo]),
-                },
+                startDate: formatDateOnly(beginDates[periodNo]),
                 supplText: supplementaryText,
                 days: DosageProposalXMLGenerator.getDays(periodTypes[periodNo], periodMappings[periodNo])
             };
             if (endDates[periodNo]) {
-                structure.endDateOrDateTime = {
-                    date: formatDateOnly(endDates[periodNo])
-                };
+                structure.endDate = formatDateOnly(endDates[periodNo]);
             }
             periods.push(structure);
 
@@ -101,8 +97,8 @@ export class DosageProposalXMLGenerator {
 
         const dosage: Dosage = {
             structures: {
-                startDateOrDateTime: undefined,
-                endDateOrDateTime: undefined,
+                startDate: undefined,
+                endDate: undefined,
                 unitOrUnits: {
                     unit: undefined,
                     unitSingular: unitTextSingular,

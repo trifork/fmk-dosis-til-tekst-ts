@@ -1,6 +1,5 @@
 
 import { assert, expect } from 'chai';
-import { formatDateTime } from '../../main/ts/DateUtil';
 import { DateOrDateTimeWrapper, DayWrapper, DosageType, DosageTypeCalculator, DosageTypeCalculator144, DosageWrapper, NoonDoseWrapper, Structure, Structures, StructuresWrapper, StructureWrapper, UnitOrUnitsWrapper } from "../../main/ts/index";
 
 describe('calculate function', () => {
@@ -55,34 +54,26 @@ describe('dateAbuts function', () => {
     });
 });
 
-describe('dateTimeAbuts function', () => {
-    it('should check if dateTimes are abuts', () => {
-        expect(DosageTypeCalculator144.dateTimeAbuts(new Date(2017, 2, 1, 10, 0, 0), new Date(2017, 2, 1, 10, 0, 1))).to.be.true;
-        expect(DosageTypeCalculator144.dateTimeAbuts(new Date(2017, 2, 1, 10, 0, 0), new Date(2017, 2, 1, 11, 0, 0))).to.be.false;
-    });
-});
+// describe('dateTimeAbuts function', () => {
+//     it('should check if dateTimes are abuts', () => {
+//         expect(DosageTypeCalculator144.dateTimeAbuts(new Date(2017, 2, 1, 10, 0, 0), new Date(2017, 2, 1, 10, 0, 1))).to.be.true;
+//         expect(DosageTypeCalculator144.dateTimeAbuts(new Date(2017, 2, 1, 10, 0, 0), new Date(2017, 2, 1, 11, 0, 0))).to.be.false;
+//     });
+// });
 
 describe('abuts function with dates', () => {
     it('should return that structures with enddates are abuts', () => {
         const s1: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-01"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-02"
-            },
+            startDate: "2017-01-01",
+            endDate: "2017-01-02",
             days: [],
             supplText: "mod smerter"
         };
         const s2: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-03"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-03"
-            },
+            startDate: "2017-01-03",
+            endDate: "2017-01-03",
             days: [],
             supplText: "mod smerter"
         };
@@ -92,23 +83,15 @@ describe('abuts function with dates', () => {
     it('should return false when periods overlaps', () => {
         const s1: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-01"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-03"
-            },
+            startDate: "2017-01-01",
+            endDate: "2017-01-03",
             days: [],
             supplText: "mod smerter"
         };
         const s2: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-03"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-03"
-            },
+            startDate: "2017-01-03",
+            endDate: "2017-01-03",
             days: [],
             supplText: "mod smerter"
         };
@@ -118,23 +101,15 @@ describe('abuts function with dates', () => {
     it('should return false when periods has gaps', () => {
         const s1: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-01"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-02"
-            },
+            startDate: "2017-01-01",
+            endDate: "2017-01-02",
             days: [],
             supplText: "mod smerter"
         };
         const s2: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-05"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-06"
-            },
+            startDate: "2017-01-05",
+            endDate: "2017-01-06",
             days: [],
             supplText: "mod smerter"
         };
@@ -144,20 +119,14 @@ describe('abuts function with dates', () => {
     it('should return false when first period has no enddate', () => {
         const s1: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-01"
-            },
+            startDate: "2017-01-01",
             days: [],
             supplText: "mod smerter"
         };
         const s2: Structure = {
             iterationInterval: 1,
-            startDateOrDateTime: {
-                date: "2017-01-05"
-            },
-            endDateOrDateTime: {
-                date: "2017-01-06"
-            },
+            startDate: "2017-01-05",
+            endDate: "2017-01-06",
             days: [],
             supplText: "mod smerter"
         };
@@ -165,136 +134,136 @@ describe('abuts function with dates', () => {
     });
 });
 
-describe('abuts function with dateTimes', () => {
-    it('should return that structures with enddates are abuts', () => {
-        const s1: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        const s2: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 1))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.true;
-    });
+// describe('abuts function with dateTimes', () => {
+//     it('should return that structures with enddates are abuts', () => {
+//         const s1: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         const s2: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 1))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.true;
+//     });
 
-    // First structure with end date - equals seconds structures start (only possible due to old data in production, validation rejects new dosages of that kind)
-    it('should return that structures with enddates are abuts', () => {
-        const s1: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        const s2: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.true;
-    });
+//     // First structure with end date - equals seconds structures start (only possible due to old data in production, validation rejects new dosages of that kind)
+//     it('should return that structures with enddates are abuts', () => {
+//         const s1: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         const s2: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 2, 11, 0, 0))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.true;
+//     });
 
-    it('should return false when periods overlaps', () => {
-        const s1: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 9, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        const s2: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 1))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 5, 11, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.false;
-    });
+//     it('should return false when periods overlaps', () => {
+//         const s1: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 9, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         const s2: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 8, 0, 1))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 5, 11, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.false;
+//     });
 
-    it('should return false when periods has gaps', () => {
-        const s1: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        const s2: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 2))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 5, 11, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.false;
-    });
+//     it('should return false when periods has gaps', () => {
+//         const s1: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         const s2: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 2))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 5, 11, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.false;
+//     });
 
-    it('should return false when first period has no enddate', () => {
-        const s1: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
-            },
-            endDateOrDateTime: undefined,
-            days: [],
-            supplText: "mod smerter"
-        };
-        const s2: Structure = {
-            iterationInterval: 1,
-            startDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 2))
-            },
-            endDateOrDateTime: {
-                dateTime: formatDateTime(new Date(2017, 1, 5, 11, 0, 0))
-            },
-            days: [],
-            supplText: "mod smerter"
-        };
-        expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.false;
-    });
-});
+//     it('should return false when first period has no enddate', () => {
+//         const s1: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 1, 10, 0, 0))
+//             },
+//             endDateOrDateTime: undefined,
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         const s2: Structure = {
+//             iterationInterval: 1,
+//             startDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 3, 11, 0, 2))
+//             },
+//             endDateOrDateTime: {
+//                 dateTime: formatDateTime(new Date(2017, 1, 5, 11, 0, 0))
+//             },
+//             days: [],
+//             supplText: "mod smerter"
+//         };
+//         expect(DosageTypeCalculator144.abuts(s1, s2)).to.be.false;
+//     });
+// });
 
 describe('splitInFixedAndPN function', () => {
     it('should split pn-only in fixed: 0 and pn: 1', () => {
@@ -307,12 +276,8 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [
                         {
                             dayNumber: 1,
@@ -328,8 +293,8 @@ describe('splitInFixedAndPN function', () => {
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate:  "2017-01-01",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -348,12 +313,8 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [
                         {
                             dayNumber: 1,
@@ -369,8 +330,8 @@ describe('splitInFixedAndPN function', () => {
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2017-01-01",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -389,23 +350,15 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [],
                     supplText: "mod smerter"
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [
                         {
                             dayNumber: 1,
@@ -421,8 +374,8 @@ describe('splitInFixedAndPN function', () => {
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2017-01-01",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -441,12 +394,8 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [
                         {
                             dayNumber: 1,
@@ -463,18 +412,14 @@ describe('splitInFixedAndPN function', () => {
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [],
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2017-01-01",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -493,23 +438,15 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [],
                     supplText: "mod smerter"
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [
                         {
                             dayNumber: 1,
@@ -525,8 +462,8 @@ describe('splitInFixedAndPN function', () => {
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2017-01-01",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -545,12 +482,8 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [
                         {
                             dayNumber: 1,
@@ -567,18 +500,14 @@ describe('splitInFixedAndPN function', () => {
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [],
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2017-01-01",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -598,23 +527,15 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2016-12-29"
-                    },
-                    endDateOrDateTime: {
-                        date: "2016-12-31"
-                    },
+                    startDate: "2016-12-29",
+                    endDate: "2016-12-31",
                     days: [],
                     supplText: "mod smerter"
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [
                         {
                             dayNumber: 1,
@@ -631,18 +552,14 @@ describe('splitInFixedAndPN function', () => {
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [],
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2016-12-29",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -661,23 +578,15 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2016-12-29"
-                    },
-                    endDateOrDateTime: {
-                        date: "2016-12-31"
-                    },
+                    startDate: "2016-12-29",
+                    endDate: "2016-12-31",
                     days: [],
                     supplText: "mod smerter"
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [
                         {
                             dayNumber: 1,
@@ -694,18 +603,14 @@ describe('splitInFixedAndPN function', () => {
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [],
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2016-12-29",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 
@@ -724,12 +629,8 @@ describe('splitInFixedAndPN function', () => {
             structures: [
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2016-12-29"
-                    },
-                    endDateOrDateTime: {
-                        date: "2016-12-31"
-                    },
+                    startDate: "2016-12-29",
+                    endDate: "2016-12-31",
                     days: [
                         {
                             dayNumber: 1,
@@ -746,34 +647,22 @@ describe('splitInFixedAndPN function', () => {
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [],
                     supplText: "mod smerter"
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-01"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-02"
-                    },
+                    startDate: "2017-01-01",
+                    endDate: "2017-01-02",
                     days: [],
                     supplText: "mod smerter"
                 },
                 {
                     iterationInterval: 1,
-                    startDateOrDateTime: {
-                        date: "2017-01-03"
-                    },
-                    endDateOrDateTime: {
-                        date: "2017-01-10"
-                    },
+                    startDate: "2017-01-03",
+                    endDate: "2017-01-10",
                     days: [
                         {
                             dayNumber: 1,
@@ -789,8 +678,8 @@ describe('splitInFixedAndPN function', () => {
                     supplText: "mod smerter"
                 }
             ],
-            startDateOrDateTime: undefined,
-            endDateOrDateTime: undefined,
+            startDate: "2016-12-29",
+            endDate: undefined,
             isPartOfMultiPeriodDosage: false
         };
 

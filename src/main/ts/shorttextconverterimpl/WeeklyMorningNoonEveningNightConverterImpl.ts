@@ -21,7 +21,7 @@ export class WeeklyMorningNoonEveningNightConverterImpl extends ShortTextConvert
         const structure: Structure = dosage.structures.structures[0];
         if (structure.iterationInterval !== 7)
             return false;
-        if (DateOrDateTimeHelper.isEqualTo(structure.startDateOrDateTime, structure.endDateOrDateTime))
+        if (DateOrDateTimeHelper.isEqualTo(structure.startDate, structure.endDate))
             return false;
         if (structure.days.length > 7 || structure.days.length === 0)
             return false;
