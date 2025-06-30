@@ -1,12 +1,10 @@
 import { ShortTextConverterImpl } from "./shorttextconverterimpl/ShortTextConverterImpl";
 import { AdministrationAccordingToSchemaConverterImpl } from "./shorttextconverterimpl/AdministrationAccordingToSchemaConverterImpl";
 import { FreeTextConverterImpl } from "./shorttextconverterimpl/FreeTextConverterImpl";
-import { MorningNoonEveningNightEyeOrEarConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightEyeOrEarConverterImpl";
 import { MorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightConverterImpl";
 import { SimpleLimitedAccordingToNeedConverterImpl } from "./shorttextconverterimpl/SimpleLimitedAccordingToNeedConverterImpl";
 import { MorningNoonEveningNightAndAccordingToNeedConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightAndAccordingToNeedConverterImpl";
 import { WeeklyMorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/WeeklyMorningNoonEveningNightConverterImpl";
-import { RepeatedEyeOrEarConverterImpl } from "./shorttextconverterimpl/RepeatedEyeOrEarConverterImpl";
 import { RepeatedConverterImpl } from "./shorttextconverterimpl/RepeatedConverterImpl";
 import { SimpleNonRepeatedConverterImpl } from "./shorttextconverterimpl/SimpleNonRepeatedConverterImpl";
 import { MorningNoonEveningNightInNDaysConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightInNDaysConverterImpl";
@@ -22,6 +20,7 @@ import { textOptionFromString, TextOptions } from "./TextOptions";
 import { LongTextConverterImpl } from "./longtextconverterimpl/LongTextConverterImpl";
 import { Dosage } from "./dto/Dosage";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
+import { StructureHelper } from "./helpers/StructureHelper";
 
 export class ShortTextConverter {
 
@@ -39,10 +38,8 @@ export class ShortTextConverter {
         ShortTextConverter._converters = [
             new AdministrationAccordingToSchemaConverterImpl(),
             new FreeTextConverterImpl(),
-            new MorningNoonEveningNightEyeOrEarConverterImpl(),
             new MorningNoonEveningNightConverterImpl(),
             new WeeklyMorningNoonEveningNightConverterImpl(),
-            new RepeatedEyeOrEarConverterImpl(),
             new RepeatedConverterImpl(),
             new SimpleNonRepeatedConverterImpl(),
             new MorningNoonEveningNightInNDaysConverterImpl(),
@@ -117,6 +114,10 @@ export class ShortTextConverter {
      * @return A short text string describing the dosage
      */
     public doConvert(dosage: Dosage, options: TextOptions, maxLength: number): string {
+
+        dosage.structures?.structures.forEach(s => {
+            s.supplText = StructureHelper.trimLeadingCommas(s.supplText);
+        });
 
         if (LongTextConverterImpl.convertAsVKA(options)) {
             return null;

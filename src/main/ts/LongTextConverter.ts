@@ -13,6 +13,7 @@ import { DefaultMultiPeriodeLongTextConverterImpl } from "./longtextconverterimp
 import { textOptionFromString, TextOptions } from "./TextOptions";
 import { Dosage } from "./dto/Dosage";
 import { DosageWrapper } from "./vowrapper/DosageWrapper";
+import { StructureHelper } from "./helpers/StructureHelper";
 
 export class LongTextConverter {
 
@@ -54,6 +55,10 @@ export class LongTextConverter {
         if (!currentTime) {
             currentTime = new Date();
         }
+
+        dosage.structures?.structures.forEach(s => {
+            s.supplText = StructureHelper.trimLeadingCommas(s.supplText);
+        });
 
         for (const converter of LongTextConverter._converters) {
             if (converter.canConvert(dosage, options)) {
