@@ -17,7 +17,6 @@ export { AdministrationAccordingToSchemaConverterImpl as ShortAdministrationAcco
 export { FreeTextConverterImpl as ShortFreeTextConverterImpl } from "./shorttextconverterimpl/FreeTextConverterImpl";
 export { MorningNoonEveningNightAndAccordingToNeedConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightAndAccordingToNeedConverterImpl";
 export { MorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightConverterImpl";
-export { MorningNoonEveningNightEyeOrEarConverterImpl } from "./shorttextconverterimpl/MorningNoonEveningNightEyeOrEarConverterImpl";
 export { ShortTextConverterImpl } from "./shorttextconverterimpl/ShortTextConverterImpl";
 export { SimpleLimitedAccordingToNeedConverterImpl } from "./shorttextconverterimpl/SimpleLimitedAccordingToNeedConverterImpl";
 export { WeeklyMorningNoonEveningNightConverterImpl } from "./shorttextconverterimpl/WeeklyMorningNoonEveningNightConverterImpl";

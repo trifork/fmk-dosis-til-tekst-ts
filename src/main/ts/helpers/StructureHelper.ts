@@ -181,4 +181,8 @@ export class StructureHelper {
             && structuredDosage.days[0].allDoses.length === 1
             && DayHelper.getNumberOfPlainDoses(structuredDosage.days[0]) === 1;
     }
+
+    public static trimLeadingCommas(s: string) {
+        return s?.replace(/^, */, "") || undefined;
+    }
 }
