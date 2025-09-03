@@ -18,7 +18,13 @@ export interface FreeText {
 }
 
 export interface Structures {
-    startDate: DateOnly;
+    /**
+     * Optional start date of the treatment this dosage is part of (currently ignored)
+    */
+    startDate?: DateOnly;
+    /**
+     * Optional end date of the treatment this dosage is part of
+    */
     endDate?: DateOnly;
     unitOrUnits: UnitOrUnits;
     structures: Structure[];

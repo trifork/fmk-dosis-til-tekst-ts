@@ -38,8 +38,6 @@ export class CombinedTwoPeriodesConverterImpl extends ShortTextConverterImpl {
 
         const tempDosage: Dosage = {
             structures: {
-                startDate: undefined,
-                endDate: undefined,
                 unitOrUnits: dosage.structures.unitOrUnits,
                 structures: [structure0],
                 isPartOfMultiPeriodDosage: false

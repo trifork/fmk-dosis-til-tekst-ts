@@ -97,8 +97,6 @@ export class DosageProposalXMLGenerator {
 
         const dosage: Dosage = {
             structures: {
-                startDate: undefined,
-                endDate: undefined,
                 unitOrUnits: {
                     unit: undefined,
                     unitSingular: unitTextSingular,
