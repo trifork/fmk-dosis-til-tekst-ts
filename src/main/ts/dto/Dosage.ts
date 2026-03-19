@@ -7,12 +7,12 @@ export interface Dosage {
 }
 
 export interface AdministrationAccordingToSchema {
-    startDate: DateOnly;
+    startDate?: DateOnly;
     endDate?: DateOnly;
 }
 
 export interface FreeText {
-    startDate: DateOnly;
+    startDate?: DateOnly;
     endDate?: DateOnly;
     text: string;
 }
