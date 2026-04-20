@@ -94,4 +94,5 @@ export { DosageProposalXMLGenerator } from "./DosageProposalXMLGenerator/DosageP
 export { DosageProposalXML } from "./DosageProposalXMLGenerator/DosageProposalXML";
 export { XML144Generator } from "./DosageProposalXMLGenerator/XML144Generator";
 export { XML146Generator } from "./DosageProposalXMLGenerator/XML146Generator";
+export { XML160Generator } from "./DosageProposalXMLGenerator/XML160Generator";
 export { DosagePeriod } from "./DosageProposalXMLGenerator/DosagePeriod";

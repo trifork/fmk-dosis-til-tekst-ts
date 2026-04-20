@@ -12,6 +12,7 @@ import { DosagePeriod } from "./DosagePeriod";
 import { TextOptions } from "../TextOptions";
 import { Day, Dosage, Dose, EveningDose, MorningDose, NightDose, NoonDose, PlainDose, Structure } from "../dto/Dosage";
 import { formatDateOnly } from "../DateUtil";
+import { XML160Generator } from "./XML160Generator";
 
 export class DosageProposalXMLGenerator {
 
@@ -20,6 +21,7 @@ export class DosageProposalXMLGenerator {
     private static readonly xml144E4Generator: XML144E4Generator = new XML144E4Generator();
     private static readonly xml146Generator: XML146Generator = new XML146Generator();
     private static readonly xml146E2Generator: XML146E2Generator = new XML146E2Generator();
+    private static readonly xml160Generator: XML160Generator = new XML160Generator();
 
     private static readonly dosageProposalXMLGeneratorVersion = 1;
 
@@ -217,6 +219,8 @@ export class DosageProposalXMLGenerator {
                 return DosageProposalXMLGenerator.xml146Generator;
             case "FMK146E2":
                 return DosageProposalXMLGenerator.xml146E2Generator;
+            case "FMK160":
+                return DosageProposalXMLGenerator.xml160Generator;
             default:
                 throw new Error("Unexpected fmk version: " + fmkversion);
         }

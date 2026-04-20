@@ -22,6 +22,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>  <!-- Skip maven repo publish - this artifact is
         published in npm -->
         <skipNpmBuild>false</skipNpmBuild>
+        <fmk.schema.version>20260317154957-9047</fmk.schema.version>
     </properties>
 
     <distributionManagement>
@@ -219,6 +220,35 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-fmk</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.trifork</groupId>
+                                    <artifactId>fmk-schema</artifactId>
+                                    <version>${fmk.schema.version}</version>
+                                    <type>zip</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>
+                                schemas/**,
+                            </includes>
+                            <outputDirectory>${project.build.directory}/fmk-schemas</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 
             <!-- Remove Typescript typings folder if present during mvn clean -->
             <!-- <plugin>

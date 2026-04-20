@@ -1,5 +1,5 @@
 
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 
 import { XML146Generator, DosagePeriod} from "../../../main/ts/index";
 
@@ -8,14 +8,9 @@ import * as xmlvalidator from 'xsd-schema-validator';
 const beginDate = new Date(2010, 0, 1);
 const endDate = new Date(2110, 0, 1);
 
-function validateXml(xml: string): void {
-    try {
-        xmlvalidator.validateXML('<?xml version="1.0" encoding="UTF-8"?>' + xml, '../schemas/fmk-1.4.6-all-types.xsd');
-    } catch (err) {
-        console.error("Validation errors: " + err + "\nXML: " + xml);
-
-        throw err;
-    }
+async function validateXml(xml: string) {
+    const result = await xmlvalidator.validateXML('<?xml version="1.0" encoding="UTF-8"?>' + xml, 'target/fmk-schemas/schemas/fmk-1.4.6-all-types.xsd');
+    assert.strictEqual(result.valid, true);
 }
 
 function expectFixed(xml: string) {
@@ -75,7 +70,7 @@ describe('XML146Generator M+M+A+N', () => {
             "</m16:StructuresFixed>" +
             "</m16:Dosage>");
 
-            validateXml(xml);
+            await validateXml(xml);
     });
 
     it('should handle M dose without enddate', async () => {
@@ -88,7 +83,7 @@ describe('XML146Generator M+M+A+N', () => {
             "<m16:DosageEndingUndetermined/>" +
             "<m16:SupplementaryText>tages med rigeligt vand</m16:SupplementaryText>");
         expectFixed(xml)
-        validateXml(xml);
+        await validateXml(xml);
     });
 
 
@@ -104,7 +99,7 @@ describe('XML146Generator M+M+A+N', () => {
             "</m16:Dose>" +
             "</m16:Day>");
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
     it('should handle M+M dose', async () => {
@@ -123,7 +118,7 @@ describe('XML146Generator M+M+A+N', () => {
             "</m16:Dose>" +
             "</m16:Day>");
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
     it('should handle M+M+A dose', async () => {
@@ -146,7 +141,7 @@ describe('XML146Generator M+M+A+N', () => {
             "</m16:Dose>" +
             "</m16:Day>");
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
     it('should handle A dose', async () => {
@@ -162,7 +157,7 @@ describe('XML146Generator M+M+A+N', () => {
             "</m16:Day>");
         expect(xml).to.not.contain("morning").and.not.contain("noon").and.not.contain("evening");
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 });
 
@@ -180,7 +175,7 @@ describe('XML146Generator N daglig', () => {
             "</m16:Day>"
         );
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
     it('should handle 1;2', async () => {
@@ -198,7 +193,7 @@ describe('XML146Generator N daglig', () => {
             "</m16:Day>"
         );
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
 
@@ -220,7 +215,7 @@ describe('XML146Generator N daglig', () => {
             "</m16:Day>"
         );
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
 
@@ -248,7 +243,7 @@ describe('XML146Generator N daglig', () => {
             "</m16:Day>"
         );
         expectFixed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 });
 
@@ -267,7 +262,7 @@ describe('XML146Generator PN', () => {
         );
 
         expectAccordingToNeed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
     it('should handle 1;2', async () => {
@@ -285,7 +280,7 @@ describe('XML146Generator PN', () => {
             "</m16:Day>"
         );
         expectAccordingToNeed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 
 
@@ -307,7 +302,7 @@ describe('XML146Generator PN', () => {
             "</m16:Day>"
         );
         expectAccordingToNeed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 });
 
@@ -394,7 +389,7 @@ describe('XMLGenerator144 Multiperiode', () => {
             "</m16:StructuresAccordingToNeed>" +
             "</m16:Dosage>");
 
-            validateXml(xml);
+            await validateXml(xml);
     });
 
     it('should handle dag 1: 2;3 dag 2: 4;5 dose', async () => {
@@ -421,6 +416,6 @@ describe('XMLGenerator144 Multiperiode', () => {
             "</m16:Day>"
         );
         expectAccordingToNeed(xml);
-        validateXml(xml);
+        await validateXml(xml);
     });
 });

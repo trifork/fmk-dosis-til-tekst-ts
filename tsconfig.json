@@ -1,18 +1,21 @@
 {
     "include": [
         "src/main/ts",
-    ],
-    "exclude": [
         "src/test/**/*.ts"
     ],
     "compilerOptions": {
         "target": "ES6",
         "module": "ESNext",
         "declaration": true,
+        "rootDir": ".",
         "outDir": "target/tsc",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "strict": false
+        "strict": false,
+        "types": [
+            "mocha",
+            "node"
+        ]
     }
 }
