@@ -1,4 +1,5 @@
 import { diffInDays } from "../DateUtil";
+import { DosisTilTekstException } from "../DosisTilTekstException";
 import { AbstractXMLGenerator } from "./AbstractXMLGenerator";
 import { DosagePeriod } from "./DosagePeriod";
 import { element, maybe, text } from "./xml/builders";
@@ -120,45 +121,51 @@ export class XML160Generator extends AbstractXMLGenerator implements XMLGenerato
                         text(day.dayNo.toString())
                     ]
                 }),
-                ...this.mapDoses(period, day)
+                element("Dosage", {
+                    children: [
+                        this.mapDoses(period, day)
+                    ]
+                })
             ]
         }));
 
     }
 
-    private mapDoses(period: DosagePeriod, day: { dayNo: number; mapping: string; }): XmlElement[] {
+    private mapDoses(period: DosagePeriod, day: { dayNo: number; mapping: string; }): XmlElement {
         if (period.getType() === "M+M+A+N") {
             const [morning, noon, evening, night] = day.mapping.split("+");
             const doses: XmlElement[] = [];
             if (morning && morning !== "0") {
-                doses.push(this.createDose("morning", morning));
+                doses.push(this.createMMANDose("Morning", morning));
             }
             if (noon && noon !== "0") {
-                doses.push(this.createDose("noon", noon));
+                doses.push(this.createMMANDose("Noon", noon));
             }
             if (evening && evening !== "0") {
-                doses.push(this.createDose("evening", evening));
+                doses.push(this.createMMANDose("Evening", evening));
             }
             if (night && night !== "0") {
-                doses.push(this.createDose("night", night));
+                doses.push(this.createMMANDose("Night", night));
             }
-            return doses;
+
+            return element("PartOfDayDosage", {
+                children: doses
+            });
         } else {
             const quantities = day.mapping.split(";").map(s => Number(s));
             const occurrenceMap = this.countOccurrences(quantities);
             const doses = [...occurrenceMap.entries()].flatMap(
                 ([count, numbers]) =>
                     numbers.map((value) =>
-                        element("Dose", {
+                        element("TimesPerDayDosage", {
                             children: [
+                                element("Quantity", {
+                                    children: [text(String(value))
+                                    ]
+                                }),
                                 element("TimesPerDay", {
                                     children: [
                                         text(String(count))
-                                    ]
-                                }),
-                                element("Quantity", {
-                                    children: [
-                                        text(String(value))
                                     ]
                                 })
                             ]
@@ -166,18 +173,17 @@ export class XML160Generator extends AbstractXMLGenerator implements XMLGenerato
                     )
             );
 
-            return doses;
+            if (doses.length > 1) {
+                throw new DosisTilTekstException("Times per day dosage with varying count cannot be expressed in FMK 1.6.0, occurences: " + JSON.stringify([...occurrenceMap]));
+            }
+
+            return doses[0];
         }
     }
 
-    private createDose(timeOfDay: string, quantity: string) {
-        return element("Dose", {
+    private createMMANDose(timeOfDay: string, quantity: string) {
+        return element(timeOfDay, {
             children: [
-                element("TimeOfDay", {
-                    children: [
-                        text(timeOfDay)
-                    ]
-                }),
                 element("Quantity", {
                     children: [
                         text(quantity)

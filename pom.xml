@@ -22,7 +22,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>  <!-- Skip maven repo publish - this artifact is
         published in npm -->
         <skipNpmBuild>false</skipNpmBuild>
-        <fmk.schema.version>20260317154957-9047</fmk.schema.version>
+        <fmk.schema.version>20260429120106-7052</fmk.schema.version>
     </properties>
 
     <distributionManagement>
