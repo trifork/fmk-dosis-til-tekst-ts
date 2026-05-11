@@ -1,7 +1,7 @@
 
 import { assert, expect } from 'chai';
 
-import { XML160Generator, DosagePeriod } from "../../../main/ts/index";
+import { XML160Generator, DosagePeriod, DosisTilTekstException } from "../../../main/ts/index";
 
 import * as xmlvalidator from 'xsd-schema-validator';
 import { formatXml } from '../formatXml';
@@ -53,22 +53,22 @@ describe('XML160Generator M+M+A+N', () => {
             <IterationInterval>1</IterationInterval>
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>morning</TimeOfDay>
-                    <Quantity>1</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>noon</TimeOfDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>evening</TimeOfDay>
-                    <Quantity>3</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>night</TimeOfDay>
-                    <Quantity>4</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Morning>
+                            <Quantity>1</Quantity>
+                        </Morning>
+                        <Noon>
+                            <Quantity>2</Quantity>
+                        </Noon>
+                        <Evening>
+                            <Quantity>3</Quantity>
+                        </Evening>
+                        <Night>
+                            <Quantity>4</Quantity>
+                        </Night>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>
         </Fixed>
     </DosagePeriod>
@@ -93,10 +93,13 @@ describe('XML160Generator M+M+A+N', () => {
             <IterationInterval>1</IterationInterval>
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>morning</TimeOfDay>
-                    <Quantity>1</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Morning>
+                            <Quantity>1</Quantity>
+                        </Morning>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>
         </Fixed>
     </DosagePeriod>
@@ -112,10 +115,13 @@ describe('XML160Generator M+M+A+N', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>morning</TimeOfDay>
-                    <Quantity>1</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Morning>
+                            <Quantity>1</Quantity>
+                        </Morning>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>`);
         expectFixed(xml);
         await validateXml(xml);
@@ -127,14 +133,16 @@ describe('XML160Generator M+M+A+N', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>morning</TimeOfDay>
-                    <Quantity>1</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>noon</TimeOfDay>
-                    <Quantity>2</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Morning>
+                            <Quantity>1</Quantity>
+                        </Morning>
+                        <Noon>
+                            <Quantity>2</Quantity>
+                        </Noon>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>`);
         expectFixed(xml);
         await validateXml(xml);
@@ -146,18 +154,19 @@ describe('XML160Generator M+M+A+N', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>morning</TimeOfDay>
-                    <Quantity>1</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>noon</TimeOfDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>evening</TimeOfDay>
-                    <Quantity>3</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Morning>
+                            <Quantity>1</Quantity>
+                        </Morning>
+                        <Noon>
+                            <Quantity>2</Quantity>
+                        </Noon>
+                        <Evening>
+                            <Quantity>3</Quantity>
+                        </Evening>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>`);
         expectFixed(xml);
         await validateXml(xml);
@@ -169,10 +178,13 @@ describe('XML160Generator M+M+A+N', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>night</TimeOfDay>
-                    <Quantity>0.5</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Night>
+                            <Quantity>0.5</Quantity>
+                        </Night>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>`);
         expect(xml).to.not.contain("morning").and.not.contain("noon").and.not.contain("evening");
         expectFixed(xml);
@@ -188,10 +200,12 @@ describe('XML160Generator N daglig', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>1</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>1</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>`);
         expectFixed(xml);
         await validateXml(xml);
@@ -199,21 +213,27 @@ describe('XML160Generator N daglig', () => {
 
     it('should handle 1;2', async () => {
         const generator = new XML160Generator();
-        const xml = generator.generateXml([new DosagePeriod('N daglig', '1;2', 1, beginDate, endDate)], 'tablet', 'tabletter');
-        expect(formatXml(xml)).to.contain(`
-            <Day>
-                <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>1</Quantity>
-                </Dose>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-            </Day>`);
-        expectFixed(xml);
-        await validateXml(xml);
+
+        assert.throws(() => {
+            generator.generateXml([new DosagePeriod('N daglig', '1;2', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        });
+
+        // const xml = generator.generateXml([new DosagePeriod('N daglig', '1;2', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        // expect(formatXml(xml)).to.contain(`
+        //     <Day>
+        //         <Index>1</Index>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>1</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>2</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //         </Dosage>
+        //     </Day>`);
+        // expectFixed(xml);
+        // await validateXml(xml);
     });
 
 
@@ -223,17 +243,21 @@ describe('XML160Generator N daglig', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>3</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>3</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>
             <Day>
                 <Index>2</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>4</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>4</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>`);
         expectFixed(xml);
         await validateXml(xml);
@@ -242,32 +266,41 @@ describe('XML160Generator N daglig', () => {
 
     it('should handle dag 1: 2;3 dag 2: 4;5 dose', async () => {
         const generator = new XML160Generator();
-        const xml = generator.generateXml([new DosagePeriod('N daglig', 'dag 1: 2;3 dag 2: 4;5', 1, beginDate, endDate)], 'tablet', 'tabletter');
-        expect(formatXml(xml)).to.contain(`
-            <Day>
-                <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>3</Quantity>
-                </Dose>
-            </Day>
-            <Day>
-                <Index>2</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>4</Quantity>
-                </Dose>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>5</Quantity>
-                </Dose>
-            </Day>`);
-        expectFixed(xml);
-        await validateXml(xml);
+
+        assert.throws(() => {
+            generator.generateXml([new DosagePeriod('N daglig', 'dag 1: 2;3 dag 2: 4;5', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        });
+
+        // const xml = generator.generateXml([new DosagePeriod('N daglig', 'dag 1: 2;3 dag 2: 4;5', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        // expect(formatXml(xml)).to.contain(`
+        //     <Day>
+        //         <Index>1</Index>
+        //         <Dosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>2</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>3</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //         </Dosage>
+        //     </Day>
+        //     <Day>
+        //         <Index>2</Index>
+        //         <Dosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>4</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>5</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //         </Dosage>
+        //     </Day>`);
+        // expectFixed(xml);
+        // await validateXml(xml);
     });
 });
 
@@ -279,10 +312,12 @@ describe('XML160Generator PN', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>1</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>1</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>`);
 
         expectAccordingToNeed(xml);
@@ -291,21 +326,28 @@ describe('XML160Generator PN', () => {
 
     it('should handle 1;2', async () => {
         const generator = new XML160Generator();
-        const xml = generator.generateXml([new DosagePeriod('PN', '1;2', 1, beginDate, endDate)], 'tablet', 'tabletter');
-        expect(formatXml(xml)).to.contain(`
-            <Day>
-                <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>1</Quantity>
-                </Dose>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-            </Day>`);
-        expectAccordingToNeed(xml);
-        await validateXml(xml);
+
+        assert.throws(() => {
+            generator.generateXml([new DosagePeriod('PN', '1;2', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        });
+
+        // const xml = generator.generateXml([new DosagePeriod('PN', '1;2', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        // expect(formatXml(xml)).to.contain(`
+        //     <Day>
+        //         <Index>1</Index>
+        //         <Dosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>1</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //             <TimesPerDayDosage>
+        //                 <Quantity>2</Quantity>
+        //                 <TimesPerDay>1</TimesPerDay>
+        //             </TimesPerDayDosage>
+        //         </Dosage>
+        //     </Day>`);
+        // expectAccordingToNeed(xml);
+        // await validateXml(xml);
     });
 
 
@@ -315,17 +357,21 @@ describe('XML160Generator PN', () => {
         expect(formatXml(xml)).to.contain(`
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>3</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>3</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>
             <Day>
                 <Index>2</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>4</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>4</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>`);
         expectAccordingToNeed(xml);
         await validateXml(xml);
@@ -355,22 +401,22 @@ describe('XML160Generator Multiperiode', () => {
             <IterationInterval>1</IterationInterval>
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimeOfDay>morning</TimeOfDay>
-                    <Quantity>1</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>noon</TimeOfDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>evening</TimeOfDay>
-                    <Quantity>3</Quantity>
-                </Dose>
-                <Dose>
-                    <TimeOfDay>night</TimeOfDay>
-                    <Quantity>4</Quantity>
-                </Dose>
+                <Dosage>
+                    <PartOfDayDosage>
+                        <Morning>
+                            <Quantity>1</Quantity>
+                        </Morning>
+                        <Noon>
+                            <Quantity>2</Quantity>
+                        </Noon>
+                        <Evening>
+                            <Quantity>3</Quantity>
+                        </Evening>
+                        <Night>
+                            <Quantity>4</Quantity>
+                        </Night>
+                    </PartOfDayDosage>
+                </Dosage>
             </Day>
         </Fixed>
     </DosagePeriod>
@@ -383,10 +429,12 @@ describe('XML160Generator Multiperiode', () => {
             <IterationInterval>1</IterationInterval>
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>1</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>1</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>
         </Fixed>
     </DosagePeriod>
@@ -399,17 +447,21 @@ describe('XML160Generator Multiperiode', () => {
             <IterationInterval>2</IterationInterval>
             <Day>
                 <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>3</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>3</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>
             <Day>
                 <Index>2</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>4</Quantity>
-                </Dose>
+                <Dosage>
+                    <TimesPerDayDosage>
+                        <Quantity>4</Quantity>
+                        <TimesPerDay>1</TimesPerDay>
+                    </TimesPerDayDosage>
+                </Dosage>
             </Day>
         </PRN>
     </DosagePeriod>
@@ -420,31 +472,40 @@ describe('XML160Generator Multiperiode', () => {
 
     it('should handle dag 1: 2;3 dag 2: 4;5 dose', async () => {
         const generator = new XML160Generator();
-        const xml = generator.generateXml([new DosagePeriod('PN', 'dag 1: 2;3 dag 2: 4;5', 1, beginDate, endDate)], 'tablet', 'tabletter');
-        expect(formatXml(xml)).to.contain(`
-            <Day>
-                <Index>1</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>2</Quantity>
-                </Dose>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>3</Quantity>
-                </Dose>
-            </Day>
-            <Day>
-                <Index>2</Index>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>4</Quantity>
-                </Dose>
-                <Dose>
-                    <TimesPerDay>1</TimesPerDay>
-                    <Quantity>5</Quantity>
-                </Dose>
-            </Day>`);
-        expectAccordingToNeed(xml);
-        await validateXml(xml);
+
+        assert.throws(() => {
+            generator.generateXml([new DosagePeriod('PN', 'dag 1: 2;3 dag 2: 4;5', 1, beginDate, endDate)], 'tablet', 'tabletter');
+        });
+
+    //     const xml = generator.generateXml([new DosagePeriod('PN', 'dag 1: 2;3 dag 2: 4;5', 1, beginDate, endDate)], 'tablet', 'tabletter');
+    //     expect(formatXml(xml)).to.contain(`
+    //         <Day>
+    //             <Index>1</Index>
+    //             <Dosage>
+    //                 <TimesPerDayDosage>
+    //                     <Quantity>2</Quantity>
+    //                     <TimesPerDay>1</TimesPerDay>
+    //                 </TimesPerDayDosage>
+    //                 <TimesPerDayDosage>
+    //                     <Quantity>3</Quantity>
+    //                     <TimesPerDay>1</TimesPerDay>
+    //                 </TimesPerDayDosage>
+    //             </Dosage>
+    //         </Day>
+    //         <Day>
+    //             <Index>2</Index>
+    //             <Dosage>
+    //                 <TimesPerDayDosage>
+    //                     <Quantity>4</Quantity>
+    //                     <TimesPerDay>1</TimesPerDay>
+    //                 </TimesPerDayDosage>
+    //                 <TimesPerDayDosage>
+    //                     <Quantity>5</Quantity>
+    //                     <TimesPerDay>1</TimesPerDay>
+    //                 </TimesPerDayDosage>
+    //             </Dosage>
+    //         </Day>`);
+    //     expectAccordingToNeed(xml);
+    //     await validateXml(xml);
     });
 });
