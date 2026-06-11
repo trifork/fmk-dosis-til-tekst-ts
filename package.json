@@ -12,7 +12,9 @@
         "pretestX": "tsc --project ./tsconfig.unittest.json",
         "testX": "TS_NODE_PROJECT=tsconfig.unittest.json mocha -r ts-node/register 'src/test/**/*.ts' --timeout 5000",
         "pretestZ": "tsc -p tsconfig.unittest.json",
-        "testZ": "mocha --timeout 5000 target/test/**/*.js"
+        "testZ": "mocha --timeout 5000 target/test/**/*.js",
+        "printExamples": "npx ts-node --project tsconfig.unittest.json src/test/ts/printExamples.ts",
+        "printNewStuff": "npx ts-node --project tsconfig.unittest.json src/test/ts/printNewStuff.ts"
     },
     "devDependencies": {
         "@eslint/js": "^9.28.0",

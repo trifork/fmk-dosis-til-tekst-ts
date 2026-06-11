@@ -20,6 +20,24 @@ export class DateOrDateTimeHelper {
         return d.toISOString();
     }
 
+    public static daysBetween(from: DateOnly, to: DateOnly, inclusive=true) {
+        const fromDate = new Date(from);
+        const toDate = new Date(to);
+        const utc1 = Date.UTC(
+            fromDate.getFullYear(),
+            fromDate.getMonth(),
+            fromDate.getDate()
+        );
+
+        const utc2 = Date.UTC(
+            toDate.getFullYear(),
+            toDate.getMonth(),
+            toDate.getDate()
+        );
+        const diff =  (utc2 - utc1) / (24 * 60 * 60 * 1000);
+        return inclusive ? diff + 1 : diff;
+    }
+
     public static isEqualTo(d1: DateOnly, d2: DateOnly): boolean {
         if (d2) {
             return d1 === d2;

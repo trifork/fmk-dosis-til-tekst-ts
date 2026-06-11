@@ -32,7 +32,6 @@ export {
     Units,
     Unit,
     Structure,
-    DateTime,
     DateOnly,
     Day,
     Dose,
@@ -96,3 +95,9 @@ export { XML144Generator } from "./DosageProposalXMLGenerator/XML144Generator";
 export { XML146Generator } from "./DosageProposalXMLGenerator/XML146Generator";
 export { XML160Generator } from "./DosageProposalXMLGenerator/XML160Generator";
 export { DosagePeriod } from "./DosageProposalXMLGenerator/DosagePeriod";
+
+// ./dosagerenderer
+export { DosageV2 } from "./dosagerenderer/Dosage";
+export { DosageRenderer } from "./dosagerenderer/DosageRenderer";
+export { DosageRendererFactory, DosageFormatterOptions } from "./dosagerenderer/DosageRendererFactory";
+export { DefaultDosageRendererFactory } from "./dosagerenderer/DefaultDosageRendererFactory";

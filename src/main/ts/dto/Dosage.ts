@@ -63,15 +63,6 @@ export interface Structure {
  */
 export type DateOnly = string;
 
-export interface DateTime {
-    /**
-     * @format date-time
-     * @isDateTime must be a valid datetime
-     * @deprecated datetimes are no longer used
-     */
-    dateTime?: string;
-}
-
 export interface Day {
     /**
      * @isInt dayNumber must be an integer value

@@ -1,7 +1,7 @@
 
 import { assert, expect } from 'chai';
 
-import { XML160Generator, DosagePeriod, DosisTilTekstException } from "../../../main/ts/index";
+import { XML160Generator, DosagePeriod } from "../../../main/ts/index";
 
 import * as xmlvalidator from 'xsd-schema-validator';
 import { formatXml } from '../formatXml';
