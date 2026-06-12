@@ -69,7 +69,7 @@ export { DateOrDateTimeHelper } from "./helpers/DateOrDateTimeHelper";
 export { DayHelper } from "./helpers/DayHelper";
 export { DoseHelper } from "./helpers/DoseHelper";
 export { StructureHelper } from "./helpers/StructureHelper";
-export { StructuresHelper} from "./helpers/StructuresHelper";
+export { StructuresHelper } from "./helpers/StructuresHelper";
 
 // ./
 export { DosisTilTekstException } from "./DosisTilTekstException";
@@ -97,7 +97,31 @@ export { XML160Generator } from "./DosageProposalXMLGenerator/XML160Generator";
 export { DosagePeriod } from "./DosageProposalXMLGenerator/DosagePeriod";
 
 // ./dosagerenderer
+export { AdministrationAccordingToSchemaInLocalSystem } from "./dosagerenderer/Dosage";
+export { DayType } from "./dosagerenderer/Dosage";
+export { DayUnspecified } from "./dosagerenderer/Dosage";
+export { DosageChoice } from "./dosagerenderer/Dosage";
+export { DosageFreeText } from "./dosagerenderer/Dosage";
+export { DosageParameter } from "./dosagerenderer/Dosage";
+export { DosageParameterSchema } from "./dosagerenderer/Dosage";
+export { DosageParametricQuantity } from "./dosagerenderer/Dosage";
+export { DosagePeriodType } from "./dosagerenderer/Dosage";
+export { DosageRestriction } from "./dosagerenderer/Dosage";
+export { DosageStructure } from "./dosagerenderer/Dosage";
 export { DosageV2 } from "./dosagerenderer/Dosage";
+export { DoseType } from "./dosagerenderer/Dosage";
+export { DoseUnitTexts } from "./dosagerenderer/Dosage";
+export { EpisodicTreatment } from "./dosagerenderer/Dosage";
+export { InfusionDose } from "./dosagerenderer/Dosage";
+export { PartOfDayDosage } from "./dosagerenderer/Dosage";
+export { Precondition } from "./dosagerenderer/Dosage";
+export { PredefinedDosageTypeEnum } from "./dosagerenderer/Dosage";
+export { TimeOfDay } from "./dosagerenderer/Dosage";
+export { TimesPerDayDosage } from "./dosagerenderer/Dosage";
+export { Weekday } from "./dosagerenderer/Dosage";
+export { WeekType } from "./dosagerenderer/Dosage";
+export { WeekdayLabel } from "./dosagerenderer/Dosage";
+
 export { DosageRenderer } from "./dosagerenderer/DosageRenderer";
 export { DosageRendererFactory, DosageFormatterOptions } from "./dosagerenderer/DosageRendererFactory";
 export { DefaultDosageRendererFactory } from "./dosagerenderer/DefaultDosageRendererFactory";

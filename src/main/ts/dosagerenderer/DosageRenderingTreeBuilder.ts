@@ -1,6 +1,6 @@
 import { formatDateOnly } from "../DateUtil";
 import { LocalTimeHelper } from "../helpers/LocalTimeHelper";
-import { DosageV2, DosageChoice, DosageParameter, DosagePeriod, DosageRestriction, DosageStructure, DoseType, PartOfDayDosage, Precondition, WeekdayLabel } from "./Dosage";
+import { DosageV2, DosageChoice, DosageParameter, DosagePeriodType, DosageRestriction, DosageStructure, DoseType, PartOfDayDosage, Precondition, WeekdayLabel } from "./Dosage";
 import { RenderingContext } from "./RenderingContext";
 
 export class DosageRenderingTreeBuilder {
@@ -96,7 +96,7 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    renderDosagePeriodHeader(ctx: RenderingContext, period: DosagePeriod, firstPeriod: boolean) {
+    renderDosagePeriodHeader(ctx: RenderingContext, period: DosagePeriodType, firstPeriod: boolean) {
         ctx.append("dosering");
         if (period.PeriodLength || period.PeriodLengthFreeText) {
             this.renderDuration(ctx, period);
@@ -405,7 +405,7 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    private renderDuration(ctx: RenderingContext, period: DosagePeriod) {
+    private renderDuration(ctx: RenderingContext, period: DosagePeriodType) {
         if (period.PeriodLengthFreeText) {
             ctx.append(period.PeriodLengthFreeText);
         } else if (period.PeriodLength) {

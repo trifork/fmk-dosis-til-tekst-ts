@@ -6,7 +6,7 @@ export interface DosageV2 {
     UnitText?: string;
     UnitTexts?: DoseUnitTexts;
     Parameter?: DosageParameter[];
-    DosagePeriod?: DosagePeriod[];
+    DosagePeriod?: DosagePeriodType[];
     FreeText?: DosageFreeText;
     AdministrationAccordingToSchemaInLocalSystem?: AdministrationAccordingToSchemaInLocalSystem;
     Type?: PredefinedDosageTypeEnum;   // Skal ikke renderes, men er det en støtte til rendering?
@@ -53,7 +53,7 @@ export interface DosageParameterSchema {
     ParametricQuantity: DosageParametricQuantity[];
 }
 
-export interface DosagePeriod {
+export interface DosagePeriodType {
     // One-of PeriodLength, PeriodLengthFreeText
     PeriodLength?: number;
     PeriodLengthFreeText?: string;

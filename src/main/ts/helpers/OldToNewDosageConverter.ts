@@ -1,4 +1,4 @@
-import { DayType, DosageV2, DosageChoice, DosagePeriod, DoseType, PartOfDayDosage, TimeOfDay, TimesPerDayDosage, Weekday, WeekdayLabel, WeekType } from "../dosagerenderer/Dosage";
+import { DayType, DosageV2, DosageChoice, DosagePeriodType, DoseType, PartOfDayDosage, TimeOfDay, TimesPerDayDosage, Weekday, WeekdayLabel, WeekType } from "../dosagerenderer/Dosage";
 import { DateOnly, Day, Dosage as OldDosage, Dose as OldDose, Structure } from "../dto/Dosage";
 import { DateOrDateTimeHelper } from "./DateOrDateTimeHelper";
 
@@ -61,8 +61,8 @@ export class OldToNewDosageConverter {
         return dosage;
     }
 
-    convertPeriod(structure: Structure): DosagePeriod {
-        const period: DosagePeriod = {};
+    convertPeriod(structure: Structure): DosagePeriodType {
+        const period: DosagePeriodType = {};
 
         if (structure.startDate && structure.endDate) {
             period.PeriodLength = DateOrDateTimeHelper.daysBetween(structure.startDate, structure.endDate);
