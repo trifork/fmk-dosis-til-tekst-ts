@@ -32,14 +32,15 @@ export class DosageRenderingTreeBuilder {
             this.renderPrecondition(ctx, dosage.Precondition);
         }
 
-        const headerCtx = ctx.beginHeader();
         if (dosage.AdministrationAccordingToSchemaInLocalSystem) {
+        const headerCtx = ctx.beginHeader();
             headerCtx.append(`fra ${dosage.AdministrationAccordingToSchemaInLocalSystem.StartDate}`);
             if (dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate) {
                 headerCtx.append(`til ${dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate}`);
             }
             ctx.append("efter skema");
         } else if (dosage.FreeText) {
+        const headerCtx = ctx.beginHeader();
             headerCtx.append(`fra ${dosage.FreeText.StartDate}`);
             if (dosage.FreeText.EndDate) {
                 headerCtx.append(`til ${dosage.FreeText.EndDate}`);
@@ -47,12 +48,13 @@ export class DosageRenderingTreeBuilder {
             ctx.append(dosage.FreeText.Text);
         } else if (dosage.DosagePeriod) {
             dosage.DosagePeriod.forEach((period, index) => {
+                const headerCtx = ctx.beginHeader();
                 const pCtx = ctx.beginParagraph();
                 if (period.Empty) {
-                    this.renderDosagePeriodHeader(ctx, period, index > 0);
+                    this.renderDosagePeriodHeader(headerCtx, period, index > 0);
                     this.renderEmptyPeriod(pCtx);
                 } else if (period.Unspecified) {
-                    this.renderDosagePeriodHeader(ctx, period, index > 0);
+                    this.renderDosagePeriodHeader(headerCtx, period, index > 0);
                     this.renderUnspecifiedPeriod(pCtx);
                 } else {
                     // NOTE: If Fixed and PRN have different IterationInterval, we need to split period into 2 with separate headers!
@@ -97,11 +99,13 @@ export class DosageRenderingTreeBuilder {
     }
 
     renderDosagePeriodHeader(ctx: RenderingContext, period: DosagePeriodType, firstPeriod: boolean) {
-        ctx.append("dosering");
-        if (period.PeriodLength || period.PeriodLengthFreeText) {
-            this.renderDuration(ctx, period);
-        } else if (!firstPeriod) {
-            ctx.append("herefter");
+        if (!this.oneLine) {
+            ctx.append("dosering");
+            if (period.PeriodLength || period.PeriodLengthFreeText) {
+                this.renderDuration(ctx, period);
+            } else if (!firstPeriod) {
+                ctx.append("herefter");
+            }
         }
     }
 
