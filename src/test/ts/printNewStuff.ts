@@ -63,6 +63,7 @@ const examples: DosageV2[] = [
             }
         }]
     },
+    { "DosagePeriod": [{ "PeriodLength": 4, "Empty": false, "Unspecified": false, "Fixed": { "IterationInterval": 1, "Day": [{ "Index": 1, "Dosage": { "TimesPerDayDosage": { "Quantity": 1, "TimesPerDay": 3 } } }] } }, { "Empty": false, "Unspecified": false, "Fixed": { "IterationInterval": 1, "Day": [{ "Index": 1, "Dosage": { "TimesPerDayDosage": { "Quantity": 2, "TimesPerDay": 4 } } }] } }], "IsSelfAdministration": false, "Precondition": { "UpdateValidFromUponHandover": false }, "UnitTexts": { "Singular": "tablet", "Plural": "tabletter" } }
 ];
 
 export function printExamples() {

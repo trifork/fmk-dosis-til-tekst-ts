@@ -101,12 +101,14 @@ export class OldToNewDosageConverter {
 
             if (fixedWeeks.find(week => week.Weekday.length > 0)) {
                 period.Fixed = {
+                    IterationInterval: structure.iterationInterval / 7,
                     Week: fixedWeeks
                 }
             }
 
             if (prnWeeks.find(week => week.Weekday.length > 0)) {
                 period.PRN = {
+                    IterationInterval: structure.iterationInterval / 7,
                     Week: prnWeeks
                 }
             }
@@ -133,6 +135,10 @@ export class OldToNewDosageConverter {
                     Day: prnDays
                 };
             }
+        }
+
+        if (!period.Fixed && !period.PRN) {
+            period.Empty = true;
         }
 
         if (structure.supplText) {
@@ -232,15 +238,15 @@ export class OldToNewDosageConverter {
     convertDose(oldDose: OldDose): DoseType {
         const dose: DoseType = {};
 
-        if (oldDose.doseQuantity) {
+        if (oldDose.doseQuantity != null) {
             dose.Quantity = oldDose.doseQuantity;
         }
 
-        if (oldDose.minimalDoseQuantity) {
+        if (oldDose.minimalDoseQuantity != null) {
             dose.MinimumQuantity = oldDose.minimalDoseQuantity;
         }
 
-        if (oldDose.maximalDoseQuantity) {
+        if (oldDose.maximalDoseQuantity != null) {
             dose.MaximumQuantity = oldDose.maximalDoseQuantity;
         }
 

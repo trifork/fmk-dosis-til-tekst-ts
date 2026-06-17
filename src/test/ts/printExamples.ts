@@ -1,4 +1,4 @@
-import { Dosage, LongTextConverter, ShortTextConverter } from "../../main/ts";
+import { Dosage, Factory, LongTextConverter, ShortTextConverter } from "../../main/ts";
 import { DefaultDosageRendererFactory } from "../../main/ts/dosagerenderer/DefaultDosageRendererFactory";
 import { DosageRenderer } from "../../main/ts/dosagerenderer/DosageRenderer";
 import { OldToNewDosageConverter } from "../../main/ts/helpers/OldToNewDosageConverter";
@@ -120,22 +120,22 @@ export function printExamples() {
 
     const longTextEx = longTextExamples.slice(0);
 
-    // for (let i = 0; i < longTextEx.length; i++) {
-    //     const dosage = longTextEx[i];
-    //     console.log("#" + i);
-    //     compareLongText(dosage, oldLongTextConverter, newLongTextConverter);
-    // }
+    for (let i = 0; i < longTextEx.length; i++) {
+        const dosage = longTextEx[i];
+        console.log("#" + i);
+        compareLongText(dosage, oldLongTextConverter, newLongTextConverter);
+    }
 
     const oldShortTextConverter = new ShortTextConverter();
     const newShortTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: true });
 
     const shortTextEx = shortTextExamples.slice(0);
 
-    for (let i = 0; i < shortTextEx.length; i++) {
-        const dosage = shortTextEx[i];
-        console.log("#" + i);
-        compareShortText(dosage, oldShortTextConverter, newShortTextConverter);
-    }
+    // for (let i = 0; i < shortTextEx.length; i++) {
+    //     const dosage = shortTextEx[i];
+    //     console.log("#" + i);
+    //     compareShortText(dosage, oldShortTextConverter, newShortTextConverter);
+    // }
 }
 
 function compareLongText(dosage: Dosage, oldConverter: LongTextConverter, newConverter: DosageRenderer) {
@@ -144,6 +144,7 @@ function compareLongText(dosage: Dosage, oldConverter: LongTextConverter, newCon
     const newTranslation = newConverter.render(newDosage);
     console.log("*** " + JSON.stringify(dosage));
     console.log("### " + JSON.stringify(newDosage));
+    console.log(`  -> ${Factory.getLongTextConverter().getConverterClassName(dosage)}`);
     console.log("< " + oldTranslation.replace(/\n/g, "\n< "));
     console.log("---");
     console.log("> " + newTranslation.replace(/\n/g, "\n> "));
@@ -155,6 +156,7 @@ function compareShortText(dosage: Dosage, oldConverter: ShortTextConverter, newC
     const newTranslation = newConverter.render(newDosage);
     console.log("*** " + JSON.stringify(dosage));
     console.log("### " + JSON.stringify(newDosage));
+    console.log(`  -> ${Factory.getShortTextConverter().getConverterClassName(dosage)}`);
     if (oldTranslation) {
         console.log("< " + oldTranslation.replace(/\n/g, "\n< "));
     } else {

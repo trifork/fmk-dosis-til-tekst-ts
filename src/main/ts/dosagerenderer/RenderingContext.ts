@@ -373,7 +373,7 @@ export class HtmlVisitor
 
     visitDefinitionList(node: DefinitionListNode): string {
         let html = "<dl>";
-        html += node.tuples.map(({ term, data }) => `<dt>${term}</dt><dd>${visitNode(data, this)}</dd>`)
+        html += node.tuples.map(({ term, data }) => `<dt>${term}</dt><dd>${visitNode(data, this)}</dd>`).join("")
         html += "</dl>";
         return html;
     }
@@ -454,7 +454,6 @@ export class MultiLineTextVisitor
         const texts = node.tuples
             .map(({ term, data }) => `${capitalize(term)}: ${visitNode(data, this)}`)
 
-        // What about oneLine?
         const text = texts.join("\n");
 
         return text;
@@ -547,8 +546,7 @@ export class OneLineTextVisitor
         const texts = node.tuples
             .map(({ term, data }) => `${capitalize(term)}: ${visitNode(data, this)}`)
 
-        // What about oneLine?
-        const text = texts.join("\n");
+        const text = texts.join(", ");
 
         return text;
     }
@@ -619,5 +617,9 @@ function escapeHtml(text: string): string {
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
+}
+
+function pruneEmptyNodes(nodes: RenderNode[]) {
+    return nodes.filter(node => node.kind !== "text" || node.text.length > 0);
 }
 
