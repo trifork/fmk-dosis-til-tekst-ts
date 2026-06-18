@@ -342,7 +342,7 @@ export class HtmlVisitor
         const chunks = node.children
             .map((c) => visitNode(c, this));
 
-        const body = chunks.join(" ");
+        const body = capitalize(chunks.join(" "));
 
         return node.options?.name
             ? `<h3 class="${node.options.name}">${body}</h3>`
@@ -418,7 +418,7 @@ export class MultiLineTextVisitor
 
         const body = capitalize(chunks.join(" "));
 
-        return `${body}:`;
+        return body.length ? `\n${body}:` : undefined;
     }
 
     visitTable(node: TableNode): string {
@@ -510,7 +510,7 @@ export class OneLineTextVisitor
 
         const body = capitalize(chunks.join(" "));
 
-        return `${body}:`;
+        return body.length ? `${body}:` : undefined;
     }
 
     visitTable(node: TableNode): string {
@@ -617,9 +617,5 @@ function escapeHtml(text: string): string {
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
-}
-
-function pruneEmptyNodes(nodes: RenderNode[]) {
-    return nodes.filter(node => node.kind !== "text" || node.text.length > 0);
 }
 
