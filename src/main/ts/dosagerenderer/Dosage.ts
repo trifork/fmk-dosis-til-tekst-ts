@@ -46,6 +46,10 @@ export type PredefinedDosageTypeEnum =
 
 export interface EpisodicTreatment {
     Trigger: string;
+    /**
+      * @isInt MinimumDaysBetweenEpisodes must be specified in whole days
+      * @minimum 0
+      */
     MinimumDaysBetweenEpisodes?: number;
 }
 
@@ -55,6 +59,10 @@ export interface DosageParameterSchema {
 
 export interface DosagePeriodType {
     // One-of PeriodLength, PeriodLengthFreeText
+    /**
+      * @isInt PeriodLength must be specified in whole days
+      * @minimum 1
+      */
     PeriodLength?: number;
     PeriodLengthFreeText?: string;
     // One-of Empty, Unspecified, [Fixed, PRN]
@@ -67,6 +75,10 @@ export interface DosagePeriodType {
 export interface DosageStructure {
     Restriction?: DosageRestriction;
     Instruction?: string;
+    /**
+      * @isInt IterationInterval must be specified in whole days
+      * @minimum 0
+      */
     IterationInterval?: number;
     Day?: DayType[];
     UnspecifiedDay?: DayUnspecified;
@@ -87,10 +99,18 @@ export interface DosageParametricQuantity {
 
 export interface DosageRestriction {
     MaximumDailyDose?: number;
+    /**
+      * @isInt MinimumDurationBetweenDoses must be specified in whole days
+      * @minimum 0
+      */
     MinimumDurationBetweenDoses?: number;
 }
 
 export interface DayType {
+    /**
+      * @isInt Index must be specified in whole days
+      * @minimum 1
+      */
     Index: number;
     Dosage: DosageChoice;
 }
@@ -123,6 +143,10 @@ export interface PartOfDayDosage {
 }
 
 export interface TimesPerDayDosage extends DoseType {
+    /**
+      * @isInt TimesPerDay must be specified in whole days
+      * @minimum 0
+      */
     TimesPerDay: number;
 }
 
