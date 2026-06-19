@@ -76,15 +76,15 @@ export class DosageRenderingTreeBuilder {
                     if (!varyingIntervals) {
                         this.renderDosagePeriodHeader(headerCtx, period, index === 0);
                         const onlyDay1 = this.compact.OnlyDay1
-                            && this.isOnlyFirstDayDosage(period.Fixed)
-                            && this.isOnlyFirstDayDosage(period.PRN);
+                            && this.isOnlyFirstDayDosage(period.Fixed, !!period.PeriodLengthFreeText, period.PeriodLength)
+                            && this.isOnlyFirstDayDosage(period.PRN, !!period.PeriodLengthFreeText, period.PeriodLength);
 
                         if (!onlyDay1) {
                             this.renderIteration(headerCtx, period.Fixed || period.PRN)
                         }
                     }
                     if (period.Fixed) {
-                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(period.Fixed);
+                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(period.Fixed, !!period.PeriodLengthFreeText, period.PeriodLength);
                         if (varyingIntervals) {
                             this.renderDosagePeriodHeader(headerCtx, period, index === 0);
                             if (!onlyDay1) {
@@ -95,7 +95,7 @@ export class DosageRenderingTreeBuilder {
                         this.renderDosageStructure(pCtx, period.Fixed, onlyDay1, false);
                     }
                     if (period.PRN) {
-                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(period.PRN);
+                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(period.PRN, !!period.PeriodLengthFreeText, period.PeriodLength);
                         if (varyingIntervals) {
                             this.renderDosagePeriodHeader(headerCtx, period, index === 0);
                             if (!onlyDay1) {
@@ -285,7 +285,7 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    isOnlyFirstDayDosage(dosageStructure: DosageStructure) {
+    isOnlyFirstDayDosage(dosageStructure: DosageStructure, hasFreeTextPeriodLength: boolean, periodLength?: number) {
         if (!dosageStructure) {
             return true;
         }
@@ -294,10 +294,14 @@ export class DosageRenderingTreeBuilder {
             if (dosageStructure.IterationInterval === 1) {
                 return true;
             }
-    
-            if (dosageStructure.IterationInterval && !dosageStructure.Day.find(day => day.Index !== 1)) {
-                // Any non-zero iteration interval, but only dosage on day 1
-                return true;
+
+            if (dosageStructure.IterationInterval) {
+                if (!dosageStructure.Day.find(day => day.Index !== 1)) {
+                    // Any non-zero iteration interval, but only dosage on day 1
+                    return true;
+                }
+            } else {
+                return !hasFreeTextPeriodLength && (!periodLength || periodLength == 1);
             }
         }
     }

@@ -7,6 +7,7 @@ type RenderNode = TextNode | ContainerNode | ParagraphNode | HeaderNode | TableN
 
 interface BaseNode {
     kind: string;
+    display?: "inline" | "block";
 }
 
 export interface TextNode extends BaseNode {
@@ -395,21 +396,46 @@ export class MultiLineTextVisitor
     }
 
     visitContainer(node: ContainerNode): string {
-        const chunks = node.children
-            .map((c) => visitNode(c, this));
-
-        const body = joinChunks(chunks, node.options?.join);
+        const body = this.joinChildren(node);
 
         return body;
     }
 
+    private joinChildren(node: ContainerNode | ParagraphNode) {
+        if (node.options?.join) {
+            const chunks = node.children
+                .map((c) => visitNode(c, this));
+
+            return joinChunks(chunks, node.options?.join);
+        }
+        return joinRenderedNodes(
+            node.children,
+            child => visitNode(child, this),
+            (left, right) => {
+                if (right.kind === "header" || right.kind === "table") {
+                    return "\n\n";
+                }
+                if (this.isBlockStyleNode(left) || this.isBlockStyleNode(right)) {
+                    return "\n";
+                }
+
+                return " ";
+            }
+        );
+    }
+
+    private isBlockStyleNode(node: RenderNode) {
+        return node.kind !== "text" && node.kind !== "container";
+    }
+
     visitParagraph(node: ParagraphNode): string {
-        const chunks = node.children
-            .map((c) => visitNode(c, this));
+        // const chunks = node.children
+        //     .map((c) => visitNode(c, this));
 
-        const body = joinChunks(chunks, node.options?.join);
+        // const body = joinChunks(chunks, node.options?.join);
+        const body = this.joinChildren(node);
 
-        return "\n" + body + "\n";
+        return body;
     }
 
     visitHeader(node: HeaderNode): string {
@@ -418,7 +444,7 @@ export class MultiLineTextVisitor
 
         const body = capitalize(chunks.join(" "));
 
-        return body.length ? `\n${body}:` : undefined;
+        return body.length ? `${body}:` : undefined;
     }
 
     visitTable(node: TableNode): string {
@@ -619,3 +645,24 @@ function escapeHtml(text: string): string {
         .replace(/>/g, "&gt;");
 }
 
+function joinRenderedNodes(
+    nodes: RenderNode[],
+    render: (node: RenderNode) => string,
+    separator: (
+        left: RenderNode,
+        right: RenderNode
+    ) => string
+): string {
+    if (nodes.length === 0) {
+        return "";
+    }
+
+    let result = render(nodes[0]);
+
+    for (let i = 1; i < nodes.length; i++) {
+        result += separator(nodes[i - 1], nodes[i]);
+        result += render(nodes[i]);
+    }
+
+    return result;
+}
