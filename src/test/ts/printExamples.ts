@@ -131,11 +131,11 @@ export function printExamples() {
 
     const shortTextEx = shortTextExamples.slice(0);
 
-    // for (let i = 0; i < shortTextEx.length; i++) {
-    //     const dosage = shortTextEx[i];
-    //     console.log("#" + i);
-    //     compareShortText(dosage, oldShortTextConverter, newShortTextConverter);
-    // }
+    for (let i = 0; i < shortTextEx.length; i++) {
+        const dosage = shortTextEx[i];
+        console.log("#" + i);
+        compareShortText(dosage, oldShortTextConverter, newShortTextConverter);
+    }
 }
 
 function compareLongText(dosage: Dosage, oldConverter: LongTextConverter, newConverter: DosageRenderer) {

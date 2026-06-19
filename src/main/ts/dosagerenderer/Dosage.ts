@@ -145,7 +145,7 @@ export interface DoseUnitTexts {
 }
 
 export interface DoseType {
-    // One-of:  Quantity, [MinimumQuantity, MaximumQuantity], AccordingToParameterSchema
+    // One-of:  Quantity, [MinimumQuantity, MaximumQuantity], AccordingToParameterSchema, Infusion
     Quantity?: number;
     MinimumQuantity?: number;
     MaximumQuantity?: number;

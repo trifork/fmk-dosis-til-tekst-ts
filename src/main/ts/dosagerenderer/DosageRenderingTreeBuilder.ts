@@ -197,9 +197,9 @@ export class DosageRenderingTreeBuilder {
             // Value column
             let value;
             if (row.Quantity != null) {
-                value = row.Quantity.toString();
+                value = `${row.Quantity} ${this.getUnit(ctx, row.Quantity === 1)}`;
             } else if (row.MinimumQuantity != null || row.MaximumQuantity != null) {
-                value = `${row.MinimumQuantity} - ${row.MaximumQuantity}`;
+                value = `${row.MinimumQuantity} - ${row.MaximumQuantity} ${this.getUnit(ctx, row.Quantity === 1)}`;
             } else {
                 value = row.Instruction;
             }
@@ -358,6 +358,10 @@ export class DosageRenderingTreeBuilder {
             dosesAndTimes.push({ dose: dosageChoice.TimesPerDayDosage, time: time });
         }
 
+        if (dosageChoice.UnlimitedDayDosage) {
+            dosesAndTimes.push({ dose: dosageChoice.UnlimitedDayDosage, time: "ubegrænset antal gange" });
+        }
+
         if (this.compact.AllDosesEqualWithinDay && this.allDosesAreEqual(dosesAndTimes.map(dt => dt.dose))) {
             this.renderDose(ctx, dosesAndTimes[0].dose, prn);
             const listCtx = ctx.begin({ join: "comma-and" });
@@ -392,12 +396,29 @@ export class DosageRenderingTreeBuilder {
     }
 
     private renderDose(ctx: RenderingContext, dose: DoseType, prn: boolean) {
+
         if (dose.Quantity != null) {
             ctx.append(`${dose.Quantity} ${this.getUnit(ctx, dose.Quantity === 1)}`);
+
         } else if (dose.MinimumQuantity != null || dose.MaximumQuantity != null) {
-            ctx.append(`${dose.MinimumQuantity} - ${dose.MaximumQuantity} this.getUnit(ctx, false)`);
+            ctx.append(`${dose.MinimumQuantity} - ${dose.MaximumQuantity} ${this.getUnit(ctx, false)}`);
+
         } else if (dose.AccordingToParameterSchema) {
-            ctx.append(`Antal ${this.getUnit(ctx, true)}/${this.getUnit(ctx, false)} i henhold til ${dose.AccordingToParameterSchema}`);
+            ctx.append(`antal ${this.getUnit(ctx, true)}/${this.getUnit(ctx, false)} i henhold til ${dose.AccordingToParameterSchema}`);
+
+        } else if (dose.Infusion) {
+            const infCtx = ctx.begin({ join: "comma"});
+            const infusion = dose.Infusion;
+            if (infusion.Duration != null) {
+                infCtx.append(`varighed ${infusion.Duration} min`);
+            } else if (infusion.MinimumDuration != null || infusion.MaximumDuration != null) {
+                infCtx.append(`varighed ${infusion.MinimumDuration} - ${infusion.MaximumDuration} min`);
+            } 
+            if (infusion.InfusionRate != null) {
+                infCtx.append(`indløbsrate ${infusion.InfusionRate} ${this.getUnit(ctx, false)}/t`);
+            } else if (infusion.MinimumInfusionRate != null || infusion.MaximumInfusionRate != null) {
+                infCtx.append(`indløbsrate ${infusion.MinimumInfusionRate} - ${infusion.MaximumInfusionRate} ${this.getUnit(ctx, false)}/t`);
+            }
         }
 
         if (prn) {
@@ -416,7 +437,7 @@ export class DosageRenderingTreeBuilder {
     private renderRestriction(ctx: RenderingContext, restriction: DosageRestriction) {
         ctx = ctx.begin({ name: "restriction", join: "comma" });
         if (restriction.MaximumDailyDose) {
-            ctx.append(`Max daglig dosis: ${restriction.MaximumDailyDose} ${this.getUnit(ctx, restriction.MaximumDailyDose === 1)}`);
+            ctx.append(`max daglig dosis: ${restriction.MaximumDailyDose} ${this.getUnit(ctx, restriction.MaximumDailyDose === 1)}`);
         }
 
         if (restriction.MinimumDurationBetweenDoses) {

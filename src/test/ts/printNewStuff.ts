@@ -53,7 +53,7 @@ const examples: DosageV2[] = [
                     },
                     {
                         FromValue: 10,
-                        Quantity: 2
+                        Quantity: 1
                     },
                     {
                         FromValue: 12,
@@ -63,7 +63,90 @@ const examples: DosageV2[] = [
             }
         }]
     },
-    { "DosagePeriod": [{ "PeriodLength": 4, "Empty": false, "Unspecified": false, "Fixed": { "IterationInterval": 1, "Day": [{ "Index": 1, "Dosage": { "TimesPerDayDosage": { "Quantity": 1, "TimesPerDay": 3 } } }] } }, { "Empty": false, "Unspecified": false, "Fixed": { "IterationInterval": 1, "Day": [{ "Index": 1, "Dosage": { "TimesPerDayDosage": { "Quantity": 2, "TimesPerDay": 4 } } }] } }], "IsSelfAdministration": false, "Precondition": { "UpdateValidFromUponHandover": false }, "UnitTexts": { "Singular": "tablet", "Plural": "tabletter" } }
+    {
+        DosagePeriod: [
+            {
+                PeriodLength: 4,
+                Fixed: {
+                    IterationInterval: 1,
+                    Day: [{
+                        Index: 1,
+                        Dosage: {
+                            TimesPerDayDosage: {
+                                Quantity: 1, TimesPerDay: 3
+                            }
+                        }
+                    }]
+                }
+            }, {
+                Fixed: {
+                    IterationInterval: 1,
+                    Day: [{
+                        Index: 1,
+                        Dosage: {
+                            TimesPerDayDosage: {
+                                Quantity: 2,
+                                TimesPerDay: 4
+                            }
+                        }
+                    }]
+                }
+            }
+        ],
+        Precondition: {
+            UpdateValidFromUponHandover: false
+        },
+        UnitTexts: {
+            Singular: "tablet",
+            Plural: "tabletter"
+        }
+    },
+    {
+        UnitTexts: {
+            Singular: "tablet",
+            Plural: "tabletter"
+        },
+        DosagePeriod: [
+            {
+                PeriodLength: 4,
+                Fixed: {
+                    IterationInterval: 1,
+                    Day: [{
+                        Index: 1,
+                        Dosage: {
+                            UnlimitedDayDosage: {
+                                Quantity: 1
+                            }
+                        }
+                    }]
+                }
+            }
+        ]
+    },
+    {
+        UnitText: "ml",
+        DosagePeriod: [
+            {
+                PeriodLength: 4,
+                Fixed: {
+                    IterationInterval: 1,
+                    Day: [{
+                        Index: 1,
+                        Dosage: {
+                            TimesPerDayDosage: {
+                                TimesPerDay: 2,
+                                Infusion: {
+                                    Duration: 5,
+                                    MinimumInfusionRate: 100,
+                                    MaximumInfusionRate: 200
+                                }
+                            }
+                        }
+                    }]
+                }
+            }
+        ]
+    }
 ];
 
 export function printExamples() {
