@@ -396,9 +396,7 @@ export class MultiLineTextVisitor
     }
 
     visitContainer(node: ContainerNode): string {
-        const body = this.joinChildren(node);
-
-        return body;
+        return this.joinChildren(node);
     }
 
     private joinChildren(node: ContainerNode | ParagraphNode) {
@@ -429,13 +427,7 @@ export class MultiLineTextVisitor
     }
 
     visitParagraph(node: ParagraphNode): string {
-        // const chunks = node.children
-        //     .map((c) => visitNode(c, this));
-
-        // const body = joinChunks(chunks, node.options?.join);
-        const body = this.joinChildren(node);
-
-        return body;
+        return this.joinChildren(node);
     }
 
     visitHeader(node: HeaderNode): string {
@@ -513,21 +505,38 @@ export class OneLineTextVisitor
     }
 
     visitContainer(node: ContainerNode): string {
-        const chunks = node.children
-            .map((c) => visitNode(c, this));
+        return this.joinChildren(node);
+    }
 
-        const body = joinChunks(chunks, node.options?.join);
+    private joinChildren(node: ContainerNode | ParagraphNode) {
+        if (node.options?.join) {
+            const chunks = node.children
+                .map((c) => visitNode(c, this));
 
-        return body;
+            return joinChunks(chunks, node.options?.join);
+        }
+        return joinRenderedNodes(
+            node.children,
+            child => visitNode(child, this),
+            (left, right) => {
+                if (right.kind === "header" || right.kind === "table") {
+                    return ". ";
+                }
+                if (this.isBlockStyleNode(left) || this.isBlockStyleNode(right)) {
+                    return ", ";
+                }
+
+                return " ";
+            }
+        );
+    }
+
+    private isBlockStyleNode(node: RenderNode) {
+        return node.kind !== "text" && node.kind !== "container";
     }
 
     visitParagraph(node: ParagraphNode): string {
-        const chunks = node.children
-            .map((c) => visitNode(c, this));
-
-        const body = joinChunks(chunks, node.options?.join);
-
-        return body;
+        return this.joinChildren(node);
     }
 
     visitHeader(node: HeaderNode): string {
@@ -657,11 +666,16 @@ function joinRenderedNodes(
         return "";
     }
 
-    let result = render(nodes[0]);
+    let result = render(nodes[0]) || "";
 
     for (let i = 1; i < nodes.length; i++) {
-        result += separator(nodes[i - 1], nodes[i]);
-        result += render(nodes[i]);
+        const rendered = render(nodes[i]);
+        if (rendered) {
+            if (result) {
+                result += separator(nodes[i - 1], nodes[i]);
+            }
+            result += rendered;
+        }
     }
 
     return result;

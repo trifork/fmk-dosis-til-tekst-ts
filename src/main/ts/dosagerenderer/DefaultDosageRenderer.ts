@@ -22,6 +22,10 @@ export class DefaultDosageRenderer implements DosageRenderer {
                 ? new OneLineTextVisitor()
                 : new MultiLineTextVisitor();
 
-        return ctx.accept(visitor);
+        const result = ctx.accept(visitor);
+
+        if (!this.options.maxLength || !result || result.length <= this.options.maxLength) {
+            return result;
+        }
     }
 }

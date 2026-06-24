@@ -111,8 +111,18 @@ const shortTextExamples: Dosage[] = [
     { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 0, "supplText": "", "startDate": "2021-10-25", "endDate": "2021-10-25", "days": [] }], "isPartOfMultiPeriodDosage": false } },
     { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 0, "supplText": "", "startDate": "2021-10-25", "endDate": "2021-10-25", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 1, "isAccordingToNeed": false }, { "type": "EveningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }], "isPartOfMultiPeriodDosage": false } },
     { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 14, "supplText": "", "startDate": "2021-10-25", "endDate": "2021-10-25", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 1, "isAccordingToNeed": false }, { "type": "EveningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }], "isPartOfMultiPeriodDosage": false } }
-
 ];
+
+
+const miscExamples: Dosage[] = [
+    { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 0, supplText: "[Single period longer than dosage days]", "startDate": "2020-08-27", "endDate": "2020-09-02", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }], "isPartOfMultiPeriodDosage": false } },
+    { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 0, supplText: "[Single period - no endDate]", "startDate": "2020-08-27", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }], "isPartOfMultiPeriodDosage": false } },
+    { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [
+        { "iterationInterval": 0, supplText: "[Two periods - first longer than dosage days]", "startDate": "2020-08-27", "endDate": "2020-09-02", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] },
+        { "iterationInterval": 0, "startDate": "2020-09-03", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }
+    ], "isPartOfMultiPeriodDosage": true } },
+]
+
 
 export function printExamples() {
     const oldLongTextConverter = new LongTextConverter();
@@ -136,6 +146,13 @@ export function printExamples() {
         console.log("#" + i);
         compareShortText(dosage, oldShortTextConverter, newShortTextConverter);
     }
+
+    for (let i = 0; i < miscExamples.length; i++) {
+        const dosage = miscExamples[i];
+        console.log("#" + i);
+        compareLongText(dosage, oldLongTextConverter, newLongTextConverter);
+    }
+
 }
 
 function compareLongText(dosage: Dosage, oldConverter: LongTextConverter, newConverter: DosageRenderer) {
@@ -165,5 +182,6 @@ function compareShortText(dosage: Dosage, oldConverter: ShortTextConverter, newC
     console.log("---");
     console.log("> " + newTranslation.replace(/\n/g, "\n> "));
 }
+
 
 printExamples();
