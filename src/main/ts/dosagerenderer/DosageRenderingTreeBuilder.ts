@@ -1,4 +1,5 @@
 import { formatDateOnly } from "../DateUtil";
+import { DurationUtil } from "../DurationUtil";
 import { LocalTimeHelper } from "../helpers/LocalTimeHelper";
 import { defaultEnabledCompactionPatterns, EnabledCompactionPatterns } from "./CompactionPatterns";
 import { DosageV2, DosageChoice, DosageParameter, DosagePeriodType, DosageRestriction, DosageStructure, DoseType, PartOfDayDosage, Precondition, WeekdayLabel } from "./Dosage";
@@ -447,7 +448,7 @@ export class DosageRenderingTreeBuilder {
         }
 
         if (restriction.MinimumDurationBetweenDoses) {
-            ctx.append(`mindst ${restriction.MinimumDurationBetweenDoses} dage imellem doser`);
+            ctx.append(`mindst ${DurationUtil.formatMinutes(restriction.MinimumDurationBetweenDoses)} imellem doser`);
         }
     }
 

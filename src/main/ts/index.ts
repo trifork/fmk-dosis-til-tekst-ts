@@ -79,6 +79,7 @@ export { LoggerService } from "./LoggerService";
 export { LongTextConverter } from "./LongTextConverter";
 export { ShortTextConverter } from "./ShortTextConverter";
 export { CombinedTextConverter } from "./CombinedTextConverter";
+export { DurationUtil } from "./DurationUtil";
 export { TextHelper } from "./TextHelper";
 export { Validator } from "./Validator";
 export { DosageTypeCalculator } from "./DosageTypeCalculator";
