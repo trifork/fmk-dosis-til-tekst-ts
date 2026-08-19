@@ -369,7 +369,7 @@ export class DosageRenderingTreeBuilder {
             dosesAndTimes.push({ dose: dosageChoice.UnlimitedDayDosage, time: "ubegrænset antal gange" });
         }
 
-        if (this.compact.AllDosesEqualWithinDay && this.allDosesAreEqual(dosesAndTimes.map(dt => dt.dose))) {
+        if (dosesAndTimes.length && this.compact.AllDosesEqualWithinDay && this.allDosesAreEqual(dosesAndTimes.map(dt => dt.dose))) {
             this.renderDose(ctx, dosesAndTimes[0].dose, prn);
             const listCtx = ctx.begin({ join: "comma-and" });
             for (const doseAndTime of dosesAndTimes) {
