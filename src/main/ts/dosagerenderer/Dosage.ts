@@ -100,7 +100,7 @@ export interface DosageParametricQuantity {
 export interface DosageRestriction {
     MaximumDailyDose?: number;
     /**
-      * @isInt MinimumDurationBetweenDoses must be specified in whole days
+      * @isInt MinimumDurationBetweenDoses must be specified in whole minutes
       * @minimum 0
       */
     MinimumDurationBetweenDoses?: number;
