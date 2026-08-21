@@ -73,7 +73,16 @@ export interface DosagePeriodType {
 }
 
 export interface DosageStructure {
+    /**
+    * @deprecated Use DosageStructure.MinimumDurationBetweenDoses and DosageStructure.(Day|UnspecifiedDay|Week).Dosage.UnlimitedDayDosage.MaximumDailyDose instead.
+    */
     Restriction?: DosageRestriction;
+
+    /**
+      * @isInt Mimumum number of minutes between doses
+      * @minimum 1
+      */
+    MinimumDurationBetweenDoses?: number;
     Instruction?: string;
     /**
       * @isInt IterationInterval must be specified in whole days
@@ -101,7 +110,7 @@ export interface DosageRestriction {
     MaximumDailyDose?: number;
     /**
       * @isInt MinimumDurationBetweenDoses must be specified in whole minutes
-      * @minimum 0
+      * @minimum 1
       */
     MinimumDurationBetweenDoses?: number;
 }
@@ -127,7 +136,11 @@ export interface DosageChoice {
     TimeOfDayDosage?: TimeOfDay[];
     PartOfDayDosage?: PartOfDayDosage;
     TimesPerDayDosage?: TimesPerDayDosage;
-    UnlimitedDayDosage?: DoseType;
+    UnlimitedDayDosage?: UnlimitedDosageType;
+}
+
+export interface UnlimitedDosageType extends DoseType {
+    MaximumDailyDose?: number;
 }
 
 export interface Weekday {

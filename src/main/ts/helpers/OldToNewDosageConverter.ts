@@ -53,6 +53,10 @@ export class OldToNewDosageConverter {
                 dosage.FreeText.DosageEndingUndetermined = true;
             }
         } else if (oldDosage.structures) {
+            // Use startDate of first period as Precondition.ValidFrom
+            dosage.Precondition = {
+                ValidFrom: oldDosage.structures?.structures[0]?.startDate
+            };
             const oldStructures = oldDosage.structures;
             dosage.DosagePeriod = oldStructures.structures.map(p => this.convertPeriod(p));
         }
@@ -70,7 +74,7 @@ export class OldToNewDosageConverter {
 
         if (structure.startDate && structure.iterationInterval > 0 && structure.iterationInterval % 7 === 0) {
             // Weekly
-            const numWeeks = structure.iterationInterval / 7;
+            const numWeeks = structure.iterationInterval;
             const fixedWeeks: WeekType[] = [];
             const prnWeeks: WeekType[] = [];
 
@@ -101,14 +105,14 @@ export class OldToNewDosageConverter {
 
             if (fixedWeeks.find(week => week.Weekday.length > 0)) {
                 period.Fixed = {
-                    IterationInterval: structure.iterationInterval / 7,
+                    IterationInterval: structure.iterationInterval,
                     Week: fixedWeeks
                 }
             }
 
             if (prnWeeks.find(week => week.Weekday.length > 0)) {
                 period.PRN = {
-                    IterationInterval: structure.iterationInterval / 7,
+                    IterationInterval: structure.iterationInterval,
                     Week: prnWeeks
                 }
             }

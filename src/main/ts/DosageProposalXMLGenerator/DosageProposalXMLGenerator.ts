@@ -13,6 +13,8 @@ import { TextOptions } from "../TextOptions";
 import { Day, Dosage, Dose, EveningDose, MorningDose, NightDose, NoonDose, PlainDose, Structure } from "../dto/Dosage";
 import { formatDateOnly } from "../DateUtil";
 import { XML160Generator } from "./XML160Generator";
+import { OldToNewDosageConverter } from "../helpers/OldToNewDosageConverter";
+import { DefaultDosageRendererFactory } from "../dosagerenderer/DefaultDosageRendererFactory";
 
 export class DosageProposalXMLGenerator {
 
@@ -49,7 +51,7 @@ export class DosageProposalXMLGenerator {
     }
 
 
-    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: (Date | null |undefined)[], fmkversion: string, dosageProposalVersion: number, shortTextMaxLength: number = ShortTextConverter.MAX_LENGTH): DosageProposalXML {
+    public static generateXMLSnippet(type: string, iteration: string, mapping: string, unitTextSingular: string, unitTextPlural: string, supplementaryText: string, beginDates: Date[], endDates: (Date | null | undefined)[], fmkversion: string, dosageProposalVersion: number, shortTextMaxLength: number = ShortTextConverter.MAX_LENGTH): DosageProposalXML {
 
         if (dosageProposalVersion !== DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion) {
             throw new Error("Unsupported dosageProposalXMLGeneratorVersion, only version " + DosageProposalXMLGenerator.dosageProposalXMLGeneratorVersion + " is supported");
@@ -109,7 +111,22 @@ export class DosageProposalXMLGenerator {
             }
         };
 
-        return new DosageProposalXML(xml, ShortTextConverter.getInstance().convert(dosage, TextOptions.STANDARD, shortTextMaxLength), LongTextConverter.getInstance().convert(dosage, TextOptions.STANDARD));
+        let shortText;
+        let longText;
+        if (fmkversion === "FMK160") {
+            const newDosage = new OldToNewDosageConverter().convertDosage(dosage);
+
+            const newShortTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: true, maxLength: shortTextMaxLength });
+            const newLongTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: false });
+
+            shortText = newShortTextConverter.render(newDosage);
+            longText = newLongTextConverter.render(newDosage);
+        } else {
+            shortText = ShortTextConverter.getInstance().convert(dosage, TextOptions.STANDARD, shortTextMaxLength);
+            longText = LongTextConverter.getInstance().convert(dosage, TextOptions.STANDARD);
+        }
+
+        return new DosageProposalXML(xml, shortText, longText);
     }
 
     static isMMAN(type: string): boolean {
@@ -172,7 +189,7 @@ export class DosageProposalXMLGenerator {
 
                     if (DosageProposalXMLGenerator.isMMAN(type)) {
                         const doses: Dose[] = DosageProposalXMLGenerator.getMMANDoses(result[2]);
-                        const day: Day = { dayNumber: dayno, allDoses: doses};
+                        const day: Day = { dayNumber: dayno, allDoses: doses };
                         days.push(day);
                     }
                     else {
@@ -183,7 +200,7 @@ export class DosageProposalXMLGenerator {
                 }
             }
             else {
-                const day: Day = { dayNumber: 1, allDoses: DosageProposalXMLGenerator.getDoses(mapping, type)};
+                const day: Day = { dayNumber: 1, allDoses: DosageProposalXMLGenerator.getDoses(mapping, type) };
                 days = [day];
             }
         }

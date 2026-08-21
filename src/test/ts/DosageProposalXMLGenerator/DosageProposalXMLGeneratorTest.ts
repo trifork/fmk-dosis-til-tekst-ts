@@ -16,12 +16,12 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
     const dosageProposalXMLGeneratorVersion = 1;
 
     it('should handle M+M+A+N dose without enddate', () => {
-        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
-//        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 og gentages hver dag:\n   Doseringsforløb:\n   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter nat tages med rigeligt vand");
+        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [undefined], "FMK146", dosageProposalXMLGeneratorVersion);
+        //        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 og gentages hver dag:\n   Doseringsforløb:\n   1 tablet morgen tages med rigeligt vand + 2 tabletter middag tages med rigeligt vand + 3 tabletter aften tages med rigeligt vand + 4 tabletter nat tages med rigeligt vand");
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010:\n1 tablet morgen, 2 tabletter middag, 3 tabletter aften og 4 tabletter nat - hver dag\nBemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
-    
+
 
     it('should handle M+M+A+N dose', () => {
         const snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, endDates, "FMK146", dosageProposalXMLGeneratorVersion);
@@ -60,6 +60,12 @@ describe('generateXMLSnippet dosagetranslation values for M+M+A+N', () => {
         expect(snippet.getShortDosageTranslation()).to.be.null;
     });
 
+    it('should handle M+M+A+N dose with fmkversion="FMK160"', () => {
+        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('M+M+A+N', '1', '1+2+3+4', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [undefined], "FMK160", dosageProposalXMLGeneratorVersion);
+        expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra 01-01-2010:\n1 tablet morgen, 2 tabletter middag, 3 tabletter aften og 4 tabletter nat - hver dag\nInstruks: tages med rigeligt vand");
+        expect(snippet.getShortDosageTranslation()).to.be.undefined;
+    });
+
 });
 
 
@@ -74,7 +80,7 @@ describe('generateXMLSnippet N daglig', () => {
     });
 
     it('should handle 1 daily iter 7 without enddate', () => {
-        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '7', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
+        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '7', '1', 'tablet', 'tabletter', 'tages med rigeligt vand', beginDates, [undefined], "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering fra d. 1. jan. 2010 - gentages hver uge:\nFredag: 1 tablet\nBemærk: tages med rigeligt vand");
         expect(snippet.getShortDosageTranslation()).to.equal("1 tablet fredag hver uge.\nBemærk: tages med rigeligt vand");
     });
@@ -99,11 +105,11 @@ describe('generateXMLSnippet N daglig', () => {
     });
 
     it('should handle not iterated without enddate (FMK-6364)', () => {
-        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '0', '1', 'tablet', 'tabletter', 'engangsdosis. Gentages ikke', beginDates,  [ undefined ], "FMK146", dosageProposalXMLGeneratorVersion);
+        const snippet = DosageProposalXMLGenerator.generateXMLSnippet('N daglig', '0', '1', 'tablet', 'tabletter', 'engangsdosis. Gentages ikke', beginDates, [undefined], "FMK146", dosageProposalXMLGeneratorVersion);
         expect(snippet.getLongDosageTranslation()).to.equal("Dosering kun d. 1. jan. 2010:\n1 tablet\nBemærk: engangsdosis. Gentages ikke");
         expect(snippet.getShortDosageTranslation()).to.equal("1 tablet 1 gang.\nBemærk: engangsdosis. Gentages ikke");
     });
- 
+
 });
 
 describe('generateXMLSnippet PN', () => {
@@ -224,7 +230,7 @@ describe('generateXMLSnippet Multiperiode', () => {
 
             "Dosering fra d. 1. feb. 2010 til d. 28. feb. 2010 - gentages hver 2. dag:\n" +
             "Dag 1: 2 tabletter efter behov, højst 1 gang dagligt\n" +
-            "Dag 2: 3 tabletter efter behov, højst 1 gang dagligt\nBemærk: tages med rigeligt vand\n\n"  +
+            "Dag 2: 3 tabletter efter behov, højst 1 gang dagligt\nBemærk: tages med rigeligt vand\n\n" +
 
             "Dosering fra d. 1. mar. 2010 til d. 31. mar. 2010:\n" +
             "2 tabletter hver dag\nBemærk: tages med rigeligt vand"

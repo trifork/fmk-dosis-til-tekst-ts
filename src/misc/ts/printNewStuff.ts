@@ -34,10 +34,7 @@ const examples: DosageV2[] = [
                         }
                     }
                 }],
-                Restriction: {
-                    MaximumDailyDose: 7,
-                    MinimumDurationBetweenDoses: 10
-                }
+                MinimumDurationBetweenDoses: 10
             }
         }],
         IsSelfAdministration: true,
@@ -110,6 +107,26 @@ const examples: DosageV2[] = [
             {
                 PeriodLength: 4,
                 Fixed: {
+                    MinimumDurationBetweenDoses: 7200,
+                    IterationInterval: 1,
+                    Day: [{
+                        Index: 1,
+                        Dosage: {
+                            UnlimitedDayDosage: {
+                                Quantity: 1,
+                                MaximumDailyDose: 7
+                            }
+                        }
+                    }]
+                }
+            },
+            {
+                PeriodLength: 4,
+                Fixed: {
+                    Restriction: {
+                        MaximumDailyDose: 8,
+                        MinimumDurationBetweenDoses: 3600
+                    },
                     IterationInterval: 1,
                     Day: [{
                         Index: 1,
@@ -146,7 +163,66 @@ const examples: DosageV2[] = [
                 }
             }
         ]
-    }
+    },
+    {
+        DosagePeriod: [
+            {
+                Fixed: {
+                    Restriction: {
+                    },
+                    IterationInterval: 7,
+                    Week: [
+                        {
+                            Weekday: [
+                                {
+                                    Label: "Monday",
+                                    Dosage: {
+                                    }
+                                },
+                                {
+                                    Label: "Tuesday",
+                                    Dosage: {
+                                    }
+                                },
+                                {
+                                    Label: "Wednesday",
+                                    Dosage: {
+                                    }
+                                },
+                                {
+                                    Label: "Thursday",
+                                    Dosage: {
+                                    }
+                                },
+                                {
+                                    Label: "Friday",
+                                    Dosage: {
+                                    }
+                                },
+                                {
+                                    Label: "Saturday",
+                                    Dosage: {
+                                    }
+                                },
+                                {
+                                    Label: "Sunday",
+                                    Dosage: {
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        Precondition: {
+        },
+        UnitTexts: {
+            Singular: "tablet",
+            Plural: "tabletter"
+        }
+    },
+    { "DosagePeriod": [{ "Fixed": { "Restriction": {}, "IterationInterval": 1, "Day": [] } }], "Precondition": {}, "UnitTexts": { "Singular": "tablet", "Plural": "tabletter" } }
 ];
 
 export function printExamples() {

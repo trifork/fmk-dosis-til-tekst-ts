@@ -1,8 +1,9 @@
-import { formatDateOnly } from "../DateUtil";
+import { formatDateDDMMYYYY, formatDateOnly } from "../DateUtil";
 import { DurationUtil } from "../DurationUtil";
 import { LocalTimeHelper } from "../helpers/LocalTimeHelper";
+import { TextHelper } from "../TextHelper";
 import { defaultEnabledCompactionPatterns, EnabledCompactionPatterns } from "./CompactionPatterns";
-import { DosageV2, DosageChoice, DosageParameter, DosagePeriodType, DosageRestriction, DosageStructure, DoseType, PartOfDayDosage, Precondition, WeekdayLabel } from "./Dosage";
+import { DosageV2, DosageChoice, DosageParameter, DosagePeriodType, DosageStructure, DoseType, PartOfDayDosage, Precondition, WeekdayLabel, UnlimitedDosageType } from "./Dosage";
 import { RenderingContext } from "./RenderingContext";
 
 export class DosageRenderingTreeBuilder {
@@ -29,7 +30,32 @@ export class DosageRenderingTreeBuilder {
     }
 
     public render(ctx: RenderingContext) {
-        return this.renderDosage(ctx, this.dosage);
+        const dosage = this.moveDeprecatedStuff(this.dosage);
+
+        return this.renderDosage(ctx, dosage);
+    }
+
+    private moveDeprecatedStuff(dosage: DosageV2) {
+        // Move Dosage.DosagePeriod.(Fixed,PRN).Resctriction.MinimumDurationBetweenDoses -> Dosage.DosagePeriod.(Fixed,PRN).MinimumDurationBetweenDoses
+        // Move Dosage.DosagePeriod.(Fixed,PRN).Resctriction.MaximumDailyDose -> *.UnlimitedDayDosage
+        for (const period of (dosage.DosagePeriod || [])) {
+            for (const ds of [period.Fixed, period.PRN].filter(Boolean)) {
+
+                if (ds.Restriction?.MaximumDailyDose) {
+                    const unlimitedDayDosages = findProperties(ds, "UnlimitedDayDosage") as UnlimitedDosageType[];
+                    for (const unlimitedDayDosage of unlimitedDayDosages) {
+                        if (!unlimitedDayDosage.MaximumDailyDose) {
+                            unlimitedDayDosage.MaximumDailyDose = ds.Restriction.MaximumDailyDose;
+                        }
+                    }
+                }
+
+                if (ds.Restriction?.MinimumDurationBetweenDoses && !ds.MinimumDurationBetweenDoses) {
+                    ds.MinimumDurationBetweenDoses = ds.Restriction?.MinimumDurationBetweenDoses;
+                }
+            }
+        }
+        return dosage;
     }
 
     private renderDosage(ctx: RenderingContext, dosage: DosageV2) {
@@ -37,16 +63,18 @@ export class DosageRenderingTreeBuilder {
             this.renderPrecondition(ctx, dosage.Precondition);
         }
 
+        const validFrom = dosage.Precondition?.ValidFrom ? new Date(dosage.Precondition.ValidFrom) : undefined;
+
         if (dosage.AdministrationAccordingToSchemaInLocalSystem) {
             const headerCtx = ctx.beginHeader();
-            headerCtx.append(`fra ${dosage.AdministrationAccordingToSchemaInLocalSystem.StartDate}`);
+            headerCtx.append(`dosering fra ${formatDateDDMMYYYY(dosage.AdministrationAccordingToSchemaInLocalSystem.StartDate)}`);
             if (dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate) {
                 headerCtx.append(`til ${dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate}`);
             }
             ctx.append("efter skema");
         } else if (dosage.FreeText) {
             const headerCtx = ctx.beginHeader();
-            headerCtx.append(`fra ${dosage.FreeText.StartDate}`);
+            headerCtx.append(`dosering fra ${formatDateDDMMYYYY(dosage.FreeText.StartDate)}`);
             if (dosage.FreeText.EndDate) {
                 headerCtx.append(`til ${dosage.FreeText.EndDate}`);
             }
@@ -61,10 +89,10 @@ export class DosageRenderingTreeBuilder {
                 }
 
                 if (period.Empty) {
-                    this.renderDosagePeriodHeader(headerCtx, period, index > 0);
+                    this.renderDosagePeriodHeader(headerCtx, period, index > 0, validFrom);
                     this.renderEmptyPeriod(pCtx);
                 } else if (period.Unspecified) {
-                    this.renderDosagePeriodHeader(headerCtx, period, index > 0);
+                    this.renderDosagePeriodHeader(headerCtx, period, index > 0, validFrom);
                     this.renderUnspecifiedPeriod(pCtx);
                 } else {
                     if (this.compact.IterationLongerThanPeriod && period.PeriodLength) {
@@ -80,7 +108,7 @@ export class DosageRenderingTreeBuilder {
                     const varyingIntervals = period.Fixed?.IterationInterval !== period.PRN?.IterationInterval;
 
                     if (!varyingIntervals) {
-                        this.renderDosagePeriodHeader(headerCtx, period, index === 0);
+                        this.renderDosagePeriodHeader(headerCtx, period, index === 0, validFrom);
                         const onlyDay1 = this.compact.OnlyDay1
                             && this.isOnlyFirstDayDosage(period.Fixed, !!period.PeriodLengthFreeText, period.PeriodLength)
                             && this.isOnlyFirstDayDosage(period.PRN, !!period.PeriodLengthFreeText, period.PeriodLength);
@@ -89,29 +117,29 @@ export class DosageRenderingTreeBuilder {
                             this.renderIteration(headerCtx, period.Fixed || period.PRN)
                         }
                     }
-                    if (period.Fixed) {
-                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(period.Fixed, !!period.PeriodLengthFreeText, period.PeriodLength);
+
+                    for (const [dosageStructure, isPRN] of [
+                        [period.Fixed, false],
+                        [period.PRN, true],
+                    ] as const) {
+                        if (!dosageStructure) {
+                            continue;
+                        }
+
+                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(dosageStructure, !!period.PeriodLengthFreeText, period.PeriodLength);
+
                         if (varyingIntervals) {
-                            this.renderDosagePeriodHeader(headerCtx, period, index === 0);
+                            this.renderDosagePeriodHeader(headerCtx, period, index === 0, validFrom);
                             if (!onlyDay1) {
                                 // Not just day 1 -> put iteration in header
-                                this.renderIteration(headerCtx, period.Fixed)
+                                this.renderIteration(headerCtx, dosageStructure);
                             }
                         }
-                        this.renderDosageStructure(pCtx, period.Fixed, onlyDay1, false);
-                    }
-                    if (period.PRN) {
-                        const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(period.PRN, !!period.PeriodLengthFreeText, period.PeriodLength);
-                        if (varyingIntervals) {
-                            this.renderDosagePeriodHeader(headerCtx, period, index === 0);
-                            if (!onlyDay1) {
-                                // Not just day 1 -> put iteration in header
-                                this.renderIteration(headerCtx, period.PRN)
-                            }
-                        }
-                        this.renderDosageStructure(pCtx, period.PRN, onlyDay1, true);
+
+                        this.renderDosageStructure(pCtx, dosageStructure, onlyDay1, isPRN);
                     }
                 }
+
                 if (this.oneLine && index < dosage.DosagePeriod.length - 1) {
                     this.renderDuration(pCtx, period);
                 }
@@ -129,9 +157,12 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    renderDosagePeriodHeader(ctx: RenderingContext, period: DosagePeriodType, firstPeriod: boolean) {
+    renderDosagePeriodHeader(ctx: RenderingContext, period: DosagePeriodType, firstPeriod: boolean, validFrom: Date) {
         if (!this.oneLine) {
             ctx.append("dosering");
+            if (firstPeriod && validFrom) {
+                ctx.append(`fra ${formatDateDDMMYYYY(validFrom)}`);
+            }
             if (period.PeriodLength || period.PeriodLengthFreeText) {
                 this.renderDuration(ctx, period);
             } else if (!firstPeriod) {
@@ -144,10 +175,11 @@ export class DosageRenderingTreeBuilder {
         const interval = dosageStructure.IterationInterval;
         if (interval) {
             if (dosageStructure.Week) {
-                if (interval === 1) {
+                const weekInterval = interval / 7;
+                if (weekInterval === 1) {
                     ctx.append(`- gentages hver uge`);
                 } else {
-                    ctx.append(`- gentages hver ${interval}. uge`);
+                    ctx.append(`- gentages hver ${weekInterval}. uge`);
                 }
             } else {
                 if (dosageStructure.IterationInterval === 1) {
@@ -162,24 +194,16 @@ export class DosageRenderingTreeBuilder {
     }
 
     renderPrecondition(ctx: RenderingContext, precondition: Precondition) {
-        ctx = ctx.begin({ name: "precondition" });
+        if (precondition.PRNTrigger || precondition.EpisodicTreatment) {
+            ctx = ctx.begin({ name: "precondition" });
 
-        if (precondition.ValidFrom) {
-            ctx.append(`Gyldig fra ${formatDateOnly(new Date(precondition.ValidFrom))}`);
-            if (precondition.UpdateValidFromUponHandover) {
-                ctx.append("(opdateres ved udlevering)")
+            if (precondition.PRNTrigger) {
+                ctx.append(`Betingelse for påbegyndt behandling ${precondition.PRNTrigger}`);
             }
-        } else {
-            if (precondition.UpdateValidFromUponHandover) {
-                ctx.append("Gyldig fra (opdateres ved udlevering)")
-            }
-        }
-        if (precondition.PRNTrigger) {
-            ctx.append(`Betingelse for påbegyndt behandling ${precondition.PRNTrigger}`);
-        }
 
-        if (precondition.EpisodicTreatment) {
-            ctx.append(`PN-kur med startbetingelse ${precondition.EpisodicTreatment.Trigger}`);
+            if (precondition.EpisodicTreatment) {
+                ctx.append(`PN-kur med startbetingelse ${precondition.EpisodicTreatment.Trigger}`);
+            }
         }
     }
 
@@ -233,19 +257,18 @@ export class DosageRenderingTreeBuilder {
                 .append(dosageStructure.Instruction);
         }
 
-        if (dosageStructure.Restriction) {
-            this.renderRestriction(ctx, dosageStructure.Restriction);
+        if (dosageStructure.MinimumDurationBetweenDoses) {
+            ctx.append(`mindst ${DurationUtil.formatMinutes(dosageStructure.MinimumDurationBetweenDoses)} imellem doser`);
         }
     }
 
     private renderDays(ctx: RenderingContext, dosageStructure: DosageStructure, onlyDay1: boolean, prn: boolean) {
 
-        if (dosageStructure.Day) {
-
+        if (dosageStructure.Day?.length > 0) {
             let singlePartOfDay: string = undefined;
 
             if (onlyDay1) {
-                singlePartOfDay = this.isSinglePartOfDay(dosageStructure.Day[0].Dosage);
+                singlePartOfDay = this.isSinglePartOfDay(dosageStructure.Day[0].Dosage);  // !!!!
                 this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, !singlePartOfDay);
             } else {
                 const defListCtx = ctx.beginDefinitionList();
@@ -366,7 +389,8 @@ export class DosageRenderingTreeBuilder {
         }
 
         if (dosageChoice.UnlimitedDayDosage) {
-            dosesAndTimes.push({ dose: dosageChoice.UnlimitedDayDosage, time: "ubegrænset antal gange" });
+            const unlimited = dosageChoice.UnlimitedDayDosage;
+            dosesAndTimes.push({ dose: unlimited, time: unlimited.MaximumDailyDose ? `max ${unlimited.MaximumDailyDose} gange om dagen` : "ubegrænset antal gange" });
         }
 
         if (dosesAndTimes.length && this.compact.AllDosesEqualWithinDay && this.allDosesAreEqual(dosesAndTimes.map(dt => dt.dose))) {
@@ -441,17 +465,6 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    private renderRestriction(ctx: RenderingContext, restriction: DosageRestriction) {
-        ctx = ctx.begin({ name: "restriction", join: "comma" });
-        if (restriction.MaximumDailyDose) {
-            ctx.append(`max daglig dosis: ${restriction.MaximumDailyDose} ${this.getUnit(ctx, restriction.MaximumDailyDose === 1)}`);
-        }
-
-        if (restriction.MinimumDurationBetweenDoses) {
-            ctx.append(`mindst ${DurationUtil.formatMinutes(restriction.MinimumDurationBetweenDoses)} imellem doser`);
-        }
-    }
-
     private renderDuration(ctx: RenderingContext, period: DosagePeriodType) {
         if (period.PeriodLengthFreeText) {
             ctx.append(period.PeriodLengthFreeText);
@@ -459,4 +472,26 @@ export class DosageRenderingTreeBuilder {
             ctx.append(`i ${period.PeriodLength} ${period.PeriodLength === 1 ? "dag" : "dage"}`)
         }
     }
+}
+
+function findProperties(
+    obj: unknown,
+    propertyName: string
+): unknown[] {
+    const results: unknown[] = [];
+
+    function walk(value: unknown) {
+        if (value === null || typeof value !== "object") return;
+
+        for (const [key, child] of Object.entries(value)) {
+            if (key === propertyName) {
+                results.push(child);
+            }
+
+            walk(child);
+        }
+    }
+
+    walk(obj);
+    return results;
 }
