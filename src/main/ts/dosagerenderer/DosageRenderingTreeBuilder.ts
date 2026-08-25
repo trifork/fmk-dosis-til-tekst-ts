@@ -66,17 +66,21 @@ export class DosageRenderingTreeBuilder {
         const validFrom = dosage.Precondition?.ValidFrom ? new Date(dosage.Precondition.ValidFrom) : undefined;
 
         if (dosage.AdministrationAccordingToSchemaInLocalSystem) {
-            const headerCtx = ctx.beginHeader();
-            headerCtx.append(`dosering fra ${formatDateDDMMYYYY(dosage.AdministrationAccordingToSchemaInLocalSystem.StartDate)}`);
-            if (dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate) {
-                headerCtx.append(`til ${dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate}`);
+            if (!this.oneLine) {
+                const headerCtx = ctx.beginHeader();
+                headerCtx.append(`dosering fra ${formatDateDDMMYYYY(dosage.AdministrationAccordingToSchemaInLocalSystem.StartDate)}`);
+                if (dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate) {
+                    headerCtx.append(`til ${dosage.AdministrationAccordingToSchemaInLocalSystem.EndDate}`);
+                }
             }
             ctx.append("efter skema");
         } else if (dosage.FreeText) {
-            const headerCtx = ctx.beginHeader();
-            headerCtx.append(`dosering fra ${formatDateDDMMYYYY(dosage.FreeText.StartDate)}`);
-            if (dosage.FreeText.EndDate) {
-                headerCtx.append(`til ${dosage.FreeText.EndDate}`);
+            if (!this.oneLine) {
+                const headerCtx = ctx.beginHeader();
+                headerCtx.append(`dosering fra ${formatDateDDMMYYYY(dosage.FreeText.StartDate)}`);
+                if (dosage.FreeText.EndDate) {
+                    headerCtx.append(`til ${dosage.FreeText.EndDate}`);
+                }
             }
             ctx.append(dosage.FreeText.Text);
         } else if (dosage.DosagePeriod) {
@@ -105,15 +109,16 @@ export class DosageRenderingTreeBuilder {
                     }
 
                     // NOTE: If Fixed and PRN have different IterationInterval, we need to split period into 2 with separate headers!
-                    const varyingIntervals = period.Fixed?.IterationInterval !== period.PRN?.IterationInterval;
+                    // Also NOTE: If oneLine, we don't include iteration in the header (we append it to the end of the DosageStructure text)
+                    const separateHeadersForFixedAndPRN = !this.oneLine && period.Fixed?.IterationInterval !== period.PRN?.IterationInterval;
 
-                    if (!varyingIntervals) {
+                    if (!separateHeadersForFixedAndPRN) {
                         this.renderDosagePeriodHeader(headerCtx, period, index === 0, validFrom);
                         const onlyDay1 = this.compact.OnlyDay1
                             && this.isOnlyFirstDayDosage(period.Fixed, !!period.PeriodLengthFreeText, period.PeriodLength)
                             && this.isOnlyFirstDayDosage(period.PRN, !!period.PeriodLengthFreeText, period.PeriodLength);
 
-                        if (!onlyDay1) {
+                        if (!onlyDay1 && !this.oneLine) {
                             this.renderIteration(headerCtx, period.Fixed || period.PRN)
                         }
                     }
@@ -128,7 +133,7 @@ export class DosageRenderingTreeBuilder {
 
                         const onlyDay1 = this.compact.OnlyDay1 && this.isOnlyFirstDayDosage(dosageStructure, !!period.PeriodLengthFreeText, period.PeriodLength);
 
-                        if (varyingIntervals) {
+                        if (separateHeadersForFixedAndPRN) {
                             this.renderDosagePeriodHeader(headerCtx, period, index === 0, validFrom);
                             if (!onlyDay1) {
                                 // Not just day 1 -> put iteration in header
@@ -238,18 +243,26 @@ export class DosageRenderingTreeBuilder {
     }
 
     private renderEmptyPeriod(ctx: RenderingContext) {
-        ctx.append("Ingen dosering");
+        ctx.append("ingen dosering");
     }
 
     private renderUnspecifiedPeriod(ctx: RenderingContext) {
-        ctx.append("Dosering ikke angivet");
+        ctx.append("dosering ikke angivet");
     }
 
     private renderDosageStructure(ctx: RenderingContext, dosageStructure: DosageStructure, onlyDay1: boolean, prn: boolean) {
 
-        // if (!this.tryRenderSinglePartOfDayDosage(ctx, dosageStructure, prn)) {
-        this.renderDays(ctx, dosageStructure, onlyDay1, prn);
-        // }
+        if (dosageStructure.Day?.length > 0) {
+            this.renderDays(onlyDay1, dosageStructure, ctx, prn);
+
+        } else if (dosageStructure.Week) {
+            this.renderWeeks(dosageStructure, ctx, prn);
+
+        } else if (dosageStructure.UnspecifiedDay) {
+            this.renderDosageChoice(ctx, dosageStructure.UnspecifiedDay.Dosage, prn);
+            ctx.append("på valgfri dag");
+        }
+
 
         if (dosageStructure.Instruction) {
             ctx.beginParagraph({ name: "instruction" })
@@ -262,45 +275,64 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    private renderDays(ctx: RenderingContext, dosageStructure: DosageStructure, onlyDay1: boolean, prn: boolean) {
+    private renderDays(onlyDay1: boolean, dosageStructure: DosageStructure, ctx: RenderingContext, prn: boolean) {
+        const singlePartOfDay: string = this.getUniquePartOfDay(dosageStructure.Day.map(day => day.Dosage));
+        const partOfDayAtEnd = this.oneLine && singlePartOfDay && onlyDay1;
 
-        if (dosageStructure.Day?.length > 0) {
-            let singlePartOfDay: string = undefined;
+        // Maybe: Optimize if all all (non-empty) days have the same dosages -> 1 tablet morgen og 2 tabletter aften dag 1, 2 og 3 ???
 
-            if (onlyDay1) {
-                singlePartOfDay = this.isSinglePartOfDay(dosageStructure.Day[0].Dosage);  // !!!!
-                this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, !singlePartOfDay);
-            } else {
-                const defListCtx = ctx.beginDefinitionList();
-                for (const day of dosageStructure.Day) {
-                    const defDataCtx = defListCtx.beginDefinition({ term: `dag ${day.Index}` });
+        if (onlyDay1) {
+            this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, !partOfDayAtEnd);
+        } else {
+            const defListCtx = ctx.beginDefinitionList();
+            for (const day of dosageStructure.Day) {
+                const defDataCtx = defListCtx.beginDefinition({ term: `dag ${day.Index}` });
 
-                    this.renderDosageChoice(defDataCtx, day.Dosage, prn);
-                }
+                this.renderDosageChoice(defDataCtx, day.Dosage, prn, !partOfDayAtEnd);
             }
+        }
 
-            if (dosageStructure.IterationInterval && onlyDay1) {
-                if (dosageStructure.IterationInterval === 1) {
-                    if (singlePartOfDay) {
-                        ctx.append("hver");
-                        ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]);
-                    } else {
-                        ctx.append(prn ? "dagligt" : "- hver dag");
-                    }
-                } else {
-                    if (singlePartOfDay) {
-                        ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]);
-                    }
-                    ctx.append(`hver ${dosageStructure.IterationInterval}. dag`);
+        if (dosageStructure.IterationInterval) {
+            if (dosageStructure.IterationInterval === 1) {
+                if (partOfDayAtEnd) {
+                    ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]); // morgen
+                } else if (prn) {
+                    ctx.append("dagligt"); // dagligt
                 }
             } else {
-                if (singlePartOfDay) {
-                    ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]);
+                if (partOfDayAtEnd) {
+                    ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]); // morgen
                 }
-                // ctx.append("en gang");
+                ctx.append(`hver ${dosageStructure.IterationInterval}. dag`); // hver 2. dag
             }
+        } else {
+            if (partOfDayAtEnd) {
+                ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]);
+            }
+        }
+    }
 
-        } else if (dosageStructure.Week) {
+    private renderWeeks(dosageStructure: DosageStructure, ctx: RenderingContext, prn: boolean) {
+        const weekdayLabels = new Set(
+            dosageStructure.Week.flatMap(week => week.Weekday.map(weekday => weekday.Label)
+            )
+        );
+        const singleWeekday = weekdayLabels.size === 1
+            ? DosageRenderingTreeBuilder.WEEKDAY_NAMES[weekdayLabels.values().next().value]
+            : undefined;
+
+        const weekdayAtEnd = this.oneLine && dosageStructure.IterationInterval && singleWeekday;
+
+        if (weekdayAtEnd) {
+            // Weekday will be mentioned at end, so we need a list, not a definition list
+            const listCtx = ctx.begin({ join: "comma-and" });
+            for (const week of dosageStructure.Week) {
+                for (const weekDay of week.Weekday) {
+                    const weekDayCtx = listCtx.begin();
+                    this.renderDosageChoice(weekDayCtx, weekDay.Dosage, prn);
+                }
+            }
+        } else {
             const defListCtx = ctx.beginDefinitionList();
             for (const week of dosageStructure.Week) {
                 for (const weekDay of week.Weekday) {
@@ -308,9 +340,24 @@ export class DosageRenderingTreeBuilder {
                     this.renderDosageChoice(defDataCtx, weekDay.Dosage, prn);
                 }
             }
-        } else if (dosageStructure.UnspecifiedDay) {
-            this.renderDosageChoice(ctx, dosageStructure.UnspecifiedDay.Dosage, prn);
-            ctx.append("på valgfri dag");
+        }
+
+        if (this.oneLine) {
+            // Render iteration here if oneLine
+            const weekIteration = dosageStructure.IterationInterval / 7;
+            if (weekdayAtEnd) {
+                if (weekIteration === 1) {
+                    ctx.append(`hver ${singleWeekday}`);
+                } else {
+                    ctx.append(`hver ${weekIteration}. ${singleWeekday}`);
+                }
+            } else {
+                if (weekIteration === 1) {
+                    ctx.append("hver uge");
+                } else if (weekIteration > 1) {
+                    ctx.append(`hver ${weekIteration}. uge`);
+                }
+            }
         }
     }
 
@@ -335,6 +382,12 @@ export class DosageRenderingTreeBuilder {
             }
         }
     }
+
+    getUniquePartOfDay(dosageChoices: DosageChoice[]): string {
+        const result = dosageChoices.map(dosageChoice => this.isSinglePartOfDay(dosageChoice))
+        return new Set(result).size === 1 ? result[0] : undefined;
+    }
+
 
     isSinglePartOfDay(dosageChoice: DosageChoice): string {
         if (dosageChoice.PartOfDayDosage

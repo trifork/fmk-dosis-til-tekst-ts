@@ -579,9 +579,9 @@ export class OneLineTextVisitor
 
     visitDefinitionList(node: DefinitionListNode): string {
         const texts = node.tuples
-            .map(({ term, data }) => `${capitalize(term)}: ${visitNode(data, this)}`)
+            .map(({ term, data }) => `${visitNode(data, this)} ${term}`)
 
-        const text = texts.join(", ");
+        const text = joinTextList(texts);
 
         return text;
     }

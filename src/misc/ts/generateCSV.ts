@@ -2,6 +2,7 @@ import { Dosage, Factory, LongTextConverter, ShortTextConverter } from "../../ma
 import { DefaultDosageRendererFactory } from "../../main/ts/dosagerenderer/DefaultDosageRendererFactory";
 import { DosageRenderer } from "../../main/ts/dosagerenderer/DosageRenderer";
 import { OldToNewDosageConverter } from "../../main/ts/helpers/OldToNewDosageConverter";
+import { readFile } from "node:fs/promises";
 
 const longTextExamples: Dosage[] = [
     { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 1, "startDate": "2018-12-04", "endDate": "2019-01-19", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "NightDoseWrapper", "doseQuantity": 1, "isAccordingToNeed": false }] }] }] } },
@@ -128,18 +129,28 @@ const miscExamples: Dosage[] = [
 ]
 
 
-export function printExamples() {
+export async function main() {
+    const filenames = process.argv.slice(2);
+
+    console.log(`${escapeCsvValue("Kort oversættelse - gammel")},${escapeCsvValue("Kort oversættelse - ny")},${escapeCsvValue("Lang oversættelse - gammel")},${escapeCsvValue("Lang oversættelse - ny")},${escapeCsvValue("json - kun DosagePeriod[]")}`);
+
+    for (const filename of filenames) {
+        const contents = await readFile(filename, "utf-8");
+        const dosages = JSON.parse(contents) as Dosage[];
+        generateCSV(dosages);
+    }
+}
+
+function generateCSV(dosages: Dosage[]) {
     const oldLongTextConverter = new LongTextConverter();
     const newLongTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: false });
 
     const oldShortTextConverter = new ShortTextConverter();
     const newShortTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: true });
 
-    console.log(`${escapeCsvValue("Kort oversættelse - gammel")},${escapeCsvValue("Kort oversættelse - ny")},${escapeCsvValue("Lang oversættelse - gammel")},${escapeCsvValue("Lang oversættelse - ny")},${escapeCsvValue("json - kun DosagePeriod[]")}`);
-
-    for (const dosage of [...longTextExamples, ...shortTextExamples, ...miscExamples]) {
+    for (const dosage of dosages) {
         const oldLongTextTranslation = oldLongTextConverter.convert(dosage);
-        const oldShortTextTranslation = oldShortTextConverter.convert(dosage);
+        const oldShortTextTranslation = oldShortTextConverter.convert(dosage, undefined, 400);
 
         const newDosage = new OldToNewDosageConverter().convertDosage(dosage);
 
@@ -148,22 +159,29 @@ export function printExamples() {
 
         let dosageJson: string;
         if (newDosage.DosagePeriod) {
-            dosageJson = JSON.stringify(newDosage.DosagePeriod, null, 4);
+            dosageJson = formatJson(newDosage.DosagePeriod);
         } else if (newDosage.AdministrationAccordingToSchemaInLocalSystem) {
-            dosageJson = JSON.stringify(newDosage.AdministrationAccordingToSchemaInLocalSystem, null, 4);
+            dosageJson = formatJson(newDosage.AdministrationAccordingToSchemaInLocalSystem);
         } else if (newDosage.FreeText) {
-            dosageJson = JSON.stringify(newDosage.FreeText, null, 4);
+            dosageJson = formatJson(newDosage.FreeText);
         } else {
             dosageJson = "-";
         }
-
 
         console.log(`${escapeCsvValue(oldShortTextTranslation)},${escapeCsvValue(newShortTextTranslation)},${escapeCsvValue(oldLongTextTranslation)},${escapeCsvValue(newLongTextTranslation)},${escapeCsvValue(dosageJson)}`);
     }
 }
 
-export function escapeCsvValue(value: unknown): string {
+function formatJson(object: unknown) {
+    const json = JSON.stringify(object, null, 4);
+    // Remove quotes around keys to save space: 
+    return json.replace(/"([A-Za-z0-9]+)":/g, "$1:");
+}
+
+function escapeCsvValue(value: unknown): string {
     return `"${(value ? String(value) : "").replace(/"/g, '""')}"`;
 }
 
-printExamples();
+
+
+main();
