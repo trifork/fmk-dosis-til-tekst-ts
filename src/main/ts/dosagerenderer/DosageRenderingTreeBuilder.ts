@@ -278,14 +278,11 @@ export class DosageRenderingTreeBuilder {
     private renderDays(onlyDay1: boolean, dosageStructure: DosageStructure, ctx: RenderingContext, prn: boolean) {
         const singlePartOfDay: string = this.getUniquePartOfDay(dosageStructure.Day.map(day => day.Dosage));
         const partOfDayAtEnd = this.oneLine && singlePartOfDay && onlyDay1;
-
+        const repeatedDailyDosage = dosageStructure.IterationInterval === 1;
         // Maybe: Optimize if all all (non-empty) days have the same dosages -> 1 tablet morgen og 2 tabletter aften dag 1, 2 og 3 ???
 
         if (onlyDay1) {
-            const onlyOneTimePerDay = dosageStructure.Day[0].Dosage.TimesPerDayDosage?.TimesPerDay === 1;
-            // If interval is not daily, it seems misleading to add "dagligt" when dosage is "once per day"
-            const includeTime = !partOfDayAtEnd && !(onlyOneTimePerDay && dosageStructure.IterationInterval > 1);
-            this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, includeTime);
+            this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, !partOfDayAtEnd, repeatedDailyDosage);
         } else {
             const defListCtx = ctx.beginDefinitionList();
             for (const day of dosageStructure.Day) {
@@ -295,7 +292,7 @@ export class DosageRenderingTreeBuilder {
                 const includeTime = !partOfDayAtEnd && !onlyOneTimePerDay;
                 const defDataCtx = defListCtx.beginDefinition({ term: `dag ${day.Index}` });
 
-                this.renderDosageChoice(defDataCtx, day.Dosage, prn, includeTime);
+                this.renderDosageChoice(defDataCtx, day.Dosage, prn, !partOfDayAtEnd, repeatedDailyDosage);
             }
         }
 
@@ -415,7 +412,7 @@ export class DosageRenderingTreeBuilder {
         }
     }
 
-    private renderDosageChoice(ctx: RenderingContext, dosageChoice: DosageChoice, prn: boolean, includeTime = true) {
+    private renderDosageChoice(ctx: RenderingContext, dosageChoice: DosageChoice, prn: boolean, includeTime = true, repeatedDailyDosage = false) {
         const dosesAndTimes: { dose: DoseType, time: string }[] = [];
 
         if (!includeTime) {
@@ -449,12 +446,17 @@ export class DosageRenderingTreeBuilder {
             const timesPerDay = dosageChoice.TimesPerDayDosage.TimesPerDay;
             let time;
             if (timesPerDay === 1) {
-                time = "dagligt";
+                time = "";
             } else if (prn) {
                 time = (`højst ${timesPerDay} gange`);
             } else {
                 time = `${timesPerDay} gange`;
             }
+
+            if (repeatedDailyDosage) {
+                time += time ? " dagligt" : "dagligt";
+            }
+
             dosesAndTimes.push({ dose: dosageChoice.TimesPerDayDosage, time: includeTime && time });
         }
 

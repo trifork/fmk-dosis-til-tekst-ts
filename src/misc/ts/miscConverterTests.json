@@ -156,5 +156,43 @@
             ],
             "isPartOfMultiPeriodDosage": false
         }
+    },
+    {
+        "structures": {
+            "unitOrUnits": {
+                "unitSingular": "tablet",
+                "unitPlural": "tabletter"
+            },
+            "startDate": "2026-08-26",
+            "structures": [
+                {
+                    "iterationInterval": 1,
+                    "startDate": "2026-08-26",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "PlainDoseWrapper",
+                                    "doseQuantity": 1,
+                                    "isAccordingToNeed": false
+                                },
+                                {
+                                    "type": "PlainDoseWrapper",
+                                    "doseQuantity": 1,
+                                    "isAccordingToNeed": false
+                                },
+                                {
+                                    "type": "PlainDoseWrapper",
+                                    "doseQuantity": 1,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "isPartOfMultiPeriodDosage": false
+        }
     }
 ]
