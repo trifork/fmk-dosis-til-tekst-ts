@@ -282,13 +282,20 @@ export class DosageRenderingTreeBuilder {
         // Maybe: Optimize if all all (non-empty) days have the same dosages -> 1 tablet morgen og 2 tabletter aften dag 1, 2 og 3 ???
 
         if (onlyDay1) {
-            this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, !partOfDayAtEnd);
+            const onlyOneTimePerDay = dosageStructure.Day[0].Dosage.TimesPerDayDosage?.TimesPerDay === 1;
+            // If interval is not daily, it seems misleading to add "dagligt" when dosage is "once per day"
+            const includeTime = !partOfDayAtEnd && !(onlyOneTimePerDay && dosageStructure.IterationInterval > 1);
+            this.renderDosageChoice(ctx, dosageStructure.Day[0].Dosage, prn, includeTime);
         } else {
             const defListCtx = ctx.beginDefinitionList();
             for (const day of dosageStructure.Day) {
+                const onlyOneTimePerDay = day.Dosage.TimesPerDayDosage?.TimesPerDay === 1;
+
+                // If multiple days, it seems misleading to add "dagligt" to each day when dosage is "once per day"
+                const includeTime = !partOfDayAtEnd && !onlyOneTimePerDay;
                 const defDataCtx = defListCtx.beginDefinition({ term: `dag ${day.Index}` });
 
-                this.renderDosageChoice(defDataCtx, day.Dosage, prn, !partOfDayAtEnd);
+                this.renderDosageChoice(defDataCtx, day.Dosage, prn, includeTime);
             }
         }
 
@@ -296,8 +303,6 @@ export class DosageRenderingTreeBuilder {
             if (dosageStructure.IterationInterval === 1) {
                 if (partOfDayAtEnd) {
                     ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]); // morgen
-                } else if (prn) {
-                    ctx.append("dagligt"); // dagligt
                 }
             } else {
                 if (partOfDayAtEnd) {
@@ -329,7 +334,11 @@ export class DosageRenderingTreeBuilder {
             for (const week of dosageStructure.Week) {
                 for (const weekDay of week.Weekday) {
                     const weekDayCtx = listCtx.begin();
-                    this.renderDosageChoice(weekDayCtx, weekDay.Dosage, prn);
+
+                    // For week days, it seems misleading to add "dagligt" to each day when dosage is "once per day"
+                    const onlyOneTimePerDay = weekDay.Dosage.TimesPerDayDosage?.TimesPerDay === 1;
+
+                    this.renderDosageChoice(weekDayCtx, weekDay.Dosage, prn, !onlyOneTimePerDay);
                 }
             }
         } else {
@@ -337,7 +346,11 @@ export class DosageRenderingTreeBuilder {
             for (const week of dosageStructure.Week) {
                 for (const weekDay of week.Weekday) {
                     const defDataCtx = defListCtx.beginDefinition({ term: `${DosageRenderingTreeBuilder.WEEKDAY_NAMES[weekDay.Label]}` });
-                    this.renderDosageChoice(defDataCtx, weekDay.Dosage, prn);
+
+                    // For week days, it seems misleading to add "dagligt" to each day when dosage is "once per day"
+                    const onlyOneTimePerDay = weekDay.Dosage.TimesPerDayDosage?.TimesPerDay === 1;
+
+                    this.renderDosageChoice(defDataCtx, weekDay.Dosage, prn, !onlyOneTimePerDay);
                 }
             }
         }
@@ -405,6 +418,10 @@ export class DosageRenderingTreeBuilder {
     private renderDosageChoice(ctx: RenderingContext, dosageChoice: DosageChoice, prn: boolean, includeTime = true) {
         const dosesAndTimes: { dose: DoseType, time: string }[] = [];
 
+        if (!includeTime) {
+            includeTime = undefined;
+        }
+
         if (dosageChoice.PartOfDayDosage) {
             const partOfDayDosage = dosageChoice.PartOfDayDosage;
 
@@ -424,7 +441,7 @@ export class DosageRenderingTreeBuilder {
 
         if (dosageChoice.TimeOfDayDosage) {
             for (const timeOfDayDose of dosageChoice.TimeOfDayDosage) {
-                dosesAndTimes.push({ dose: timeOfDayDose, time: "kl. " + LocalTimeHelper.toString(timeOfDayDose.Time) });
+                dosesAndTimes.push({ dose: timeOfDayDose, time: includeTime && "kl. " + LocalTimeHelper.toString(timeOfDayDose.Time) });
             }
         }
 
@@ -432,13 +449,13 @@ export class DosageRenderingTreeBuilder {
             const timesPerDay = dosageChoice.TimesPerDayDosage.TimesPerDay;
             let time;
             if (timesPerDay === 1) {
-                time = undefined;
+                time = "dagligt";
             } else if (prn) {
                 time = (`højst ${timesPerDay} gange`);
             } else {
                 time = `${timesPerDay} gange`;
             }
-            dosesAndTimes.push({ dose: dosageChoice.TimesPerDayDosage, time: time });
+            dosesAndTimes.push({ dose: dosageChoice.TimesPerDayDosage, time: includeTime && time });
         }
 
         if (dosageChoice.UnlimitedDayDosage) {

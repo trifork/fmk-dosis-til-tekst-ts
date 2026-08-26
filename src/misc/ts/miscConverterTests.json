@@ -1,12 +1,160 @@
 [
-    { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 0, "supplText": "[Single period longer than dosage days]", "startDate": "2020-08-27", "endDate": "2020-09-02", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }], "isPartOfMultiPeriodDosage": false } },
-    { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 0, "supplText": "[Single period - no endDate]", "startDate": "2020-08-27", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }], "isPartOfMultiPeriodDosage": false } },
     {
         "structures": {
-            "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [
-                { "iterationInterval": 0, "supplText": "[Two periods - first longer than dosage days]", "startDate": "2020-08-27", "endDate": "2020-09-02", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] },
-                { "iterationInterval": 0, "startDate": "2020-09-03", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "MorningDoseWrapper", "doseQuantity": 3, "isAccordingToNeed": false }] }] }
-            ], "isPartOfMultiPeriodDosage": true
+            "unitOrUnits": {
+                "unitSingular": "tablet",
+                "unitPlural": "tabletter"
+            },
+            "structures": [
+                {
+                    "iterationInterval": 0,
+                    "supplText": "[Single period longer than dosage days]",
+                    "startDate": "2020-08-27",
+                    "endDate": "2020-09-02",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "MorningDoseWrapper",
+                                    "doseQuantity": 3,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "isPartOfMultiPeriodDosage": false
+        }
+    },
+    {
+        "structures": {
+            "unitOrUnits": {
+                "unitSingular": "tablet",
+                "unitPlural": "tabletter"
+            },
+            "structures": [
+                {
+                    "iterationInterval": 0,
+                    "supplText": "[Single period - no endDate]",
+                    "startDate": "2020-08-27",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "MorningDoseWrapper",
+                                    "doseQuantity": 3,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "isPartOfMultiPeriodDosage": false
+        }
+    },
+    {
+        "structures": {
+            "unitOrUnits": {
+                "unitSingular": "tablet",
+                "unitPlural": "tabletter"
+            },
+            "structures": [
+                {
+                    "iterationInterval": 0,
+                    "supplText": "[Two periods - first longer than dosage days]",
+                    "startDate": "2020-08-27",
+                    "endDate": "2020-09-02",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "MorningDoseWrapper",
+                                    "doseQuantity": 3,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "iterationInterval": 0,
+                    "startDate": "2020-09-03",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "MorningDoseWrapper",
+                                    "doseQuantity": 3,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "isPartOfMultiPeriodDosage": true
+        }
+    },
+    {
+        "structures": {
+            "unitOrUnits": {
+                "unitSingular": "tablet",
+                "unitPlural": "tabletter"
+            },
+            "startDate": "2026-08-25",
+            "structures": [
+                {
+                    "iterationInterval": 1,
+                    "startDate": "2026-08-25",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "MorningDoseWrapper",
+                                    "doseQuantity": 1,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "isPartOfMultiPeriodDosage": false
+        }
+    },
+    {
+        "structures": {
+            "unitOrUnits": {
+                "unitSingular": "tablet",
+                "unitPlural": "tabletter"
+            },
+            "startDate": "2026-08-25",
+            "structures": [
+                {
+                    "iterationInterval": 1,
+                    "startDate": "2026-08-25",
+                    "days": [
+                        {
+                            "dayNumber": 1,
+                            "allDoses": [
+                                {
+                                    "type": "PlainDoseWrapper",
+                                    "doseQuantity": 1,
+                                    "isAccordingToNeed": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "isPartOfMultiPeriodDosage": false
         }
     }
 ]

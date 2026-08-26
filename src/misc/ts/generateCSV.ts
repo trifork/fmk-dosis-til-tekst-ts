@@ -148,7 +148,7 @@ function generateCSV(dosages: Dosage[]) {
     const oldShortTextConverter = new ShortTextConverter();
     const newShortTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: true });
 
-    for (const dosage of dosages) {
+    dosages.forEach((dosage, index) => {
         const oldLongTextTranslation = oldLongTextConverter.convert(dosage);
         const oldShortTextTranslation = oldShortTextConverter.convert(dosage, undefined, 400);
 
@@ -169,7 +169,7 @@ function generateCSV(dosages: Dosage[]) {
         }
 
         console.log(`${escapeCsvValue(oldShortTextTranslation)},${escapeCsvValue(newShortTextTranslation)},${escapeCsvValue(oldLongTextTranslation)},${escapeCsvValue(newLongTextTranslation)},${escapeCsvValue(dosageJson)}`);
-    }
+    });
 }
 
 function formatJson(object: unknown) {
