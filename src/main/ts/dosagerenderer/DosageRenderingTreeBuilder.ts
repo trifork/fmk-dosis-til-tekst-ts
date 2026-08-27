@@ -265,7 +265,7 @@ export class DosageRenderingTreeBuilder {
 
 
         if (dosageStructure.Instruction) {
-            ctx.beginParagraph({ name: "instruction" })
+            ctx.begin({ name: "d2t-instruction" })
                 .append("Instruks:")
                 .append(dosageStructure.Instruction);
         }
@@ -305,7 +305,10 @@ export class DosageRenderingTreeBuilder {
                 if (partOfDayAtEnd) {
                     ctx.append(DosageRenderingTreeBuilder.TIME_OF_DAY_NAMES[singlePartOfDay]); // morgen
                 }
-                ctx.append(`hver ${dosageStructure.IterationInterval}. dag`); // hver 2. dag
+                if (this.oneLine || onlyDay1) {
+                    // If oneLine, there is no header showing repetition
+                    ctx.append(`hver ${dosageStructure.IterationInterval}. dag`); // hver 2. dag
+                }
             }
         } else {
             if (partOfDayAtEnd) {
@@ -508,19 +511,19 @@ export class DosageRenderingTreeBuilder {
 
         } else if (dose.AccordingToParameterSchema) {
             ctx.append(`antal ${this.getUnit(ctx, true)}/${this.getUnit(ctx, false)} i henhold til ${dose.AccordingToParameterSchema}`);
+        } 
 
-        } else if (dose.Infusion) {
+        if (dose.Infusion) {
             const infCtx = ctx.begin({ join: "comma" });
             const infusion = dose.Infusion;
             if (infusion.Duration != null) {
-                infCtx.append(`varighed ${infusion.Duration} min`);
+                infCtx.append(`infusions-varighed ${infusion.Duration} min`);
             } else if (infusion.MinimumDuration != null || infusion.MaximumDuration != null) {
-                infCtx.append(`varighed ${infusion.MinimumDuration} - ${infusion.MaximumDuration} min`);
-            }
-            if (infusion.InfusionRate != null) {
-                infCtx.append(`indløbsrate ${infusion.InfusionRate} ${this.getUnit(ctx, false)}/t`);
+                infCtx.append(`infusions-varighed ${infusion.MinimumDuration} - ${infusion.MaximumDuration} min`);
+            } else if (infusion.InfusionRate != null) {
+                infCtx.append(`indløbsrate ${infusion.InfusionRate} ml/t`);
             } else if (infusion.MinimumInfusionRate != null || infusion.MaximumInfusionRate != null) {
-                infCtx.append(`indløbsrate ${infusion.MinimumInfusionRate} - ${infusion.MaximumInfusionRate} ${this.getUnit(ctx, false)}/t`);
+                infCtx.append(`indløbsrate ${infusion.MinimumInfusionRate} - ${infusion.MaximumInfusionRate} ml/t`);
             }
         }
 

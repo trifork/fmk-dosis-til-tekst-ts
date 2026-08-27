@@ -74,7 +74,7 @@ export class OldToNewDosageConverter {
 
         if (structure.startDate && structure.iterationInterval > 0 && structure.iterationInterval % 7 === 0) {
             // Weekly
-            const numWeeks = structure.iterationInterval;
+            const numWeeks = structure.iterationInterval / 7;
             const fixedWeeks: WeekType[] = [];
             const prnWeeks: WeekType[] = [];
 

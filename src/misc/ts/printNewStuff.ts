@@ -141,7 +141,7 @@ const examples: DosageV2[] = [
         ]
     },
     {
-        UnitText: "ml",
+        UnitText: "mg",
         DosagePeriod: [
             {
                 PeriodLength: 4,
@@ -151,9 +151,32 @@ const examples: DosageV2[] = [
                         Index: 1,
                         Dosage: {
                             TimesPerDayDosage: {
+                                Quantity: 500,
                                 TimesPerDay: 2,
                                 Infusion: {
-                                    Duration: 5,
+                                    Duration: 5
+                                }
+                            }
+                        }
+                    }]
+                }
+            }
+        ]
+    },
+    {
+        UnitText: "mg",
+        DosagePeriod: [
+            {
+                PeriodLength: 4,
+                Fixed: {
+                    IterationInterval: 1,
+                    Day: [{
+                        Index: 1,
+                        Dosage: {
+                            TimesPerDayDosage: {
+                                Quantity: 500,
+                                TimesPerDay: 2,
+                                Infusion: {
                                     MinimumInfusionRate: 100,
                                     MaximumInfusionRate: 200
                                 }

@@ -191,6 +191,7 @@ export interface DoseType {
 }
 
 export interface InfusionDose {
+    // One-of: Duration, [ MinimumDuration, MaximumDuration ], InfusionRate, [ MinimumInfusionRate, MaximumInfusionRate]
     Duration?: number;
     MinimumDuration?: number;
     MaximumDuration?: number;
