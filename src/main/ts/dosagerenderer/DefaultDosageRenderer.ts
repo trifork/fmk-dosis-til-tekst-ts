@@ -10,7 +10,7 @@ export class DefaultDosageRenderer implements DosageRenderer {
     }
 
     render(dosage: DosageV2): string {
-        const ctx = RenderingContext.createRoot();
+        const ctx = RenderingContext.createRoot("d2t");
 
         const builder = new DosageRenderingTreeBuilder(dosage, this.options.oneLine);
 

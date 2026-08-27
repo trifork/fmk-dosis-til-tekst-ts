@@ -311,8 +311,8 @@ function visitNode<T>(
  * Example HTML Visitor
  * ========================================================= */
 
-export class HtmlVisitor
-    implements RenderVisitor<string> {
+export class HtmlVisitor implements RenderVisitor<string> {
+
     visitText(node: TextNode): string {
         return escapeHtml(node.text);
     }
@@ -389,8 +389,8 @@ export class HtmlVisitor
     }
 }
 
-export class MultiLineTextVisitor
-    implements RenderVisitor<string> {
+export class MultiLineTextVisitor implements RenderVisitor<string> {
+
     visitText(node: TextNode): string {
         return node.text;
     }
@@ -498,8 +498,8 @@ export class MultiLineTextVisitor
 
 }
 
-export class OneLineTextVisitor
-    implements RenderVisitor<string> {
+export class OneLineTextVisitor implements RenderVisitor<string> {
+    
     visitText(node: TextNode): string {
         return node.text;
     }
