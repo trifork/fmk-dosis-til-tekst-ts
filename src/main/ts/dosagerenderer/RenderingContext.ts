@@ -35,6 +35,7 @@ export interface HeaderNode extends BaseNode {
 
 export interface TableNode extends BaseNode {
     kind: "table";
+    caption: ContainerNode;
     head: ContainerNode;
     rows: ContainerNode[];
     options: ContainerOptions;
@@ -189,6 +190,7 @@ export class RenderingContext extends Context<EditableContainerNode> {
         const table: TableNode = {
             kind: "table",
             options,
+            caption: undefined,
             head: undefined,
             rows: []
         };
@@ -220,6 +222,18 @@ export class TableContext extends Context<TableNode> {
         parent: Context<RenderNode>
     ) {
         super(node, parent);
+    }
+
+    beginCaption(options?: ContainerOptions): RenderingContext {
+        const caption: ContainerNode = {
+            kind: "container",
+            children: [],
+            options
+        };
+
+        this.node.caption = caption;
+
+        return new RenderingContext(caption, this);
     }
 
     beginTableHead(options?: ContainerOptions): RenderingContext {
@@ -353,6 +367,14 @@ export class HtmlVisitor implements RenderVisitor<string> {
     visitTable(node: TableNode): string {
         let html = "<table>";
 
+        if (node.caption) {
+            const captionText = node.caption.children
+                .map((c) => visitNode(c, this)).join(" ");
+            html += "<caption>";
+            html += captionText;
+            html += "</caption";
+        }
+
         if (node.head) {
             html += "<thead><tr>";
             html += this.wrapChildrenInTH(node.head);
@@ -374,7 +396,7 @@ export class HtmlVisitor implements RenderVisitor<string> {
 
     visitDefinitionList(node: DefinitionListNode): string {
         let html = "<dl>";
-        html += node.tuples.map(({ term, data }) => `<dt>${term}</dt><dd>${visitNode(data, this)}</dd>`).join("")
+        html += node.tuples.map(({ term, data }) => `<dt>${capitalize(term)}</dt><dd>${visitNode(data, this)}</dd>`).join("")
         html += "</dl>";
         return html;
     }
@@ -451,6 +473,14 @@ export class MultiLineTextVisitor implements RenderVisitor<string> {
     visitTable(node: TableNode): string {
         let text = "";
 
+        if (node.caption) {
+            const captionText = node.caption.children
+                .map((c) => visitNode(c, this)).join(" ");
+            text += captionText;
+            text += "\n";
+        }
+
+
         let headerCellTexts: string[];
         const maxCellWidths: number[] = [];
 
@@ -508,7 +538,7 @@ export class MultiLineTextVisitor implements RenderVisitor<string> {
 }
 
 export class OneLineTextVisitor implements RenderVisitor<string> {
-    
+
     visitText(node: TextNode): string {
         return node.text;
     }
@@ -559,6 +589,13 @@ export class OneLineTextVisitor implements RenderVisitor<string> {
 
     visitTable(node: TableNode): string {
         let text = "";
+
+        if (node.caption) {
+            const captionText = node.caption.children
+                .map((c) => visitNode(c, this)).join(" ");
+            text += captionText;
+            text += ": ";
+        }
 
         let headerCellTexts: string[];
         const maxCellWidths: number[] = [];
