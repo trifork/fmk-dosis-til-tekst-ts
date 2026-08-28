@@ -1,9 +1,8 @@
-import { formatDateDDMMYYYY, formatDateOnly } from "../DateUtil";
+import { formatDateDDMMYYYY } from "../DateUtil";
 import { DurationUtil } from "../DurationUtil";
 import { LocalTimeHelper } from "../helpers/LocalTimeHelper";
-import { TextHelper } from "../TextHelper";
 import { defaultEnabledCompactionPatterns, EnabledCompactionPatterns } from "./CompactionPatterns";
-import { DosageV2, DosageChoice, DosageParameter, DosagePeriodType, DosageStructure, DoseType, PartOfDayDosage, Precondition, WeekdayLabel, UnlimitedDosageType } from "./Dosage";
+import { DosageChoice, DosageParameter, DosagePeriodType, DosageStructure, DosageV2, DoseType, Precondition, UnlimitedDosageType, WeekdayLabel } from "./Dosage";
 import { RenderingContext } from "./RenderingContext";
 
 export class DosageRenderingTreeBuilder {
@@ -214,11 +213,14 @@ export class DosageRenderingTreeBuilder {
 
     renderParameter(ctx: RenderingContext, parameter: DosageParameter) {
         ctx = ctx.begin({ name: "parameter", join: "capitalize-newline" });
-        ctx.append(parameter.ParameterName);
-        if (parameter.ParameterLabel) {
-            ctx.append(parameter.ParameterLabel);
-        }
         const tableCtx = ctx.beginTable();
+
+        const captionCtx = tableCtx.beginCaption();
+        captionCtx.append(parameter.ParameterName);
+        if (parameter.ParameterLabel) {
+            captionCtx.append(` ${parameter.ParameterLabel}`);
+        }
+
         const tableHead = tableCtx.beginTableHead();
         tableHead.append("Fra værdi");
         tableHead.append("Dosis/instruks");
