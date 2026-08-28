@@ -308,7 +308,7 @@ function visitNode<T>(
 }
 
 /* =========================================================
- * Example HTML Visitor
+ * HTML Visitor
  * ========================================================= */
 
 export class HtmlVisitor implements RenderVisitor<string> {
@@ -354,15 +354,15 @@ export class HtmlVisitor implements RenderVisitor<string> {
         let html = "<table>";
 
         if (node.head) {
-            html += "<thead><th>";
-            html += this.wrapInTD(node.head);
-            html += "</th></thead>";
+            html += "<thead><tr>";
+            html += this.wrapChildrenInTH(node.head);
+            html += "</tr></thead>";
         }
 
         html += "<tbody>";
         for (const rowContainers of node.rows) {
             html += "<tr>";
-            html += this.wrapInTD(rowContainers);
+            html += this.wrapChildrenInTD(rowContainers);
             html += "</tr>";
         }
 
@@ -379,10 +379,19 @@ export class HtmlVisitor implements RenderVisitor<string> {
         return html;
     }
 
-    wrapInTD(node: ContainerNode) {
+    wrapChildrenInTD(node: ContainerNode) {
         const html = node.children
             .map((c) => visitNode(c, this))
             .map(c => `<td>${c}</td>`)
+            .join("");
+
+        return html;
+    }
+
+    wrapChildrenInTH(node: ContainerNode) {
+        const html = node.children
+            .map((c) => visitNode(c, this))
+            .map(c => `<th>${c}</th>`)
             .join("");
 
         return html;
