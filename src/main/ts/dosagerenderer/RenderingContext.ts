@@ -338,7 +338,7 @@ export class HtmlVisitor implements RenderVisitor<string> {
         const body = joinChunks(chunks, node.options?.join);
 
         return node.options?.name
-            ? `<div class="${node.options.name}">${body}</div>`
+            ? `<span class="${node.options.name === "d2t" ? "d2t": "d2t-" + node.options.name}">${body}</span>`
             : body;
     }
 
@@ -349,8 +349,8 @@ export class HtmlVisitor implements RenderVisitor<string> {
         const body = joinChunks(chunks, node.options?.join);
 
         return node.options?.name
-            ? `<p class="${node.options.name}">${body}</p>`
-            : `<p>${body}</p>`;
+            ? `<span class="d2t-${node.options.name}">${body}</span>`
+            : `<span class="d2t-paragraph">${body}</span>`;
     }
 
     visitHeader(node: HeaderNode): string {
@@ -360,7 +360,7 @@ export class HtmlVisitor implements RenderVisitor<string> {
         const body = capitalize(chunks.join(" "));
 
         return node.options?.name
-            ? `<h3 class="${node.options.name}">${body}</h3>`
+            ? `<h3 class="d2t-${node.options.name}">${body}</h3>`
             : `<h3>${body}</h3>`;
     }
 
@@ -372,7 +372,7 @@ export class HtmlVisitor implements RenderVisitor<string> {
                 .map((c) => visitNode(c, this)).join(" ");
             html += "<caption>";
             html += captionText;
-            html += "</caption";
+            html += "</caption>";
         }
 
         if (node.head) {
@@ -389,7 +389,7 @@ export class HtmlVisitor implements RenderVisitor<string> {
         }
 
         html += "</tbody>";
-        html += "</table";
+        html += "</table>";
 
         return html;
     }
@@ -493,7 +493,7 @@ export class MultiLineTextVisitor implements RenderVisitor<string> {
 
         for (const rowContainers of node.rows) {
             const cellTexts = this.getCellTexts(rowContainers);
-            this.updateMaxWidths(maxCellWidths, headerCellTexts);
+            this.updateMaxWidths(maxCellWidths, cellTexts);
             bodyCellTexts.push(cellTexts);
         }
 
@@ -609,7 +609,7 @@ export class OneLineTextVisitor implements RenderVisitor<string> {
 
         for (const rowContainers of node.rows) {
             const cellTexts = this.getCellTexts(rowContainers);
-            this.updateMaxWidths(maxCellWidths, headerCellTexts);
+            this.updateMaxWidths(maxCellWidths, cellTexts);
             bodyCellTexts.push(cellTexts);
         }
 
