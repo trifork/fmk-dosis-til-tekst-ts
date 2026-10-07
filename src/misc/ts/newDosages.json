@@ -1,0 +1,214 @@
+[
+    {
+        "DosagePeriod": [
+            {
+                "Fixed": {
+                    "MinimumDurationBetweenDoses": 60,
+                    "Instruction": "Tages ved måltid",
+                    "IterationInterval": 1,
+                    "Day": [
+                        {
+                            "Index": 1,
+                            "Dosage": {
+                                "PartOfDayDosage": {
+                                    "Morning": {
+                                        "Quantity": 1
+                                    },
+                                    "Evening": {
+                                        "Quantity": 2
+                                    },
+                                    "Night": {
+                                        "Quantity": 1
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "Precondition": {
+            "ValidFrom": "2026-09-21"
+        },
+        "UnitTexts": {
+            "Singular": "dråbe",
+            "Plural": "dråber"
+        }
+    },
+    {
+        "DosagePeriod": [
+            {
+                "Fixed": {
+                    "MinimumDurationBetweenDoses": 75,
+                    "IterationInterval": 1,
+                    "Day": [
+                        {
+                            "Index": 1,
+                            "Dosage": {
+                                "TimesPerDayDosage": {
+                                    "AccordingToParameterSchema": "Smertetabel (første bud)",
+                                    "TimesPerDay": 2
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "Parameter": [
+            {
+                "ParameterName": "Smertetabel",
+                "ParameterLabel": "første bud",
+                "ParameterUnit": "stk",
+                "ParameterSchema": {
+                    "ParametricQuantity": [
+                        {
+                            "FromValue": 1,
+                            "Quantity": 10
+                        },
+                        {
+                            "FromValue": 2,
+                            "Quantity": 20
+                        },
+                        {
+                            "FromValue": 10,
+                            "Instruction": "tal med lægen"
+                        },
+                        {
+                            "FromValue": 17
+                        }
+                    ]
+                }
+            }
+        ],
+        "Precondition": {
+            "ValidFrom": "2026-09-21",
+            "EpisodicTreatment": {
+                "Trigger": "ved feber",
+                "MinimumDaysBetweenEpisodes": 20
+            }
+        },
+        "UnitTexts": {
+            "Singular": "mg",
+            "Plural": "mg"
+        }
+    },
+    {
+        "DosagePeriod": [
+            {
+                "Fixed": {
+                    "IterationInterval": 1,
+                    "Day": [
+                        {
+                            "Index": 1,
+                            "Dosage": {
+                                "UnlimitedDayDosage": {
+                                    "Quantity": 480,
+                                    "Infusion": {
+                                        "InfusionRate": 20
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "Precondition": {
+            "ValidFrom": "2026-09-22"
+        },
+        "UnitTexts": {
+            "Singular": "ml",
+            "Plural": "ml"
+        }
+    },
+    {
+        "DosagePeriod": [
+            {
+                "PRN": {
+                    "IterationInterval": 1,
+                    "Day": [
+                        {
+                            "Index": 1,
+                            "Dosage": {
+                                "UnlimitedDayDosage": {
+                                    "Quantity": 30,
+                                    "MaximumDailyDose": 240,
+                                    "Infusion": {
+                                        "InfusionRate": 20
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "Precondition": {
+            "ValidFrom": "2026-09-22"
+        },
+        "UnitTexts": {
+            "Singular": "ml",
+            "Plural": "ml"
+        }
+    },
+    {
+        "DosagePeriod": [
+            {
+                "Fixed": {
+                    "IterationInterval": 1,
+                    "Day": [
+                        {
+                            "Index": 1,
+                            "Dosage": {
+                                "UnlimitedDayDosage": {
+                                    "Quantity": 480,
+                                    "Infusion": {
+                                        "InfusionRate": 20
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "Precondition": {
+            "ValidFrom": "2026-09-22"
+        },
+        "UnitTexts": {
+            "Singular": "ml",
+            "Plural": "ml"
+        }
+    },
+    {
+        "DosagePeriod": [
+            {
+                "Fixed": {
+                    "IterationInterval": 1,
+                    "Day": [
+                        {
+                            "Index": 1,
+                            "Dosage": {
+                                "TimesPerDayDosage": {
+                                    "TimesPerDay": 1,
+                                    "Quantity": 30,
+                                    "Infusion": {
+                                        "InfusionRate": 20
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "Precondition": {
+            "ValidFrom": "2026-09-22"
+        },
+        "UnitTexts": {
+            "Singular": "ml",
+            "Plural": "ml"
+        }
+    }
+]
