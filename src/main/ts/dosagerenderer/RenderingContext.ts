@@ -675,20 +675,6 @@ function joinChunks(chunks: string[], joinStyle: JoinStyle = "space") {
     }
 }
 
-function capitalize(s?: string) {
-    return s?.length
-        ? s[0].toUpperCase() + s.slice(1)
-        : s;
-}
-
-function joinTextList(items: string[]) {
-    if (items.length <= 2) {
-        return items.join(" og ");
-    }
-
-    return items.slice(0, -1).join(", ") + " og " + items[items.length - 1];
-}
-
 /* =========================================================
  * Utility
  * ========================================================= */
@@ -726,3 +712,4 @@ function joinRenderedNodes(
 
     return result;
 }
+import { capitalize, joinTextList } from "../TextUtils";

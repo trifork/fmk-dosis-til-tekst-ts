@@ -1,6 +1,7 @@
 import { formatDateDDMMYYYY } from "../DateUtil";
 import { DurationUtil } from "../DurationUtil";
 import { LocalTimeHelper } from "../helpers/LocalTimeHelper";
+import { capitalize } from "../TextUtils";
 import { defaultEnabledCompactionPatterns, EnabledCompactionPatterns } from "./CompactionPatterns";
 import { DosageChoice, DosageParameter, DosagePeriodType, DosageStructure, DosageV2, DoseType, Precondition, UnlimitedDosageType, WeekdayLabel } from "./Dosage";
 import { RenderingContext } from "./RenderingContext";
@@ -209,7 +210,7 @@ export class DosageRenderingTreeBuilder {
             ctx = ctx.begin({ name: "precondition", join: "comma" });
 
             if (precondition.PRNTrigger) {
-                ctx.append(`betingelse for påbegyndt behandling ${precondition.PRNTrigger}`);
+                ctx.append(`Betingelse for påbegyndt behandling: ${capitalize(precondition.PRNTrigger)}`);
             }
 
             if (precondition.EpisodicTreatment) {
@@ -274,26 +275,29 @@ export class DosageRenderingTreeBuilder {
 
     private renderDosageStructure(ctx: RenderingContext, dosageStructure: DosageStructure, onlyDay1: boolean, prn: boolean) {
 
+        const dotSeparatedCtx = ctx.begin({ name: "dosage-structure", join: "dot" });
+        const commaSeparatedCtx = dotSeparatedCtx.begin({ name: "dosage-structure", join: "comma" });
+        const coreCtx = commaSeparatedCtx.begin();
+
         if (dosageStructure.Day?.length > 0) {
-            this.renderDays(onlyDay1, dosageStructure, ctx, prn);
+            this.renderDays(onlyDay1, dosageStructure, coreCtx, prn);
 
         } else if (dosageStructure.Week) {
-            this.renderWeeks(dosageStructure, ctx, prn);
+            this.renderWeeks(dosageStructure, coreCtx, prn);
 
         } else if (dosageStructure.UnspecifiedDay) {
-            this.renderDosageChoice(ctx, dosageStructure.UnspecifiedDay.Dosage, prn);
-            ctx.append("på valgfri dag");
-        }
-
-
-        if (dosageStructure.Instruction) {
-            ctx.begin({ name: "d2t-instruction" })
-                .append("Instruks:")
-                .append(dosageStructure.Instruction);
+            this.renderDosageChoice(coreCtx, dosageStructure.UnspecifiedDay.Dosage, prn);
+            coreCtx.append("på valgfri dag");
         }
 
         if (dosageStructure.MinimumDurationBetweenDoses) {
-            ctx.append(`mindst ${DurationUtil.formatMinutes(dosageStructure.MinimumDurationBetweenDoses)} imellem doser`);
+            commaSeparatedCtx.append(`mindst ${DurationUtil.formatMinutes(dosageStructure.MinimumDurationBetweenDoses)} imellem doser`);
+        }
+
+        if (dosageStructure.Instruction) {
+            dotSeparatedCtx.begin({ name: "instruction" })
+                .append("Instruks:")
+                .append(capitalize(dosageStructure.Instruction));
         }
     }
 
@@ -434,7 +438,7 @@ export class DosageRenderingTreeBuilder {
     }
 
     private renderDosageChoice(ctx: RenderingContext, dosageChoice: DosageChoice, prn: boolean, includeTime = true, repeatedDailyDosage = false) {
-        const dosesAndTimes: { dose: DoseType, time: string }[] = [];
+        const dosesAndTimes: { dose: DoseType, time: string, commentOnAmout?: string }[] = [];
 
         if (!includeTime) {
             includeTime = undefined;
@@ -483,18 +487,20 @@ export class DosageRenderingTreeBuilder {
 
         if (dosageChoice.UnlimitedDayDosage) {
             const unlimited = dosageChoice.UnlimitedDayDosage;
+            const hasMaximum = unlimited.MaximumDailyDose != null;
+            const time = hasMaximum
+                ? `, max ${unlimited.MaximumDailyDose} pr. døgn`
+                : prn ? "ubegrænset antal gange" : "kontinuerligt";
+
             dosesAndTimes.push({
                 dose: unlimited,
-                time: unlimited.MaximumDailyDose
-                    ? `max ${unlimited.MaximumDailyDose} gange om dagen`
-                    : prn
-                        ? "ubegrænset antal gange"
-                        : "kontinuerligt"
+                time: time,
+                commentOnAmout: !hasMaximum && !prn ? "pr. døgn" : undefined
             });
         }
 
         if (dosesAndTimes.length && this.compact.AllDosesEqualWithinDay && this.allDosesAreEqual(dosesAndTimes.map(dt => dt.dose))) {
-            this.renderDose(ctx, dosesAndTimes[0].dose, prn);
+            this.renderDose(ctx, dosesAndTimes[0].dose, prn, dosesAndTimes[0].commentOnAmout);
             const listCtx = ctx.begin({ join: "comma-and" });
             for (const doseAndTime of dosesAndTimes) {
                 if (doseAndTime.time) {
@@ -505,7 +511,7 @@ export class DosageRenderingTreeBuilder {
             const listCtx = ctx.begin({ join: "comma-and" });
             for (let i = 0; i < dosesAndTimes.length; i++) {
                 const itemCtx = listCtx.begin();
-                this.renderDose(itemCtx, dosesAndTimes[i].dose, prn);
+                this.renderDose(itemCtx, dosesAndTimes[i].dose, prn, dosesAndTimes[i].commentOnAmout);
                 if (dosesAndTimes[i].time) {
                     itemCtx.append(dosesAndTimes[i].time);
                 }
@@ -526,34 +532,44 @@ export class DosageRenderingTreeBuilder {
         return allEqual;
     }
 
-    private renderDose(ctx: RenderingContext, dose: DoseType, prn: boolean) {
+    private renderDose(ctx: RenderingContext, dose: DoseType, prn: boolean, commentOnAmount?: string) {
+        const commaSeparatedCtx = ctx.begin({ join: "comma" });
+        const quantityCtx = commaSeparatedCtx.begin();
 
         if (dose.Quantity != null) {
-            ctx.append(`${dose.Quantity} ${this.getUnit(ctx, dose.Quantity === 1)}`);
+            quantityCtx.append(String(dose.Quantity));
+            quantityCtx.append(this.getUnit(quantityCtx, dose.Quantity === 1));
+            if (commentOnAmount) {
+                quantityCtx.append(`${commentOnAmount}`);
+            }
 
         } else if (dose.MinimumQuantity != null || dose.MaximumQuantity != null) {
-            ctx.append(`${dose.MinimumQuantity} - ${dose.MaximumQuantity} ${this.getUnit(ctx, false)}`);
+            quantityCtx.append(`${dose.MinimumQuantity} - ${dose.MaximumQuantity}`);
+            quantityCtx.append(this.getUnit(quantityCtx, false));
+            if (commentOnAmount) {
+                quantityCtx.append(`${commentOnAmount}`);
+            }
 
         } else if (dose.AccordingToParameterSchema) {
-            ctx.append(`antal ${this.getUnit(ctx, false)} i henhold til ${dose.AccordingToParameterSchema}`);
-        }
-
-        if (dose.Infusion) {
-            const infCtx = ctx.begin({ join: "comma" });
-            const infusion = dose.Infusion;
-            if (infusion.Duration != null) {
-                infCtx.append(`over ${infusion.Duration} min`);
-            } else if (infusion.MinimumDuration != null || infusion.MaximumDuration != null) {
-                infCtx.append(`over ${infusion.MinimumDuration} - ${infusion.MaximumDuration} min`);
-            } else if (infusion.InfusionRate != null) {
-                infCtx.append(`indløbsrate ${infusion.InfusionRate} ml/t`);
-            } else if (infusion.MinimumInfusionRate != null || infusion.MaximumInfusionRate != null) {
-                infCtx.append(`indløbsrate ${infusion.MinimumInfusionRate} - ${infusion.MaximumInfusionRate} ml/t`);
-            }
+            quantityCtx.append(`antal ${this.getUnit(quantityCtx, false)} i henhold til ${dose.AccordingToParameterSchema}`);
         }
 
         if (prn) {
-            ctx.append("efter behov");
+            quantityCtx.append("efter behov");
+        }
+
+        if (dose.Infusion) {
+            const infusionCtx = commaSeparatedCtx.begin({ join: "comma" });
+            const infusion = dose.Infusion;
+            if (infusion.Duration != null) {
+                infusionCtx.append(`over ${infusion.Duration} min`);
+            } else if (infusion.MinimumDuration != null || infusion.MaximumDuration != null) {
+                infusionCtx.append(`over ${infusion.MinimumDuration} - ${infusion.MaximumDuration} min`);
+            } else if (infusion.InfusionRate != null) {
+                infusionCtx.append(`indløbsrate ${infusion.InfusionRate} ml/t`);
+            } else if (infusion.MinimumInfusionRate != null || infusion.MaximumInfusionRate != null) {
+                infusionCtx.append(`indløbsrate ${infusion.MinimumInfusionRate} - ${infusion.MaximumInfusionRate} ml/t`);
+            }
         }
     }
 
