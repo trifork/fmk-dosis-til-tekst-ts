@@ -1,8 +1,10 @@
-import { Dosage, Factory, LongTextConverter, ShortTextConverter } from "../../main/ts";
+import { Dosage, DosageV2, Factory, LongTextConverter, ShortTextConverter } from "../../main/ts";
 import { DefaultDosageRendererFactory } from "../../main/ts/dosagerenderer/DefaultDosageRendererFactory";
-import { DosageRenderer } from "../../main/ts/dosagerenderer/DosageRenderer";
 import { OldToNewDosageConverter } from "../../main/ts/helpers/OldToNewDosageConverter";
 import { readFile } from "node:fs/promises";
+import { parseArgs } from "node:util";
+import { createWriteStream } from "node:fs";
+import type { Writable } from "node:stream";
 
 const longTextExamples: Dosage[] = [
     { "structures": { "unitOrUnits": { "unitSingular": "tablet", "unitPlural": "tabletter" }, "structures": [{ "iterationInterval": 1, "startDate": "2018-12-04", "endDate": "2019-01-19", "days": [{ "dayNumber": 1, "allDoses": [{ "type": "NightDoseWrapper", "doseQuantity": 1, "isAccordingToNeed": false }] }] }] } },
@@ -128,27 +130,85 @@ const miscExamples: Dosage[] = [
     },
 ]
 
-
 export async function main() {
-    const filenames = process.argv.slice(2);
+    const { values, positionals } = parseArgs({
+        options: {
+            legacy: {
+                type: "boolean",
+                short: "l"
+            },
+            output: {
+                type: "string",
+                short: "o"
+            },
+            help: {
+                type: "boolean",
+                short: "h",
+            }
+        },
+        allowPositionals: true,
+    });
 
-    console.log(`${escapeCsvValue("Kort oversættelse - gammel")},${escapeCsvValue("Kort oversættelse - ny")},${escapeCsvValue("Lang oversættelse - gammel")},${escapeCsvValue("Lang oversættelse - ny")},${escapeCsvValue("json - kun DosagePeriod[]")}`);
+    if (values.help) {
+        console.log(`
+Usage:
+  generateCSV [options] <input1.json> <input2.json> ..
 
-    for (const filename of filenames) {
-        const contents = await readFile(filename, "utf-8");
-        const dosages = JSON.parse(contents) as Dosage[];
-        generateCSV(dosages);
+Options:
+  -o, --output <file>  Write output to a file instead of stdout
+  -l, --legacy         Input is legacy dosage json. Produce comparison of old/new dosage rendering
+  -h, --help           Show this help
+`);
+
+        process.exit(0);
+    }
+
+    const filenames = positionals;
+
+    const output = getOutput(values.output);
+
+    const legacy = !!values.legacy;
+
+    await generate(output, legacy, filenames);
+
+    if (output !== process.stdout) {
+        output.end();
     }
 }
 
-function generateCSV(dosages: Dosage[]) {
+async function generate(output: Writable, legacy: boolean, filenames: string[]) {
+    if (legacy) {
+        output.write(`${escapeCsvValue("Kort oversættelse - gammel")},${escapeCsvValue("Kort oversættelse - ny")},${escapeCsvValue("Lang oversættelse - gammel")},${escapeCsvValue("Lang oversættelse - ny")},${escapeCsvValue("json - kun DosagePeriod[]")}\n`);
+    } else {
+        output.write(`${escapeCsvValue("Kort oversættelse")},${escapeCsvValue("Lang oversættelse")},${escapeCsvValue("json - kun DosagePeriod[]")}\n`);
+    }
+
+    for (const filename of filenames) {
+        const contents = await readFile(filename, "utf-8");
+        if (legacy) {
+            const dosages = JSON.parse(contents) as Dosage[];
+            await generateCompareToLegacyCSV(output, dosages);
+        } else {
+            const dosages = JSON.parse(contents) as DosageV2[];
+            await generateCSV(output, dosages);
+        }
+    }
+}
+
+function getOutput(output?: string): Writable {
+    return output
+        ? createWriteStream(output, { encoding: "utf8" })
+        : process.stdout;
+}
+
+async function generateCompareToLegacyCSV(output: Writable, dosages: Dosage[]) {
     const oldLongTextConverter = new LongTextConverter();
     const newLongTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: false });
 
     const oldShortTextConverter = new ShortTextConverter();
     const newShortTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: true });
 
-    dosages.forEach((dosage, index) => {
+    dosages.forEach(async (dosage, index) => {
         const oldLongTextTranslation = oldLongTextConverter.convert(dosage);
         const oldShortTextTranslation = oldShortTextConverter.convert(dosage, undefined, 400);
 
@@ -168,7 +228,30 @@ function generateCSV(dosages: Dosage[]) {
             dosageJson = "-";
         }
 
-        console.log(`${escapeCsvValue(oldShortTextTranslation)},${escapeCsvValue(newShortTextTranslation)},${escapeCsvValue(oldLongTextTranslation)},${escapeCsvValue(newLongTextTranslation)},${escapeCsvValue(dosageJson)}`);
+        await output.write(`${escapeCsvValue(oldShortTextTranslation)},${escapeCsvValue(newShortTextTranslation)},${escapeCsvValue(oldLongTextTranslation)},${escapeCsvValue(newLongTextTranslation)},${escapeCsvValue(dosageJson)}\n`);
+    });
+}
+
+async function generateCSV(output: Writable, dosages: DosageV2[]) {
+    const newLongTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: false });
+    const newShortTextConverter = new DefaultDosageRendererFactory().getDosageRenderer({ html: false, oneLine: true });
+
+    dosages.forEach(async (dosage, index) => {
+        const newShortTextTranslation = newShortTextConverter.render(dosage);
+        const newLongTextTranslation = newLongTextConverter.render(dosage);
+
+        let dosageJson: string;
+        if (dosage.DosagePeriod) {
+            dosageJson = formatJson(dosage.DosagePeriod);
+        } else if (dosage.AdministrationAccordingToSchemaInLocalSystem) {
+            dosageJson = formatJson(dosage.AdministrationAccordingToSchemaInLocalSystem);
+        } else if (dosage.FreeText) {
+            dosageJson = formatJson(dosage.FreeText);
+        } else {
+            dosageJson = "-";
+        }
+
+        await output.write(`${escapeCsvValue(newShortTextTranslation)},${escapeCsvValue(newLongTextTranslation)},${escapeCsvValue(dosageJson)}\n`);
     });
 }
 
